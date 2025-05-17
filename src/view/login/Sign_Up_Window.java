@@ -57,12 +57,12 @@ public class Sign_Up_Window extends JFrame {
 		contentPane.setLayout(null);
 		
 		tf_Username = new JTextField();
-		tf_Username.setBounds(267, 119, 171, 44);
+		tf_Username.setBounds(267, 148, 171, 44);
 		contentPane.add(tf_Username);
 		tf_Username.setColumns(10);
 		
 		tf_Gmail = new JTextField();
-		tf_Gmail.setBounds(267, 195, 171, 44);
+		tf_Gmail.setBounds(267, 224, 171, 44);
 		tf_Gmail.setColumns(10);
 		contentPane.add(tf_Gmail);
 		
@@ -80,33 +80,33 @@ public class Sign_Up_Window extends JFrame {
 		contentPane.add(lblNewLabel);
 		
 		pf_Password = new JPasswordField();
-		pf_Password.setBounds(267, 271, 171, 44);
+		pf_Password.setBounds(267, 300, 171, 44);
 		contentPane.add(pf_Password);
 		
 		pf_ConfirmPassword = new JPasswordField();
-		pf_ConfirmPassword.setBounds(267, 349, 171, 44);
+		pf_ConfirmPassword.setBounds(267, 378, 171, 44);
 		contentPane.add(pf_ConfirmPassword);
 		
 		lblNewLabel_1 = new JLabel("Sign In");
 		lblNewLabel_1.setBounds(285, 47, 138, 46);
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 20));
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(lblNewLabel_1);
 		
 		lblNewLabel_2 = new JLabel("Username");
-		lblNewLabel_2.setBounds(246, 94, 97, 14);
+		lblNewLabel_2.setBounds(246, 123, 97, 14);
 		contentPane.add(lblNewLabel_2);
 		
 		lblNewLabel_3 = new JLabel("Gmail");
-		lblNewLabel_3.setBounds(246, 170, 97, 14);
+		lblNewLabel_3.setBounds(246, 199, 97, 14);
 		contentPane.add(lblNewLabel_3);
 		
 		lblNewLabel_4 = new JLabel("Password");
-		lblNewLabel_4.setBounds(246, 246, 97, 14);
+		lblNewLabel_4.setBounds(246, 275, 97, 14);
 		contentPane.add(lblNewLabel_4);
 		
 		lblNewLabel_5 = new JLabel("Confirm Password");
-		lblNewLabel_5.setBounds(246, 324, 97, 14);
+		lblNewLabel_5.setBounds(246, 353, 97, 14);
 		contentPane.add(lblNewLabel_5);
 	}
 }
