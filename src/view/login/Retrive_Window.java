@@ -1,17 +1,11 @@
 package view.login;
 
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-=======
->>>>>>> f1210bf7f77f3f7c658d03eee866e0acfded4c1c
->>>>>>> Stashed changes
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -26,41 +20,15 @@ public class Retrive_Window extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-<<<<<<< Updated upstream
 
-	public Retrive_Window(Database_Manager database_manager) {
-=======
-<<<<<<< HEAD
 	private JTextField tf_Username;
 	private JTextField tf_Gmail;
 	private JLabel lblNewLabel_1;
 	private JLabel lblNewLabel_2;
 	private JLabel lblNewLabel_3;
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Retrive_Window frame = new Retrive_Window();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
-	public Retrive_Window() {
-=======
 
 	public Retrive_Window(Database_Manager database_manager) {
->>>>>>> f1210bf7f77f3f7c658d03eee866e0acfded4c1c
->>>>>>> Stashed changes
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 692, 637);
 		contentPane = new JPanel();
