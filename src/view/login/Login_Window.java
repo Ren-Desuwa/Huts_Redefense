@@ -58,7 +58,7 @@ public class Login_Window extends JFrame {
 		contentPane.add(tf_Username);
 		tf_Username.setColumns(10);
 		
-		JButton btn = new JButton("Log In");
+		JButton btn = new JButton("Log Ina");
 		btn.setBounds(301, 331, 109, 44);
 		btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
