@@ -13,7 +13,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-public class Login_Window extends JFrame {
+public class Sign_In_Window extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -23,7 +23,7 @@ public class Login_Window extends JFrame {
 	private JLabel lblNewLabel_2;
 	private JLabel lblNewLabel_4;
 
-	public Login_Window() {
+	public Sign_In_Window() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 692, 637);
 		contentPane = new JPanel();

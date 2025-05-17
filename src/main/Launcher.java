@@ -1,7 +1,7 @@
 package main;
 
 import java.awt.EventQueue;
-import view.login.Login_Window;
+import view.login.Sign_In_Window;
 
 public class Launcher {
 	public static void main(String[] args) {
@@ -11,7 +11,7 @@ public class Launcher {
 			public void run() {
 				try {
 					// Create and show the main window
-					Login_Window window = new Login_Window();
+					Sign_In_Window window = new Sign_In_Window();
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
