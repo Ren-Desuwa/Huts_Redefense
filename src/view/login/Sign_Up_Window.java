@@ -14,6 +14,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import database.Database_Manager;
+
 public class Sign_Up_Window extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -28,7 +30,7 @@ public class Sign_Up_Window extends JFrame {
 	private JLabel lblNewLabel_4;
 	private JLabel lblNewLabel_5;
 	
-	public Sign_Up_Window() {
+	public Sign_Up_Window(Database_Manager database_manager) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 692, 637);
 		contentPane = new JPanel();
