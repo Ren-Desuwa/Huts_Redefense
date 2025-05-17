@@ -15,7 +15,7 @@ import javax.swing.border.EmptyBorder;
 
 import database.Database_Manager;
 
-public class Log_In_Window extends JFrame {
+public class Sign_In_Window extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -25,7 +25,7 @@ public class Log_In_Window extends JFrame {
 	private JLabel lblNewLabel_2;
 	private JLabel lblNewLabel_4;
 
-	public Log_In_Window(Database_Manager database_manager) {
+	public Sign_In_Window(Database_Manager database_manager) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 692, 637);
 		contentPane = new JPanel();
