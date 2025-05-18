@@ -13,13 +13,17 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import database.Database_Manager;
+import model.User;
+import view.Main_Frame;
 
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.sql.SQLException;
 
 public class Retrive_Window extends JFrame {
 
 	private static final long serialVersionUID = 1L;
+	private Database_Manager database_manager;
 	private JPanel contentPane;
 
 	private JTextField tf_Username;
@@ -29,9 +33,14 @@ public class Retrive_Window extends JFrame {
 	private JLabel lbl_Email;
 
 	public Retrive_Window(Database_Manager database_manager) {
+<<<<<<< HEAD
 
 		setTitle("Forgot Password");
 		setResizable(false);
+=======
+		this.database_manager = database_manager;
+		
+>>>>>>> 8a242a7d79e37df4c05fcee55f11e4a588cf6d56
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 692, 637);
 		contentPane = new JPanel();
@@ -84,6 +93,7 @@ public class Retrive_Window extends JFrame {
 		btn_Confirm.setBounds(300, 385, 109, 44);
 		btn_Confirm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				gotoConfirmation();
 			}
 		});
 		contentPane.add(btn_Confirm);
@@ -101,6 +111,36 @@ public class Retrive_Window extends JFrame {
 		lbl_Email = new JLabel("Email");
 		lbl_Email.setBounds(246, 252, 97, 14);
 		contentPane.add(lbl_Email);
+	}
+	private void gotoConfirmation() {
+		String username = tf_Username.getText();
+		String email = tf_Email.getText();
+		
+		if (username.isEmpty() || email.isEmpty()) {
+			System.out.println("Please fill in all fields.");
+			return;
+		}
+		
+		if (username.equals("Enter Username") || email.equals("Enter Email")) {
+			System.out.println("Please fill in all fields.");
+			return;
+		}
+		
+		try {
+			if (!database_manager.getUserManager().UsernamePasswordMatch(username, email)) {
+				System.out.println("Username and email do not match.");
+			}
+			
+			User current_user = database_manager.getUserManager().getUserByUsername(username);
+			
+			this.dispose();
+			
+			New_Password_Window newpassword = new New_Password_Window(database_manager, current_user);
+			newpassword.setVisible(true);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

@@ -193,11 +193,15 @@ public class Log_In_Window extends JFrame {
 		
 		if (username.isEmpty() || password.isEmpty()) {
 			System.out.println("Please fill in all fields.");
+			lbl_Incorrect_Signage1.setVisible(true); // Show label
+			lbl_Incorrect_Signaage2.setVisible(true); // Show label
 			return;
 		}
 		
 		if (username.equals("Enter Username") || password.equals("Enter Password")) {
 			System.out.println("Please fill in all fields.");
+			lbl_Incorrect_Signage1.setVisible(true); // Show label
+			lbl_Incorrect_Signaage2.setVisible(true); // Show label
 			return;
 		}
 		
