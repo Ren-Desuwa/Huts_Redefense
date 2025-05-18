@@ -1,4 +1,4 @@
-package test;
+package database.test;
 
 import database.Database_Manager;
 import database.User_Manager;
@@ -109,8 +109,8 @@ public class Database_Manager_Test {
         double electricityRate = 0.15;
         double electricityTotal = electricityReading * electricityRate;
         
-        readingManager.addReading(currentUser, electricityDate, "Electricity", 
-                electricityReading, electricityRate, electricityTotal);
+        System.out.println(String.valueOf(electricityTotal));
+        readingManager.addReading(currentUser, electricityDate, "electricity", electricityReading, electricityRate, electricityTotal);
         System.out.println("Added electricity reading for date: " + electricityDate);
         
         // Add water reading
@@ -119,7 +119,8 @@ public class Database_Manager_Test {
         double waterRate = 2.50;
         double waterTotal = waterReading * waterRate;
         
-        readingManager.addReading(currentUser, waterDate, "Water", 
+        System.out.println(String.valueOf(waterTotal));
+        readingManager.addReading(currentUser, waterDate, "water", 
                 waterReading, waterRate, waterTotal);
         System.out.println("Added water reading for date: " + waterDate);
         
@@ -129,7 +130,8 @@ public class Database_Manager_Test {
         double gasRate = 1.20;
         double gasTotal = gasReading * gasRate;
         
-        readingManager.addReading(currentUser, gasDate, "Gas", 
+        System.out.println(String.valueOf(gasTotal));
+        readingManager.addReading(currentUser, gasDate, "gas", 
                 gasReading, gasRate, gasTotal);
         System.out.println("Added gas reading for date: " + gasDate);
         
@@ -145,11 +147,11 @@ public class Database_Manager_Test {
         System.out.println("Retrieved " + rangeReadings.size() + " readings in date range");
         
         // Test getting latest reading by type
-        Reading latestGasReading = readingManager.getLatestReadingByType(currentUser, "Gas");
+        Reading latestGasReading = readingManager.getLatestReadingByType(currentUser, "gas");
         System.out.println("Latest gas reading date: " + 
                 (latestGasReading != null ? latestGasReading.getDate() : "null"));
         assert latestGasReading != null && 
-               latestGasReading.getType().equals("Gas") : 
+               latestGasReading.getType().equals("gas") : 
                "Failed to retrieve latest gas reading";
         
         // Test updating a reading
