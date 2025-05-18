@@ -34,15 +34,21 @@ public class Home_Panel extends JPanel {
 		panel_Electricity_Graph.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		panel_Electricity_Graph.setBounds(504, 157, 413, 365);
 		add(panel_Electricity_Graph);
+		panel_Electricity_Graph.setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("Electricity");
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		lblNewLabel.setBounds(160, 118, 112, 85);
+		panel_Electricity_Graph.add(lblNewLabel);
 		
 		JPanel panel_Water_Graph = new JPanel();
 		panel_Water_Graph.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		panel_Water_Graph.setBounds(504, 157, 413, 313);
+		panel_Water_Graph.setBounds(504, 157, 413, 365);
 		add(panel_Water_Graph);
 		
 		JPanel panel_Gas_Graph = new JPanel();
 		panel_Gas_Graph.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		panel_Gas_Graph.setBounds(504, 157, 413, 313);
+		panel_Gas_Graph.setBounds(504, 157, 413, 365);
 		add(panel_Gas_Graph);
 		
 		JPanel panel_behind1 = new JPanel();
