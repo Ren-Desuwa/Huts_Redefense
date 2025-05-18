@@ -78,7 +78,7 @@ public class Reading_Manager {
 	}
 	
 	public void deleteReading(Reading reading) throws SQLException {
-		String sqlscript = "DELETE FROM readings WHERE rading_id = ?";
+		String sqlscript = "DELETE FROM readings WHERE reading_id = ?";
 		try (PreparedStatement prepared_statement = connection.prepareStatement(sqlscript)) {
 			prepared_statement.setInt(1, reading.getReading_Id());
 			prepared_statement.executeUpdate();
