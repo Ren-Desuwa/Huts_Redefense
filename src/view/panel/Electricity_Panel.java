@@ -141,10 +141,15 @@ public class Electricity_Panel extends JPanel {
 	
 	private JList<String> getAllReadings() {
 		try {
-			List<Reading> all_readings = database_manager.getReadingManager().getAllReadingsByType(current_user, "Electricity");
-			if (all_readings != null) {
-				return new JList<String>(new String[] {"No readings found.", "Please add a reading."});
+			if (!database_manager.getReadingManager().isReadingExists(current_user, TOOL_TIP_TEXT_KEY)) {
+				JList<String> list = new JList<>(new String[] {"No readings found.", "Please add a reading."});
+				list.setFont(new Font("Tahoma", Font.PLAIN, 15));
+				list.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+				list.setPreferredSize(new Dimension(429, 448));
+				list.setFixedCellHeight(30);
+				return list;
 			}
+			List<Reading> all_readings = database_manager.getReadingManager().getAllReadingsByType(current_user, "Electricity");
 			
 			String[] readings = new String[all_readings.size()];
 			for (int i = 0; i < all_readings.size(); i++) {
@@ -154,10 +159,7 @@ public class Electricity_Panel extends JPanel {
 			JList<String> list = new JList<>(readings);
 			list.setFont(new Font("Tahoma", Font.PLAIN, 15));
 			list.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-			list.setPreferredSize(new Dimension(447, 408));
-			list.setVisibleRowCount(10);
-			list.setFixedCellHeight(40);
-			list.setFixedCellWidth(447);
+			list.setPreferredSize(new Dimension(429, 448));
 			return list;
 		}
 		catch (Exception e) {
