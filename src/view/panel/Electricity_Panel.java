@@ -18,7 +18,8 @@ public class Electricity_Panel extends JPanel {
 		this.database_manager = database_manager;
 		this.current_user = current_user;
 		
-
+		
+		
 	}
 
 }
