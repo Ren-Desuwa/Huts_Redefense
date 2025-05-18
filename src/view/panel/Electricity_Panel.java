@@ -4,6 +4,7 @@ import java.awt.Dimension;
 
 import javax.swing.JPanel;
 
+
 import database.Database_Manager;
 import model.Reading;
 import model.User;
@@ -19,6 +20,10 @@ import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 
 public class Electricity_Panel extends JPanel {
 
@@ -27,7 +32,6 @@ public class Electricity_Panel extends JPanel {
 	private User current_user;
 	private JPanel panel_Welcome_Title;
 	private JPanel panel_add_reading;
-	private JTextField tf_Date;
 	private JTextField tf_Reading;
 	private JTextField tf_Rate;
 	private JTextField tf_TotalPrice;
@@ -85,11 +89,6 @@ public class Electricity_Panel extends JPanel {
 		lbl_Date_1.setBounds(10, 75, 114, 22);
 		panel_add_reading.add(lbl_Date_1);
 		
-		tf_Date = new JTextField();
-		tf_Date.setBounds(10, 102,169, 56);
-		panel_add_reading.add(tf_Date);
-		tf_Date.setColumns(10);
-		
 		JLabel lbl_Reading = new JLabel("Reading (kWh)");
 		lbl_Reading.setHorizontalAlignment(SwingConstants.LEFT);
 		lbl_Reading.setFont(new Font("Tahoma", Font.PLAIN, 17));
@@ -124,8 +123,38 @@ public class Electricity_Panel extends JPanel {
 		panel_add_reading.add(tf_TotalPrice);
 		
 		JButton btn_Add_Reading = new JButton("Add Reading");
+		btn_Add_Reading.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				addReading();
+			}
+		});
 		btn_Add_Reading.setBounds(161, 315, 120, 50);
 		panel_add_reading.add(btn_Add_Reading);
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		for (int i = 1; i <= 31; i++) {
+			comboBox.addItem(i);
+			}
+		comboBox.setBounds(10, 99, 63, 59);
+		panel_add_reading.add(comboBox);
+		
+		JComboBox comboBox_1 = new JComboBox();
+		comboBox_1.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		for (int i = 1; i <= 12; i++) {
+			comboBox_1.addItem(i);
+			}
+		comboBox_1.setBounds(83, 99, 63, 59);
+		panel_add_reading.add(comboBox_1);
+		
+		JComboBox comboBox_1_1 = new JComboBox();
+		for (int i = 1975; i <= 2025; i++) {
+			comboBox_1_1.addItem(i);
+			}
+		comboBox_1_1.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		comboBox_1_1.setBounds(157, 99, 63, 59);
+		panel_add_reading.add(comboBox_1_1);
 		
 		JList<String> all_readings = getAllReadings();
 		JScrollPane scrollPane = new JScrollPane(all_readings);
@@ -137,6 +166,21 @@ public class Electricity_Panel extends JPanel {
 		lbl_Title_AddReading_1.setFont(new Font("Tahoma", Font.PLAIN, 25));
 		scrollPane.setColumnHeaderView(lbl_Title_AddReading_1);
 		
+	}
+	
+	private void addReading() {
+		double reading = Double.parseDouble(tf_Reading.getText());
+		double rate = Double.parseDouble(tf_Rate.getText());
+		double total_price = Double.parseDouble(tf_TotalPrice.getText());
+		
+		Reading new_reading = new Reading(current_user.getUser_Id(), date, "Electricity", reading, rate, total_price);
+		
+		try {
+			database_manager.getReadingManager().addReading(current_user, new_reading);
+			System.out.println("Reading added successfully.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private JList<String> getAllReadings() {
