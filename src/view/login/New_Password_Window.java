@@ -32,18 +32,13 @@ public class New_Password_Window extends JFrame {
 	private JLabel lblNewLabel_1;
 	private JLabel lblNewLabel_4;
 	private JLabel lblNewLabel_5;
-
-<<<<<<< HEAD
-	public New_Password_Window() {
 		
-		setTitle("New Password");
-		setResizable(false);
-=======
 	public New_Password_Window(Database_Manager database_manager, User current_user) {
 		this.current_user = current_user;
 		this.database_manager = database_manager;
 		
->>>>>>> 8a242a7d79e37df4c05fcee55f11e4a588cf6d56
+		setTitle("New Password");
+		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 692, 637);
 		contentPane = new JPanel();
