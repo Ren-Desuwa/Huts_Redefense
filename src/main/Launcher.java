@@ -3,7 +3,7 @@ package main;
 import java.awt.EventQueue;
 
 import database.Database_Manager;
-import view.login.Sign_In_Window;
+import view.login.*;
 
 public class Launcher {
 	public static void main(String[] args) {
@@ -17,7 +17,7 @@ public class Launcher {
 			public void run() {
 				try {
 					// Create and show the main window
-					Sign_In_Window window = new Sign_In_Window(database_manager);
+					Sign_Up_Window window = new Sign_Up_Window(database_manager);
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
