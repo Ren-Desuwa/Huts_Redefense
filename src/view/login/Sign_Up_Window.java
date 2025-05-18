@@ -14,6 +14,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import database.Database_Manager;
+import model.User;
 import view.Main_Frame;
 
 import java.awt.event.FocusAdapter;
@@ -214,7 +215,8 @@ public class Sign_Up_Window extends JFrame {
 			// Optionally, you can close the window or redirect to another page
 			this.dispose();
 			
-			Main_Frame mainframe = new Main_Frame();
+			User current_user = database_manager.getUserManager().getUserByUsername(username);
+			Main_Frame mainframe = new Main_Frame(database_manager, current_user);
 			mainframe.setVisible(true);
 			
 		} catch (Exception e) {

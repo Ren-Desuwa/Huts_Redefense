@@ -14,6 +14,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import database.Database_Manager;
+import model.User;
 import view.Main_Frame;
 
 import java.awt.event.FocusAdapter;
@@ -151,15 +152,17 @@ public class Log_In_Window extends JFrame {
 		}
 		
 		try {
-			if (database_manager.getUserManager().UsernamePasswordMatch(username, password)) {
+			if (!database_manager.getUserManager().UsernamePasswordMatch(username, password)) {
 				System.out.println("Passwords do not match.");
 				return;
 			}
 			System.out.println("User Log In successfully.");
 			
+			User current_user = database_manager.getUserManager().getUserByUsername(username);
+			
 			this.dispose();
 			
-			Main_Frame mainframe = new Main_Frame();
+			Main_Frame mainframe = new Main_Frame(database_manager, current_user);
 			mainframe.setVisible(true);
 			
 		} catch (SQLException e) {

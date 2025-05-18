@@ -169,7 +169,7 @@ public class User_Manager {
 			prepared_statement.setString(1, username);
 			prepared_statement.setString(2, password);
 			ResultSet resultSet = prepared_statement.executeQuery();
-			return resultSet.next();
+			return resultSet.next(); // If a row is returned, the username and password match // true else false
 		} catch (SQLException e) {
 			e.printStackTrace();
 			
