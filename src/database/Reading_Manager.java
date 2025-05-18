@@ -35,7 +35,6 @@ public class Reading_Manager {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			
 		}
 	}
 	
@@ -267,6 +266,21 @@ public class Reading_Manager {
 		return null;
 	}
 	
+	public boolean isReadingExists(User user, String type) throws SQLException {
+		String sqlscript = "SELECT * FROM readings WHERE user_id = ? AND type = ?";
+		try (PreparedStatement prepared_statement = connection.prepareStatement(sqlscript)) {
+			prepared_statement.setInt(1, user.getUser_Id());
+			prepared_statement.setString(2, type);
+			try (ResultSet rs = prepared_statement.executeQuery()) {
+				return rs.next(); // if a record exists, rs.next() will return true else false
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+		}
+		return false; // return false if an error occurs
+	}
+	
 	public List<Reading> getAllReadingsByType(User user, String type) throws SQLException {
 		String sqlscript = "SELECT * FROM readings WHERE user_id = ? AND type = ? ORDER BY date ASC";
 		List<Reading> list = new ArrayList<>();
@@ -292,5 +306,7 @@ public class Reading_Manager {
 		}
 		return list;
 	}
+	
+	
 	
 }
