@@ -21,9 +21,9 @@ public class Reading_Manager {
 			prepared_statement.setInt(1, user.getUser_Id()); // user_id
 			prepared_statement.setString(2, date.toString()); // date
 			prepared_statement.setString(3, type); // type
-			prepared_statement.setDouble(3, reading);
-			prepared_statement.setDouble(4, rate);
-			prepared_statement.setDouble(5, total_price);
+			prepared_statement.setDouble(4, reading);
+			prepared_statement.setDouble(5, rate);
+			prepared_statement.setDouble(6, total_price);
 			prepared_statement.executeUpdate();
 			
 			// Get the generated ID

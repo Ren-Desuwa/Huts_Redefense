@@ -143,7 +143,7 @@ public class Database_Manager_Test {
         // Test retrieving readings within a date range
         LocalDate startDate = LocalDate.now().minusDays(20);
         LocalDate endDate = LocalDate.now();
-        List<Reading> rangeReadings = readingManager.getReadingsByUserId(currentUser, startDate, endDate);
+        List<Reading> rangeReadings = readingManager.getReadingsByTime(currentUser, startDate, endDate);
         System.out.println("Retrieved " + rangeReadings.size() + " readings in date range");
         
         // Test getting latest reading by type
