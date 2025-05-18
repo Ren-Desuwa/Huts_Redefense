@@ -44,6 +44,7 @@ public class Log_In_Window extends JFrame {
 		
 		setTitle("Log In");
 		setResizable(false);
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 692, 637);
 		contentPane = new JPanel();

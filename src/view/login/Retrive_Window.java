@@ -32,14 +32,12 @@ public class Retrive_Window extends JFrame {
 	private JLabel lbl_Email;
 
 	public Retrive_Window(Database_Manager database_manager) {
-<<<<<<< HEAD
-
-		setTitle("Forgot Password");
-		setResizable(false);
-=======
 		this.database_manager = database_manager;
 		
->>>>>>> 8a242a7d79e37df4c05fcee55f11e4a588cf6d56
+		setTitle("Forgot Password");
+		setResizable(false);
+		
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 692, 637);
 		contentPane = new JPanel();
