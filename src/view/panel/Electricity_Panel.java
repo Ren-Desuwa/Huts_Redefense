@@ -5,14 +5,20 @@ import java.awt.Dimension;
 import javax.swing.JPanel;
 
 import database.Database_Manager;
+import model.Reading;
 import model.User;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import javax.swing.JLabel;
+import javax.swing.JList;
+
 import java.awt.Font;
+import java.util.List;
+
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import javax.swing.JScrollPane;
 
 public class Electricity_Panel extends JPanel {
 
@@ -68,9 +74,9 @@ public class Electricity_Panel extends JPanel {
 		add(panel_add_reading);
 		
 		JLabel lbl_Title_AddReading = new JLabel("Add New Reading");
-		lbl_Title_AddReading.setHorizontalAlignment(SwingConstants.LEFT);
+		lbl_Title_AddReading.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_Title_AddReading.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		lbl_Title_AddReading.setBounds(10, 11, 393, 32);
+		lbl_Title_AddReading.setBounds(0, 0, 393, 32);
 		panel_add_reading.add(lbl_Title_AddReading);
 		
 		JLabel lbl_Date_1 = new JLabel("Date");
@@ -121,5 +127,42 @@ public class Electricity_Panel extends JPanel {
 		btn_Add_Reading.setBounds(161, 315, 120, 50);
 		panel_add_reading.add(btn_Add_Reading);
 		
+		JList<String> all_readings = getAllReadings();
+		JScrollPane scrollPane = new JScrollPane(all_readings);
+		scrollPane.setBounds(518, 114, 447, 408);
+		add(scrollPane);
+		
+		JLabel lbl_Title_AddReading_1 = new JLabel("Recent Readings");
+		lbl_Title_AddReading_1.setHorizontalAlignment(SwingConstants.CENTER);
+		lbl_Title_AddReading_1.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		scrollPane.setColumnHeaderView(lbl_Title_AddReading_1);
+		
+	}
+	
+	private JList<String> getAllReadings() {
+		try {
+			List<Reading> all_readings = database_manager.getReadingManager().getAllReadingsByType(current_user, "Electricity");
+			if (all_readings != null) {
+				return new JList<String>(new String[] {"No readings found.", "Please add a reading."});
+			}
+			
+			String[] readings = new String[all_readings.size()];
+			for (int i = 0; i < all_readings.size(); i++) {
+				Reading reading = all_readings.get(i);
+				readings[i] = "Date: " + reading.getDate() + ", Reading: " + reading.getReading() + " kWh, Rate: " + reading.getRate() + " Php, Total Price: " + reading.getTotal_Price() + " Php";
+			}
+			JList<String> list = new JList<>(readings);
+			list.setFont(new Font("Tahoma", Font.PLAIN, 15));
+			list.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+			list.setPreferredSize(new Dimension(447, 408));
+			list.setVisibleRowCount(10);
+			list.setFixedCellHeight(40);
+			list.setFixedCellWidth(447);
+			return list;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }
