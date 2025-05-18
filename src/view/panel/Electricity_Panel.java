@@ -20,7 +20,7 @@ public class Electricity_Panel extends JPanel {
 		this.database_manager = database_manager;
 		this.current_user = current_user;
 		
-		setPreferredSize(new Dimension(1000, 725));
+		setPreferredSize(new Dimension(986, 688));
 		setLayout(null);
 		
 	}
