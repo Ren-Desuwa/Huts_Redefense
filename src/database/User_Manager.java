@@ -61,7 +61,7 @@ public class User_Manager {
 	}
 	
 	public void deleteUser(int userId) throws SQLException {
-		String sqlscript = "DELETE FROM users WHERE id = ?";
+		String sqlscript = "DELETE FROM users WHERE user_id = ?";
 		try (PreparedStatement prepared_statement = connection.prepareStatement(sqlscript)) {
 			prepared_statement.setInt(1, userId);
 			prepared_statement.executeUpdate();
@@ -76,7 +76,7 @@ public class User_Manager {
 	}
 	
 	public void updateUser(User user, String username, String password, String email) throws SQLException {
-		String sqlscript = "UPDATE users SET username = ?, password = ?, email = ? WHERE id = ?";
+		String sqlscript = "UPDATE users SET username = ?, password = ?, email = ? WHERE user_id = ?";
 		try (PreparedStatement prepared_statement = connection.prepareStatement(sqlscript)) {
 			prepared_statement.setString(1, username);
 			prepared_statement.setString(2, password);
@@ -90,7 +90,7 @@ public class User_Manager {
 	}
 	
 	public User getUserById(int userId) throws SQLException {
-		String sqlscript = "SELECT * FROM users WHERE id = ?";
+		String sqlscript = "SELECT * FROM users WHERE user_id = ?";
 		try (PreparedStatement prepared_statement = connection.prepareStatement(sqlscript)) {
 			prepared_statement.setInt(1, userId);
 			ResultSet resultSet = prepared_statement.executeQuery();
@@ -136,7 +136,7 @@ public class User_Manager {
 			ResultSet resultSet = prepared_statement.executeQuery();
 			if (resultSet.next()) {
 				return new User(
-					resultSet.getInt("id"),
+					resultSet.getInt("user_id"),
 					resultSet.getString("username"),
 					resultSet.getString("password"),
 					resultSet.getString("email")
