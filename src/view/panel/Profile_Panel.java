@@ -10,7 +10,7 @@ public class Profile_Panel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	public Profile_Panel(Database_Manager database_manager, User current_user) {
-
+		
 	}
 
 }
