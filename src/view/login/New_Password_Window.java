@@ -23,6 +23,9 @@ public class New_Password_Window extends JFrame {
 	private JLabel lblNewLabel_5;
 
 	public New_Password_Window() {
+		
+		setTitle("New Password");
+		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 692, 637);
 		contentPane = new JPanel();

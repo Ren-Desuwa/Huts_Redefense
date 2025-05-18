@@ -19,6 +19,7 @@ public class Home_Panel extends JPanel {
 	public Home_Panel(Database_Manager database_manager, User current_user) {
 		this.database_manager = database_manager;
 		this.current_user = current_user;
+		setLayout(null);
 		
 
 	}

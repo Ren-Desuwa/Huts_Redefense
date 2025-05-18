@@ -45,7 +45,6 @@ public class Main_Frame extends JFrame {
 	private JButton side_electricity_button;
 	private JButton side_water_button;
 	private JButton side_gas_button;
-	private JLabel lblNewLabel;
 	
 	public Main_Frame(Database_Manager database_manager, User user) {
 		this.database_manager = database_manager;
@@ -66,6 +65,7 @@ public class Main_Frame extends JFrame {
 		setTitle("Main Frame");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(50, 50, 1200, 725);
+        setResizable(false);
         content_pane = new JPanel();
         content_pane.setLayout(new BorderLayout(0, 0));
         setContentPane(content_pane);
@@ -86,9 +86,6 @@ public class Main_Frame extends JFrame {
         gas_panel = new Gas_Panel(database_manager, current_user);
         
         card_panel.add(home_panel, HOME_PANEL);
-        
-        lblNewLabel = new JLabel("HOME");
-        home_panel.add(lblNewLabel);
         card_panel.add(electricity_panel, ELECTRICITY_PANEL);
         card_panel.add(water_panel, WATER_PANEL);
         card_panel.add(gas_panel, GAS_PANEL);

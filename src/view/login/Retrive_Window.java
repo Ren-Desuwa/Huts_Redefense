@@ -30,6 +30,8 @@ public class Retrive_Window extends JFrame {
 
 	public Retrive_Window(Database_Manager database_manager) {
 
+		setTitle("Forgot Password");
+		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 692, 637);
 		contentPane = new JPanel();
