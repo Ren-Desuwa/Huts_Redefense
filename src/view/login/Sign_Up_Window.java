@@ -14,6 +14,8 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import database.Database_Manager;
+import view.Main_Frame;
+
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
@@ -127,7 +129,7 @@ public class Sign_Up_Window extends JFrame {
 		contentPane.add(pf_Password);
 		
 		lbl_Confirm_Password = new JLabel("Confirm Password");
-		lbl_Confirm_Password.setBounds(246, 353, 163, 14);
+		lbl_Confirm_Password.setBounds(246, 353, 119, 14);
 		contentPane.add(lbl_Confirm_Password);
 		
 		pf_ConfirmPassword = new JPasswordField();
@@ -211,6 +213,9 @@ public class Sign_Up_Window extends JFrame {
 			
 			// Optionally, you can close the window or redirect to another page
 			this.dispose();
+			
+			Main_Frame mainframe = new Main_Frame();
+			mainframe.setVisible(true);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
