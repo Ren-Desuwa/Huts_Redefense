@@ -11,7 +11,7 @@ public class Reading {
 	private double rate;
 	private double total_price;
 	
-	public Reading(int user_id, LocalDate date, String type, int reading, int rate, int total_price) {
+	public Reading(int user_id, LocalDate date, String type, double reading, double rate, double total_price) {
 		this.user_id = user_id;
 		this.date = date;
 		this.type = type;
@@ -20,7 +20,7 @@ public class Reading {
 		this.total_price = total_price;
 	}
 	
-	public Reading(int user_id, LocalDate date, String type, int reading, int total_price) {
+	public Reading(int user_id, LocalDate date, String type, double reading, double total_price) {
 		this.user_id = user_id;
 		this.date = date;
 		this.type = type;
@@ -28,15 +28,17 @@ public class Reading {
 		this.total_price = total_price;
 	}
 	
-	public Reading(int reading_id, int user_id, LocalDate date, String type, double d, double e, double f) {
+	public Reading(int reading_id, int user_id, LocalDate date, String type, double reading, double rate, double total_price) {
 		this.reading_id = reading_id;
 		this.user_id = user_id;
 		this.date = date;
 		this.type = type;
-		this.reading = d;
-		this.rate = e;
-		this.total_price = f;
+		this.reading = reading;
+		this.rate = rate;
+		this.total_price = total_price;
 	}
+	
+	
 	
 	public int getReading_Id() {return reading_id;}
 	public int getUser_Id() {return user_id;}

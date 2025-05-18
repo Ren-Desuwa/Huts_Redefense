@@ -3,6 +3,7 @@ package main;
 import java.awt.EventQueue;
 
 import database.Database_Manager;
+import model.Reading;
 import model.User;
 import view.login.*;
 import view.Main_Frame;
@@ -16,7 +17,6 @@ public class Launcher {
 		Database_Manager database_manager = Database_Manager.getInstance();
 		
 		User Test_User = new User(1,"Test_User", "Test_Password", "Test_Email");
-		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
