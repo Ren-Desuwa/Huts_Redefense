@@ -14,11 +14,10 @@ import javax.swing.border.EmptyBorder;
 
 import database.Database_Manager;
 import model.User;
-import view.Main_Frame;
 
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.sql.SQLException;
+import java.awt.Color;
 
 public class Retrive_Window extends JFrame {
 
@@ -38,10 +37,21 @@ public class Retrive_Window extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 692, 637);
 		contentPane = new JPanel();
+		contentPane.setBackground(new Color(255, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		
+		lbl_Title_Forgot_Password = new JLabel("Forgot Password");
+		lbl_Title_Forgot_Password.setBounds(267, 47, 171, 46);
+		lbl_Title_Forgot_Password.setFont(new Font("Tahoma", Font.BOLD, 20));
+		lbl_Title_Forgot_Password.setHorizontalAlignment(SwingConstants.CENTER);
+		contentPane.add(lbl_Title_Forgot_Password);
+		
+		lbl_Username = new JLabel("Username");
+		lbl_Username.setBounds(246, 176, 97, 14);
+		contentPane.add(lbl_Username);
 		
 		tf_Username = new JTextField();
 		tf_Username.setText("Enter Username");
@@ -63,6 +73,10 @@ public class Retrive_Window extends JFrame {
 		contentPane.add(tf_Username);
 		tf_Username.setColumns(10);
 		
+		lbl_Email = new JLabel("Email");
+		lbl_Email.setBounds(246, 252, 97, 14);
+		contentPane.add(lbl_Email);
+		
 		tf_Email = new JTextField();
 		tf_Email.setText("Enter Email");
 		tf_Email.addFocusListener(new FocusAdapter() {
@@ -82,7 +96,7 @@ public class Retrive_Window extends JFrame {
 		tf_Email.setBounds(267, 277, 171, 44);
 		tf_Email.setColumns(10);
 		contentPane.add(tf_Email);
-		
+			
 		JButton btn_Confirm = new JButton("Confirm");
 		btn_Confirm.setBounds(300, 385, 109, 44);
 		btn_Confirm.addActionListener(new ActionListener() {
@@ -91,20 +105,6 @@ public class Retrive_Window extends JFrame {
 			}
 		});
 		contentPane.add(btn_Confirm);
-		
-		lbl_Title_Forgot_Password = new JLabel("Forgot Password");
-		lbl_Title_Forgot_Password.setBounds(267, 47, 171, 46);
-		lbl_Title_Forgot_Password.setFont(new Font("Tahoma", Font.BOLD, 20));
-		lbl_Title_Forgot_Password.setHorizontalAlignment(SwingConstants.CENTER);
-		contentPane.add(lbl_Title_Forgot_Password);
-		
-		lbl_Username = new JLabel("Username");
-		lbl_Username.setBounds(246, 176, 97, 14);
-		contentPane.add(lbl_Username);
-		
-		lbl_Email = new JLabel("Email");
-		lbl_Email.setBounds(246, 252, 97, 14);
-		contentPane.add(lbl_Email);
 	}
 	private void gotoConfirmation() {
 		String username = tf_Username.getText();

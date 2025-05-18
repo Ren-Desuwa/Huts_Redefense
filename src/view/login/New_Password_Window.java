@@ -16,6 +16,10 @@ import database.Database_Manager;
 import model.User;
 import view.Main_Frame;
 
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+
+
 public class New_Password_Window extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -50,10 +54,48 @@ public class New_Password_Window extends JFrame {
 		contentPane.add(btn);
 		
 		pf_Password = new JPasswordField();
+		pf_Password.setText("Enter Password");
+		pf_Password.setEchoChar((char) 0);
+		pf_Password.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				if (String.valueOf(pf_Password.getPassword()).equals("Enter Password")) {
+					pf_Password.setText("");
+					pf_Password.setEchoChar('\u2022'); // Bullet character
+				}
+			}
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (pf_Password.getPassword().length == 0) {
+					pf_Password.setText("Enter Password");
+					pf_Password.setEchoChar((char) 0); // Show text again
+				}
+			}
+		});
 		pf_Password.setBounds(268, 200, 171, 44);
 		contentPane.add(pf_Password);
 		
 		pf_ConfirmPassword = new JPasswordField();
+		pf_ConfirmPassword.setText("Confirm Password");
+		pf_ConfirmPassword.setEchoChar((char) 0);
+		pf_ConfirmPassword.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				if (String.valueOf(pf_ConfirmPassword.getPassword()).equals("Confirm Password")) {
+					pf_ConfirmPassword.setText("");
+					pf_ConfirmPassword.setEchoChar('\u2022'); // Bullet character
+				}
+			}
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (pf_ConfirmPassword.getPassword().length == 0) {
+					pf_ConfirmPassword.setText("Confirm Password");
+					pf_ConfirmPassword.setEchoChar((char) 0); // Show text again
+				}
+			}
+		});
 		pf_ConfirmPassword.setBounds(268, 278, 171, 44);
 		contentPane.add(pf_ConfirmPassword);
 		
