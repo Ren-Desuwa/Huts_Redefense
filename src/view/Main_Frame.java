@@ -2,8 +2,14 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -12,6 +18,7 @@ import javax.swing.JPanel;
 import database.Database_Manager;
 import model.*;
 import view.panel.*;
+import javax.swing.JLabel;
 
 
 public class Main_Frame extends JFrame {
@@ -38,6 +45,7 @@ public class Main_Frame extends JFrame {
 	private JButton side_electricity_button;
 	private JButton side_water_button;
 	private JButton side_gas_button;
+	private JLabel lblNewLabel;
 	
 	public Main_Frame(Database_Manager database_manager, User user) {
 		this.database_manager = database_manager;
@@ -45,8 +53,9 @@ public class Main_Frame extends JFrame {
 		
 		initializeFrame();
 		createPanels();
-		createSidePanel();
-		createCardPanel();
+        initializeComponents();
+        addComponentsToFrame();
+        setupActionListeners();
 		
 		content_pane.add(side_panel, BorderLayout.WEST);
 		content_pane.add(card_panel, BorderLayout.CENTER);
@@ -77,38 +86,95 @@ public class Main_Frame extends JFrame {
         gas_panel = new Gas_Panel(database_manager, current_user);
         
         card_panel.add(home_panel, HOME_PANEL);
+        
+        lblNewLabel = new JLabel("HOME");
+        home_panel.add(lblNewLabel);
         card_panel.add(electricity_panel, ELECTRICITY_PANEL);
         card_panel.add(water_panel, WATER_PANEL);
         card_panel.add(gas_panel, GAS_PANEL);
         
+	}
+	
+	private void initializeComponents() {
+		side_home_button = new JButton("Home");
+		side_electricity_button = new JButton("Electricity");
+		side_water_button = new JButton("Water");
+		side_gas_button = new JButton("Gas");
+		
+		side_home_button.setAlignmentX(Component.CENTER_ALIGNMENT);
+		side_home_button.setMaximumSize(new Dimension(180, 40));
+		side_home_button.setBackground(new Color(70, 70, 70));
+		side_home_button.setForeground(Color.WHITE);
+		side_home_button.setFocusPainted(false);
+		side_home_button.setBorderPainted(false);
+		side_home_button.setFont(new Font("Arial", Font.PLAIN, 16));
+		
+		side_electricity_button.setAlignmentX(Component.CENTER_ALIGNMENT);
+		side_electricity_button.setMaximumSize(new Dimension(180, 40));
+		side_electricity_button.setBackground(new Color(70, 70, 70));
+		side_electricity_button.setForeground(Color.WHITE);
+		side_electricity_button.setFocusPainted(false);
+		side_electricity_button.setBorderPainted(false);
+		side_electricity_button.setFont(new Font("Arial", Font.PLAIN, 16));
+		
+		side_water_button.setAlignmentX(Component.CENTER_ALIGNMENT);
+		side_water_button.setMaximumSize(new Dimension(180, 40));
+		side_water_button.setBackground(new Color(70, 70, 70));
+		side_water_button.setForeground(Color.WHITE);
+		side_water_button.setFocusPainted(false);
+		side_water_button.setBorderPainted(false);
+		side_water_button.setFont(new Font("Arial", Font.PLAIN, 16));
+		
+		side_gas_button.setAlignmentX(Component.CENTER_ALIGNMENT);
+		side_gas_button.setMaximumSize(new Dimension(180, 40));
+		side_gas_button.setBackground(new Color(70, 70, 70));
+		side_gas_button.setForeground(Color.WHITE);
+		side_gas_button.setFocusPainted(false);
+		side_gas_button.setBorderPainted(false);
+		side_gas_button.setFont(new Font("Arial", Font.PLAIN, 16));
+	}
+	
+	private void addComponentsToFrame() {
+		content_pane.add(side_panel, BorderLayout.WEST);
+		content_pane.add(card_panel, BorderLayout.CENTER);
+		
+		side_panel.add(Box.createRigidArea(new Dimension(0, 20)));
+		side_panel.add(side_home_button);
+		side_panel.add(Box.createRigidArea(new Dimension(0, 10)));
+		side_panel.add(side_electricity_button);
+		side_panel.add(Box.createRigidArea(new Dimension(0, 10)));
+		side_panel.add(side_water_button);
+		side_panel.add(Box.createRigidArea(new Dimension(0, 10)));
+		side_panel.add(side_gas_button);
+		side_panel.add(Box.createVerticalGlue());
+		
+	}
+	
+	private void setupActionListeners() {
+        side_home_button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                card_layout.show(card_panel, HOME_PANEL);
+            }
+        });
         
-	}
+        side_electricity_button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				card_layout.show(card_panel, ELECTRICITY_PANEL);
+			}
+		});
+        
+        side_water_button.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		card_layout.show(card_panel, WATER_PANEL);
+        	}
+        });
+        
+        side_gas_button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				card_layout.show(card_panel, GAS_PANEL);
+			}
+		});
+        
+    }
 	
-	private void createCardPanel() {
-		card_panel = new JPanel();
-		card_layout = new CardLayout();
-		card_panel.setLayout(card_layout);
-		
-		Home_Panel home_panel = new Home_Panel(database_manager, current_user);
-		Electricity_Panel electricity_panel = new Electricity_Panel(database_manager, current_user);
-		Water_Panel water_panel = new Water_Panel(database_manager, current_user);
-		Gas_Panel gas_panel = new Gas_Panel(database_manager, current_user);
-		
-		card_panel.add(home_panel, HOME_PANEL);
-		card_panel.add(electricity_panel, ELECTRICITY_PANEL);
-		card_panel.add(water_panel, WATER_PANEL);
-		card_panel.add(gas_panel, GAS_PANEL);
-		
-	}
-	
-	private void createSidePanel() {
-		Side_Panel = new JPanel();
-		Side_Panel.setLayout(new CardLayout());
-		
-		Side_Panel.add(new Home_Panel(database_manager, current_user), HOME_PANEL);
-		Side_Panel.add(new Electricity_Panel(database_manager, current_user), ELECTRICITY_PANEL);
-		Side_Panel.add(new Water_Panel(database_manager, current_user), WATER_PANEL);
-		Side_Panel.add(new Gas_Panel(database_manager, current_user), GAS_PANEL);
-		
-	}
 }
