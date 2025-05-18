@@ -12,9 +12,16 @@ import javax.swing.JPasswordField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import database.Database_Manager;
+import model.User;
+import view.Main_Frame;
+
 public class New_Password_Window extends JFrame {
 
 	private static final long serialVersionUID = 1L;
+	private User current_user;
+	private Database_Manager database_manager;
+	
 	private JPanel contentPane;
 	private JPasswordField pf_Password;
 	private JPasswordField pf_ConfirmPassword;
@@ -22,7 +29,10 @@ public class New_Password_Window extends JFrame {
 	private JLabel lblNewLabel_4;
 	private JLabel lblNewLabel_5;
 
-	public New_Password_Window() {
+	public New_Password_Window(Database_Manager database_manager, User current_user) {
+		this.current_user = current_user;
+		this.database_manager = database_manager;
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 692, 637);
 		contentPane = new JPanel();
