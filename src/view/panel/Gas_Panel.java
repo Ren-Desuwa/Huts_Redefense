@@ -1,5 +1,7 @@
 package view.panel;
 
+import java.awt.Dimension;
+
 import javax.swing.JPanel;
 
 import database.Database_Manager;
@@ -18,7 +20,9 @@ public class Gas_Panel extends JPanel {
 		this.database_manager = database_manager;
 		this.current_user = current_user;
 		
-
+		setPreferredSize(new Dimension(1000, 725));
+		setLayout(null);
+		
 	}
 
 }
