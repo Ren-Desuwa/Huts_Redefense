@@ -127,7 +127,7 @@ public class Sign_Up_Window extends JFrame {
 		contentPane.add(pf_Password);
 		
 		lbl_Confirm_Password = new JLabel("Confirm Password");
-		lbl_Confirm_Password.setBounds(246, 353, 97, 14);
+		lbl_Confirm_Password.setBounds(246, 353, 163, 14);
 		contentPane.add(lbl_Confirm_Password);
 		
 		pf_ConfirmPassword = new JPasswordField();
