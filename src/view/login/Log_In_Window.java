@@ -41,6 +41,9 @@ public class Log_In_Window extends JFrame {
 
 	public Log_In_Window(Database_Manager database_manager) {
 		this.database_manager = database_manager;
+		
+		setTitle("Log In");
+		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 692, 637);
 		contentPane = new JPanel();

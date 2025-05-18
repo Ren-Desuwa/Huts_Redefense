@@ -40,6 +40,9 @@ public class Sign_Up_Window extends JFrame {
 	
 	public Sign_Up_Window(Database_Manager database_manager) {
 		this.database_manager = database_manager;
+		
+		setTitle("Sign Up");
+		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 692, 637);
 		contentPane = new JPanel();
