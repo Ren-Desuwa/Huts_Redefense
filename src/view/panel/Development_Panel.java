@@ -7,7 +7,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import org.knowm.xchart.CategoryChart;
 import org.knowm.xchart.CategoryChartBuilder;
@@ -43,32 +45,48 @@ public class Development_Panel extends JPanel {
         dimensionLabel2.setFont(new Font("Tahoma", Font.PLAIN, 11));
         dimensionLabel2.setBounds(10, 30, 187, 26);
         add(dimensionLabel2);
+        
+        
+        // Sample data for the list
+        String[] items = {"Item 1", "Item 2", "Item 3", "Item 4", "Item 5",
+                          "Item 6", "Item 7", "Item 8", "Item 9", "Item 10"};
 
-        // Panel to hold the chart
-        JPanel chartHolder = new JPanel();
-        chartHolder.setLayout(new BorderLayout()); // Important to use layout that respects component sizing
-        chartHolder.setBounds(244, 48, 456, 261);
-        add(chartHolder);
+        // Create the JList
+        JList<String> list = new JList<>(items);
 
-        // Sample data for electricity usage
-        List<String> months = Arrays.asList("Jan", "Feb", "Mar", "Apr", "May", "Jun");
-        List<Double> wattData = Arrays.asList(320.0, 290.0, 310.0, 270.0, 350.0, 330.0);
+        // Put the JList into a JScrollPane
+        JScrollPane scrollPane_1 = new JScrollPane(list);
+        scrollPane_1.setBounds(341, 94, 431, 313);
+        add(scrollPane_1);
+        
+        // Create a frame to show it
 
-        // Create the chart
-        CategoryChart chart = new CategoryChartBuilder()
-                .width(456)
-                .height(261)
-                .title("Monthly Electricity Usage")
-                .xAxisTitle("Month")
-                .yAxisTitle("Watts")
-                .build();
 
-        chart.getStyler().setLegendVisible(false);
-        chart.addSeries("Watts", months, wattData);
-
-        // Add XChartPanel to Swing panel
-        XChartPanel<CategoryChart> chartPanel = new XChartPanel<>(chart);
-        chartHolder.add(chartPanel, BorderLayout.CENTER);
+//        // Panel to hold the chart
+//        JPanel chartHolder = new JPanel();
+//        chartHolder.setLayout(new BorderLayout()); // Important to use layout that respects component sizing
+//        chartHolder.setBounds(244, 48, 456, 261);
+//        add(chartHolder);
+//
+//        // Sample data for electricity usage
+//        List<String> months = Arrays.asList("Jan", "Feb", "Mar", "Apr", "May", "Jun");
+//        List<Double> wattData = Arrays.asList(320.0, 290.0, 310.0, 270.0, 350.0, 330.0);
+//
+//        // Create the chart
+//        CategoryChart chart = new CategoryChartBuilder()
+//                .width(456)
+//                .height(261)
+//                .title("Monthly Electricity Usage")
+//                .xAxisTitle("Month")
+//                .yAxisTitle("Watts")
+//                .build();
+//
+//        chart.getStyler().setLegendVisible(false);
+//        chart.addSeries("Watts", months, wattData);
+//
+//        // Add XChartPanel to Swing panel
+//        XChartPanel<CategoryChart> chartPanel = new XChartPanel<>(chart);
+//        chartHolder.add(chartPanel, BorderLayout.CENTER);
     }
     
     public void updateDimensions(JPanel sidePanel) {
