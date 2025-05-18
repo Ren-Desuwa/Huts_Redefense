@@ -14,16 +14,19 @@ import javax.swing.border.EmptyBorder;
 
 import database.Database_Manager;
 
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+
 public class Retrive_Window extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 
 	private JTextField tf_Username;
-	private JTextField tf_Gmail;
-	private JLabel lblNewLabel_1;
-	private JLabel lblNewLabel_2;
-	private JLabel lblNewLabel_3;
+	private JTextField tf_Email;
+	private JLabel lbl_Title_Forgot_Password;
+	private JLabel lbl_Username;
+	private JLabel lbl_Email;
 
 	public Retrive_Window(Database_Manager database_manager) {
 
@@ -36,36 +39,66 @@ public class Retrive_Window extends JFrame {
 		contentPane.setLayout(null);
 		
 		tf_Username = new JTextField();
+		tf_Username.setText("Enter Username");
+		tf_Username.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				if (tf_Username.getText().equals("Enter Username")) {
+					tf_Username.setText("");
+				}
+			}
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (tf_Username.getText().isEmpty()) {
+					tf_Username.setText("Enter Username");
+				}
+			}
+		});
 		tf_Username.setBounds(267, 201, 171, 44);
 		contentPane.add(tf_Username);
 		tf_Username.setColumns(10);
 		
-		tf_Gmail = new JTextField();
-		tf_Gmail.setBounds(267, 277, 171, 44);
-		tf_Gmail.setColumns(10);
-		contentPane.add(tf_Gmail);
+		tf_Email = new JTextField();
+		tf_Email.setText("Enter Email");
+		tf_Email.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				if (tf_Email.getText().equals("Enter Email")) {
+					tf_Email.setText("");
+				}
+			}
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (tf_Email.getText().isEmpty()) {
+					tf_Email.setText("Enter Email");
+				}
+			}
+		});
+		tf_Email.setBounds(267, 277, 171, 44);
+		tf_Email.setColumns(10);
+		contentPane.add(tf_Email);
 		
-		JButton btn = new JButton("Confirm");
-		btn.setBounds(300, 385, 109, 44);
-		btn.addActionListener(new ActionListener() {
+		JButton btn_Confirm = new JButton("Confirm");
+		btn_Confirm.setBounds(300, 385, 109, 44);
+		btn_Confirm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		contentPane.add(btn);
+		contentPane.add(btn_Confirm);
 		
-		lblNewLabel_1 = new JLabel("Forgot Password");
-		lblNewLabel_1.setBounds(267, 47, 171, 46);
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 20));
-		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-		contentPane.add(lblNewLabel_1);
+		lbl_Title_Forgot_Password = new JLabel("Forgot Password");
+		lbl_Title_Forgot_Password.setBounds(267, 47, 171, 46);
+		lbl_Title_Forgot_Password.setFont(new Font("Tahoma", Font.BOLD, 20));
+		lbl_Title_Forgot_Password.setHorizontalAlignment(SwingConstants.CENTER);
+		contentPane.add(lbl_Title_Forgot_Password);
 		
-		lblNewLabel_2 = new JLabel("Username");
-		lblNewLabel_2.setBounds(246, 176, 97, 14);
-		contentPane.add(lblNewLabel_2);
+		lbl_Username = new JLabel("Username");
+		lbl_Username.setBounds(246, 176, 97, 14);
+		contentPane.add(lbl_Username);
 		
-		lblNewLabel_3 = new JLabel("Gmail");
-		lblNewLabel_3.setBounds(246, 252, 97, 14);
-		contentPane.add(lblNewLabel_3);
+		lbl_Email = new JLabel("Email");
+		lbl_Email.setBounds(246, 252, 97, 14);
+		contentPane.add(lbl_Email);
 	}
 
 }

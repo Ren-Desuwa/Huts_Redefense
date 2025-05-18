@@ -22,6 +22,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
+import java.awt.Color;
 
 public class Log_In_Window extends JFrame {
 
@@ -34,6 +35,9 @@ public class Log_In_Window extends JFrame {
 	private JLabel lbl_Title_Log_In;
 	private JLabel lbl_Username;
 	private JLabel lbl_Password;
+	private JLabel lbl_Forgot_Password;
+	private JLabel lbl_Incorrect_Signage1;
+	private JLabel lbl_Incorrect_Signaage2;
 
 	public Log_In_Window(Database_Manager database_manager) {
 		this.database_manager = database_manager;
@@ -54,10 +58,6 @@ public class Log_In_Window extends JFrame {
 		lbl_Username = new JLabel("Username");
 		lbl_Username.setBounds(248, 129, 97, 14);
 		contentPane.add(lbl_Username);
-		
-		lbl_Password = new JLabel("Password");
-		lbl_Password.setBounds(248, 209, 97, 14);
-		contentPane.add(lbl_Password);
 							
 		tf_Username = new JTextField();
 		tf_Username.setText("Enter Username");
@@ -80,19 +80,9 @@ public class Log_In_Window extends JFrame {
 		contentPane.add(tf_Username);
 		tf_Username.setColumns(10);
 		
-		JButton btn = new JButton("Log In");
-		btn.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				Login();
-			}
-		});
-		btn.setBounds(301, 331, 109, 44);
-		btn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		contentPane.add(btn);
+		lbl_Password = new JLabel("Password");
+		lbl_Password.setBounds(248, 209, 97, 14);
+		contentPane.add(lbl_Password);
 		
 		pf_Password = new JPasswordField();
 		pf_Password.setText("Enter Password");
@@ -116,16 +106,73 @@ public class Log_In_Window extends JFrame {
 		pf_Password.setBounds(269, 234, 171, 44);
 		contentPane.add(pf_Password);
 		
+		lbl_Forgot_Password = new JLabel("Forgot Password?");
+		lbl_Forgot_Password.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		lbl_Forgot_Password.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				lbl_Forgot_Password.setText("<html><u>Forgot Password?</u></html>");
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				lbl_Forgot_Password.setText("Forgot Password?");
+			}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				gotoForgotPassword();
+			}
+		});
+		lbl_Forgot_Password.setBounds(356, 289, 157, 14);
+		lbl_Forgot_Password.setVisible(false); // Hide initially
+		contentPane.add(lbl_Forgot_Password);
+		
+		JButton btn = new JButton("Log In");
+		btn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				Login();
+			}
+		});
+		btn.setBounds(301, 331, 109, 44);
+		btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		contentPane.add(btn);
+		
 		JLabel lbl_SignUp = new JLabel("Sign Up");
 		lbl_SignUp.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				goToSignUp();
 			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				lbl_SignUp.setText("<html><u>Sign Up</u></html>");
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				lbl_SignUp.setText("Sign Up");
+			}
 		});
 		lbl_SignUp.setBounds(322, 386, 70, 25);
 		lbl_SignUp.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(lbl_SignUp);
+		
+		lbl_Incorrect_Signage1 = new JLabel("*");
+		lbl_Incorrect_Signage1.setForeground(new Color(255, 0, 0));
+		lbl_Incorrect_Signage1.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_Incorrect_Signage1.setBounds(440, 220, 61, 25);
+		lbl_Incorrect_Signage1.setVisible(false); // Hide initially
+		contentPane.add(lbl_Incorrect_Signage1);
+		
+		lbl_Incorrect_Signaage2 = new JLabel("*");
+		lbl_Incorrect_Signaage2.setForeground(new Color(255, 0, 0));
+		lbl_Incorrect_Signaage2.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_Incorrect_Signaage2.setBounds(440, 140, 61, 25);
+		lbl_Incorrect_Signaage2.setVisible(false); // Hide initially
+		contentPane.add(lbl_Incorrect_Signaage2);
 		
 	}
 	private void goToSignUp() {
@@ -154,6 +201,9 @@ public class Log_In_Window extends JFrame {
 		try {
 			if (!database_manager.getUserManager().UsernamePasswordMatch(username, password)) {
 				System.out.println("Passwords do not match.");
+				lbl_Forgot_Password.setVisible(true); // Show label
+				lbl_Incorrect_Signage1.setVisible(true); // Show label
+				lbl_Incorrect_Signaage2.setVisible(true); // Show label
 				return;
 			}
 			System.out.println("User Log In successfully.");
@@ -170,5 +220,12 @@ public class Log_In_Window extends JFrame {
 			e.printStackTrace();
 		}
 	}
-
+	private void gotoForgotPassword() {
+		// Close the current window
+		this.dispose();
+		
+		// Open the Forgot Password window
+		Retrive_Window retrivewindow = new Retrive_Window(database_manager);
+		retrivewindow.setVisible(true);
+	}
 }
