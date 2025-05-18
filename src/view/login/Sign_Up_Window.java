@@ -171,6 +171,14 @@ public class Sign_Up_Window extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				goToLogIn();
 			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				lbl_Login.setText("<html><u>Log in</u></html>");
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				lbl_Login.setText("Log in");
+			}
 		});
 		lbl_Login.setBounds(321, 518, 70, 25);
 		lbl_Login.setHorizontalAlignment(SwingConstants.CENTER);
