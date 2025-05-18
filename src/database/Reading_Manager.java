@@ -142,9 +142,9 @@ public class Reading_Manager {
 						rs.getInt("user_id"),
 						LocalDate.parse(rs.getString("date")),
 						rs.getString("type"),
-						rs.getInt("reading"),
-						rs.getInt("rate"),
-						rs.getInt("total_price")
+						rs.getDouble("reading"),
+						rs.getDouble("rate"),
+						rs.getDouble("total_price")
 					);
 				}
 				return null;
@@ -167,9 +167,9 @@ public class Reading_Manager {
 						rs.getInt("user_id"),
 						LocalDate.parse(rs.getString("date")),
 						rs.getString("type"),
-						rs.getInt("reading"),
-						rs.getInt("rate"),
-						rs.getInt("total_price")
+						rs.getDouble("reading"),
+						rs.getDouble("rate"),
+						rs.getDouble("total_price")
 					);
 				}
 				return null;
@@ -201,9 +201,9 @@ public class Reading_Manager {
 						rs.getInt("user_id"),
 						LocalDate.parse(rs.getString("date")),
 						rs.getString("type"),
-						rs.getInt("reading"),
-						rs.getInt("rate"),
-						rs.getInt("total_price")
+						rs.getDouble("reading"),
+						rs.getDouble("rate"),
+						rs.getDouble("total_price")
 					));
 				}
 			}
@@ -228,9 +228,9 @@ public class Reading_Manager {
 						rs.getInt("user_id"),
 						LocalDate.parse(rs.getString("date")),
 						rs.getString("type"),
-						rs.getInt("reading"),
-						rs.getInt("rate"),
-						rs.getInt("total_price")
+						rs.getDouble("reading"),
+						rs.getDouble("rate"),
+						rs.getDouble("total_price")
 					));
 				}
 			}
@@ -239,6 +239,32 @@ public class Reading_Manager {
 			
 		}
 		return list;
+	}
+	
+	public Reading getLatestReadingByType(User user,String type) throws SQLException {
+		String sqlscript = "SELECT * FROM readings WHERE user_id = ? AND type = ? ORDER BY date DESC LIMIT 1";
+		try (PreparedStatement prepared_statement = connection.prepareStatement(sqlscript)) {
+			prepared_statement.setInt(1, user.getUser_Id());
+			prepared_statement.setString(2, type);
+			try (ResultSet rs = prepared_statement.executeQuery()) {
+				if (rs.next()) {
+					return new Reading(
+						rs.getInt("reading_id"),
+						rs.getInt("user_id"),
+						LocalDate.parse(rs.getString("date")),
+						rs.getString("type"),
+						rs.getDouble("reading"),
+						rs.getDouble("rate"),
+						rs.getDouble("total_price")
+					);
+				}
+				return null;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+		}
+		return null;
 	}
 	
 }
