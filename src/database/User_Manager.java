@@ -178,7 +178,7 @@ public class User_Manager {
 	}
 	
 	public void updateUserPassword(User user, String password) throws SQLException {
-		String sqlscript = "UPDATE users SET password = ? WHERE id = ?";
+		String sqlscript = "UPDATE users SET password = ? WHERE user_id = ?";
 		try (PreparedStatement prepared_statement = connection.prepareStatement(sqlscript)) {
 			prepared_statement.setString(1, password);
 			prepared_statement.setInt(2, user.getUser_Id());

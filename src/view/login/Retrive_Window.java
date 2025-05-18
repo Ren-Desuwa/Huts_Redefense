@@ -105,12 +105,12 @@ public class Retrive_Window extends JFrame {
 		btn_Confirm.setBounds(300, 385, 109, 44);
 		btn_Confirm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				gotoConfirmation();
+				Confirmation();
 			}
 		});
 		contentPane.add(btn_Confirm);
 	}
-	private void gotoConfirmation() {
+	private void Confirmation() {
 		String username = tf_Username.getText();
 		String email = tf_Email.getText();
 		
@@ -125,7 +125,7 @@ public class Retrive_Window extends JFrame {
 		}
 		
 		try {
-			if (!database_manager.getUserManager().UsernamePasswordMatch(username, email)) {
+			if (database_manager.getUserManager().UsernamePasswordMatch(username, email)) {
 				System.out.println("Username and email do not match.");
 			}
 			

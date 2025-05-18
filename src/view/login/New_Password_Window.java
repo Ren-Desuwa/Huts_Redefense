@@ -29,9 +29,9 @@ public class New_Password_Window extends JFrame {
 	private JPanel contentPane;
 	private JPasswordField pf_Password;
 	private JPasswordField pf_ConfirmPassword;
-	private JLabel lblNewLabel_1;
-	private JLabel lblNewLabel_4;
-	private JLabel lblNewLabel_5;
+	private JLabel lbl_Title_Forgot_Password;
+	private JLabel lbl_New_Password;
+	private JLabel lbl_Confirm_Password;
 		
 	public New_Password_Window(Database_Manager database_manager, User current_user) {
 		this.current_user = current_user;
@@ -39,6 +39,7 @@ public class New_Password_Window extends JFrame {
 		
 		setTitle("New Password");
 		setResizable(false);
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 692, 637);
 		contentPane = new JPanel();
@@ -47,13 +48,15 @@ public class New_Password_Window extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JButton btn = new JButton("Change Password");
-		btn.setBounds(285, 385, 138, 44);
-		btn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		contentPane.add(btn);
+		lbl_Title_Forgot_Password = new JLabel("Forgot Password");
+		lbl_Title_Forgot_Password.setBounds(267, 47, 171, 46);
+		lbl_Title_Forgot_Password.setFont(new Font("Tahoma", Font.BOLD, 20));
+		lbl_Title_Forgot_Password.setHorizontalAlignment(SwingConstants.CENTER);
+		contentPane.add(lbl_Title_Forgot_Password);
+		
+		lbl_New_Password = new JLabel("New Password");
+		lbl_New_Password.setBounds(247, 175, 97, 14);
+		contentPane.add(lbl_New_Password);
 		
 		pf_Password = new JPasswordField();
 		pf_Password.setText("Enter Password");
@@ -78,6 +81,10 @@ public class New_Password_Window extends JFrame {
 		pf_Password.setBounds(268, 200, 171, 44);
 		contentPane.add(pf_Password);
 		
+		lbl_Confirm_Password = new JLabel("Confirm Password");
+		lbl_Confirm_Password.setBounds(247, 253, 97, 14);
+		contentPane.add(lbl_Confirm_Password);
+		
 		pf_ConfirmPassword = new JPasswordField();
 		pf_ConfirmPassword.setText("Confirm Password");
 		pf_ConfirmPassword.setEchoChar((char) 0);
@@ -101,19 +108,45 @@ public class New_Password_Window extends JFrame {
 		pf_ConfirmPassword.setBounds(268, 278, 171, 44);
 		contentPane.add(pf_ConfirmPassword);
 		
-		lblNewLabel_1 = new JLabel("Forgot Password");
-		lblNewLabel_1.setBounds(267, 47, 171, 46);
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 20));
-		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-		contentPane.add(lblNewLabel_1);
-		
-		lblNewLabel_4 = new JLabel("New Password");
-		lblNewLabel_4.setBounds(247, 175, 97, 14);
-		contentPane.add(lblNewLabel_4);
-		
-		lblNewLabel_5 = new JLabel("Confirm Password");
-		lblNewLabel_5.setBounds(247, 253, 97, 14);
-		contentPane.add(lblNewLabel_5);
+		JButton btn_Change_Password = new JButton("Change Password");
+		btn_Change_Password.setBounds(285, 385, 138, 44);
+		btn_Change_Password.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ChangePassword();
+			}
+		});
+		contentPane.add(btn_Change_Password);
 	}
-
+	private void ChangePassword() {
+		String password = String.valueOf(pf_Password.getPassword());
+		String confirmPassword = String.valueOf(pf_ConfirmPassword.getPassword());
+		
+		if (password.isEmpty() || confirmPassword.isEmpty()) {
+			System.out.println("Please fill in all fields.");
+			return;
+		}
+		
+		if (password.equals("Enter Password") || confirmPassword.equals("Confirm Password")) {
+			System.out.println("Please fill in all fields.");
+			return;
+		}
+		
+		if (!password.equals(confirmPassword)) {
+			System.out.println("Passwords do not match.");
+			return;
+		}
+		
+		try {
+			database_manager.getUserManager().updateUserPassword(current_user, password);
+			System.out.println("Password changed successfully.");
+			
+			this.dispose();
+			
+			// Open the Sign In window
+			Log_In_Window LogInWindow = new Log_In_Window(database_manager);
+			LogInWindow.setVisible(true);
+		} catch (Exception e) {
+			System.out.println("Error changing password: " + e.getMessage());
+		}
+	}
 }
