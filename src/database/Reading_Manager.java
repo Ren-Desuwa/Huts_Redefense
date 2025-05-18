@@ -40,7 +40,7 @@ public class Reading_Manager {
 	}
 	
 	public void addReading(User user, LocalDate date, String type, double reading, double total_price) throws SQLException {
-		String sqlscript = "INSERT INTO readings (user_id, date, type, reading, rate, total_price) VALUES (?, ?, ?, ?, ?, ?)";
+		String sqlscript = "INSERT INTO readings (user_id, date, type, reading, total_price) VALUES (?, ?, ?, ?, ?)";
 		try (PreparedStatement prepared_statement = connection.prepareStatement(sqlscript, Statement.RETURN_GENERATED_KEYS)) {
 			prepared_statement.setInt(1, user.getUser_Id()); // user_id
 			prepared_statement.setString(2, date.toString()); // date
@@ -67,7 +67,7 @@ public class Reading_Manager {
 	}
 	
 	public void deleteReading(User user, int readingId) throws SQLException {
-		String sqlscript = "DELETE FROM readings WHERE rading_id = ? AND user_id = ?";
+		String sqlscript = "DELETE FROM readings WHERE reading_id = ? AND user_id = ?";
 		try (PreparedStatement prepared_statement = connection.prepareStatement(sqlscript)) {
 			prepared_statement.setInt(1, readingId);
 			prepared_statement.setInt(2, user.getUser_Id());
