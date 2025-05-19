@@ -18,6 +18,7 @@ import model.User;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.Color;
+import java.awt.EventQueue;
 
 public class Retrive_Window extends JFrame {
 
@@ -131,10 +132,19 @@ public class Retrive_Window extends JFrame {
 			
 			User current_user = database_manager.getUserManager().getUserByUsername(username);
 			
-			this.dispose();
-			
-			New_Password_Window newpassword = new New_Password_Window(database_manager, current_user);
-			newpassword.setVisible(true);
+			final JFrame currentFrame = this;
+		    
+		    EventQueue.invokeLater(new Runnable() {
+		        public void run() {
+		            try {
+		                currentFrame.dispose();
+		                New_Password_Window newPasswordWindow = new New_Password_Window(database_manager, current_user);
+		                newPasswordWindow.setVisible(true);
+		            } catch (Exception e) {
+		                e.printStackTrace();
+		            }
+		        }
+		    });
 			
 		} catch (Exception e) {
 			e.printStackTrace();

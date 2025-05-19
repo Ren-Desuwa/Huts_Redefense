@@ -1,4 +1,4 @@
-package view.panel;
+package view.panel.misc;
 
 import java.awt.Dimension;
 import java.awt.EventQueue;
