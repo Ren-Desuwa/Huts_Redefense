@@ -10,14 +10,28 @@ import javax.swing.JLabel;
 import java.awt.Dimension;
 import javax.swing.JButton;
 import javax.swing.border.LineBorder;
+
+import org.knowm.xchart.CategoryChart;
+import org.knowm.xchart.CategoryChartBuilder;
+import org.knowm.xchart.XChartPanel;
+import org.knowm.xchart.style.Styler.LegendPosition;
+
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import javax.swing.JTextPane;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 
 public class Home_Panel extends JPanel {
 
@@ -46,6 +60,11 @@ public class Home_Panel extends JPanel {
 	private JLabel lbl_Gas;
 	private JPanel panel_OverAll_Graph;
 	private JLabel lblNewLabel_1;
+	
+	 private XChartPanel<CategoryChart> electricityChartPanel;
+	 private XChartPanel<CategoryChart> waterChartPanel;
+	 private XChartPanel<CategoryChart> gasChartPanel;
+	 private XChartPanel<CategoryChart> overallChartPanel;
 	
 	public Home_Panel(Database_Manager database_manager, User current_user) {
 		this.database_manager = database_manager;
@@ -303,39 +322,237 @@ public class Home_Panel extends JPanel {
 	}
 	
 	public void setupData() {
-		
-		try {
-			Reading electricity_reading = database_manager.getReadingManager().getLatestReadingByType(current_user, "electricity");
-			Reading water_reading = database_manager.getReadingManager().getLatestReadingByType(current_user, "water");
-			Reading gas_reading = database_manager.getReadingManager().getLatestReadingByType(current_user, "gas");
-			
-			if (electricity_reading == null) {
-				lbl_Electricity_Reading_Value.setText("No Data");
-			} else {
-				lbl_Electricity_Reading_Value.setText(String.valueOf(electricity_reading.getReading()));
-			}
-			
-			if (water_reading == null) {
-				lbl_Water_Reading_Value.setText("No Data");
-			} else {
-				lbl_Water_Reading_Value.setText(String.valueOf(water_reading.getReading()));
-			}
-			
-			if (gas_reading == null) {
-				lbl_Gas_Reading_Value.setText("No Data");
-			} else {
-				lbl_Gas_Reading_Value.setText(String.valueOf(gas_reading.getReading()));
-			}
-			
-			if (electricity_reading == null || water_reading == null || gas_reading == null) {
-				lbl_OverAll_Reading_Value.setText("No Data");
-			} else {
-				double total_price = electricity_reading.getTotal_Price() + water_reading.getTotal_Price() + gas_reading.getTotal_Price();
-				lbl_Electricity_Reading_Value.setText(String.valueOf(total_price));
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+        try {
+            Reading electricity_reading = database_manager.getReadingManager().getLatestReadingByType(current_user, "electricity");
+            Reading water_reading = database_manager.getReadingManager().getLatestReadingByType(current_user, "water");
+            Reading gas_reading = database_manager.getReadingManager().getLatestReadingByType(current_user, "gas");
+            
+            // Original code for setting the labels
+            if (electricity_reading == null) {
+                lbl_Electricity_Reading_Value.setText("No Data");
+            } else {
+                lbl_Electricity_Reading_Value.setText(String.valueOf(electricity_reading.getReading()));
+            }
+            
+            if (water_reading == null) {
+                lbl_Water_Reading_Value.setText("No Data");
+            } else {
+                lbl_Water_Reading_Value.setText(String.valueOf(water_reading.getReading()));
+            }
+            
+            if (gas_reading == null) {
+                lbl_Gas_Reading_Value.setText("No Data");
+            } else {
+                lbl_Gas_Reading_Value.setText(String.valueOf(gas_reading.getReading()));
+            }
+            
+            if (electricity_reading == null || water_reading == null || gas_reading == null) {
+                lbl_OverAll_Reading_Value.setText("No Data");
+            } else {
+                double total_price = electricity_reading.getTotal_Price() + water_reading.getTotal_Price() + gas_reading.getTotal_Price();
+                lbl_OverAll_Reading_Value.setText(String.valueOf(total_price));
+            }
+            
+            // Setup the bar graphs
+            setupBarGraphs();
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+	
+	/**
+     * Initializes and displays bar graphs for utility readings
+     * This method creates bar charts for electricity, water, gas, and overall expenses
+     */
+    private void setupBarGraphs() {
+        try {
+            // Get the current date and calculate date range (last 6 months)
+            LocalDate currentDate = LocalDate.now();
+            LocalDate startDate = currentDate.minusMonths(6);
+            
+            // Get all readings within the date range
+            List<Reading> readings = database_manager.getReadingManager()
+                    .getReadingsByTime(current_user, startDate, currentDate);
+            
+            // Setup individual utility graphs
+            setupElectricityGraph(readings);
+            setupWaterGraph(readings);
+            setupGasGraph(readings);
+            setupOverallGraph(readings);
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Creates and displays the electricity bar graph
+     * @param readings List of all readings from the database
+     */
+    private void setupElectricityGraph(List<Reading> readings) {
+        // Filter only electricity readings
+        List<Reading> electricityReadings = readings.stream()
+                .filter(reading -> reading.getType().equals("electricity"))
+                .collect(Collectors.toList());
+        
+        // Group readings by month
+        Map<Month, Double> monthlyReadings = groupReadingsByMonth(electricityReadings, false);
+        
+        // Create chart
+        CategoryChart chart = createBarChart("Monthly Electricity Usage", "Month", "kWh", monthlyReadings);
+        
+        // Create chart panel
+        electricityChartPanel = new XChartPanel<>(chart);
+        electricityChartPanel.setBounds(10, 10, 393, 345);
+        
+        // Add to panel
+        panel_Electricity_Graph.removeAll();
+        panel_Electricity_Graph.add(electricityChartPanel);
+        panel_Electricity_Graph.revalidate();
+        panel_Electricity_Graph.repaint();
+    }
+    
+    /**
+     * Creates and displays the water bar graph
+     * @param readings List of all readings from the database
+     */
+    private void setupWaterGraph(List<Reading> readings) {
+        // Filter only water readings
+        List<Reading> waterReadings = readings.stream()
+                .filter(reading -> reading.getType().equals("water"))
+                .collect(Collectors.toList());
+        
+        // Group readings by month
+        Map<Month, Double> monthlyReadings = groupReadingsByMonth(waterReadings, false);
+        
+        // Create chart
+        CategoryChart chart = createBarChart("Monthly Water Usage", "Month", "m³", monthlyReadings);
+        
+        // Create chart panel
+        waterChartPanel = new XChartPanel<>(chart);
+        waterChartPanel.setBounds(10, 10, 393, 345);
+        
+        // Add to panel
+        panel_Water_Graph.removeAll();
+        panel_Water_Graph.add(waterChartPanel);
+        panel_Water_Graph.revalidate();
+        panel_Water_Graph.repaint();
+    }
+    
+    /**
+     * Creates and displays the gas bar graph
+     * @param readings List of all readings from the database
+     */
+    private void setupGasGraph(List<Reading> readings) {
+        // Filter only gas readings
+        List<Reading> gasReadings = readings.stream()
+                .filter(reading -> reading.getType().equals("gas"))
+                .collect(Collectors.toList());
+        
+        // Group readings by month
+        Map<Month, Double> monthlyReadings = groupReadingsByMonth(gasReadings, false);
+        
+        // Create chart
+        CategoryChart chart = createBarChart("Monthly Gas Usage", "Month", "Qty", monthlyReadings);
+        
+        // Create chart panel
+        gasChartPanel = new XChartPanel<>(chart);
+        gasChartPanel.setBounds(10, 10, 393, 345);
+        
+        // Add to panel
+        panel_Gas_Graph.removeAll();
+        panel_Gas_Graph.add(gasChartPanel);
+        panel_Gas_Graph.revalidate();
+        panel_Gas_Graph.repaint();
+    }
+    
+    /**
+     * Creates and displays the overall expenses bar graph
+     * @param readings List of all readings from the database
+     */
+    private void setupOverallGraph(List<Reading> readings) {
+        // Group readings by month using total price
+        Map<Month, Double> monthlyExpenses = groupReadingsByMonth(readings, true);
+        
+        // Create chart
+        CategoryChart chart = createBarChart("Monthly Total Expenses", "Month", "PHP", monthlyExpenses);
+        
+        // Create chart panel
+        overallChartPanel = new XChartPanel<>(chart);
+        overallChartPanel.setBounds(10, 10, 393, 345);
+        
+        // Add to panel
+        panel_OverAll_Graph.removeAll();
+        panel_OverAll_Graph.add(overallChartPanel);
+        panel_OverAll_Graph.revalidate();
+        panel_OverAll_Graph.repaint();
+    }
+    
+    /**
+     * Groups readings by month and calculates either sum of readings or sum of total price
+     * @param readings List of readings to group
+     * @param usePrice If true, uses total_price field; if false, uses reading field
+     * @return Map with Month as key and summed value as value
+     */
+    private Map<Month, Double> groupReadingsByMonth(List<Reading> readings, boolean usePrice) {
+        Map<Month, Double> monthlyData = new HashMap<>();
+        
+        // Process each reading
+        for (Reading reading : readings) {
+            Month month = reading.getDate().getMonth();
+            double value = usePrice ? reading.getTotal_Price() : reading.getReading();
+            
+            // Add to map, summing values for the same month
+            monthlyData.put(month, monthlyData.getOrDefault(month, 0.0) + value);
+        }
+        
+        return monthlyData;
+    }
+    
+    /**
+     * Creates a bar chart with the given data
+     * @param title Chart title
+     * @param xAxisTitle X-axis label
+     * @param yAxisTitle Y-axis label
+     * @param monthlyData Map of Month to value
+     * @return Configured CategoryChart
+     */
+    private CategoryChart createBarChart(String title, String xAxisTitle, String yAxisTitle, Map<Month, Double> monthlyData) {
+        // Create new chart
+        CategoryChart chart = new CategoryChartBuilder()
+                .width(380)
+                .height(300)
+                .title(title)
+                .xAxisTitle(xAxisTitle)
+                .yAxisTitle(yAxisTitle)
+                .build();
+        
+        // Customize chart
+        chart.getStyler().setLegendPosition(LegendPosition.InsideNE);
+        chart.getStyler().setPlotGridLinesVisible(false);
+        chart.getStyler().setXAxisLabelRotation(45);
+        
+        // Sort months chronologically
+        List<Month> sortedMonths = new ArrayList<>(monthlyData.keySet());
+        sortedMonths.sort((m1, m2) -> Integer.compare(m1.getValue(), m2.getValue()));
+        
+        // Prepare data for chart
+        List<String> monthNames = new ArrayList<>();
+        List<Double> values = new ArrayList<>();
+        
+        for (Month month : sortedMonths) {
+            monthNames.add(month.toString().substring(0, 3)); // First 3 letters of month name
+            values.add(monthlyData.get(month));
+        }
+        
+        // Add data series to chart
+        chart.addSeries("Usage", monthNames, values);
+        
+        return chart;
+    }
+    
+    /**
+     * Updates the setupData method to also refresh the charts
+     */
 }

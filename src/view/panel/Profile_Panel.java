@@ -330,6 +330,8 @@ public class Profile_Panel extends JPanel {
         lblWaterCount.setFont(new Font("Tahoma", Font.PLAIN, 40));
         lblWaterCount.setBounds(0, 11, 140, 72);
         waterStatsPanel.add(lblWaterCount);
+        
+        Water_Tool_Tip = new Following_Tool_Tip(waterStatsPanel, "Open Water Reading?", 500);
     }
     
     /**
@@ -362,6 +364,8 @@ public class Profile_Panel extends JPanel {
         lblGasCount.setFont(new Font("Tahoma", Font.PLAIN, 40));
         lblGasCount.setBounds(0, 11, 140, 72);
         gasStatsPanel.add(lblGasCount);
+        
+        Gas_Tool_Tip = new Following_Tool_Tip(gasStatsPanel, "Open Gas Reading?", 500);
     }
     
     /**
