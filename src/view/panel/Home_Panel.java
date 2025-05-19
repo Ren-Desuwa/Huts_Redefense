@@ -19,7 +19,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -87,19 +86,35 @@ public class Home_Panel extends JPanel {
         this.databaseManager = databaseManager;
         this.currentUser = currentUser;
         
-        setPreferredSize(new Dimension(986, 688));
-        setLayout(null);
-        
-        initComponents();
-        setupEventListeners();
+        initializePanelProperties();
+        createMainPanels();
+        createHeaderPanel();
+        createContentPanel();
+        createTipsPanel();
+        createGraphPanel();
+        createActionListeners();
         setupData();
     }
     
     /**
-     * Initialize all UI components for the Home Panel
+     * Initialize the panel's properties
      */
-    private void initComponents() {
-        // Welcome Title Panel
+    private void initializePanelProperties() {
+        setPreferredSize(new Dimension(986, 688));
+        setLayout(null);
+    }
+    
+    /**
+     * Create main panels structure
+     */
+    private void createMainPanels() {
+        // This is a container method - the actual panels are created in their respective methods
+    }
+    
+    /**
+     * Create the header panel with welcome title
+     */
+    private void createHeaderPanel() {
         panelWelcomeTitle = new JPanel();
         panelWelcomeTitle.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
         panelWelcomeTitle.setBounds(21, 11, 944, 85);
@@ -125,7 +140,132 @@ public class Home_Panel extends JPanel {
         lblDate.setBounds(764, 11, 170, 54);
         lblDate.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         panelWelcomeTitle.add(lblDate);
+    }
+    
+    /**
+     * Create the content panel with utility information
+     */
+    private void createContentPanel() {
+        panelInformation = new JPanel();
+        panelInformation.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+        panelInformation.setBounds(21, 114, 467, 408);
+        panelInformation.setLayout(null);
+        add(panelInformation);
         
+        createElectricityInfoPanel();
+        createWaterInfoPanel();
+        createGasInfoPanel();
+        createOverallInfoPanel();
+    }
+    
+    /**
+     * Create the electricity information panel
+     */
+    private void createElectricityInfoPanel() {
+        panelElectricityInfo = new JPanel();
+        panelElectricityInfo.setBounds(10, 28, 447, 77);
+        panelElectricityInfo.setLayout(null);
+        panelInformation.add(panelElectricityInfo);
+        
+        lblTitleElectricityInfo = new JLabel("Electricity");
+        lblTitleElectricityInfo.setFont(new Font("Tahoma", Font.PLAIN, 30));
+        lblTitleElectricityInfo.setBounds(10, 21, 156, 32);
+        panelElectricityInfo.add(lblTitleElectricityInfo);
+        
+        lblElectricityReadingValue = new JLabel();
+        lblElectricityReadingValue.setHorizontalAlignment(SwingConstants.CENTER);
+        lblElectricityReadingValue.setFont(new Font("Tahoma", Font.BOLD, 20));
+        lblElectricityReadingValue.setBounds(259, 21, 100, 32);
+        panelElectricityInfo.add(lblElectricityReadingValue);
+        
+        lblElectricityReadingUnit = new JLabel("KwH");
+        lblElectricityReadingUnit.setFont(new Font("Tahoma", Font.PLAIN, 18));
+        lblElectricityReadingUnit.setBounds(369, 22, 68, 32);
+        panelElectricityInfo.add(lblElectricityReadingUnit);
+    }
+    
+    /**
+     * Create the water information panel
+     */
+    private void createWaterInfoPanel() {
+        panelWaterInfo = new JPanel();
+        panelWaterInfo.setBounds(10, 116, 447, 77);
+        panelWaterInfo.setLayout(null);
+        panelInformation.add(panelWaterInfo);
+        
+        lblTitleWaterInfo = new JLabel("Water");
+        lblTitleWaterInfo.setFont(new Font("Tahoma", Font.PLAIN, 30));
+        lblTitleWaterInfo.setBounds(10, 22, 156, 32);
+        panelWaterInfo.add(lblTitleWaterInfo);
+        
+        lblWaterReadingValue = new JLabel();
+        lblWaterReadingValue.setHorizontalAlignment(SwingConstants.CENTER);
+        lblWaterReadingValue.setFont(new Font("Tahoma", Font.BOLD, 20));
+        lblWaterReadingValue.setBounds(261, 21, 100, 32);
+        panelWaterInfo.add(lblWaterReadingValue);
+        
+        lblWaterReadingUnit = new JLabel("m³");
+        lblWaterReadingUnit.setFont(new Font("Tahoma", Font.PLAIN, 18));
+        lblWaterReadingUnit.setBounds(369, 22, 68, 32);
+        panelWaterInfo.add(lblWaterReadingUnit);
+    }
+    
+    /**
+     * Create the gas information panel
+     */
+    private void createGasInfoPanel() {
+        panelGasInfo = new JPanel();
+        panelGasInfo.setBounds(10, 204, 447, 77);
+        panelGasInfo.setLayout(null);
+        panelInformation.add(panelGasInfo);
+        
+        lblTitleGasInfo = new JLabel("Gas");
+        lblTitleGasInfo.setFont(new Font("Tahoma", Font.PLAIN, 30));
+        lblTitleGasInfo.setBounds(10, 23, 156, 32);
+        panelGasInfo.add(lblTitleGasInfo);
+        
+        lblGasReadingValue = new JLabel();
+        lblGasReadingValue.setHorizontalAlignment(SwingConstants.CENTER);
+        lblGasReadingValue.setFont(new Font("Tahoma", Font.BOLD, 20));
+        lblGasReadingValue.setBounds(259, 22, 100, 32);
+        panelGasInfo.add(lblGasReadingValue);
+        
+        lblGasReadingUnit = new JLabel("Qty");
+        lblGasReadingUnit.setFont(new Font("Tahoma", Font.PLAIN, 18));
+        lblGasReadingUnit.setBounds(369, 23, 68, 32);
+        panelGasInfo.add(lblGasReadingUnit);
+    }
+    
+    /**
+     * Create the overall information panel
+     */
+    private void createOverallInfoPanel() {
+        panelOverallInfo = new JPanel();
+        panelOverallInfo.setBounds(10, 292, 447, 77);
+        panelOverallInfo.setLayout(null);
+        panelInformation.add(panelOverallInfo);
+        
+        lblTitleOverAllInfo = new JLabel("Overall Expenses");
+        lblTitleOverAllInfo.setFont(new Font("Tahoma", Font.PLAIN, 30));
+        lblTitleOverAllInfo.setBounds(10, 22, 260, 32);
+        panelOverallInfo.add(lblTitleOverAllInfo);
+        
+        lblOverAllReadingValue = new JLabel();
+        lblOverAllReadingValue.setHorizontalAlignment(SwingConstants.CENTER);
+        lblOverAllReadingValue.setFont(new Font("Tahoma", Font.BOLD, 20));
+        lblOverAllReadingValue.setBounds(258, 21, 101, 32);
+        panelOverallInfo.add(lblOverAllReadingValue);
+        
+        lblOverAllReadingUnit = new JLabel("Php");
+        lblOverAllReadingUnit.setFont(new Font("Tahoma", Font.PLAIN, 18));
+        lblOverAllReadingUnit.setBounds(369, 22, 68, 32);
+        panelOverallInfo.add(lblOverAllReadingUnit);
+    }
+    
+    /**
+     * Create the graph panel with CardLayout for different utilities
+     */
+    private void createGraphPanel() {
         // Graph Container with CardLayout
         panelGraphContainer = new JPanel();
         panelGraphContainer.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
@@ -161,103 +301,12 @@ public class Home_Panel extends JPanel {
         panelBehind3.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
         panelBehind3.setBounds(552, 114, 413, 347);
         add(panelBehind3);
-        
-        // Information Panel
-        panelInformation = new JPanel();
-        panelInformation.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-        panelInformation.setBounds(21, 114, 467, 408);
-        panelInformation.setLayout(null);
-        add(panelInformation);
-        
-        // Electricity Info Panel
-        panelElectricityInfo = new JPanel();
-        panelElectricityInfo.setBounds(10, 28, 447, 77);
-        panelElectricityInfo.setLayout(null);
-        panelInformation.add(panelElectricityInfo);
-        
-        lblTitleElectricityInfo = new JLabel("Electricity");
-        lblTitleElectricityInfo.setFont(new Font("Tahoma", Font.PLAIN, 30));
-        lblTitleElectricityInfo.setBounds(10, 21, 156, 32);
-        panelElectricityInfo.add(lblTitleElectricityInfo);
-        
-        lblElectricityReadingValue = new JLabel();
-        lblElectricityReadingValue.setHorizontalAlignment(SwingConstants.CENTER);
-        lblElectricityReadingValue.setFont(new Font("Tahoma", Font.BOLD, 20));
-        lblElectricityReadingValue.setBounds(259, 21, 100, 32);
-        panelElectricityInfo.add(lblElectricityReadingValue);
-        
-        lblElectricityReadingUnit = new JLabel("KwH");
-        lblElectricityReadingUnit.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        lblElectricityReadingUnit.setBounds(369, 22, 68, 32);
-        panelElectricityInfo.add(lblElectricityReadingUnit);
-        
-        // Water Info Panel
-        panelWaterInfo = new JPanel();
-        panelWaterInfo.setBounds(10, 116, 447, 77);
-        panelWaterInfo.setLayout(null);
-        panelInformation.add(panelWaterInfo);
-        
-        lblTitleWaterInfo = new JLabel("Water");
-        lblTitleWaterInfo.setFont(new Font("Tahoma", Font.PLAIN, 30));
-        lblTitleWaterInfo.setBounds(10, 22, 156, 32);
-        panelWaterInfo.add(lblTitleWaterInfo);
-        
-        lblWaterReadingValue = new JLabel();
-        lblWaterReadingValue.setHorizontalAlignment(SwingConstants.CENTER);
-        lblWaterReadingValue.setFont(new Font("Tahoma", Font.BOLD, 20));
-        lblWaterReadingValue.setBounds(261, 21, 100, 32);
-        panelWaterInfo.add(lblWaterReadingValue);
-        
-        lblWaterReadingUnit = new JLabel("m³");
-        lblWaterReadingUnit.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        lblWaterReadingUnit.setBounds(369, 22, 68, 32);
-        panelWaterInfo.add(lblWaterReadingUnit);
-        
-        // Gas Info Panel
-        panelGasInfo = new JPanel();
-        panelGasInfo.setBounds(10, 204, 447, 77);
-        panelGasInfo.setLayout(null);
-        panelInformation.add(panelGasInfo);
-        
-        lblTitleGasInfo = new JLabel("Gas");
-        lblTitleGasInfo.setFont(new Font("Tahoma", Font.PLAIN, 30));
-        lblTitleGasInfo.setBounds(10, 23, 156, 32);
-        panelGasInfo.add(lblTitleGasInfo);
-        
-        lblGasReadingValue = new JLabel();
-        lblGasReadingValue.setHorizontalAlignment(SwingConstants.CENTER);
-        lblGasReadingValue.setFont(new Font("Tahoma", Font.BOLD, 20));
-        lblGasReadingValue.setBounds(259, 22, 100, 32);
-        panelGasInfo.add(lblGasReadingValue);
-        
-        lblGasReadingUnit = new JLabel("Qty");
-        lblGasReadingUnit.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        lblGasReadingUnit.setBounds(369, 23, 68, 32);
-        panelGasInfo.add(lblGasReadingUnit);
-        
-        // Overall Info Panel
-        panelOverallInfo = new JPanel();
-        panelOverallInfo.setBounds(10, 292, 447, 77);
-        panelOverallInfo.setLayout(null);
-        panelInformation.add(panelOverallInfo);
-        
-        lblTitleOverAllInfo = new JLabel("Overall Expenses");
-        lblTitleOverAllInfo.setFont(new Font("Tahoma", Font.PLAIN, 30));
-        lblTitleOverAllInfo.setBounds(10, 22, 260, 32);
-        panelOverallInfo.add(lblTitleOverAllInfo);
-        
-        lblOverAllReadingValue = new JLabel();
-        lblOverAllReadingValue.setHorizontalAlignment(SwingConstants.CENTER);
-        lblOverAllReadingValue.setFont(new Font("Tahoma", Font.BOLD, 20));
-        lblOverAllReadingValue.setBounds(258, 21, 101, 32);
-        panelOverallInfo.add(lblOverAllReadingValue);
-        
-        lblOverAllReadingUnit = new JLabel("Php");
-        lblOverAllReadingUnit.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        lblOverAllReadingUnit.setBounds(369, 22, 68, 32);
-        panelOverallInfo.add(lblOverAllReadingUnit);
-        
-        // Tips Panel
+    }
+    
+    /**
+     * Create the tips panel with money-saving advice
+     */
+    private void createTipsPanel() {
         panelTips = new JPanel();
         panelTips.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
         panelTips.setBounds(21, 543, 944, 134);
@@ -292,7 +341,7 @@ public class Home_Panel extends JPanel {
     /**
      * Setup event listeners for interactive elements
      */
-    private void setupEventListeners() {
+    private void createActionListeners() {
         // Electricity panel click event
         panelElectricityInfo.addMouseListener(new MouseAdapter() {
             @Override
@@ -402,25 +451,6 @@ public class Home_Panel extends JPanel {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-    
-    /**
-     * Updates a specific utility graph with filtered data - placeholder implementation
-     * 
-     * @param readings Complete list of readings
-     * @param utilityType Type of utility ("electricity", "water", or "gas")
-     */
-    private void updateUtilityGraph(List<Reading> readings, String utilityType) {
-        // This is a placeholder method - real implementation would update the graphs
-    }
-    
-    /**
-     * Updates the overall expenses graph - placeholder implementation
-     * 
-     * @param readings Complete list of readings
-     */
-    private void updateOverallGraph(List<Reading> readings) {
-        // This is a placeholder method - real implementation would update the overall graph
     }
     
     /**
