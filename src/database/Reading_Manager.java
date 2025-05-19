@@ -2,8 +2,12 @@ package database;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.Month;
+import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import model.*;
 
@@ -213,7 +217,7 @@ public class Reading_Manager {
 		return list;
 	}
 	
-	public List<Reading> getReadingsByTime(User user, LocalDate startDate, LocalDate endDate) throws SQLException {
+	public List<Reading> getReadingsByDate(User user, LocalDate startDate, LocalDate endDate) throws SQLException {
 		String sqlscript = "SELECT * FROM readings WHERE user_id = ? AND date >= ? AND date <= ? ORDER BY date ASC";
 		List<Reading> list = new ArrayList<>();
 		try (PreparedStatement prepared_statement = connection.prepareStatement(sqlscript)) {
@@ -240,7 +244,35 @@ public class Reading_Manager {
 		return list;
 	}
 	
-	public Reading getLatestReadingByType(User user,String type) throws SQLException {
+	public List<Reading> getReadingsByDateAndType(User user, LocalDate startDate, LocalDate endDate, String type) throws SQLException {
+		String sqlscript = "SELECT * FROM readings WHERE user_id = ? AND date >= ? AND date <= ? AND type = ? ORDER BY date ASC";
+		List<Reading> list = new ArrayList<>();
+		try (PreparedStatement prepared_statement = connection.prepareStatement(sqlscript)) {
+			prepared_statement.setInt(1, user.getUser_Id());
+			prepared_statement.setString(2, startDate.toString());
+			prepared_statement.setString(3, endDate.toString());
+			prepared_statement.setString(4, type);
+			try (ResultSet rs = prepared_statement.executeQuery()) {
+				while (rs.next()) {
+					list.add(new Reading(
+						rs.getInt("reading_id"),
+						rs.getInt("user_id"),
+						LocalDate.parse(rs.getString("date")),
+						rs.getString("type"),
+						rs.getDouble("reading"),
+						rs.getDouble("rate"),
+						rs.getDouble("total_price")
+					));
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+		}
+		return list;
+	}
+	
+	public Reading getLatestReadingByType(User user, String type) throws SQLException {
 		String sqlscript = "SELECT * FROM readings WHERE user_id = ? AND type = ? ORDER BY date DESC LIMIT 1";
 		try (PreparedStatement prepared_statement = connection.prepareStatement(sqlscript)) {
 			prepared_statement.setInt(1, user.getUser_Id());
@@ -307,6 +339,148 @@ public class Reading_Manager {
 		return list;
 	}
 	
+	// NEW METHODS MOVED FROM HOME_PANEL
 	
-	
+	/**
+     * Groups readings by month and calculates either sum of readings or sum of total price
+     * 
+     * @param readings List of readings to group
+     * @param usePrice If true, uses total_price field; if false, uses reading field
+     * @return Map with Month as key and summed value as value
+     */
+    public Map<Month, Double> groupReadingsByMonth(List<Reading> readings, boolean usePrice) {
+        Map<Month, Double> monthlyData = new HashMap<>();
+        
+        if (readings != null) {
+            for (Reading reading : readings) {
+                LocalDate readingDate = reading.getDate();
+                Month month = readingDate.getMonth();
+                
+                double value = usePrice ? reading.getTotal_Price() : reading.getReading();
+                
+                // Add value to existing month or create new entry
+                monthlyData.put(month, monthlyData.getOrDefault(month, 0.0) + value);
+            }
+        }
+        
+        return monthlyData;
+    }
+    
+    /**
+     * Gets utility usage data organized by month for a specific time period
+     * 
+     * @param user The user to get data for
+     * @param utilityType The type of utility ("electricity", "water", "gas")
+     * @param months Number of months to look back from current date
+     * @param usePrice Whether to use price values (true) or reading values (false)
+     * @return Map with Month as key and value as double
+     */
+    public Map<Month, Double> getMonthlyUtilityData(User user, String utilityType, int months, boolean usePrice) 
+            throws SQLException {
+        LocalDate endDate = LocalDate.now();
+        LocalDate startDate = endDate.minusMonths(months);
+        
+        List<Reading> readings = getReadingsByDateAndType(user, startDate, endDate, utilityType);
+        return groupReadingsByMonth(readings, usePrice);
+    }
+    
+    /**
+     * Gets combined monthly expense data for all utilities
+     * 
+     * @param user The user to get data for 
+     * @param months Number of months to look back from current date
+     * @return Map with Month as key and total expense as value
+     */
+    public Map<Month, Double> getMonthlyTotalExpenses(User user, int months) throws SQLException {
+        Map<Month, Double> totalExpenses = new HashMap<>();
+        
+        // Get data for each utility type
+        Map<Month, Double> electricityExpenses = getMonthlyUtilityData(user, "electricity", months, true);
+        Map<Month, Double> waterExpenses = getMonthlyUtilityData(user, "water", months, true);
+        Map<Month, Double> gasExpenses = getMonthlyUtilityData(user, "gas", months, true);
+        
+        // Get all months from any of the maps
+        for (Month month : electricityExpenses.keySet()) {
+            double totalForMonth = electricityExpenses.getOrDefault(month, 0.0) +
+                                  waterExpenses.getOrDefault(month, 0.0) +
+                                  gasExpenses.getOrDefault(month, 0.0);
+            totalExpenses.put(month, totalForMonth);
+        }
+        
+        // Add months from water expenses that might not be in electricity
+        for (Month month : waterExpenses.keySet()) {
+            if (!totalExpenses.containsKey(month)) {
+                double totalForMonth = waterExpenses.get(month) +
+                                      gasExpenses.getOrDefault(month, 0.0);
+                totalExpenses.put(month, totalForMonth);
+            }
+        }
+        
+        // Add months from gas expenses that might not be in either electricity or water
+        for (Month month : gasExpenses.keySet()) {
+            if (!totalExpenses.containsKey(month)) {
+                totalExpenses.put(month, gasExpenses.get(month));
+            }
+        }
+        
+        return totalExpenses;
+    }
+    
+    /**
+     * Gets total expenses for all utilities in a specified date range
+     * 
+     * @param user The user to get data for
+     * @param startDate The start date
+     * @param endDate The end date
+     * @return Total expenses for all utilities in the date range
+     */
+    public double getTotalExpensesInRange(User user, LocalDate startDate, LocalDate endDate) throws SQLException {
+        double totalExpenses = 0.0;
+        
+        List<Reading> allReadings = getReadingsByDate(user, startDate, endDate);
+        for (Reading reading : allReadings) {
+            totalExpenses += reading.getTotal_Price();
+        }
+        
+        return totalExpenses;
+    }
+    
+    /**
+     * Gets latest readings for all utility types
+     * 
+     * @param user The user to get readings for
+     * @return Map with utility type as key and Reading object as value
+     */
+    public Map<String, Reading> getLatestReadingsForAllTypes(User user) throws SQLException {
+        Map<String, Reading> latestReadings = new HashMap<>();
+        
+        // Common utility types
+        String[] utilityTypes = {"electricity", "water", "gas"};
+        
+        for (String type : utilityTypes) {
+            Reading reading = getLatestReadingByType(user, type);
+            if (reading != null) {
+                latestReadings.put(type, reading);
+            }
+        }
+        
+        return latestReadings;
+    }
+    
+    /**
+     * Calculates the total combined cost of the latest readings for all utilities
+     * 
+     * @param user The user to calculate for
+     * @return The total cost of all latest utility readings
+     */
+    public double getTotalLatestCost(User user) throws SQLException {
+        Map<String, Reading> latestReadings = getLatestReadingsForAllTypes(user);
+        double totalCost = 0.0;
+        
+        for (Reading reading : latestReadings.values()) {
+            totalCost += reading.getTotal_Price();
+        }
+        
+        return totalCost;
+    }
 }
