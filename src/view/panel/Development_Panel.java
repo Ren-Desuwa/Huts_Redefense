@@ -1,23 +1,18 @@
 package view.panel;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
+
 
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import org.knowm.xchart.CategoryChart;
-import org.knowm.xchart.CategoryChartBuilder;
-import org.knowm.xchart.XChartPanel;
+
 
 import database.Database_Manager;
-import model.Reading;
+
 import model.User;
 
 public class Development_Panel extends JPanel {

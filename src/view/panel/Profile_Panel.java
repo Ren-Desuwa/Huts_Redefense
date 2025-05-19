@@ -3,6 +3,7 @@ package view.panel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.Font;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -13,8 +14,9 @@ import javax.swing.SwingConstants;
 
 import database.Database_Manager;
 import model.User;
-import view.login.New_Password_Window;
+import view.panel.misc.Change_Password_Window;
 import visuals.Circle_Panel;
+import visuals.Following_Tool_Tip;
 import visuals.Rounded_Panel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -39,6 +41,7 @@ public class Profile_Panel extends JPanel {
     
     // Labels
     private JLabel lblProfileInitials;
+    private JLabel lblEditProfile;
     private JLabel lblEmail;
     private JLabel lblUsername;
     private JLabel lblAccountInformation;
@@ -70,6 +73,11 @@ public class Profile_Panel extends JPanel {
     private JSeparator separatorStatistics;
     private JSeparator separatorActions;
     
+    // imports
+    private Following_Tool_Tip Electricity_Tool_Tip;
+    private Following_Tool_Tip Water_Tool_Tip;
+    private Following_Tool_Tip Gas_Tool_Tip;
+    
     /**
      * Create the panel.
      */
@@ -83,6 +91,7 @@ public class Profile_Panel extends JPanel {
         createContentPanel();
         createStatisticsPanel();
         createActionsSection();
+        createActionListeners();
         updateUserInfo();
     }
     
@@ -152,6 +161,15 @@ public class Profile_Panel extends JPanel {
         lblUsername.setFont(new Font("Tahoma", Font.PLAIN, 44));
         lblUsername.setBounds(270, 107, 293, 82);
         headerPanel.add(lblUsername);
+        
+        lblEditProfile = new JLabel("Edit Profile");
+        lblEditProfile.setForeground(Color.WHITE);
+        lblEditProfile.setFont(new Font("Tahoma", Font.PLAIN, 20));
+        lblEditProfile.setBounds(826, 23, 110, 25);
+        
+        headerPanel.add(lblEditProfile);
+        
+        
     }
     
     /**
@@ -278,6 +296,8 @@ public class Profile_Panel extends JPanel {
         lblElectricityReadings.setFont(new Font("Tahoma", Font.PLAIN, 20));
         lblElectricityReadings.setBounds(0, 115, 140, 25);
         electricityStatsPanel.add(lblElectricityReadings);
+        
+        Electricity_Tool_Tip = new Following_Tool_Tip(electricityStatsPanel, "Open Electricity Reading?", 500);
     }
     
     /**
@@ -365,10 +385,24 @@ public class Profile_Panel extends JPanel {
     }
     
     
-    public void createActionListeners() {
+    private void createActionListeners() {
 		btnChangePassword.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				createChangePasswordWindow();
+			}
+		});
+		
+		lblEditProfile.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
+				openEditProfileWindow();
+			}
+		});
+		lblEditProfile.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseEntered(java.awt.event.MouseEvent evt) {
+				lblEditProfile.setForeground(Color.BLUE);
+			}
+			public void mouseExited(java.awt.event.MouseEvent evt) {
+				lblEditProfile.setForeground(Color.WHITE);
 			}
 		});
 	}
@@ -377,7 +411,7 @@ public class Profile_Panel extends JPanel {
      * Update the panel with user information
      * Note: This method would be called after construction to populate user data
      */
-    public void updateUserInfo() {
+    private void updateUserInfo() {
         if (current_user == null) {
             return;
         }
@@ -407,4 +441,22 @@ public class Profile_Panel extends JPanel {
         // Update other user-specific information
         // This would be implemented based on your User class structure
     }
+    
+    private void createChangePasswordWindow() {
+    	EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Change_Password_Window window = new Change_Password_Window(database_manager, current_user);
+					window.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+    	private void openEditProfileWindow() {
+		// Implement the logic to open the edit profile window
+		// This could be a new JFrame or a dialog that allows the user to edit their profile information
+		System.out.println("Edit Profile clicked");
+	}
 }

@@ -21,8 +21,8 @@ public class Launcher {
 			public void run() {
 				try {
 					// Create and show the main window
-//					Main_Frame window = new Main_Frame(database_manager,Test_User);
-					Log_In_Window window = new Log_In_Window(database_manager);
+					Main_Frame window = new Main_Frame(database_manager,Test_User);
+//					Log_In_Window window = new Log_In_Window(database_manager);
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
