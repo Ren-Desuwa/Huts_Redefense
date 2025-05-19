@@ -297,6 +297,11 @@ public class Home_Panel extends JPanel {
 		setupData();
 	}
 	
+	public void Home_Panel_Refresh() {
+		
+		setupData();
+	}
+	
 	public void setupData() {
 		
 		try {

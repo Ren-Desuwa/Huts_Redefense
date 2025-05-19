@@ -60,12 +60,14 @@ public class Electricity_Panel extends JPanel {
 	private JLabel lbl_Head_Rate;
 	private JLabel lbl_Head_TotalPrice;
 	private JPanel Line;
+	private Home_Panel homepanel;
 	/**
 	 * Create the panel.
 	 */
-	public Electricity_Panel(Database_Manager database_manager, User current_user) {
+	public Electricity_Panel(Database_Manager database_manager, User current_user, Home_Panel homepanel) {
 		this.database_manager = database_manager;
 		this.current_user = current_user;
+		this.homepanel = homepanel;
 		
 		setPreferredSize(new Dimension(986, 688));
 		setLayout(null);
@@ -146,7 +148,7 @@ public class Electricity_Panel extends JPanel {
 		
 		lbl_Head_TotalPrice = new JLabel("Total Price");
 		lbl_Head_TotalPrice.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_Head_TotalPrice.setBounds(348, 39, 108, 17);
+		lbl_Head_TotalPrice.setBounds(342, 39, 108, 17);
 		lbl_Head_TotalPrice.setFont(new Font("Tahoma", Font.BOLD, 15));
 		Headerpanel.add(lbl_Head_TotalPrice);
 		
@@ -223,9 +225,19 @@ public class Electricity_Panel extends JPanel {
 
 		
 		// Open the Add Reading window
-		Add_Reading_Panel add_reading_panel = new Add_Reading_Panel(database_manager, current_user);
+		Add_Reading_Panel add_reading_panel = new Add_Reading_Panel(database_manager, current_user, this);
 		add_reading_panel.setVisible(true);
 	}
+	
+	public void Electricity_Panel_Refresh() {
+		all_readings = getAllReadings();
+	    sP_Recent_Readings.setViewportView(all_readings);
+	    getAllReadings();
+	    setupData(); // Also update the current reading display
+	    
+	    homepanel.Home_Panel_Refresh();
+	}
+	
 	public void setupData() {
 		
 		try {
@@ -246,7 +258,7 @@ public class Electricity_Panel extends JPanel {
 		try {
 			if (!database_manager.getReadingManager().isReadingExists(current_user, "electricity")) {
 				JList<String> list = new JList<>(new String[] {"No readings found.", "Please add a reading."});
-				list.setFont(new Font("Tahoma", Font.PLAIN, 12));
+				list.setFont(new Font("monoFont", Font.PLAIN, 15));
 				list.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 				list.setPreferredSize(new Dimension(429, 448));
 				list.setFixedCellHeight(30);
@@ -257,13 +269,22 @@ public class Electricity_Panel extends JPanel {
 			String[] readings = new String[all_readings.size()];
 			for (int i = 0; i < all_readings.size(); i++) {
 				Reading reading = all_readings.get(i);
-				readings[i] = " \t" + reading.getDate() + " \t" + reading.getReading() + "kWh \t" + reading.getRate() + "Php \t" + reading.getTotal_Price() + "Php";
+				readings[i] = String.format("  %-19s %-21s %-17s %-10s", reading.getDate(), reading.getReading() + "kWh", reading.getRate() + "Php", reading.getTotal_Price() + "Php");
 			}
 			JList<String> list = new JList<>(readings);
-			list.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			list.setFont(new Font("monoFont", Font.PLAIN, 15));
 			list.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 			list.setPreferredSize(new Dimension(429, 448));
 			list.setFixedCellHeight(30);
+			list.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					int response = javax.swing.JOptionPane.showConfirmDialog(null, "Do you want to eddit this reading?", "Edit Reading", javax.swing.JOptionPane.YES_NO_OPTION);
+					if (response == javax.swing.JOptionPane.YES_OPTION) {
+					
+					}
+				}
+			});
 			return list;
 		}
 		catch (Exception e) {
