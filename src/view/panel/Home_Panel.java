@@ -300,9 +300,9 @@ public class Home_Panel extends JPanel {
 	public void setupData() {
 		
 		try {
-			Reading electricity_reading = database_manager.getReadingManager().getLatestReadingByType(current_user, "Electricity");
-			Reading water_reading = database_manager.getReadingManager().getLatestReadingByType(current_user, "Water");
-			Reading gas_reading = database_manager.getReadingManager().getLatestReadingByType(current_user, "Gas");
+			Reading electricity_reading = database_manager.getReadingManager().getLatestReadingByType(current_user, "electricity");
+			Reading water_reading = database_manager.getReadingManager().getLatestReadingByType(current_user, "water");
+			Reading gas_reading = database_manager.getReadingManager().getLatestReadingByType(current_user, "gas");
 			
 			if (electricity_reading == null) {
 				lbl_Electricity_Reading_Value.setText("No Data");

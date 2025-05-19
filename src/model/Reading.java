@@ -1,3 +1,4 @@
+
 package model;
 
 import java.time.LocalDate;
@@ -6,7 +7,7 @@ public class Reading {
 	private int reading_id;
 	private int user_id;
 	private LocalDate date;
-	private String type; // "Electricity", "Water", "Gas"
+	private String type; // "electricity", "water", "gas", "other"
 	private double reading;
 	private double rate;
 	private double total_price;
@@ -52,7 +53,7 @@ public class Reading {
 	public void setUser_Id(int user_id) {this.user_id = user_id;}
 	public void setDate(LocalDate date) {this.date = date;}
 	public void setType(String type) {this.type = type;}
-	public void setReading(int reading) {this.reading = reading;}
-	public void setRate(int rate) {this.rate = rate;}
-	public void setTotal_Price(int total_price) {this.total_price = total_price;}
+	public void setReading(double reading) {this.reading = reading;}
+	public void setRate(double rate) {this.rate = rate;}
+	public void setTotal_Price(double total_price) {this.total_price = total_price;}
 }

@@ -3,6 +3,7 @@ package view.panel;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import org.knowm.xchart.CategoryChartBuilder;
 import org.knowm.xchart.XChartPanel;
 
 import database.Database_Manager;
+import model.Reading;
 import model.User;
 
 public class Development_Panel extends JPanel {
@@ -58,6 +60,16 @@ public class Development_Panel extends JPanel {
         JScrollPane scrollPane_1 = new JScrollPane(list);
         scrollPane_1.setBounds(341, 94, 431, 313);
         add(scrollPane_1);
+        
+//        double reading1 = 100;
+//        double reading2 = 20;
+//        double reading3 = 30;
+//        
+//        double newReading = 50;
+//        LocalDate date = LocalDate.of(2023, 10, 1);
+//        Reading reading = new Reading(100, date, "other", reading1, reading2, reading3);
+//        reading.setRate(newReading);
+        
         
         // Create a frame to show it
 

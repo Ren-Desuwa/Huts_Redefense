@@ -43,9 +43,9 @@ public class User_Manager {
 			prepared_statement.executeUpdate();
 			
 			// Get the generated ID
-			try (ResultSet ruleset = prepared_statement.getGeneratedKeys()) {
-				if (ruleset.next()) {
-					int id = ruleset.getInt(1);
+			try (ResultSet resultset = prepared_statement.getGeneratedKeys()) {
+				if (resultset.next()) {
+					int id = resultset.getInt(1);
 					System.out.println("Inserted user with ID: " + id);
 				}
 			}
