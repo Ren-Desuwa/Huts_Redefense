@@ -1,5 +1,6 @@
 package view.login;
 
+import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -172,7 +173,7 @@ public class Sign_Up_Window extends JFrame {
 		lbl_Login.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				goToLogIn();
+				openLogIn();
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -188,13 +189,21 @@ public class Sign_Up_Window extends JFrame {
 		contentPane.add(lbl_Login);
 	}
 	
-	private void goToLogIn() {
+	private void openLogIn() {
 		// Close the current window
-		this.dispose();
+		JFrame currentFrame = this;
 		
-		// Open the Sign In window
-		Log_In_Window LogInWindow = new Log_In_Window(database_manager);
-		LogInWindow.setVisible(true);
+		EventQueue.invokeLater(new Runnable() {
+	        public void run() {
+	            try {
+	                currentFrame.dispose();
+	                Log_In_Window logInWindow = new Log_In_Window(database_manager);
+	                logInWindow.setVisible(true);
+	            } catch (Exception e) {
+	                e.printStackTrace();
+	            }
+	        }
+	    });
 	}
 	
 	private void SignUp() {
@@ -224,11 +233,19 @@ public class Sign_Up_Window extends JFrame {
 			System.out.println("User registered successfully.");
 			
 			// Optionally, you can close the window or redirect to another page
-			this.dispose();
+			JFrame currentFrame = this;
 			
-			User current_user = database_manager.getUserManager().getUserByUsername(username);
-			Main_Frame mainframe = new Main_Frame(database_manager, current_user);
-			mainframe.setVisible(true);
+			EventQueue.invokeLater(new Runnable() {
+		        public void run() {
+		            try {
+		                currentFrame.dispose();
+		                Main_Frame mainFrame = new Main_Frame(database_manager, new User(username, password, email));
+		                mainFrame.setVisible(true);
+		            } catch (Exception e) {
+		                e.printStackTrace();
+		            }
+		        }
+		    });
 			
 		} catch (Exception e) {
 			e.printStackTrace();

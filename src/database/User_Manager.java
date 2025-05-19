@@ -110,7 +110,8 @@ public class User_Manager {
 	}
 	
 	public User getUserByUsername(String username) throws SQLException {
-		String sqlscript = "SELECT * FROM users WHERE username = ?";
+		// Using GLOB operator for case-sensitive comparison
+		String sqlscript = "SELECT * FROM users WHERE username = ? COLLATE BINARY";
 		try (PreparedStatement prepared_statement = connection.prepareStatement(sqlscript)) {
 			prepared_statement.setString(1, username);
 			ResultSet resultSet = prepared_statement.executeQuery();
@@ -130,7 +131,7 @@ public class User_Manager {
 	}
 	
 	public User getUserByEmail(String email) throws SQLException {
-		String sqlscript = "SELECT * FROM users WHERE email = ?";
+		String sqlscript = "SELECT * FROM users WHERE email = ? COLLATE NOCASE";
 		try (PreparedStatement prepared_statement = connection.prepareStatement(sqlscript)) {
 			prepared_statement.setString(1, email);
 			ResultSet resultSet = prepared_statement.executeQuery();
@@ -150,7 +151,7 @@ public class User_Manager {
 	}
 	
 	public boolean UsernameEmailMatch(String username, String email) throws SQLException {
-		String sqlscript = "SELECT * FROM users WHERE username = ? AND email = ?";
+		String sqlscript = "SELECT * FROM users WHERE username = ? COLLATE BINARY AND email = ? COLLATE NOCASE";
 		try (PreparedStatement prepared_statement = connection.prepareStatement(sqlscript)) {
 			prepared_statement.setString(1, username);
 			prepared_statement.setString(2, email);
@@ -164,7 +165,7 @@ public class User_Manager {
 	}
 	
 	public boolean UsernamePasswordMatch(String username, String password) throws SQLException {
-		String sqlscript = "SELECT * FROM users WHERE username = ? AND password = ?";
+		String sqlscript = "SELECT * FROM users WHERE username = ? COLLATE BINARY AND password = ? COLLATE BINARY";
 		try (PreparedStatement prepared_statement = connection.prepareStatement(sqlscript)) {
 			prepared_statement.setString(1, username);
 			prepared_statement.setString(2, password);

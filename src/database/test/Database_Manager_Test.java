@@ -61,15 +61,15 @@ public class Database_Manager_Test {
         System.out.println("\n--- Testing User Manager ---");
         int passedTests = 0;
         int totalTests = 0;
-        
+
         // Test user creation
         String testUsername = "testuser_" + System.currentTimeMillis();
         String testPassword = "password123";
         String testEmail = "test" + System.currentTimeMillis() + "@example.com";
-        
+
         System.out.println("Creating test user: " + testUsername);
         userManager.addUser(testUsername, testPassword, testEmail);
-        
+
         // Test retrieving user by username
         totalTests++;
         User retrievedUser = userManager.getUserByUsername(testUsername);
@@ -79,7 +79,7 @@ public class Database_Manager_Test {
         } else {
             System.out.println("❌ FAILURE: User retrieval by username failed");
         }
-        
+
         // Test retrieving user by email
         totalTests++;
         User retrievedUserByEmail = userManager.getUserByEmail(testEmail);
@@ -89,7 +89,7 @@ public class Database_Manager_Test {
         } else {
             System.out.println("❌ FAILURE: User retrieval by email failed");
         }
-        
+
         // Test username/password match
         totalTests++;
         boolean credentialsMatch = userManager.UsernamePasswordMatch(testUsername, testPassword);
@@ -99,7 +99,7 @@ public class Database_Manager_Test {
         } else {
             System.out.println("❌ FAILURE: Username/password match failed");
         }
-        
+
         // Test username/email match
         totalTests++;
         boolean usernameEmailMatch = userManager.UsernameEmailMatch(testUsername, testEmail);
@@ -109,30 +109,48 @@ public class Database_Manager_Test {
         } else {
             System.out.println("❌ FAILURE: Username/email match failed");
         }
+
+        // Test updating username and email
+        totalTests++;
+        String updatedUsername = "updated_" + testUsername;
+        String updatedEmail = "updated_" + testEmail;
+        System.out.println("Updating username and email");
+        userManager.updateUser(retrievedUser, updatedUsername, testPassword, updatedEmail);
         
+        // Verify username and email update
+        User updatedUser = userManager.getUserById(retrievedUser.getUser_Id());
+        if (updatedUser != null && 
+            updatedUser.getUsername().equals(updatedUsername) && 
+            updatedUser.getEmail().equals(updatedEmail)) {
+            System.out.println("✅ SUCCESS: Username and email update successful");
+            passedTests++;
+        } else {
+            System.out.println("❌ FAILURE: Username and email update failed");
+        }
+
         // Test updating user password
         totalTests++;
         String newPassword = "newpassword456";
         System.out.println("Updating user password");
-        userManager.updateUserPassword(retrievedUser, newPassword);
-        
+        userManager.updateUserPassword(updatedUser, newPassword);
+
         // Verify password update
-        boolean newCredentialsMatch = userManager.UsernamePasswordMatch(testUsername, newPassword);
+        boolean newCredentialsMatch = userManager.UsernamePasswordMatch(updatedUsername, newPassword);
         if (newCredentialsMatch) {
             System.out.println("✅ SUCCESS: Password update successful");
             passedTests++;
         } else {
             System.out.println("❌ FAILURE: Password update failed");
         }
-        
+
         // Set current user for Reading Manager tests
-        userManager.setCurrentUser(retrievedUser);
-        if (userManager.getCurrentUser() != null && userManager.getCurrentUser().getUsername().equals(testUsername)) {
+        userManager.setCurrentUser(updatedUser);
+        if (userManager.getCurrentUser() != null && userManager.getCurrentUser().getUsername().equals(updatedUsername)) {
             System.out.println("✅ SUCCESS: Current user set: " + userManager.getCurrentUser().getUsername());
         } else {
             System.out.println("❌ FAILURE: Failed to set current user");
         }
-        
+
         return new int[] {passedTests, totalTests};
     }
     

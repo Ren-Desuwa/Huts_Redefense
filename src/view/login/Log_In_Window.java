@@ -23,6 +23,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.awt.Color;
+import java.awt.EventQueue;
 
 public class Log_In_Window extends JFrame {
 
@@ -123,7 +124,7 @@ public class Log_In_Window extends JFrame {
 			}
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				gotoForgotPassword();
+				openForgotPassword();
 			}
 		});
 		lbl_Forgot_Password.setBounds(356, 289, 157, 14);
@@ -149,7 +150,7 @@ public class Log_In_Window extends JFrame {
 		lbl_SignUp.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				goToSignUp();
+				openSignUp();
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -179,13 +180,20 @@ public class Log_In_Window extends JFrame {
 		contentPane.add(lbl_Incorrect_Signaage2);
 		
 	}
-	private void goToSignUp() {
-		// Close the current window
-		this.dispose();
-		
-		// Open the Sign Up window
-		Sign_Up_Window SignUpWindow = new Sign_Up_Window(database_manager);
-		SignUpWindow.setVisible(true);
+	private void openSignUp() {
+		final JFrame currentFrame = this;
+	    
+	    EventQueue.invokeLater(new Runnable() {
+	        public void run() {
+	            try {
+	                currentFrame.dispose();
+	                Sign_Up_Window SignUpWindow = new Sign_Up_Window(database_manager);
+	                SignUpWindow.setVisible(true);
+	            } catch (Exception e) {
+	                e.printStackTrace();
+	            }
+	        }
+	    });
 	}
 	
 	private void Login() {
@@ -218,22 +226,39 @@ public class Log_In_Window extends JFrame {
 			
 			User current_user = database_manager.getUserManager().getUserByUsername(username);
 			
-			this.dispose();
-			
-			Main_Frame mainframe = new Main_Frame(database_manager, current_user);
-			mainframe.setVisible(true);
+			final JFrame currentFrame = this;
+		    
+		    EventQueue.invokeLater(new Runnable() {
+		        public void run() {
+		            try {
+		                currentFrame.dispose();
+		                Main_Frame mainFrame = new Main_Frame(database_manager, current_user);
+		                mainFrame.setVisible(true);
+		            } catch (Exception e) {
+		                e.printStackTrace();
+		            }
+		        }
+		    });
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	private void gotoForgotPassword() {
+	private void openForgotPassword() {
 		// Close the current window
-		this.dispose();
-		
-		// Open the Forgot Password window
-		Retrive_Window retrivewindow = new Retrive_Window(database_manager);
-		retrivewindow.setVisible(true);
+		final JFrame currentFrame = this;
+	    
+	    EventQueue.invokeLater(new Runnable() {
+	        public void run() {
+	            try {
+	                currentFrame.dispose();
+	                Retrive_Window retrive_window = new Retrive_Window(database_manager);
+	                retrive_window.setVisible(true);
+	            } catch (Exception e) {
+	                e.printStackTrace();
+	            }
+	        }
+	    });
 	}
 }

@@ -13,8 +13,11 @@ import javax.swing.SwingConstants;
 
 import database.Database_Manager;
 import model.User;
+import view.login.New_Password_Window;
 import visuals.Circle_Panel;
 import visuals.Rounded_Panel;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Profile_Panel extends JPanel {
 
@@ -43,8 +46,8 @@ public class Profile_Panel extends JPanel {
     private JLabel lblUsernameValue;
     private JLabel lblEmailProp;
     private JLabel lblEmailValue;
-    private JLabel lblDateJoinedProp;
-    private JLabel lblDateJoinedValue;
+    private JLabel lblTotalSubmissionsProp;
+    private JLabel lblTotalSubmissionsValue;
     private JLabel lblUsageStatistics;
     private JLabel lblActions;
     
@@ -80,6 +83,7 @@ public class Profile_Panel extends JPanel {
         createContentPanel();
         createStatisticsPanel();
         createActionsSection();
+        updateUserInfo();
     }
     
     /**
@@ -96,6 +100,7 @@ public class Profile_Panel extends JPanel {
      */
     private void createMainPanels() {
         mainPanel = new Rounded_Panel(100, Color.BLACK, 0);
+        mainPanel.setBackground(new Color(250, 250, 250));
         mainPanel.setLayout(new BorderLayout());
         add(mainPanel, BorderLayout.CENTER);
     }
@@ -154,6 +159,7 @@ public class Profile_Panel extends JPanel {
      */
     private void createContentPanel() {
         contentPanel = new JPanel();
+        contentPanel.setBackground(new Color(250, 250, 250));
         contentPanel.setLayout(null);
         mainPanel.add(contentPanel, BorderLayout.CENTER);
         
@@ -185,7 +191,7 @@ public class Profile_Panel extends JPanel {
         lblUsernameValue = new JLabel("Username");
         lblUsernameValue.setForeground(Color.BLACK);
         lblUsernameValue.setFont(new Font("Tahoma", Font.PLAIN, 20));
-        lblUsernameValue.setBounds(183, 58, 263, 25);
+        lblUsernameValue.setBounds(202, 58, 263, 25);
         contentPanel.add(lblUsernameValue);
         
         // Email section
@@ -198,21 +204,21 @@ public class Profile_Panel extends JPanel {
         lblEmailValue = new JLabel("Email@gmail.com");
         lblEmailValue.setForeground(Color.BLACK);
         lblEmailValue.setFont(new Font("Tahoma", Font.PLAIN, 20));
-        lblEmailValue.setBounds(183, 94, 263, 25);
+        lblEmailValue.setBounds(202, 94, 263, 25);
         contentPanel.add(lblEmailValue);
         
         // Date joined section
-        lblDateJoinedProp = new JLabel("Date Joined");
-        lblDateJoinedProp.setForeground(Color.BLACK);
-        lblDateJoinedProp.setFont(new Font("Tahoma", Font.PLAIN, 20));
-        lblDateJoinedProp.setBounds(20, 130, 134, 25);
-        contentPanel.add(lblDateJoinedProp);
+        lblTotalSubmissionsProp = new JLabel("Total Submissions");
+        lblTotalSubmissionsProp.setForeground(Color.BLACK);
+        lblTotalSubmissionsProp.setFont(new Font("Tahoma", Font.PLAIN, 20));
+        lblTotalSubmissionsProp.setBounds(20, 130, 165, 25);
+        contentPanel.add(lblTotalSubmissionsProp);
         
-        lblDateJoinedValue = new JLabel("4/5/2025");
-        lblDateJoinedValue.setForeground(Color.BLACK);
-        lblDateJoinedValue.setFont(new Font("Tahoma", Font.PLAIN, 20));
-        lblDateJoinedValue.setBounds(183, 130, 263, 25);
-        contentPanel.add(lblDateJoinedValue);
+        lblTotalSubmissionsValue = new JLabel("0");
+        lblTotalSubmissionsValue.setForeground(Color.BLACK);
+        lblTotalSubmissionsValue.setFont(new Font("Tahoma", Font.PLAIN, 20));
+        lblTotalSubmissionsValue.setBounds(202, 130, 263, 25);
+        contentPanel.add(lblTotalSubmissionsValue);
     }
     
     /**
@@ -220,11 +226,13 @@ public class Profile_Panel extends JPanel {
      */
     private void createStatisticsPanel() {
         statisticsPanel = new JPanel();
+        statisticsPanel.setBackground(new Color(250, 250, 250));
         statisticsPanel.setBounds(475, 11, 471, 220);
         statisticsPanel.setLayout(null);
         contentPanel.add(statisticsPanel);
         
         lblUsageStatistics = new JLabel("Usage Statistics");
+        lblUsageStatistics.setBackground(new Color(250, 250, 250));
         lblUsageStatistics.setForeground(Color.BLACK);
         lblUsageStatistics.setFont(new Font("Tahoma", Font.PLAIN, 20));
         lblUsageStatistics.setBounds(10, 0, 263, 25);
@@ -356,6 +364,15 @@ public class Profile_Panel extends JPanel {
         contentPanel.add(separatorActions);
     }
     
+    
+    public void createActionListeners() {
+		btnChangePassword.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+	}
+    
     /**
      * Update the panel with user information
      * Note: This method would be called after construction to populate user data
@@ -368,11 +385,19 @@ public class Profile_Panel extends JPanel {
         // Update header information
         String username = current_user.getUsername(); // Assuming getter exists
         String email = current_user.getEmail(); // Assuming getter exists
+        int totalSubmissions; // Assuming getter exists
+        
+        try {
+			totalSubmissions = database_manager.getReadingManager().getReadingsByUserId(current_user).size();
+		} catch (Exception e) {
+			totalSubmissions = 0; // Default to 0 if there's an error
+		}
         
         lblUsername.setText(username);
         lblEmail.setText(email);
         lblUsernameValue.setText(username);
         lblEmailValue.setText(email);
+        lblTotalSubmissionsValue.setText(String.valueOf(totalSubmissions));
         
         // Set profile initials
         if (username != null && !username.isEmpty()) {

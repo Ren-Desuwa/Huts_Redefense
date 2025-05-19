@@ -1,5 +1,6 @@
 package view.login;
 
+import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,7 +15,6 @@ import javax.swing.border.EmptyBorder;
 
 import database.Database_Manager;
 import model.User;
-import view.Main_Frame;
 
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -140,11 +140,19 @@ public class New_Password_Window extends JFrame {
 			database_manager.getUserManager().updateUserPassword(current_user, password);
 			System.out.println("Password changed successfully.");
 			
-			this.dispose();
+			JFrame currentFrame = this;
 			
-			// Open the Sign In window
-			Log_In_Window LogInWindow = new Log_In_Window(database_manager);
-			LogInWindow.setVisible(true);
+			EventQueue.invokeLater(new Runnable() {
+		        public void run() {
+		            try {
+		                currentFrame.dispose();
+		                Log_In_Window loginWindow = new Log_In_Window(database_manager);
+		                loginWindow.setVisible(true);
+		            } catch (Exception e) {
+		                e.printStackTrace();
+		            }
+		        }
+		    });
 		} catch (Exception e) {
 			System.out.println("Error changing password: " + e.getMessage());
 		}
