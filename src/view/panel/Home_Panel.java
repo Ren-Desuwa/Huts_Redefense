@@ -358,6 +358,7 @@ public class Home_Panel extends JPanel {
         panel.setLayout(null);
         panel.setBackground(Color.WHITE);
         
+        
         // Add a title label
         JLabel lblTitle = new JLabel(title);
         lblTitle.setFont(new Font("Tahoma", Font.BOLD, 16));

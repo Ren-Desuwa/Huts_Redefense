@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.time.LocalDate;
@@ -97,5 +98,17 @@ public class Bar_Graph_Panel extends JPanel {
 
         // Update chart with new data
         setData(seriesName, monthNames, values);
+    }
+    
+    public static Map<Month, Double> generateMonthlyData(Map<Month, Double> existingData, int monthsToShow) {
+        Map<Month, Double> result = new LinkedHashMap<>();
+        Month currentMonth = LocalDate.now().getMonth();
+
+        for (int i = monthsToShow - 1; i >= 0; i--) {
+            Month month = currentMonth.minus(i);
+            result.put(month, existingData.getOrDefault(month, 0.0));
+        }
+
+        return result;
     }
 }
