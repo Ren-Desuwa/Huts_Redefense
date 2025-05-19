@@ -29,6 +29,7 @@ import javax.swing.JScrollPane;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import javax.swing.JComboBox;
@@ -66,6 +67,7 @@ public class Electricity_Panel extends JPanel {
 	private JLabel lbl_Head_TotalPrice;
 	private JPanel Line;
 	private Home_Panel homepanel;
+	private JLabel lblTime;
 	/**
 	 * Create the panel.
 	 */
@@ -97,6 +99,14 @@ public class Electricity_Panel extends JPanel {
 		lbl_Date.setBounds(764, 11, 170, 54);
 		lbl_Date.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
 		panel_Electricity_Consumption_Title.add(lbl_Date);
+		
+		lblTime = new JLabel("Time");
+        lblTime.setVerticalAlignment(SwingConstants.TOP);
+        lblTime.setHorizontalAlignment(SwingConstants.RIGHT);
+        lblTime.setFont(new Font("Tahoma", Font.PLAIN, 30));
+        lblTime.setBounds(764, 46, 170, 41);
+        lblTime.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm a")));
+        panel_Electricity_Consumption_Title.add(lblTime);
 		
 		lbl_SubTitle_Electricity_Consmption = new JLabel("Track and manage your electricity usage ");
 		lbl_SubTitle_Electricity_Consmption.setHorizontalAlignment(SwingConstants.LEFT);

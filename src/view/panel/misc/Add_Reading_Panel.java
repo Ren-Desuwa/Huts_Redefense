@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import javax.swing.border.LineBorder;
@@ -59,6 +60,7 @@ public class Add_Reading_Panel extends JDialog {
 	private JLabel lbl_Month;
 	private JLabel lbl_Year;
 	private Electricity_Panel electricitypanel;
+	private JLabel lblTime;
 	
 	public Add_Reading_Panel(JFrame parent ,Database_Manager database_manager, User current_user, Electricity_Panel utilitypanel) {
 		super(parent, "Add Reading", true);
@@ -84,8 +86,16 @@ public class Add_Reading_Panel extends JDialog {
 		panel_Electricity_Consumption_Title.setBounds(10, 11, 416, 97);
 		contentPane.add(panel_Electricity_Consumption_Title);
 		
+		lblTime = new JLabel("Time");
+		lblTime.setVerticalAlignment(SwingConstants.TOP);
+		lblTime.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblTime.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		lblTime.setBounds(134, 8, 170, 41);
+		lblTime.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm a")));
+        panel_Electricity_Consumption_Title.add(lblTime);
+		
 		lbl_Date = new JLabel("Date");
-		lbl_Date.setBounds(236, 11, 170, 54);
+		lbl_Date.setBounds(236, 8, 170, 54);
 		panel_Electricity_Consumption_Title.add(lbl_Date);
 		lbl_Date.setVerticalAlignment(SwingConstants.TOP);
 		lbl_Date.setHorizontalAlignment(SwingConstants.RIGHT);

@@ -12,6 +12,7 @@ import javax.swing.JList;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -64,6 +65,7 @@ public class Edit_Reading_Panel extends JDialog {
 	private JButton btn_Delete;
 	private JLabel lbl_Column_TotalPrice;
 	private JComboBox<String> cB_Edit_Reading_Selection;
+	private JLabel lblTime;
 	
 	
 		public Edit_Reading_Panel(JFrame parent, Database_Manager database_manager, User current_user, Electricity_Panel utilitypanel) {
@@ -91,7 +93,7 @@ public class Edit_Reading_Panel extends JDialog {
 			contentPane.add(panel_Electricity_Consumption_Title);
 			
 			lbl_DateToday = new JLabel("Date");
-			lbl_DateToday.setBounds(236, 11, 170, 54);
+			lbl_DateToday.setBounds(236, 8, 170, 54);
 			panel_Electricity_Consumption_Title.add(lbl_DateToday);
 			lbl_DateToday.setVerticalAlignment(SwingConstants.TOP);
 			lbl_DateToday.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -103,6 +105,14 @@ public class Edit_Reading_Panel extends JDialog {
 			panel_Electricity_Consumption_Title.add(lbl_Title_Electricity_Consumption);
 			lbl_Title_Electricity_Consumption.setHorizontalAlignment(SwingConstants.CENTER);
 			lbl_Title_Electricity_Consumption.setFont(new Font("Tahoma", Font.PLAIN, 35));
+			
+			lblTime = new JLabel("Time");
+			lblTime.setVerticalAlignment(SwingConstants.TOP);
+			lblTime.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblTime.setFont(new Font("Tahoma", Font.PLAIN, 17));
+			lblTime.setBounds(134, 8, 170, 41);
+			lblTime.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm a")));
+	        panel_Electricity_Consumption_Title.add(lblTime);
 			
 			JLabel lbl_Reading_Selection = new JLabel("Select a Reading to edit");
 			lbl_Reading_Selection.setHorizontalAlignment(SwingConstants.LEFT);
