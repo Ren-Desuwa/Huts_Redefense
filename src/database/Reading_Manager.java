@@ -213,13 +213,41 @@ public class Reading_Manager {
 		return list;
 	}
 	
-	public List<Reading> getReadingsByTime(User user, LocalDate startDate, LocalDate endDate) throws SQLException {
+	public List<Reading> getReadingsByDate(User user, LocalDate startDate, LocalDate endDate) throws SQLException {
 		String sqlscript = "SELECT * FROM readings WHERE user_id = ? AND date >= ? AND date <= ? ORDER BY date ASC";
 		List<Reading> list = new ArrayList<>();
 		try (PreparedStatement prepared_statement = connection.prepareStatement(sqlscript)) {
 			prepared_statement.setInt(1, user.getUser_Id());
 			prepared_statement.setString(2, startDate.toString());
 			prepared_statement.setString(3, endDate.toString());
+			try (ResultSet rs = prepared_statement.executeQuery()) {
+				while (rs.next()) {
+					list.add(new Reading(
+						rs.getInt("reading_id"),
+						rs.getInt("user_id"),
+						LocalDate.parse(rs.getString("date")),
+						rs.getString("type"),
+						rs.getDouble("reading"),
+						rs.getDouble("rate"),
+						rs.getDouble("total_price")
+					));
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+		}
+		return list;
+	}
+	
+	public List<Reading> getReadingsByDateAndType(User user, LocalDate startDate, LocalDate endDate, String type) throws SQLException {
+		String sqlscript = "SELECT * FROM readings WHERE user_id = ? AND date >= ? AND date <= ? AND type = ? ORDER BY date ASC";
+		List<Reading> list = new ArrayList<>();
+		try (PreparedStatement prepared_statement = connection.prepareStatement(sqlscript)) {
+			prepared_statement.setInt(1, user.getUser_Id());
+			prepared_statement.setString(2, startDate.toString());
+			prepared_statement.setString(3, endDate.toString());
+			prepared_statement.setString(4, type);
 			try (ResultSet rs = prepared_statement.executeQuery()) {
 				while (rs.next()) {
 					list.add(new Reading(

@@ -5,6 +5,7 @@ import javax.swing.JPanel;
 import database.Database_Manager;
 import model.Reading;
 import model.User;
+import view.panel.misc.Graph_Panel;
 import visuals.Bar_Graph_Panel;
 import visuals.Rounded_Panel;
 
@@ -30,6 +31,7 @@ import java.util.Map;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
 
 /**
@@ -69,6 +71,7 @@ public class Home_Panel extends JPanel {
     private JLabel lblTitleWelcome;
     private JLabel lblUsername;
     private JLabel lblDate;
+    private JLabel lblTime;
     private JLabel lblTitleElectricityInfo;
     private JLabel lblTitleWaterInfo;
     private JLabel lblTitleGasInfo;
@@ -81,12 +84,10 @@ public class Home_Panel extends JPanel {
     private JLabel lblOverAllReadingUnit;
     
     /** Graph components */
-    private CardLayout graphCardLayout;
-    private JPanel electricityGraphPanel;
-    private JPanel waterGraphPanel;
-    private JPanel gasGraphPanel;
-    private JPanel overallGraphPanel;
-    private JLabel lblTime;
+    private Graph_Panel graphPanel;
+    private JPanel panelBehind1;
+    private JPanel panelBehind2;
+    private JPanel panelBehind3;
     
     //==============================================================================================
     // CONSTRUCTOR
@@ -304,25 +305,18 @@ public class Home_Panel extends JPanel {
      * Create the graph panel with CardLayout for different utilities
      */
     private void createGraphPanel() {
-        // Graph Container with CardLayout
+        // Create the main graph container (visible to WindowBuilder)
         panelGraphContainer = new JPanel();
         panelGraphContainer.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
         panelGraphContainer.setBounds(504, 157, 413, 365);
-        graphCardLayout = new CardLayout();
-        panelGraphContainer.setLayout(graphCardLayout);
+        panelGraphContainer.setLayout(new BorderLayout()); // Use BorderLayout for easy replacement
         add(panelGraphContainer);
         
-        // Create graph panels with placeholders
-        electricityGraphPanel = createPlaceholderGraphPanel("Monthly Electricity Usage");
-        waterGraphPanel = createPlaceholderGraphPanel("Monthly Water Usage");
-        gasGraphPanel = createPlaceholderGraphPanel("Monthly Gas Usage");
-        overallGraphPanel = createPlaceholderGraphPanel("Monthly Total Expenses");
+        // Create Graph_Panel instance
+        graphPanel = new view.panel.misc.Graph_Panel();
         
-        // Add graph panels to container with card names
-        panelGraphContainer.add(electricityGraphPanel, "electricity");
-        panelGraphContainer.add(waterGraphPanel, "water");
-        panelGraphContainer.add(gasGraphPanel, "gas");
-        panelGraphContainer.add(overallGraphPanel, "overall");
+        // Add Graph_Panel to the container
+        panelGraphContainer.add(graphPanel, BorderLayout.CENTER);
         
         createGraphShadowPanels();
     }
@@ -331,52 +325,20 @@ public class Home_Panel extends JPanel {
      * Creates shadow panels for visual design effect behind the graph
      */
     private void createGraphShadowPanels() {
-        JPanel panelBehind1 = new JPanel();
+        panelBehind1 = new JPanel();
         panelBehind1.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
         panelBehind1.setBounds(520, 142, 413, 365);
         add(panelBehind1);
         
-        JPanel panelBehind2 = new JPanel();
+        panelBehind2 = new JPanel();
         panelBehind2.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
         panelBehind2.setBounds(536, 129, 413, 356);
         add(panelBehind2);
         
-        JPanel panelBehind3 = new JPanel();
+        panelBehind3 = new JPanel();
         panelBehind3.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
         panelBehind3.setBounds(552, 114, 413, 347);
         add(panelBehind3);
-    }
-    
-    /**
-     * Creates a placeholder panel for graphs
-     * 
-     * @param title Title to display on the graph panel
-     * @return A configured JPanel
-     */
-    private JPanel createPlaceholderGraphPanel(String title) {
-        JPanel panel = new Bar_Graph_Panel(title, "Month", "Usage");
-        panel.setLayout(null);
-        panel.setBackground(Color.WHITE);
-        
-        
-        // Add a title label
-        JLabel lblTitle = new JLabel(title);
-        lblTitle.setFont(new Font("Tahoma", Font.BOLD, 16));
-        lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
-        lblTitle.setBounds(10, 11, 393, 25);
-        panel.add(lblTitle);
-        
-        // Add placeholder text
-        JLabel lblPlaceholder = new JLabel("Graph Placeholder");
-        lblPlaceholder.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        lblPlaceholder.setHorizontalAlignment(SwingConstants.CENTER);
-        lblPlaceholder.setBounds(10, 150, 393, 25);
-        panel.add(lblPlaceholder);
-        
-        // Add border for visual clarity
-        panel.setBorder(new LineBorder(Color.LIGHT_GRAY));
-        
-        return panel;
     }
     
     //==============================================================================================
@@ -426,19 +388,19 @@ public class Home_Panel extends JPanel {
      * Setup event listeners for interactive elements
      */
     private void createActionListeners() {
-    	Timer timer = new Timer(60_000, e -> {
+        Timer timer = new Timer(60_000, e -> {
             lblTime.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")));
         });
-    	LocalTime now = LocalTime.now();
-    	int millisUntilNextMinute = (60 - now.getSecond()) * 1000 - now.getNano() / 1_000_000;
-    	timer.setInitialDelay(millisUntilNextMinute); // optional: sync with real time
+        LocalTime now = LocalTime.now();
+        int millisUntilNextMinute = (60 - now.getSecond()) * 1000 - now.getNano() / 1_000_000;
+        timer.setInitialDelay(millisUntilNextMinute); // optional: sync with real time
         timer.start();
-    	
+        
         // Electricity panel click event
         panelElectricityInfo.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                graphCardLayout.show(panelGraphContainer, "electricity");
+                graphPanel.showElectricityGraph();
             }
         });
         
@@ -446,7 +408,7 @@ public class Home_Panel extends JPanel {
         panelWaterInfo.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                graphCardLayout.show(panelGraphContainer, "water");
+                graphPanel.showWaterGraph();
             }
         });
         
@@ -454,7 +416,7 @@ public class Home_Panel extends JPanel {
         panelGasInfo.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                graphCardLayout.show(panelGraphContainer, "gas");
+                graphPanel.showGasGraph();
             }
         });
         
@@ -462,10 +424,9 @@ public class Home_Panel extends JPanel {
         panelOverallInfo.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                graphCardLayout.show(panelGraphContainer, "overall");
+                graphPanel.showOverallGraph();
             }
         });
-        
     }
     
     //==============================================================================================
@@ -491,6 +452,9 @@ public class Home_Panel extends JPanel {
             
             // Update labels with latest readings
             updateReadingLabels(electricityReading, waterReading, gasReading);
+            
+            // Initialize graph panels (needed because we're using a delayed initialization approach)
+            graphPanel.initialize();
             
             // Setup the bar graphs with data from past 6 months
             updateBarGraphs();
@@ -542,8 +506,43 @@ public class Home_Panel extends JPanel {
      */
     private void updateBarGraphs() {
         try {
-            // Show electricity graph by default
-            graphCardLayout.show(panelGraphContainer, "electricity");
+            // Prepare monthly data maps
+            Map<Month, Double> electricityData = new HashMap<>();
+            Map<Month, Double> waterData = new HashMap<>();
+            Map<Month, Double> gasData = new HashMap<>();
+            Map<Month, Double> overallData = new HashMap<>();
+            
+            // Fetch last 6 months of readings
+            LocalDate endDate = LocalDate.now();
+            LocalDate startDate = endDate.minusMonths(6);
+            
+            List<Reading> electricityReadings = databaseManager.getReadingManager()
+                .getReadingsByDateAndType(currentUser, startDate, endDate, "electricity");
+            List<Reading> waterReadings = databaseManager.getReadingManager()
+                .getReadingsByDateAndType(currentUser, startDate, endDate, "water");
+            List<Reading> gasReadings = databaseManager.getReadingManager()
+                .getReadingsByDateAndType(currentUser, startDate, endDate, "gas");
+            
+            // Group readings by month
+            electricityData = groupReadingsByMonth(electricityReadings, false);
+            waterData = groupReadingsByMonth(waterReadings, false);
+            gasData = groupReadingsByMonth(gasReadings, false);
+            
+            // Group price data by month for overall expenses
+            Map<Month, Double> electricityPrices = groupReadingsByMonth(electricityReadings, true);
+            Map<Month, Double> waterPrices = groupReadingsByMonth(waterReadings, true);
+            Map<Month, Double> gasPrices = groupReadingsByMonth(gasReadings, true);
+            
+            // Combine all price data for total expenses
+            for (Month month : electricityPrices.keySet()) {
+                double totalPrice = electricityPrices.getOrDefault(month, 0.0) +
+                                    waterPrices.getOrDefault(month, 0.0) +
+                                    gasPrices.getOrDefault(month, 0.0);
+                overallData.put(month, totalPrice);
+            }
+            
+            // Update graphs with data
+            graphPanel.updateGraphs(electricityData, waterData, gasData, overallData, 5);
             
         } catch (Exception e) {
             e.printStackTrace();
@@ -564,7 +563,19 @@ public class Home_Panel extends JPanel {
      */
     private Map<Month, Double> groupReadingsByMonth(List<Reading> readings, boolean usePrice) {
         Map<Month, Double> monthlyData = new HashMap<>();
-        // Placeholder implementation - could be completed later
+        
+        if (readings != null) {
+            for (Reading reading : readings) {
+                LocalDate readingDate = reading.getDate();
+                Month month = readingDate.getMonth();
+                
+                double value = usePrice ? reading.getTotal_Price() : reading.getReading();
+                
+                // Add value to existing month or create new entry
+                monthlyData.put(month, monthlyData.getOrDefault(month, 0.0) + value);
+            }
+        }
+        
         return monthlyData;
     }
 }

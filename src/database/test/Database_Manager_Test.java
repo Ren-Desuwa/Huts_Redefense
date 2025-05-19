@@ -312,7 +312,7 @@ public class Database_Manager_Test {
         totalTests++;
         LocalDate startDate = LocalDate.now().minusDays(20);
         LocalDate endDate = LocalDate.now();
-        List<Reading> rangeReadings = readingManager.getReadingsByTime(currentUser, startDate, endDate);
+        List<Reading> rangeReadings = readingManager.getReadingsByDate(currentUser, startDate, endDate);
         int expectedInRange = 0;
         for (Reading r : allReadings) {
             if (!r.getDate().isBefore(startDate) && !r.getDate().isAfter(endDate)) {
