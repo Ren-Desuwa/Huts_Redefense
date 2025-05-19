@@ -8,10 +8,10 @@ import java.time.Month;
 import java.util.Map;
 import java.awt.Color;
 
-import visuals.Bar_Graph_Panel;
+import visuals.Scrollable_Bar_Graph_Panel;
 
 /**
- * Panel for displaying utility usage graphs
+ * Panel for displaying utility usage graphs with horizontal scrolling
  * Designed to be WindowBuilder-friendly
  */
 @SuppressWarnings("serial")
@@ -22,10 +22,10 @@ public class Graph_Panel extends JPanel {
     private JPanel cardContainer;
     
     // Graph panel references
-    private Bar_Graph_Panel electricityGraphPanel;
-    private Bar_Graph_Panel waterGraphPanel;
-    private Bar_Graph_Panel gasGraphPanel;
-    private Bar_Graph_Panel overallGraphPanel;
+    private Scrollable_Bar_Graph_Panel electricityGraphPanel;
+    private Scrollable_Bar_Graph_Panel waterGraphPanel;
+    private Scrollable_Bar_Graph_Panel gasGraphPanel;
+    private Scrollable_Bar_Graph_Panel overallGraphPanel;
     
     /**
      * Creates a new graph panel with placeholder
@@ -53,11 +53,18 @@ public class Graph_Panel extends JPanel {
         graphCardLayout = new CardLayout();
         cardContainer = new JPanel(graphCardLayout);
         
-        // Initialize the individual graph panels
-        electricityGraphPanel = new Bar_Graph_Panel("Monthly Electricity Usage", "Month", "KwH");
-        waterGraphPanel = new Bar_Graph_Panel("Monthly Water Usage", "Month", "m³");
-        gasGraphPanel = new Bar_Graph_Panel("Monthly Gas Usage", "Month", "Qty");
-        overallGraphPanel = new Bar_Graph_Panel("Monthly Total Expenses", "Month", "Php");
+        // Initialize the individual graph panels with scrollable bar graphs
+        electricityGraphPanel = new Scrollable_Bar_Graph_Panel("Monthly Electricity Usage", "Month", "KwH");
+        electricityGraphPanel.setBarColor(new Color(79, 129, 189)); // Blue
+        
+        waterGraphPanel = new Scrollable_Bar_Graph_Panel("Monthly Water Usage", "Month", "m³");
+        waterGraphPanel.setBarColor(new Color(155, 187, 89)); // Green
+        
+        gasGraphPanel = new Scrollable_Bar_Graph_Panel("Monthly Gas Usage", "Month", "Qty");
+        gasGraphPanel.setBarColor(new Color(192, 80, 77)); // Red
+        
+        overallGraphPanel = new Scrollable_Bar_Graph_Panel("Monthly Total Expenses", "Month", "Php");
+        overallGraphPanel.setBarColor(new Color(128, 100, 162)); // Purple
         
         // Add graph panels to the card container
         cardContainer.add(electricityGraphPanel, "electricity");
