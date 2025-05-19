@@ -18,6 +18,7 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
     // UI Components
     private JPanel chartPanel;          // Container for the bar chart 
     private JPanel axisLabelPanel;      // Fixed panel for Y-axis labels and title
+    private JPanel headerPanel;         // Fixed panel for title and series name
     private JScrollPane scrollPane;     // Scrollpane for horizontal scrolling
     
     // Graph Data
@@ -32,9 +33,10 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
     // Drawing constants
     private static final int BAR_WIDTH = 50;         // Width of each bar
     private static final int BAR_SPACING = 20;       // Space between bars
-    private static final int TOP_MARGIN = 60;        // Top margin for title
+    private static final int TOP_MARGIN = 30;        // Top margin for content (reduced since header is separate)
     private static final int BOTTOM_MARGIN = 60;     // Bottom margin for x-axis labels
     private static final int Y_AXIS_WIDTH = 60;      // Width of y-axis panel
+    private static final int HEADER_HEIGHT = 40;     // Height of the header panel
     private static final int DEFAULT_HEIGHT = 300;   // Default height of the panel
     
     // Color scheme
@@ -63,6 +65,7 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
         this.data = new HashMap<>();
         this.monthsToShow = 6;
         this.maxValue = 100.0; // Default max value
+        this.seriesName = ""; // Default empty series name
         
         initializeUI();
     }
@@ -73,19 +76,33 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
     private void initializeUI() {
         setLayout(new BorderLayout());
         
+        // Create header panel for title and series name (fixed at the top)
+        headerPanel = new JPanel() {
+        	private static final long serialVersionUID = 1L;
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                drawHeader(g);
+            }
+        };
+        headerPanel.setPreferredSize(new Dimension(getWidth(), HEADER_HEIGHT));
+        headerPanel.setBackground(backgroundColor);
+        
         // Create Y-axis labels panel (fixed on the left)
         axisLabelPanel = new JPanel() {
+        	private static final long serialVersionUID = 1L;
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 drawYAxisLabels(g);
             }
         };
-        axisLabelPanel.setPreferredSize(new Dimension(Y_AXIS_WIDTH, DEFAULT_HEIGHT));
+        axisLabelPanel.setPreferredSize(new Dimension(Y_AXIS_WIDTH, DEFAULT_HEIGHT - HEADER_HEIGHT));
         axisLabelPanel.setBackground(backgroundColor);
         
         // Create chart panel (will be scrollable)
         chartPanel = new JPanel() {
+        	private static final long serialVersionUID = 1L;
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -101,9 +118,14 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         scrollPane.getViewport().setBackground(backgroundColor);
         
+        // Create container for axis label and scroll pane
+        JPanel contentPanel = new JPanel(new BorderLayout());
+        contentPanel.add(axisLabelPanel, BorderLayout.WEST);
+        contentPanel.add(scrollPane, BorderLayout.CENTER);
+        
         // Add components to the main panel
-        add(axisLabelPanel, BorderLayout.WEST);
-        add(scrollPane, BorderLayout.CENTER);
+        add(headerPanel, BorderLayout.NORTH);
+        add(contentPanel, BorderLayout.CENTER);
     }
     
     /**
@@ -142,8 +164,18 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
      * Updates the chart panel size based on the number of months to show
      */
     private void updateChartPanelSize() {
-        int width = calculateChartWidth();
-        int height = getHeight() > 0 ? getHeight() : DEFAULT_HEIGHT;
+        int width;
+
+        if (data == null || data.isEmpty()) {
+            // If there's no data, set width to the viewport's width to avoid scrolling
+            width = scrollPane != null ? scrollPane.getViewport().getWidth() : getWidth();
+            if (width <= 0) width = 400; // fallback in case layout not yet resolved
+        } else {
+            // Use calculated chart width based on data
+            width = calculateChartWidth();
+        }
+
+        int height = getHeight() > 0 ? getHeight() - HEADER_HEIGHT : DEFAULT_HEIGHT - HEADER_HEIGHT;
         
         chartPanel.setPreferredSize(new Dimension(width, height));
         chartPanel.revalidate();
@@ -173,6 +205,25 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
         }
         
         return max > 0 ? max : 10.0;
+    }
+    
+    /**
+     * Draw the fixed header containing the title and series name
+     */
+    private void drawHeader(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        
+        // Draw the title
+        g2d.setFont(new Font("SansSerif", Font.BOLD, 14));
+        g2d.setColor(textColor);
+        g2d.drawString(title, 10, 20);
+        
+        // Draw the series name (if provided)
+        if (seriesName != null && !seriesName.isEmpty()) {
+            g2d.setFont(new Font("SansSerif", Font.BOLD, 12));
+            
+        }
     }
     
     /**
@@ -231,13 +282,6 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
         
         int height = getHeight() - TOP_MARGIN - BOTTOM_MARGIN;
         
-        // Draw title
-        g2d.setFont(new Font("SansSerif", Font.BOLD, 14));
-        g2d.setColor(textColor);
-        FontMetrics fm = g2d.getFontMetrics();
-        int titleWidth = fm.stringWidth(title);
-        g2d.drawString(title, (calculateChartWidth() - titleWidth) / 2, 30);
-        
         // Sort the data by months
         List<Month> sortedMonths = new ArrayList<>(data.keySet());
         Collections.sort(sortedMonths);
@@ -245,7 +289,7 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
         if (data.isEmpty()) {
             // Draw "No Data" message
             g2d.setFont(new Font("SansSerif", Font.BOLD, 14));
-            g2d.drawString("No Data Available", 20, TOP_MARGIN + height/2);
+            g2d.drawString("No Data Available Yet", 20, TOP_MARGIN + height/4);
             return;
         }
         
@@ -254,7 +298,7 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
         
         // Draw X-axis label
         g2d.setFont(new Font("SansSerif", Font.BOLD, 12));
-        fm = g2d.getFontMetrics();
+        FontMetrics fm = g2d.getFontMetrics();
         int xLabelWidth = fm.stringWidth(xAxisLabel);
         g2d.drawString(xAxisLabel, (calculateChartWidth() - xLabelWidth) / 2, TOP_MARGIN + height + 40);
         
@@ -294,18 +338,27 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
     @Override
     public void setBounds(int x, int y, int width, int height) {
         super.setBounds(x, y, width, height);
+        if (headerPanel != null) {
+            headerPanel.setPreferredSize(new Dimension(width, HEADER_HEIGHT));
+        }
         updateChartPanelSize();
     }
     
     @Override
     public void setSize(int width, int height) {
         super.setSize(width, height);
+        if (headerPanel != null) {
+            headerPanel.setPreferredSize(new Dimension(width, HEADER_HEIGHT));
+        }
         updateChartPanelSize();
     }
     
     @Override
     public void setSize(Dimension d) {
         super.setSize(d);
+        if (headerPanel != null) {
+            headerPanel.setPreferredSize(new Dimension(d.width, HEADER_HEIGHT));
+        }
         updateChartPanelSize();
     }
 }
