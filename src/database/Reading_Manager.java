@@ -282,7 +282,7 @@ public class Reading_Manager {
 	}
 	
 	public List<Reading> getAllReadingsByType(User user, String type) throws SQLException {
-		String sqlscript = "SELECT * FROM readings WHERE user_id = ? AND type = ? ORDER BY date ASC";
+		String sqlscript = "SELECT * FROM readings WHERE user_id = ? AND type = ? ORDER BY date DESC";
 		List<Reading> list = new ArrayList<>();
 		try (PreparedStatement prepared_statement = connection.prepareStatement(sqlscript)) {
 			prepared_statement.setInt(1, user.getUser_Id());

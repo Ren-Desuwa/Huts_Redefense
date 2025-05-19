@@ -33,7 +33,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 
-public class Add_Reading_Panel extends JFrame {
+public class Edit_Reading_Panel extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -60,7 +60,7 @@ public class Add_Reading_Panel extends JFrame {
 	private JLabel lbl_Year;
 	private Electricity_Panel electricitypanel;
 	
-	public Add_Reading_Panel(Database_Manager database_manager, User current_user, Electricity_Panel utilitypanel) {
+	public Edit_Reading_Panel(Database_Manager database_manager, User current_user, Electricity_Panel utilitypanel) {
 		this.database_manager = database_manager;
 		this.current_user = current_user;
 		this.electricitypanel = utilitypanel;
