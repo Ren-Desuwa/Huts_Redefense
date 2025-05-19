@@ -25,7 +25,7 @@ import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-
+import javax.swing.JDialog;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -33,7 +33,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 
-public class Add_Reading_Panel extends JFrame {
+public class Add_Reading_Panel extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -60,12 +60,13 @@ public class Add_Reading_Panel extends JFrame {
 	private JLabel lbl_Year;
 	private Electricity_Panel electricitypanel;
 	
-	public Add_Reading_Panel(Database_Manager database_manager, User current_user, Electricity_Panel utilitypanel) {
+	public Add_Reading_Panel(JFrame parent ,Database_Manager database_manager, User current_user, Electricity_Panel utilitypanel) {
+		super(parent, "Add Reading", true);
 		this.database_manager = database_manager;
 		this.current_user = current_user;
 		this.electricitypanel = utilitypanel;
 		
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 535);
 		
 		setTitle("Add Reading");

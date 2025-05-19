@@ -1,6 +1,7 @@
 package view.panel;
 
 import java.awt.Dimension;
+import java.awt.EventQueue;
 
 import javax.swing.JPanel;
 
@@ -8,7 +9,9 @@ import javax.swing.JPanel;
 import database.Database_Manager;
 import model.Reading;
 import model.User;
+import view.login.Sign_Up_Window;
 import view.panel.misc.Add_Reading_Panel;
+import view.panel.misc.Edit_Reading_Panel;
 
 import javax.swing.border.LineBorder;
 import java.awt.Color;
@@ -19,6 +22,7 @@ import java.awt.Font;
 import java.util.List;
 
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
@@ -28,6 +32,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.DefaultComboBoxModel;
 
 public class Electricity_Panel extends JPanel {
@@ -223,10 +228,19 @@ public class Electricity_Panel extends JPanel {
 	
 	private void goToAddReading() {
 
-		
-		// Open the Add Reading window
-		Add_Reading_Panel add_reading_panel = new Add_Reading_Panel(database_manager, current_user, this);
-		add_reading_panel.setVisible(true);
+		EventQueue.invokeLater(new Runnable() {
+	        public void run() {
+	            try {
+	            	Add_Reading_Panel add_reading_panel = new Add_Reading_Panel(
+		            	    (JFrame) SwingUtilities.getWindowAncestor(Electricity_Panel.this),
+		            	    database_manager, current_user, Electricity_Panel.this
+		            	);
+		            	add_reading_panel.setVisible(true);
+	            } catch (Exception e) {
+	                e.printStackTrace();
+	            }
+	        }
+	    });
 	}
 	
 	public void Electricity_Panel_Refresh() {
@@ -281,7 +295,20 @@ public class Electricity_Panel extends JPanel {
 				public void mouseClicked(MouseEvent e) {
 					int response = javax.swing.JOptionPane.showConfirmDialog(null, "Do you want to eddit this reading?", "Edit Reading", javax.swing.JOptionPane.YES_NO_OPTION);
 					if (response == javax.swing.JOptionPane.YES_OPTION) {
-					
+						EventQueue.invokeLater(new Runnable() {
+					        public void run() {
+					            try {
+					            	Edit_Reading_Panel edit_reading_panel = new Edit_Reading_Panel(
+					            	    (JFrame) SwingUtilities.getWindowAncestor(Electricity_Panel.this),
+					            	    database_manager, current_user, Electricity_Panel.this
+					            	);
+					            	edit_reading_panel.setVisible(true);
+
+					            } catch (Exception e) {
+					                e.printStackTrace();
+					            }
+					        }
+					    });
 					}
 				}
 			});
