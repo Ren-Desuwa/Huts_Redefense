@@ -5,6 +5,9 @@ import javax.swing.JPanel;
 import database.Database_Manager;
 import model.Reading;
 import model.User;
+import visuals.Bar_Graph_Panel;
+import visuals.Rounded_Panel;
+
 import javax.swing.JLabel;
 import java.awt.Dimension;
 import javax.swing.JButton;
@@ -13,7 +16,11 @@ import javax.swing.border.LineBorder;
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.SwingConstants;
+import javax.swing.Timer;
+
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -32,29 +39,33 @@ public class Home_Panel extends JPanel {
 
     private static final long serialVersionUID = 1L;
     
-    // Database and user fields
+    //==============================================================================================
+    // FIELDS
+    //==============================================================================================
+    
+    /** Database and user fields */
     private Database_Manager databaseManager;
     private User currentUser;
     
-    // Main panels
+    /** Main panel containers */
     private JPanel panelWelcomeTitle;
     private JPanel panelInformation;
     private JPanel panelTips;
     private JPanel panelGraphContainer;
     
-    // Utility info panels
+    /** Utility info panels */
     private JPanel panelElectricityInfo;
     private JPanel panelWaterInfo;
     private JPanel panelGasInfo;
     private JPanel panelOverallInfo;
     
-    // Reading value labels
+    /** Reading value labels */
     private JLabel lblElectricityReadingValue;
     private JLabel lblWaterReadingValue;
     private JLabel lblGasReadingValue;
     private JLabel lblOverAllReadingValue;
     
-    // Title labels
+    /** Panel title labels */
     private JLabel lblTitleWelcome;
     private JLabel lblUsername;
     private JLabel lblDate;
@@ -63,18 +74,23 @@ public class Home_Panel extends JPanel {
     private JLabel lblTitleGasInfo;
     private JLabel lblTitleOverAllInfo;
     
-    // Unit labels
+    /** Unit labels */
     private JLabel lblElectricityReadingUnit;
     private JLabel lblWaterReadingUnit;
     private JLabel lblGasReadingUnit;
     private JLabel lblOverAllReadingUnit;
     
-    // Graph panels
+    /** Graph components */
     private CardLayout graphCardLayout;
     private JPanel electricityGraphPanel;
     private JPanel waterGraphPanel;
     private JPanel gasGraphPanel;
     private JPanel overallGraphPanel;
+    private JLabel lblTime;
+    
+    //==============================================================================================
+    // CONSTRUCTOR
+    //==============================================================================================
     
     /**
      * Constructor for the Home Panel
@@ -87,17 +103,16 @@ public class Home_Panel extends JPanel {
         this.currentUser = currentUser;
         
         initializePanelProperties();
-        createMainPanels();
-        createHeaderPanel();
-        createContentPanel();
-        createTipsPanel();
-        createGraphPanel();
-        createActionListeners();
+        initializeUI();
         setupData();
     }
     
+    //==============================================================================================
+    // INITIALIZATION METHODS
+    //==============================================================================================
+    
     /**
-     * Initialize the panel's properties
+     * Initialize the panel's base properties
      */
     private void initializePanelProperties() {
         setPreferredSize(new Dimension(986, 688));
@@ -105,18 +120,25 @@ public class Home_Panel extends JPanel {
     }
     
     /**
-     * Create main panels structure
+     * Initialize all UI components
      */
-    private void createMainPanels() {
-        // This is a container method - the actual panels are created in their respective methods
+    private void initializeUI() {
+        createHeaderPanel();
+        createContentPanel();
+        createGraphPanel();
+        createTipsPanel();
+        createActionListeners();
     }
+    
+    //==============================================================================================
+    // UI CREATION - HEADER SECTION
+    //==============================================================================================
     
     /**
      * Create the header panel with welcome title
      */
     private void createHeaderPanel() {
-        panelWelcomeTitle = new JPanel();
-        panelWelcomeTitle.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+        panelWelcomeTitle = new Rounded_Panel(25, Color.BLACK, 1);
         panelWelcomeTitle.setBounds(21, 11, 944, 85);
         panelWelcomeTitle.setLayout(null);
         add(panelWelcomeTitle);
@@ -140,7 +162,19 @@ public class Home_Panel extends JPanel {
         lblDate.setBounds(764, 11, 170, 54);
         lblDate.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         panelWelcomeTitle.add(lblDate);
+        
+        lblTime = new JLabel("Time");
+        lblTime.setVerticalAlignment(SwingConstants.TOP);
+        lblTime.setHorizontalAlignment(SwingConstants.RIGHT);
+        lblTime.setFont(new Font("Tahoma", Font.PLAIN, 30));
+        lblTime.setBounds(764, 46, 170, 41);
+        lblTime.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm")));
+        panelWelcomeTitle.add(lblTime);
     }
+    
+    //==============================================================================================
+    // UI CREATION - CONTENT PANELS
+    //==============================================================================================
     
     /**
      * Create the content panel with utility information
@@ -262,6 +296,10 @@ public class Home_Panel extends JPanel {
         panelOverallInfo.add(lblOverAllReadingUnit);
     }
     
+    //==============================================================================================
+    // UI CREATION - GRAPH SECTION
+    //==============================================================================================
+    
     /**
      * Create the graph panel with CardLayout for different utilities
      */
@@ -286,7 +324,13 @@ public class Home_Panel extends JPanel {
         panelGraphContainer.add(gasGraphPanel, "gas");
         panelGraphContainer.add(overallGraphPanel, "overall");
         
-        // Graph shadow panels for design effect
+        createGraphShadowPanels();
+    }
+    
+    /**
+     * Creates shadow panels for visual design effect behind the graph
+     */
+    private void createGraphShadowPanels() {
         JPanel panelBehind1 = new JPanel();
         panelBehind1.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
         panelBehind1.setBounds(520, 142, 413, 365);
@@ -302,6 +346,41 @@ public class Home_Panel extends JPanel {
         panelBehind3.setBounds(552, 114, 413, 347);
         add(panelBehind3);
     }
+    
+    /**
+     * Creates a placeholder panel for graphs
+     * 
+     * @param title Title to display on the graph panel
+     * @return A configured JPanel
+     */
+    private JPanel createPlaceholderGraphPanel(String title) {
+        JPanel panel = new Bar_Graph_Panel(title, "Month", "Usage");
+        panel.setLayout(null);
+        panel.setBackground(Color.WHITE);
+        
+        // Add a title label
+        JLabel lblTitle = new JLabel(title);
+        lblTitle.setFont(new Font("Tahoma", Font.BOLD, 16));
+        lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
+        lblTitle.setBounds(10, 11, 393, 25);
+        panel.add(lblTitle);
+        
+        // Add placeholder text
+        JLabel lblPlaceholder = new JLabel("Graph Placeholder");
+        lblPlaceholder.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        lblPlaceholder.setHorizontalAlignment(SwingConstants.CENTER);
+        lblPlaceholder.setBounds(10, 150, 393, 25);
+        panel.add(lblPlaceholder);
+        
+        // Add border for visual clarity
+        panel.setBorder(new LineBorder(Color.LIGHT_GRAY));
+        
+        return panel;
+    }
+    
+    //==============================================================================================
+    // UI CREATION - TIPS SECTION
+    //==============================================================================================
     
     /**
      * Create the tips panel with money-saving advice
@@ -338,10 +417,22 @@ public class Home_Panel extends JPanel {
         panelTips.add(lblGasTips);
     }
     
+    //==============================================================================================
+    // INTERACTION HANDLING
+    //==============================================================================================
+    
     /**
      * Setup event listeners for interactive elements
      */
     private void createActionListeners() {
+    	Timer timer = new Timer(60_000, e -> {
+            lblTime.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")));
+        });
+    	LocalTime now = LocalTime.now();
+    	int millisUntilNextMinute = (60 - now.getSecond()) * 1000 - now.getNano() / 1_000_000;
+    	timer.setInitialDelay(millisUntilNextMinute); // optional: sync with real time
+        timer.start();
+    	
         // Electricity panel click event
         panelElectricityInfo.addMouseListener(new MouseAdapter() {
             @Override
@@ -373,7 +464,12 @@ public class Home_Panel extends JPanel {
                 graphCardLayout.show(panelGraphContainer, "overall");
             }
         });
+        
     }
+    
+    //==============================================================================================
+    // DATA HANDLING
+    //==============================================================================================
     
     /**
      * Public method to refresh the panel data
@@ -453,36 +549,9 @@ public class Home_Panel extends JPanel {
         }
     }
     
-    /**
-     * Creates a placeholder panel for graphs
-     * 
-     * @param title Title to display on the graph panel
-     * @return A configured JPanel
-     */
-    private JPanel createPlaceholderGraphPanel(String title) {
-        JPanel panel = new JPanel();
-        panel.setLayout(null);
-        panel.setBackground(Color.WHITE);
-        
-        // Add a title label
-        JLabel lblTitle = new JLabel(title);
-        lblTitle.setFont(new Font("Tahoma", Font.BOLD, 16));
-        lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
-        lblTitle.setBounds(10, 11, 393, 25);
-        panel.add(lblTitle);
-        
-        // Add placeholder text
-        JLabel lblPlaceholder = new JLabel("Graph Placeholder");
-        lblPlaceholder.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        lblPlaceholder.setHorizontalAlignment(SwingConstants.CENTER);
-        lblPlaceholder.setBounds(10, 150, 393, 25);
-        panel.add(lblPlaceholder);
-        
-        // Add border for visual clarity
-        panel.setBorder(new LineBorder(Color.LIGHT_GRAY));
-        
-        return panel;
-    }
+    //==============================================================================================
+    // UTILITY METHODS
+    //==============================================================================================
     
     /**
      * Groups readings by month and calculates either sum of readings or sum of total price

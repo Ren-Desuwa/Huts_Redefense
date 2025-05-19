@@ -11,6 +11,7 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.time.LocalDate;
 
 public class Bar_Graph_Panel extends JPanel {
 
@@ -77,20 +78,23 @@ public class Bar_Graph_Panel extends JPanel {
      * @param seriesName Name of the data series
      * @param monthlyData Map with Month as key and value as double
      */
-    public void setMonthlyData(String seriesName, Map<Month, Double> monthlyData) {
-        // Sort months chronologically
-        List<Month> sortedMonths = new ArrayList<>(monthlyData.keySet());
-        sortedMonths.sort((m1, m2) -> Integer.compare(m1.getValue(), m2.getValue()));
-        
-        // Prepare data for chart
+    public void setMonthlyData(String seriesName, Map<Month, Double> monthlyData, int monthsToShowBefore) {
         List<String> monthNames = new ArrayList<>();
         List<Double> values = new ArrayList<>();
-        
-        for (Month month : sortedMonths) {
-            monthNames.add(month.toString().substring(0, 3)); // First 3 letters of month name
-            values.add(monthlyData.get(month));
+
+        // Get current month
+        Month currentMonth = LocalDate.now().getMonth();
+
+        // Build the list of months to show (latest on the right)
+        for (int i = monthsToShowBefore; i >= 0; i--) {
+            Month month = currentMonth.minus(i); // Handles wrap-around internally
+            String shortName = month.toString().substring(0, 3);
+            monthNames.add(shortName);
+
+            // Use data if available, else default to 0
+            values.add(monthlyData.getOrDefault(month, 0.0));
         }
-        
+
         // Update chart with new data
         setData(seriesName, monthNames, values);
     }
