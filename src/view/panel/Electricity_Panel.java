@@ -34,9 +34,6 @@ public class Electricity_Panel extends JPanel {
 	private User current_user;
 	private JPanel panel_Electricity_Consumption_Title;
 	private JPanel panel_add_reading;
-	private JTextField tf_Reading;
-	private JTextField tf_Rate;
-	private JTextField tf_TotalPrice;
 
 	/**
 	 * Create the panel.
@@ -79,84 +76,11 @@ public class Electricity_Panel extends JPanel {
 		panel_add_reading.setBounds(21, 114, 466, 377);
 		add(panel_add_reading);
 		
-		JLabel lbl_Title_AddReading = new JLabel("Add New Reading");
+		JLabel lbl_Title_AddReading = new JLabel("Consumption Trends");
 		lbl_Title_AddReading.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_Title_AddReading.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		lbl_Title_AddReading.setBounds(0, 0, 393, 32);
+		lbl_Title_AddReading.setBounds(0, 0, 466, 32);
 		panel_add_reading.add(lbl_Title_AddReading);
-		
-		JLabel lbl_Date_1 = new JLabel("Date");
-		lbl_Date_1.setHorizontalAlignment(SwingConstants.LEFT);
-		lbl_Date_1.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		lbl_Date_1.setBounds(10, 75, 114, 22);
-		panel_add_reading.add(lbl_Date_1);
-		
-		JLabel lbl_Reading = new JLabel("Reading (kWh)");
-		lbl_Reading.setHorizontalAlignment(SwingConstants.LEFT);
-		lbl_Reading.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		lbl_Reading.setBounds(10, 188, 141, 22);
-		panel_add_reading.add(lbl_Reading);
-		
-		tf_Reading = new JTextField();
-		tf_Reading.setColumns(10);
-		tf_Reading.setBounds(10, 212,169, 56);
-		panel_add_reading.add(tf_Reading);
-		
-		JLabel lbl_Rate = new JLabel("Rate (Php)");
-		lbl_Rate.setHorizontalAlignment(SwingConstants.LEFT);
-		lbl_Rate.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		lbl_Rate.setBounds(262, 75, 141, 22);
-		panel_add_reading.add(lbl_Rate);
-		
-		tf_Rate = new JTextField();
-		tf_Rate.setColumns(10);
-		tf_Rate.setBounds(262, 99, 169, 59);
-		panel_add_reading.add(tf_Rate);
-		
-		JLabel lbl_TotalPrice = new JLabel("Total Price (Php)");
-		lbl_TotalPrice.setHorizontalAlignment(SwingConstants.LEFT);
-		lbl_TotalPrice.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		lbl_TotalPrice.setBounds(262, 188, 141, 22);
-		panel_add_reading.add(lbl_TotalPrice);
-		
-		tf_TotalPrice = new JTextField();
-		tf_TotalPrice.setColumns(10);
-		tf_TotalPrice.setBounds(262, 212, 169, 56);
-		panel_add_reading.add(tf_TotalPrice);
-		
-		JButton btn_Add_Reading = new JButton("Add Reading");
-		btn_Add_Reading.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				addReading();
-			}
-		});
-		btn_Add_Reading.setBounds(161, 315, 120, 50);
-		panel_add_reading.add(btn_Add_Reading);
-		
-		JComboBox CB_Day = new JComboBox();
-		CB_Day.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		for (int i = 1; i <= 31; i++) {
-			CB_Day.addItem(i);
-			}
-		CB_Day.setBounds(10, 99, 63, 59);
-		panel_add_reading.add(CB_Day);
-		
-		JComboBox CB_Month = new JComboBox();
-		CB_Month.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		for (int i = 1; i <= 12; i++) {
-			CB_Month.addItem(i);
-			}
-		CB_Month.setBounds(83, 99, 63, 59);
-		panel_add_reading.add(CB_Month);
-		
-		JComboBox CB_Year = new JComboBox();
-		for (int i = 1975; i <= 2025; i++) {
-			CB_Year.addItem(i);
-			}
-		CB_Year.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		CB_Year.setBounds(157, 99, 63, 59);
-		panel_add_reading.add(CB_Year);
 		
 		JList<String> all_readings = getAllReadings();
 		JScrollPane SP_Recent_Readings = new JScrollPane(all_readings);
@@ -195,7 +119,7 @@ public class Electricity_Panel extends JPanel {
 		btn_Add_New_Reading.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
+				goToAddReading();
 			}
 		});
 		btn_Add_New_Reading.setFont(new Font("Tahoma", Font.BOLD, 10));
@@ -231,7 +155,15 @@ public class Electricity_Panel extends JPanel {
 		setupData();
 	}
 	
-public void setupData() {
+	
+	private void goToAddReading() {
+
+		
+		// Open the Add Reading window
+		Add_Reading_Panel add_reading_panel = new Add_Reading_Panel(database_manager, current_user);
+		add_reading_panel.setVisible(true);
+	}
+	public void setupData() {
 		
 		try {
 			Reading electricity_reading = database_manager.getReadingManager().getLatestReadingByType(current_user, "Electricity");
@@ -245,19 +177,6 @@ public void setupData() {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-	
-	private void addReading() {
-		double reading = Double.parseDouble(tf_Reading.getText());
-		double rate = Double.parseDouble(tf_Rate.getText());
-		double total_price = Double.parseDouble(tf_TotalPrice.getText());
-		
-//		try {
-//			database_manager.getReadingManager().addReading(current_user, );
-//			System.out.println("Reading added successfully.");
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
 	}
 	
 	private JList<String> getAllReadings() {
