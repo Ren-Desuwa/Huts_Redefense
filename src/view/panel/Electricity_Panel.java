@@ -22,6 +22,9 @@ import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
@@ -57,11 +60,12 @@ public class Electricity_Panel extends JPanel {
 		lbl_Title_Electricity_Consumption.setBounds(10, 0, 393, 54);
 		panel_Electricity_Consumption_Title.add(lbl_Title_Electricity_Consumption);
 		
-		JLabel lbl_Date = new JLabel("18/05/2025");
+		JLabel lbl_Date = new JLabel("Date");
 		lbl_Date.setVerticalAlignment(SwingConstants.TOP);
 		lbl_Date.setHorizontalAlignment(SwingConstants.RIGHT);
 		lbl_Date.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		lbl_Date.setBounds(764, 11, 170, 54);
+		lbl_Date.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
 		panel_Electricity_Consumption_Title.add(lbl_Date);
 		
 		JLabel lbl_SubTitle_Electricity_Consmption = new JLabel("Track and manage your electricity usage ");
@@ -166,7 +170,7 @@ public class Electricity_Panel extends JPanel {
 	public void setupData() {
 		
 		try {
-			Reading electricity_reading = database_manager.getReadingManager().getLatestReadingByType(current_user, "Electricity");
+			Reading electricity_reading = database_manager.getReadingManager().getLatestReadingByType(current_user, "electricity");
 			
 			if (electricity_reading == null) {
 				lbl_Electricity_Reading_Value.setText("No Data");
@@ -181,30 +185,30 @@ public class Electricity_Panel extends JPanel {
 	
 	private JList<String> getAllReadings() {
 		try {
-			if (!database_manager.getReadingManager().isReadingExists(current_user, TOOL_TIP_TEXT_KEY)) {
+			if (!database_manager.getReadingManager().isReadingExists(current_user, "electricity")) {
 				JList<String> list = new JList<>(new String[] {"No readings found.", "Please add a reading."});
-				list.setFont(new Font("Tahoma", Font.PLAIN, 15));
+				list.setFont(new Font("Tahoma", Font.PLAIN, 12));
 				list.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 				list.setPreferredSize(new Dimension(429, 448));
 				list.setFixedCellHeight(30);
 				return list;
 			}
-			List<Reading> all_readings = database_manager.getReadingManager().getAllReadingsByType(current_user, "Electricity");
+			List<Reading> all_readings = database_manager.getReadingManager().getAllReadingsByType(current_user, "electricity");
 			
 			String[] readings = new String[all_readings.size()];
 			for (int i = 0; i < all_readings.size(); i++) {
 				Reading reading = all_readings.get(i);
-				readings[i] = "Date: " + reading.getDate() + ", Reading: " + reading.getReading() + " kWh, Rate: " + reading.getRate() + " Php, Total Price: " + reading.getTotal_Price() + " Php";
+				readings[i] = "Date: " + reading.getDate() + ", Reading: " + reading.getReading() + "kWh, Rate: " + reading.getRate() + "Php, Total Price: " + reading.getTotal_Price() + "Php";
 			}
 			JList<String> list = new JList<>(readings);
-			list.setFont(new Font("Tahoma", Font.PLAIN, 15));
+			list.setFont(new Font("Tahoma", Font.PLAIN, 12));
 			list.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 			list.setPreferredSize(new Dimension(429, 448));
 			return list;
 		}
 		catch (Exception e) {
 			e.printStackTrace();
+			return new JList<>(new String[] {"Error fetching readings."});
 		}
-		return null;
 	}
 }
