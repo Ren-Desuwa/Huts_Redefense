@@ -474,7 +474,7 @@ public class Home_Panel extends JPanel {
     /**
      * Public method to refresh the panel data
      */
-    public void homePanel_Refresh() {
+    public void Home_Panel_Refresh() {
         setupData();
     }
     

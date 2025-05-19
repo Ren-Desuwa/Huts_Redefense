@@ -285,7 +285,9 @@ public class Add_Reading_Panel extends JDialog {
 			}
 			
 			database_manager.getReadingManager().addReading(current_user , date, "electricity", readingValue, rateValue, totalPriceValue);
+			
 			electricitypanel.Electricity_Panel_Refresh();
+			
 			javax.swing.JOptionPane.showMessageDialog(this, "Reading added successfully.", "Success", javax.swing.JOptionPane.INFORMATION_MESSAGE);
 			this.dispose();
 			

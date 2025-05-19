@@ -55,13 +55,15 @@ public class Edit_Reading_Panel extends JDialog {
 	private JLabel lbl_TotalPrice;
 	private JButton btn_Edit;
 	private JButton btn_Cancel;
-	private JLabel lbl_Day;
-	private JLabel lbl_Month;
-	private JLabel lbl_Year;
+	private JLabel lbl_Column_Date;
+	private JLabel lbl_Column_Reading;
+	private JLabel lbl_Column_Rate;
 	private Electricity_Panel electricitypanel;
 	private JPanel panel_Date;
 	private JLabel lbl_DateSelected;
 	private JButton btn_Delete;
+	private JLabel lbl_Column_TotalPrice;
+	private JComboBox<String> cB_Edit_Reading_Selection;
 	
 	
 		public Edit_Reading_Panel(JFrame parent, Database_Manager database_manager, User current_user, Electricity_Panel utilitypanel) {
@@ -108,36 +110,38 @@ public class Edit_Reading_Panel extends JDialog {
 			lbl_Reading_Selection.setBounds(10, 130, 239, 22);
 			contentPane.add(lbl_Reading_Selection);
 			
-			JComboBox<String> list = getAllReadings();
-			JComboBox cB_Edit_Reading_Selection = new JComboBox();
+			cB_Edit_Reading_Selection = getAllReadings();
 			cB_Edit_Reading_Selection.setFont(new Font("Tahoma", Font.PLAIN, 17));
-			cB_Edit_Reading_Selection.setBounds(10, 158, 416, 45);
+			cB_Edit_Reading_Selection.setBounds(10, 175, 416, 45);
+			cB_Edit_Reading_Selection.addActionListener(e -> {
+			    selectedReading();
+			});
 			contentPane.add(cB_Edit_Reading_Selection);
 			
 			lbl_Title_Date = new JLabel("Date");
 			lbl_Title_Date.setHorizontalAlignment(SwingConstants.LEFT);
 			lbl_Title_Date.setFont(new Font("Tahoma", Font.PLAIN, 20));
-			lbl_Title_Date.setBounds(10, 214, 114, 22);
+			lbl_Title_Date.setBounds(10, 232, 114, 22);
 			contentPane.add(lbl_Title_Date);
 			
-			lbl_Day = new JLabel("Day");
-			lbl_Day.setHorizontalAlignment(SwingConstants.LEFT);
-			lbl_Day.setFont(new Font("Tahoma", Font.PLAIN, 12));
-			lbl_Day.setBounds(10, 238, 114, 22);
-			contentPane.add(lbl_Day);
+			lbl_Column_Date = new JLabel("Date");
+			lbl_Column_Date.setHorizontalAlignment(SwingConstants.CENTER);
+			lbl_Column_Date.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			lbl_Column_Date.setBounds(6, 154, 114, 22);
+			contentPane.add(lbl_Column_Date);
 			
-			lbl_Month = new JLabel("Month");
-			lbl_Month.setHorizontalAlignment(SwingConstants.LEFT);
-			lbl_Month.setFont(new Font("Tahoma", Font.PLAIN, 12));
-			lbl_Month.setBounds(157, 238, 114, 22);
-			contentPane.add(lbl_Month);
+			lbl_Column_Reading = new JLabel("Reading");
+			lbl_Column_Reading.setHorizontalAlignment(SwingConstants.CENTER);
+			lbl_Column_Reading.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			lbl_Column_Reading.setBounds(124, 154, 98, 22);
+			contentPane.add(lbl_Column_Reading);
 			
 			
-			lbl_Year = new JLabel("Year");
-			lbl_Year.setHorizontalAlignment(SwingConstants.LEFT);
-			lbl_Year.setFont(new Font("Tahoma", Font.PLAIN, 12));
-			lbl_Year.setBounds(306, 238, 114, 22);
-			contentPane.add(lbl_Year);
+			lbl_Column_Rate = new JLabel("Rate");
+			lbl_Column_Rate.setHorizontalAlignment(SwingConstants.CENTER);
+			lbl_Column_Rate.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			lbl_Column_Rate.setBounds(217, 154, 87, 22);
+			contentPane.add(lbl_Column_Rate);
 			
 			lbl_Reading = new JLabel("Reading (kWh)");
 			lbl_Reading.setHorizontalAlignment(SwingConstants.LEFT);
@@ -217,11 +221,11 @@ public class Edit_Reading_Panel extends JDialog {
 			tf_TotalPrice.setBounds(10, 496, 416, 45);
 			contentPane.add(tf_TotalPrice);
 			
-			btn_Edit =  new JButton("Edit");
+			btn_Edit =  new JButton("Update");
 			btn_Edit.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					
+					updateReading();
 				}
 			});
 			btn_Edit.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -240,21 +244,140 @@ public class Edit_Reading_Panel extends JDialog {
 			contentPane.add(btn_Cancel);
 			
 			panel_Date = new JPanel();
+			panel_Date.setBorder(new LineBorder(new Color(0, 0, 0)));
 			panel_Date.setBackground(new Color(255, 255, 255));
 			panel_Date.setBounds(10, 261, 416, 43);
 			contentPane.add(panel_Date);
 			panel_Date.setLayout(null);
 			
-			lbl_DateSelected = new JLabel("New label");
-			lbl_DateSelected.setBounds(0, 0, 416, 43);
+			lbl_DateSelected = new JLabel("Selected Date");
+			lbl_DateSelected.setFont(new Font("Tahoma", Font.PLAIN, 15));
+			lbl_DateSelected.setBounds(5, 0, 406, 43);
 			panel_Date.add(lbl_DateSelected);
 			
 			btn_Delete = new JButton("Delete");
+			btn_Delete.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					deleteselectedReading();
+				}
+			});
 			btn_Delete.setFont(new Font("Tahoma", Font.PLAIN, 15));
 			btn_Delete.setBounds(234, 553, 91, 34);
 			contentPane.add(btn_Delete);
+			
+			lbl_Column_TotalPrice = new JLabel("Total Price");
+			lbl_Column_TotalPrice.setHorizontalAlignment(SwingConstants.CENTER);
+			lbl_Column_TotalPrice.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			lbl_Column_TotalPrice.setBounds(311, 154, 87, 22);
+			contentPane.add(lbl_Column_TotalPrice);
 		}
-	
+		
+		public void selectedReading() {
+			String selected = (String) cB_Edit_Reading_Selection.getSelectedItem();
+			if (selected != null && !selected.startsWith("No readings") && !selected.startsWith("Error")) {
+		        String date = selected.trim().split("\\s+")[0];
+		        String reading = selected.trim().split("\\s+")[1];
+		        String rate = selected.trim().split("\\s+")[2];
+		        String totalPrice = selected.trim().split("\\s+")[3];
+		        
+		        double readingValue = Double.parseDouble(reading.replace("kWh", ""));
+		        double rateValue = Double.parseDouble(rate.replace("Php", ""));
+		        double totalPriceValue = Double.parseDouble(totalPrice.replace("Php", ""));
+		        
+		        lbl_DateSelected.setText(date);
+		        tf_Reading.setText(String.valueOf(readingValue));
+		        tf_Rate.setText(String.valueOf(rateValue));
+		        tf_TotalPrice.setText(String.valueOf(totalPriceValue));
+		    } else {
+		        lbl_DateSelected.setText("Selected Date");
+		    }
+		}
+		
+		public void deleteselectedReading() {
+			String reading = tf_Reading.getText();
+			String rate = tf_Rate.getText();
+			String totalPrice = tf_TotalPrice.getText();
+			
+			if (reading.equals("Enter Reading") || rate.equals("Enter Rate") || totalPrice.equals("Total Price")) {
+				javax.swing.JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			try {
+				double readingValue = Double.parseDouble(reading);
+				double rateValue = Double.parseDouble(rate);
+				double totalPriceValue = Double.parseDouble(totalPrice);
+				
+				int selectedIndex = cB_Edit_Reading_Selection.getSelectedIndex();
+				if (selectedIndex < 0) {
+				    javax.swing.JOptionPane.showMessageDialog(this, "No reading selected.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+				    return;
+				}
+				List<Reading> allReadings = database_manager.getReadingManager().getAllReadingsByType(current_user, "electricity");
+				Reading selectedReading = allReadings.get(selectedIndex);
+				
+				selectedReading.setReading(readingValue);
+				selectedReading.setRate(rateValue);
+				selectedReading.setTotal_Price(totalPriceValue);
+				
+				database_manager.getReadingManager().deleteReading(current_user, selectedReading);
+				
+				getAllReadings();
+				electricitypanel.Electricity_Panel_Refresh();
+				
+				javax.swing.JOptionPane.showMessageDialog(this, "Reading Deleted successfully.", "Success", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+				
+				this.dispose();
+			} catch (NumberFormatException e) {
+				javax.swing.JOptionPane.showMessageDialog(this, "Invalid input. Please enter numeric values.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		
+		public void updateReading() {
+			String reading = tf_Reading.getText();
+			String rate = tf_Rate.getText();
+			String totalPrice = tf_TotalPrice.getText();
+			
+			if (reading.equals("Enter Reading") || rate.equals("Enter Rate") || totalPrice.equals("Total Price")) {
+				javax.swing.JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			
+			try {
+				double readingValue = Double.parseDouble(reading);
+				double rateValue = Double.parseDouble(rate);
+				double totalPriceValue = Double.parseDouble(totalPrice);
+				
+				int selectedIndex = cB_Edit_Reading_Selection.getSelectedIndex();
+				if (selectedIndex < 0) {
+				    javax.swing.JOptionPane.showMessageDialog(this, "No reading selected.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+				    return;
+				}
+				List<Reading> allReadings = database_manager.getReadingManager().getAllReadingsByType(current_user, "electricity");
+				Reading selectedReading = allReadings.get(selectedIndex);
+				
+				selectedReading.setReading(readingValue);
+				selectedReading.setRate(rateValue);
+				selectedReading.setTotal_Price(totalPriceValue);
+				
+				database_manager.getReadingManager().updateReading(current_user,selectedReading);
+				
+				getAllReadings();
+				electricitypanel.Electricity_Panel_Refresh();
+				
+				javax.swing.JOptionPane.showMessageDialog(this, "Reading updated successfully.", "Success", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+				
+				this.dispose();
+			} catch (NumberFormatException e) {
+				javax.swing.JOptionPane.showMessageDialog(this, "Invalid input. Please enter numeric values.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
 		public void cancelAddReading() {
 			String reading = tf_Reading.getText();
 			String rate = tf_Rate.getText();
@@ -273,7 +396,7 @@ public class Edit_Reading_Panel extends JDialog {
 		private JComboBox<String> getAllReadings() {
 			try {
 				if (!database_manager.getReadingManager().isReadingExists(current_user, "electricity")) {
-					JComboBox<String> cB_Edit_Reading_Selection = new JComboBox<>(new String[] {"No readings found.", "Please add a reading."});
+					cB_Edit_Reading_Selection = new JComboBox<>(new String[] {"No readings found.", "Please add a reading."});
 					return cB_Edit_Reading_Selection;
 				}
 				List<Reading> all_readings = database_manager.getReadingManager().getAllReadingsByType(current_user, "electricity");
@@ -281,9 +404,9 @@ public class Edit_Reading_Panel extends JDialog {
 				String[] readings = new String[all_readings.size()];
 				for (int i = 0; i < all_readings.size(); i++) {
 					Reading reading = all_readings.get(i);
-					readings[i] = String.format("  %-19s %-21s %-17s %-10s", reading.getDate(), reading.getReading() + "kWh", reading.getRate() + "Php", reading.getTotal_Price() + "Php");
+					readings[i] = String.format("  %-13s %-11s %-9s %-10s", reading.getDate(), reading.getReading() + "kWh", reading.getRate() + "Php", reading.getTotal_Price() + "Php");
 				}
-				JComboBox<String> cB_Edit_Reading_Selection = new JComboBox<>(readings);
+				cB_Edit_Reading_Selection = new JComboBox<>(readings);
 				return cB_Edit_Reading_Selection;
 			}
 			catch (Exception e) {
@@ -291,5 +414,4 @@ public class Edit_Reading_Panel extends JDialog {
 				return new JComboBox<>(new String[] {"Error fetching readings."});
 			}
 		}
-		
 	}
