@@ -97,7 +97,7 @@ public class Main_Frame extends JFrame {
         electricity_panel = new Electricity_Panel(database_manager, current_user, home_panel);
         water_panel = new Water_Panel(database_manager, current_user, home_panel);
         gas_panel = new Gas_Panel(database_manager, current_user, home_panel);
-        profile_panel = new Profile_Panel(database_manager, current_user);
+        profile_panel = new Profile_Panel(this,database_manager, current_user);
         
         card_panel.add(home_panel, HOME_PANEL);
         card_panel.add(electricity_panel, ELECTRICITY_PANEL);
@@ -106,7 +106,6 @@ public class Main_Frame extends JFrame {
         card_panel.add(profile_panel, PROFILE_PANEL);
         
         // dev panel
-        
         development_panel = new Development_Panel(database_manager, current_user);
         card_panel.add(development_panel, DEV_PANEL);
         
@@ -261,7 +260,12 @@ public class Main_Frame extends JFrame {
 	        }
 	    });
 	}
-
-
+	
+	public void showElectricityPanel() {card_layout.show(card_panel, ELECTRICITY_PANEL);}
+	public void showWaterPanel() {card_layout.show(card_panel, WATER_PANEL);}
+	public void showGasPanel() {card_layout.show(card_panel, GAS_PANEL);}
+	public void showHomePanel() {card_layout.show(card_panel, HOME_PANEL);}
+	public void showProfilePanel() {card_layout.show(card_panel, PROFILE_PANEL);}
+	public void showDevelopmentPanel() {card_layout.show(card_panel, DEV_PANEL);}
 	
 }

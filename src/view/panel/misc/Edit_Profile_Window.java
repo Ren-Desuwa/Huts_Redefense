@@ -28,6 +28,7 @@ public class Edit_Profile_Window extends JDialog {
     public Edit_Profile_Window(Profile_Panel profile_Panel, Database_Manager database_manager, User current_user) {
         this.database_manager = database_manager;
         this.current_user = current_user;
+        this.profile_Panel = profile_Panel;
         initialize();
         loadUserData();
     }
@@ -52,6 +53,7 @@ public class Edit_Profile_Window extends JDialog {
         contentPane.add(initialsPanel);
 
         lblInitials = new JLabel();
+        lblInitials.setForeground(new Color(255, 255, 255));
         lblInitials.setHorizontalAlignment(SwingConstants.CENTER);
         lblInitials.setFont(new Font("Tahoma", Font.BOLD, 48));
         initialsPanel.add(lblInitials);

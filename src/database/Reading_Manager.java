@@ -386,6 +386,7 @@ public class Reading_Manager {
         return groupReadingsByMonth(readings, usePrice);
     }
     
+    
     /**
      * Gets combined monthly expense data for all utilities
      * 
@@ -626,5 +627,20 @@ public class Reading_Manager {
 			
 		}
 		return null;
+	}
+	public int getTotalReadings(User currentUser) {
+		String sqlscript = "SELECT COUNT(*) as total FROM readings WHERE user_id = ?";
+		try (PreparedStatement prepared_statement = connection.prepareStatement(sqlscript)) {
+			prepared_statement.setInt(1, currentUser.getUser_Id());
+			try (ResultSet rs = prepared_statement.executeQuery()) {
+				if (rs.next()) {
+					return rs.getInt("total");
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+		}
+		return 0;
 	}
 }

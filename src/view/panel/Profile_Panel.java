@@ -15,6 +15,7 @@ import javax.swing.SwingConstants;
 
 import database.Database_Manager;
 import model.User;
+import view.Main_Frame;
 import view.panel.misc.Change_Password_Window;
 import view.panel.misc.Edit_Profile_Window;
 import visuals.Circle_Panel;
@@ -22,6 +23,7 @@ import visuals.Following_Tool_Tip;
 import visuals.Rounded_Button;
 import visuals.Rounded_Panel;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 
 public class Profile_Panel extends JPanel {
@@ -29,9 +31,10 @@ public class Profile_Panel extends JPanel {
     private static final long serialVersionUID = 1L;
     
     // Data fields
-    private Profile_Panel instance;
     private Database_Manager database_manager;
     private User current_user;
+    private Main_Frame main_frame;
+    private Profile_Panel profile_Panel;
     
     // UI Components
     private JPanel mainPanel;
@@ -85,9 +88,11 @@ public class Profile_Panel extends JPanel {
     /**
      * Create the panel.
      */
-    public Profile_Panel(Database_Manager database_manager, User current_user) {
+    public Profile_Panel(Main_Frame main_frame,Database_Manager database_manager, User current_user) {
         this.database_manager = database_manager;
         this.current_user = current_user;
+        this.main_frame = main_frame;
+        this.profile_Panel = this; 
         
         initializePanelProperties();
         createMainPanels();
@@ -236,7 +241,7 @@ public class Profile_Panel extends JPanel {
         lblTotalSubmissionsProp.setBounds(20, 130, 165, 25);
         contentPanel.add(lblTotalSubmissionsProp);
         
-        lblTotalSubmissionsValue = new JLabel("0");
+        lblTotalSubmissionsValue = new JLabel();
         lblTotalSubmissionsValue.setForeground(Color.BLACK);
         lblTotalSubmissionsValue.setFont(new Font("Tahoma", Font.PLAIN, 20));
         lblTotalSubmissionsValue.setBounds(202, 130, 263, 25);
@@ -420,6 +425,21 @@ public class Profile_Panel extends JPanel {
 				lblEditProfile.setForeground(Color.WHITE);
 			}
 		});
+		electricityStatsPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
+				main_frame.showElectricityPanel();
+			}
+		});
+		waterStatsPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
+				main_frame.showWaterPanel();
+			}
+		});
+		gasStatsPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
+				main_frame.showGasPanel();
+			}
+		});
 	}
     
     /**
@@ -436,11 +456,22 @@ public class Profile_Panel extends JPanel {
         String username = current_user.getUsername(); // Assuming getter exists
         String email = current_user.getEmail(); // Assuming getter exists
         int totalSubmissions; // Assuming getter exists
+        int electricityCount; // Assuming getter exists
+        int waterCount; // Assuming getter existsq
+        int gasCount; // Assuming getter exists
         
         try {
-			totalSubmissions = database_manager.getReadingManager().getReadingsByUserId(current_user).size();
-		} catch (Exception e) {
+			totalSubmissions = database_manager.getReadingManager().getTotalReadings(current_user);
+			electricityCount = database_manager.getReadingManager().getAllReadingsByType(current_user, "electricity").size();
+			waterCount = database_manager.getReadingManager().getAllReadingsByType(current_user, "water").size();
+			gasCount = database_manager.getReadingManager().getAllReadingsByType(current_user, "gas").size();
+			
+		} catch (SQLException e) {
 			totalSubmissions = 0; // Default to 0 if there's an error
+			electricityCount = 0; // Default to 0 if there's an error
+			waterCount = 0; // Default to 0 if there's an error
+			gasCount = 0; // Default to 0 if there's an error
+			e.printStackTrace();
 		}
         
         lblUsername.setText(username);
@@ -448,6 +479,9 @@ public class Profile_Panel extends JPanel {
         lblUsernameValue.setText(username);
         lblEmailValue.setText(email);
         lblTotalSubmissionsValue.setText(String.valueOf(totalSubmissions));
+        lblElectricityCount.setText(String.valueOf(electricityCount)); // Assuming getter exists
+        lblWaterCount.setText(String.valueOf(waterCount)); // Assuming getter exists
+        lblGasCount.setText(String.valueOf(gasCount)); // Assuming getter exists
         
         // Set profile initials
         if (username != null && !username.isEmpty()) {
@@ -486,9 +520,5 @@ public class Profile_Panel extends JPanel {
 				}
 			}
 		});
-	}
-    
-    public Profile_Panel getProfile_Panel() {
-		return profile_Panel;
 	}
 }
