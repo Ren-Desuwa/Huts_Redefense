@@ -13,6 +13,7 @@ import view.panel.misc.Add_Reading_Panel;
 import view.panel.misc.Edit_Reading_Panel;
 import visuals.Graph_Panel;
 import visuals.Rounded_Panel;
+import visuals.Rounded_Button;
 
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -51,7 +52,7 @@ public class Electricity_Panel extends JPanel {
 	private JPanel panel_Current_Reading;
 	private JPanel panel_Graph_Container;
 	private JPanel panel_tips;
-	private JScrollPane sP_Recent_Readings;
+	private JPanel panel_Recent_Readings_Container;
 	
 	// Scroll panel fields
 	private JPanel Headerpanel;
@@ -72,7 +73,8 @@ public class Electricity_Panel extends JPanel {
 	private JLabel lbl_Date;
 	private JLabel lbl_Time;
 	
-	// Scroll panel labels
+	// Scroll panel components
+	private JScrollPane sP_Recent_Readings;
 	private JLabel lbl_Title_RecentReadings;
 	private JLabel lbl_Head_Date;
 	private JLabel lbl_Head_Readings;
@@ -89,7 +91,6 @@ public class Electricity_Panel extends JPanel {
 	private JLabel lbl_Title_Tips;
 	private JLabel lbl_Tips1;
 	private JLabel lbl_Tips2;
-	private JPanel panel_Recent_Readings_Container;
 	
 	
 	/**
@@ -193,13 +194,23 @@ public class Electricity_Panel extends JPanel {
 		lbl_Electricity_Reading_Unit.setBounds(254, 55, 68, 32);
 		panel_Current_Reading.add(lbl_Electricity_Reading_Unit);
 		
-		btn_Add_New_Reading = new JButton("Add New Reading");
+		btn_Add_New_Reading = new Rounded_Button("Add New Reading", 25);
 		btn_Add_New_Reading.setBackground(new Color(192, 192, 192));
+		btn_Add_New_Reading.setForeground(Color.BLACK);
 		btn_Add_New_Reading.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				goToAddReading();
 			}
+			@Override
+            public void mouseEntered(MouseEvent e) {
+				btn_Add_New_Reading.setBackground(new Color(150, 150, 150));
+            }
+            
+            @Override
+            public void mouseExited(MouseEvent e) {
+            	btn_Add_New_Reading.setBackground(new Color(192, 192, 192));
+            }
 		});
 		btn_Add_New_Reading.setFont(new Font("Tahoma", Font.BOLD, 10));
 		btn_Add_New_Reading.setBounds(155, 125, 151, 34);

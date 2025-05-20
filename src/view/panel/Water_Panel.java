@@ -12,6 +12,7 @@ import model.User;
 import view.panel.misc.Add_Reading_Panel;
 import view.panel.misc.Edit_Reading_Panel;
 import visuals.Graph_Panel;
+import visuals.Rounded_Button;
 import visuals.Rounded_Panel;
 
 import javax.swing.border.EmptyBorder;
@@ -51,7 +52,7 @@ public class Water_Panel extends JPanel {
 	private JPanel panel_Current_Reading;
 	private JPanel panel_Graph_Container;
 	private JPanel panel_tips;
-	private JScrollPane sP_Recent_Readings;
+	private JPanel panel_Recent_Readings_Container;
 	
 	// Scroll panel fields
 	private JPanel Headerpanel;
@@ -72,7 +73,8 @@ public class Water_Panel extends JPanel {
 	private JLabel lbl_Date;
 	private JLabel lbl_Time;
 	
-	// Scroll label fields
+	// Scroll label components
+	private JScrollPane sP_Recent_Readings;
 	private JLabel lbl_Title_RecentReadings;
 	private JLabel lbl_Head_Date;
 	private JLabel lbl_Head_Readings;
@@ -101,10 +103,9 @@ public class Water_Panel extends JPanel {
 		setPreferredSize(new Dimension(986, 688));
 		setLayout(null);
 		
-		panel_Title_Water_Consumption = new JPanel();
+		panel_Title_Water_Consumption = new Rounded_Panel();
 		panel_Title_Water_Consumption.setBackground(new Color(255, 255, 255));
 		panel_Title_Water_Consumption.setLayout(null);
-		panel_Title_Water_Consumption.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		panel_Title_Water_Consumption.setBounds(21, 11, 944, 85);
 		add(panel_Title_Water_Consumption);
 		
@@ -136,9 +137,8 @@ public class Water_Panel extends JPanel {
 		lbl_SubTitle_Water_Consmption.setBounds(20, 52, 393, 22);
 		panel_Title_Water_Consumption.add(lbl_SubTitle_Water_Consmption);
 		
-		panel_Graph_Container = new Rounded_Panel(15, Color.BLACK, 1);
+		panel_Graph_Container = new Rounded_Panel();
 		panel_Graph_Container.setBackground(new Color(255, 255, 255));
-//		panel_add_reading.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		panel_Graph_Container.setBounds(21, 114, 466, 377);
 		add(panel_Graph_Container);
 		panel_Graph_Container.setLayout(null);
@@ -167,11 +167,16 @@ public class Water_Panel extends JPanel {
             panel_Graph_View.add(graph_Panel);
         }
 		
-		all_readings = getAllReadings();
+        panel_Recent_Readings_Container = new Rounded_Panel();
+		panel_Recent_Readings_Container.setBackground(new Color(255, 255, 255));
+		panel_Recent_Readings_Container.setBounds(497, 114, 466, 377);
+		add(panel_Recent_Readings_Container);
+		panel_Recent_Readings_Container.setLayout(null);
+		
 		sP_Recent_Readings = new JScrollPane();
-		sP_Recent_Readings.setBounds(499, 114, 466, 377);
-		sP_Recent_Readings.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		add(sP_Recent_Readings);
+		sP_Recent_Readings.setBounds(5, 5, 456, 366);
+		sP_Recent_Readings.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		panel_Recent_Readings_Container.add(sP_Recent_Readings);
 		sP_Recent_Readings.setViewportView(all_readings);
 		
 		Headerpanel = new JPanel();
@@ -215,10 +220,9 @@ public class Water_Panel extends JPanel {
 		Line.setBounds(10, 64, 446, 3);
 		Headerpanel.add(Line);
 		
-		panel_Current_Reading = new JPanel();
+		panel_Current_Reading = new Rounded_Panel();
 		panel_Current_Reading.setBackground(new Color(255, 255, 255));
 		panel_Current_Reading.setLayout(null);
-		panel_Current_Reading.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		panel_Current_Reading.setBounds(21, 509, 466, 168);
 		add(panel_Current_Reading);
 		
@@ -239,22 +243,31 @@ public class Water_Panel extends JPanel {
 		lbl_Water_Reading_Unit.setBounds(254, 55, 68, 32);
 		panel_Current_Reading.add(lbl_Water_Reading_Unit);
 		
-		btn_Add_New_Reading = new JButton("Add New Reading");
+		btn_Add_New_Reading = new Rounded_Button("Add New Reading", 25);
 		btn_Add_New_Reading.setBackground(new Color(192, 192, 192));
+		btn_Add_New_Reading.setForeground(Color.BLACK);
 		btn_Add_New_Reading.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				goToAddReading();
 			}
+			@Override
+            public void mouseEntered(MouseEvent e) {
+				btn_Add_New_Reading.setBackground(new Color(150, 150, 150));
+            }
+            
+            @Override
+            public void mouseExited(MouseEvent e) {
+            	btn_Add_New_Reading.setBackground(new Color(192, 192, 192));
+            }
 		});
 		btn_Add_New_Reading.setFont(new Font("Tahoma", Font.BOLD, 10));
 		btn_Add_New_Reading.setBounds(155, 125, 151, 34);
 		panel_Current_Reading.add(btn_Add_New_Reading);
 		
-		panel_tips = new JPanel();
+		panel_tips = new Rounded_Panel();
 		panel_tips.setBackground(new Color(255, 255, 255));
 		panel_tips.setLayout(null);
-		panel_tips.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		panel_tips.setBounds(499, 509, 466, 168);
 		add(panel_tips);
 		
