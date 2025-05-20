@@ -25,7 +25,6 @@ import java.time.format.DateTimeFormatter;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.sql.SQLException;
 import java.awt.BorderLayout;
 
 public class Home_Panel extends JPanel {
@@ -484,9 +483,9 @@ public class Home_Panel extends JPanel {
             Reading gas = database_Manager.getReadingManager().getLatestReadingByType(current_User, "gas");
 
             // Update each reading's label
-            updateReadingLabel(electricity, lbl_Electricity_Reading_Value, lbl_Trend_Of_Reading_Electricity, "electricity");
-            updateReadingLabel(water, lbl_Water_Reading_Value, lbl_Trend_Of_Reading_Water, "water");
-            updateReadingLabel(gas, lbl_Gas_Reading_Value, lbl_Trend_Of_Reading_Gas, "gas");
+            database_Manager.getReadingManager().updateReadingLabel(current_User,electricity, lbl_Electricity_Reading_Value, lbl_Trend_Of_Reading_Electricity, "electricity");
+            database_Manager.getReadingManager().updateReadingLabel(current_User,water, lbl_Water_Reading_Value, lbl_Trend_Of_Reading_Water, "water");
+            database_Manager.getReadingManager().updateReadingLabel(current_User,gas, lbl_Gas_Reading_Value, lbl_Trend_Of_Reading_Gas, "gas");
 
             // Calculate and update overall reading
             double total = 0;
@@ -514,22 +513,4 @@ public class Home_Panel extends JPanel {
             e.printStackTrace();
         }
     }
-
-    private void updateReadingLabel(Reading reading, JLabel valueLabel, JLabel trendLabel, String type) {
-        if (reading == null) {
-            valueLabel.setText("No Data");
-            trendLabel.setText("No Data");
-        } else {
-            valueLabel.setText(String.valueOf(reading.getReading()));
-            try {
-                String trend = database_Manager.getReadingManager().getTrend(current_User, type);
-                trendLabel.setText(trend);
-                trendLabel.setForeground(database_Manager.getReadingManager().getTrendColor(current_User, type));
-            } catch (SQLException e) {
-                e.printStackTrace();
-                trendLabel.setText("Error calculating trend");
-            }
-        }
-    }
-
 }
