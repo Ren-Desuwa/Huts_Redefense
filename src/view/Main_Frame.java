@@ -78,6 +78,7 @@ public class Main_Frame extends JFrame {
 		setTitle("Main Frame");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(50, 50, 1200, 725);
+        setBackground(new Color(213, 213, 213));
         setResizable(false);
         content_pane = new JPanel();
         content_pane.setLayout(new BorderLayout(0, 0));
@@ -86,6 +87,7 @@ public class Main_Frame extends JFrame {
 	
 	private void createPanels() {
 		side_panel = new JPanel();
+		side_panel.setBackground(new Color(213, 213, 213));
 		side_panel.setPreferredSize(new Dimension(200, getHeight()));
         side_panel.setLayout(new BoxLayout(side_panel, BoxLayout.Y_AXIS));
         

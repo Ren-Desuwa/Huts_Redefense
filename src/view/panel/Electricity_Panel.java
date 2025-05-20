@@ -13,8 +13,12 @@ import view.panel.misc.Add_Reading_Panel;
 import view.panel.misc.Edit_Reading_Panel;
 import visuals.Graph_Panel;
 import visuals.Rounded_Panel;
+import visuals.Rounded_Button;
 
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+
+import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -46,9 +50,9 @@ public class Electricity_Panel extends JPanel {
 	// Main panel fields
 	private JPanel panel_Title_Electricity_Consumption;
 	private JPanel panel_Current_Reading;
-	private JPanel panel_add_reading;
+	private JPanel panel_Graph_Container;
 	private JPanel panel_tips;
-	private JScrollPane sP_Recent_Readings;
+	private JPanel panel_Recent_Readings_Container;
 	
 	// Scroll panel fields
 	private JPanel Headerpanel;
@@ -56,9 +60,11 @@ public class Electricity_Panel extends JPanel {
 	private JList<String> all_readings;
 	
 	//Graph panel field
-	private Graph_Panel panel_Graph_Container;
+	private JPanel panel_Graph_View;
+	private Graph_Panel graph_Panel;
+	private JLabel lbl_Title_Gaph;
 	
-	// Home panel field
+	// Home panel
 	private Home_Panel homepanel;
 	
 	// Title Panel labels
@@ -67,28 +73,26 @@ public class Electricity_Panel extends JPanel {
 	private JLabel lbl_Date;
 	private JLabel lbl_Time;
 	
-	// Add Reading panel labels
-	
-	// Scroll panel labels
+	// Scroll panel components
+	private JScrollPane sP_Recent_Readings;
 	private JLabel lbl_Title_RecentReadings;
 	private JLabel lbl_Head_Date;
 	private JLabel lbl_Head_Readings;
 	private JLabel lbl_Head_Rate;
 	private JLabel lbl_Head_TotalPrice;
 	
-	// Current Reading panel labels
-	
-	// Tips panel labels
-	
-	
+	// Current Reading panel components
 	private JLabel lbl_Electricity_Reading_Value;
 	private JLabel lbl_Title_Current_Reading;
 	private JLabel lbl_Electricity_Reading_Unit;
 	private JButton btn_Add_New_Reading;
+	
+	// Tips panel labels
 	private JLabel lbl_Title_Tips;
 	private JLabel lbl_Tips1;
 	private JLabel lbl_Tips2;
-	private JLabel lbl_Title_AddReading;
+	
+	
 	/**
 	 * Create the panel.
 	 */
@@ -97,13 +101,13 @@ public class Electricity_Panel extends JPanel {
 		this.current_user = current_user;
 		this.homepanel = homepanel;
 		
+		setBackground(new Color(213, 213, 213));
 		setPreferredSize(new Dimension(986, 688));
 		setLayout(null);
 		
-		panel_Title_Electricity_Consumption = new JPanel();
+		panel_Title_Electricity_Consumption = new Rounded_Panel();
 		panel_Title_Electricity_Consumption.setBackground(new Color(255, 255, 255));
 		panel_Title_Electricity_Consumption.setLayout(null);
-		panel_Title_Electricity_Consumption.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		panel_Title_Electricity_Consumption.setBounds(21, 11, 944, 85);
 		add(panel_Title_Electricity_Consumption);
 		
@@ -135,29 +139,119 @@ public class Electricity_Panel extends JPanel {
 		lbl_SubTitle_Electricity_Consumption.setBounds(20, 52, 393, 22);
 		panel_Title_Electricity_Consumption.add(lbl_SubTitle_Electricity_Consumption);
 		
-		panel_add_reading = new Rounded_Panel(15, Color.BLACK, 1);
-		panel_add_reading.setBackground(new Color(255, 255, 255));
-//		panel_add_reading.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		panel_add_reading.setBounds(21, 114, 466, 377);
-		add(panel_add_reading);
-		panel_add_reading.setLayout(null);
+		panel_Graph_Container = new Rounded_Panel();
+		panel_Graph_Container.setBackground(new Color(255, 255, 255));
+		panel_Graph_Container.setBounds(21, 114, 466, 377);
+		add(panel_Graph_Container);
+		panel_Graph_Container.setLayout(null);
 		
-		lbl_Title_AddReading = new JLabel("Consumption Trends");
-		lbl_Title_AddReading.setBounds(0, 0, 466, 32);
-		lbl_Title_AddReading.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_Title_AddReading.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		panel_add_reading.add(lbl_Title_AddReading);
+		lbl_Title_Gaph = new JLabel("Monthly Electricity Expenses");
+		lbl_Title_Gaph.setBounds(0, 0, 466, 32);
+		lbl_Title_Gaph.setHorizontalAlignment(SwingConstants.CENTER);
+		lbl_Title_Gaph.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		panel_Graph_Container.add(lbl_Title_Gaph);
 		
-		panel_Graph_Container = new Graph_Panel();
-		panel_Graph_Container.setBounds(0, 43, 466, 323);
-		panel_add_reading.add(panel_Graph_Container);
-		panel_Graph_Container.showElectricityGraph();
+		panel_Graph_View = new Rounded_Panel(25, Color.BLACK, 0);
+		panel_Graph_View.setBounds(10, 30, 446, 336);
+		panel_Graph_Container.add(panel_Graph_View);
+        panel_Graph_View.setBorder(new EmptyBorder(5, 5, 5, 5));
+        panel_Graph_View.setBackground(new Color(255, 255, 255));
+        panel_Graph_View.setLayout(new BorderLayout());
+		
+        if (database_manager == null) {
+            JPanel placeholder = new JPanel();
+            placeholder.setBackground(Color.WHITE);
+            panel_Graph_View.add(placeholder);
+        } else {
+            // Create and add actual graph panel at runtime
+            graph_Panel = new Graph_Panel(database_manager.getReadingManager(), current_user, "electricity");
+            graph_Panel.setBackground(new Color(255, 255, 255));
+            panel_Graph_View.add(graph_Panel);
+        }
 		
 		all_readings = getAllReadings();
+		
+		panel_Current_Reading = new Rounded_Panel();
+		panel_Current_Reading.setBackground(new Color(255, 255, 255));
+		panel_Current_Reading.setLayout(null);
+		panel_Current_Reading.setBounds(21, 509, 466, 168);
+		add(panel_Current_Reading);
+		
+		lbl_Title_Current_Reading = new JLabel("Current Reading");
+		lbl_Title_Current_Reading.setHorizontalAlignment(SwingConstants.CENTER);
+		lbl_Title_Current_Reading.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		lbl_Title_Current_Reading.setBounds(42, 11, 393, 32);
+		panel_Current_Reading.add(lbl_Title_Current_Reading);
+		
+		lbl_Electricity_Reading_Value = new JLabel();
+		lbl_Electricity_Reading_Value.setHorizontalAlignment(SwingConstants.CENTER);
+		lbl_Electricity_Reading_Value.setFont(new Font("Tahoma", Font.BOLD, 20));
+		lbl_Electricity_Reading_Value.setBounds(144, 54, 100, 32);
+		panel_Current_Reading.add(lbl_Electricity_Reading_Value);
+		
+		lbl_Electricity_Reading_Unit = new JLabel("KwH");
+		lbl_Electricity_Reading_Unit.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lbl_Electricity_Reading_Unit.setBounds(254, 55, 68, 32);
+		panel_Current_Reading.add(lbl_Electricity_Reading_Unit);
+		
+		btn_Add_New_Reading = new Rounded_Button("Add New Reading", 25);
+		btn_Add_New_Reading.setBackground(new Color(192, 192, 192));
+		btn_Add_New_Reading.setForeground(Color.BLACK);
+		btn_Add_New_Reading.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				goToAddReading();
+			}
+			@Override
+            public void mouseEntered(MouseEvent e) {
+				btn_Add_New_Reading.setBackground(new Color(150, 150, 150));
+            }
+            
+            @Override
+            public void mouseExited(MouseEvent e) {
+            	btn_Add_New_Reading.setBackground(new Color(192, 192, 192));
+            }
+		});
+		btn_Add_New_Reading.setFont(new Font("Tahoma", Font.BOLD, 10));
+		btn_Add_New_Reading.setBounds(155, 125, 151, 34);
+		panel_Current_Reading.add(btn_Add_New_Reading);
+		
+		panel_tips = new Rounded_Panel();
+		panel_tips.setBackground(new Color(255, 255, 255));
+		panel_tips.setLayout(null);
+		panel_tips.setBounds(499, 509, 466, 168);
+		add(panel_tips);
+		
+		lbl_Title_Tips = new JLabel("Energy Saving Tips");
+		lbl_Title_Tips.setHorizontalAlignment(SwingConstants.CENTER);
+		lbl_Title_Tips.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		lbl_Title_Tips.setBounds(42, 11, 393, 32);
+		panel_tips.add(lbl_Title_Tips);
+		
+		lbl_Tips1 = new JLabel("<html><ul><li>Unplug chargers when not in use to avoid phantom energy consumption.</li></ul></html>");
+		lbl_Tips1.setVerticalAlignment(SwingConstants.TOP);
+		lbl_Tips1.setBounds(-34, 49, 502, 51);
+		panel_tips.add(lbl_Tips1);
+		lbl_Tips1.setHorizontalAlignment(SwingConstants.LEFT);
+		lbl_Tips1.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		
+		lbl_Tips2 = new JLabel("<html><ul><li>Use LED bulbs it consumes 75% less energy than incandescent bulbs.</li></ul></html>");
+		lbl_Tips2.setVerticalAlignment(SwingConstants.TOP);
+		lbl_Tips2.setHorizontalAlignment(SwingConstants.LEFT);
+		lbl_Tips2.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lbl_Tips2.setBounds(-34, 107, 502, 51);
+		panel_tips.add(lbl_Tips2);
+		
+		panel_Recent_Readings_Container = new Rounded_Panel();
+		panel_Recent_Readings_Container.setBackground(new Color(255, 255, 255));
+		panel_Recent_Readings_Container.setBounds(497, 114, 466, 377);
+		add(panel_Recent_Readings_Container);
+		panel_Recent_Readings_Container.setLayout(null);
+		
 		sP_Recent_Readings = new JScrollPane();
-		sP_Recent_Readings.setBounds(499, 114, 466, 377);
-		sP_Recent_Readings.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		add(sP_Recent_Readings);
+		sP_Recent_Readings.setBounds(5, 5, 456, 366);
+		sP_Recent_Readings.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		panel_Recent_Readings_Container.add(sP_Recent_Readings);
 		sP_Recent_Readings.setViewportView(all_readings);
 		
 		Headerpanel = new JPanel();
@@ -200,69 +294,6 @@ public class Electricity_Panel extends JPanel {
 		Line.setBorder(new LineBorder(new Color(0, 0, 0), 12));
 		Line.setBounds(10, 64, 446, 3);
 		Headerpanel.add(Line);
-		
-		panel_Current_Reading = new JPanel();
-		panel_Current_Reading.setBackground(new Color(255, 255, 255));
-		panel_Current_Reading.setLayout(null);
-		panel_Current_Reading.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		panel_Current_Reading.setBounds(21, 509, 466, 168);
-		add(panel_Current_Reading);
-		
-		lbl_Title_Current_Reading = new JLabel("Current Reading");
-		lbl_Title_Current_Reading.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_Title_Current_Reading.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		lbl_Title_Current_Reading.setBounds(42, 11, 393, 32);
-		panel_Current_Reading.add(lbl_Title_Current_Reading);
-		
-		lbl_Electricity_Reading_Value = new JLabel();
-		lbl_Electricity_Reading_Value.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_Electricity_Reading_Value.setFont(new Font("Tahoma", Font.BOLD, 20));
-		lbl_Electricity_Reading_Value.setBounds(144, 54, 100, 32);
-		panel_Current_Reading.add(lbl_Electricity_Reading_Value);
-		
-		lbl_Electricity_Reading_Unit = new JLabel("KwH");
-		lbl_Electricity_Reading_Unit.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lbl_Electricity_Reading_Unit.setBounds(254, 55, 68, 32);
-		panel_Current_Reading.add(lbl_Electricity_Reading_Unit);
-		
-		btn_Add_New_Reading = new JButton("Add New Reading");
-		btn_Add_New_Reading.setBackground(new Color(192, 192, 192));
-		btn_Add_New_Reading.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				goToAddReading();
-			}
-		});
-		btn_Add_New_Reading.setFont(new Font("Tahoma", Font.BOLD, 10));
-		btn_Add_New_Reading.setBounds(155, 125, 151, 34);
-		panel_Current_Reading.add(btn_Add_New_Reading);
-		
-		panel_tips = new JPanel();
-		panel_tips.setBackground(new Color(255, 255, 255));
-		panel_tips.setLayout(null);
-		panel_tips.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		panel_tips.setBounds(499, 509, 466, 168);
-		add(panel_tips);
-		
-		lbl_Title_Tips = new JLabel("Energy Saving Tips");
-		lbl_Title_Tips.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_Title_Tips.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		lbl_Title_Tips.setBounds(42, 11, 393, 32);
-		panel_tips.add(lbl_Title_Tips);
-		
-		lbl_Tips1 = new JLabel("<html><ul><li>Unplug chargers when not in use to avoid phantom energy consumption.</li></ul></html>");
-		lbl_Tips1.setVerticalAlignment(SwingConstants.TOP);
-		lbl_Tips1.setBounds(-34, 49, 502, 51);
-		panel_tips.add(lbl_Tips1);
-		lbl_Tips1.setHorizontalAlignment(SwingConstants.LEFT);
-		lbl_Tips1.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		
-		lbl_Tips2 = new JLabel("<html><ul><li>Use LED bulbs it consumes 75% less energy than incandescent bulbs.</li></ul></html>");
-		lbl_Tips2.setVerticalAlignment(SwingConstants.TOP);
-		lbl_Tips2.setHorizontalAlignment(SwingConstants.LEFT);
-		lbl_Tips2.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lbl_Tips2.setBounds(-34, 107, 502, 51);
-		panel_tips.add(lbl_Tips2);
 		
 		setupData();
 	}

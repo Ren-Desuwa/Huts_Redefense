@@ -108,21 +108,14 @@ public class Graph_Panel extends JPanel {
         Rounded_Panel container = new Rounded_Panel(25, Color.BLACK, 0);
         container.setLayout(new BorderLayout());
 
-        String title = switch (utility_type) {
-            case "electricity" -> "Monthly Electricity Usage";
-            case "water" -> "Monthly Water Usage";
-            case "gas" -> "Monthly Gas Usage";
-            default -> "Usage";
-        };
-
         String units = switch (utility_type) {
-            case "electricity" -> "KwH";
-            case "water" -> "m³";
-            case "gas" -> "Qty";
+            case "electricity" -> "Total Price (Php)";
+            case "water" -> "Total Price (Php)";
+            case "gas" -> "Total Price (Php)";
             default -> "";
         };
 
-        Scrollable_Bar_Graph_Panel utility_graph = new Scrollable_Bar_Graph_Panel(title, "Month", units);
+        Scrollable_Bar_Graph_Panel utility_graph = new Scrollable_Bar_Graph_Panel("", "Month", units);
         Color barColor = switch (utility_type) {
             case "electricity" -> new Color(79, 129, 189);
             case "water" -> new Color(155, 187, 89);
@@ -162,7 +155,7 @@ public class Graph_Panel extends JPanel {
 
     private void updateSingleGraphData() {
         try {
-            Map<Month, Double> data = reading_manager.getMonthlyUtilityData(current_user, utility_type, 6, false);
+            Map<Month, Double> data = reading_manager.getMonthlyUtilityData(current_user, utility_type, 6, true);
             switch (utility_type) {
                 case "electricity" -> electricity_graph.setMonthlyData("Electricity", data, 6);
                 case "water" -> water_graph.setMonthlyData("Water", data, 6);
