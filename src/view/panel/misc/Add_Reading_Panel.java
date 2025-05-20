@@ -410,10 +410,12 @@ public class Add_Reading_Panel extends JDialog {
 			if (parentPanel instanceof Water_Panel) {
 				waterpanel = (Water_Panel) parentPanel;
 				waterpanel.Panel_Refresh();
+				waterpanel.Refresh_Graph();
 			}
 			if (parentPanel instanceof Gas_Panel) {
 				gaspanel = (Gas_Panel) parentPanel;
 				gaspanel.Panel_Refresh();
+				gaspanel.Refresh_Graph();
 			}
 			
 			javax.swing.JOptionPane.showMessageDialog(this, "Reading added successfully.", "Success", javax.swing.JOptionPane.INFORMATION_MESSAGE);
