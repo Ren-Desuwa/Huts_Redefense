@@ -169,8 +169,6 @@ public class Electricity_Panel extends JPanel {
             panel_Graph_View.add(graph_Panel);
         }
 		
-		all_readings = getAllReadings();
-		
 		panel_Current_Reading = new Rounded_Panel();
 		panel_Current_Reading.setBackground(new Color(255, 255, 255));
 		panel_Current_Reading.setLayout(null);
@@ -242,6 +240,7 @@ public class Electricity_Panel extends JPanel {
 		lbl_Tips2.setBounds(-34, 107, 502, 51);
 		panel_tips.add(lbl_Tips2);
 		
+		all_readings = getAllReadings();
 		panel_Recent_Readings_Container = new Rounded_Panel();
 		panel_Recent_Readings_Container.setBackground(new Color(255, 255, 255));
 		panel_Recent_Readings_Container.setBounds(497, 114, 466, 377);
