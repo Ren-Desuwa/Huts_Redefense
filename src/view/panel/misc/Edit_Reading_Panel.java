@@ -56,7 +56,7 @@ public class Edit_Reading_Panel extends JDialog {
 	private JTextField tf_TotalPrice;
 	private JPanel panel_Electricity_Consumption_Title;
 	private JLabel lbl_DateToday;
-	private JLabel lbl_Title_Electricity_Consumption;
+	private JLabel lbl_Title_EditReading;
 	private JLabel lbl_Title_Date;
 	private JLabel lbl_Reading;
 	private JLabel lbl_Rate;
@@ -107,11 +107,11 @@ public class Edit_Reading_Panel extends JDialog {
 			lbl_DateToday.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
 			lbl_DateToday.setFont(new Font("Tahoma", Font.PLAIN, 17));
 			
-			lbl_Title_Electricity_Consumption = new JLabel("Edit Reading");
-			lbl_Title_Electricity_Consumption.setBounds(13, 20, 393, 54);
-			panel_Electricity_Consumption_Title.add(lbl_Title_Electricity_Consumption);
-			lbl_Title_Electricity_Consumption.setHorizontalAlignment(SwingConstants.CENTER);
-			lbl_Title_Electricity_Consumption.setFont(new Font("Tahoma", Font.PLAIN, 35));
+			lbl_Title_EditReading = new JLabel("Edit Reading");
+			lbl_Title_EditReading.setBounds(13, 20, 393, 54);
+			panel_Electricity_Consumption_Title.add(lbl_Title_EditReading);
+			lbl_Title_EditReading.setHorizontalAlignment(SwingConstants.CENTER);
+			lbl_Title_EditReading.setFont(new Font("Tahoma", Font.PLAIN, 35));
 			
 			lblTime = new JLabel("Time");
 			lblTime.setVerticalAlignment(SwingConstants.TOP);
@@ -160,13 +160,13 @@ public class Edit_Reading_Panel extends JDialog {
 			lbl_Column_Rate.setBounds(217, 154, 87, 22);
 			contentPane.add(lbl_Column_Rate);
 			
-			lbl_Reading = new JLabel("Reading (kWh)");
+			lbl_Reading = new JLabel("Reading");
 			lbl_Reading.setHorizontalAlignment(SwingConstants.LEFT);
 			lbl_Reading.setFont(new Font("Tahoma", Font.PLAIN, 20));
 			lbl_Reading.setBounds(10, 311, 163, 22);
 			contentPane.add(lbl_Reading);
 			
-			tf_Reading = new JTextField("Enter Reading");
+			tf_Reading = new JTextField("");
 			tf_Reading.setFont(new Font("Tahoma", Font.PLAIN, 15));
 			tf_Reading.addFocusListener(new FocusAdapter() {
 				@Override
@@ -288,6 +288,72 @@ public class Edit_Reading_Panel extends JDialog {
 			lbl_Column_TotalPrice.setFont(new Font("Tahoma", Font.PLAIN, 12));
 			lbl_Column_TotalPrice.setBounds(311, 154, 87, 22);
 			contentPane.add(lbl_Column_TotalPrice);
+			
+			setLabels();
+			
+		}
+		
+		private void setLabels() {
+			if (readingType.equals("electricity")) {
+				setTitle("Edit Electricity Reading");
+				lbl_Reading.setText("Reading (kWh)");
+				
+				tf_Reading.setText("Enter Reading (kWh)");
+				tf_Reading.addFocusListener(new FocusAdapter() {
+					@Override
+					public void focusGained(FocusEvent e) {
+						if (tf_Reading.getText().equals("Enter Reading (kWh)")) {
+							tf_Reading.setText("");
+						}
+					}
+					@Override
+					public void focusLost(FocusEvent e) {
+						if (tf_Reading.getText().isEmpty()) {
+							tf_Reading.setText("Enter Reading (kWh)");
+						}
+					}
+				});
+			} 
+			if (readingType.equals("water")) {
+				setTitle("Edit Water Reading");
+				lbl_Reading.setText("Reading (m³)");
+				
+				tf_Reading.setText("Enter Reading (m³)");
+				tf_Reading.addFocusListener(new FocusAdapter() {
+					@Override
+					public void focusGained(FocusEvent e) {
+						if (tf_Reading.getText().equals("Enter Reading (m³)")) {
+							tf_Reading.setText("");
+						}
+					}
+					@Override
+					public void focusLost(FocusEvent e) {
+						if (tf_Reading.getText().isEmpty()) {
+							tf_Reading.setText("Enter Reading (m³)");
+						}
+					}
+				});
+			}
+			if (readingType.equals("gas")) {
+				setTitle("Edit Gas Reading");
+				lbl_Reading.setText("Reading (Qty)");
+				
+				tf_Reading.setText("Enter Reading (Qty)");
+				tf_Reading.addFocusListener(new FocusAdapter() {
+					@Override
+					public void focusGained(FocusEvent e) {
+						if (tf_Reading.getText().equals("Enter Reading (Qty)")) {
+							tf_Reading.setText("");
+						}
+					}
+					@Override
+					public void focusLost(FocusEvent e) {
+						if (tf_Reading.getText().isEmpty()) {
+							tf_Reading.setText("Enter Reading (Qty)");
+						}
+					}
+				});
+			}
 		}
 		
 		public void selectedReading() {

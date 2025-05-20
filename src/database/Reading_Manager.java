@@ -496,7 +496,7 @@ public class Reading_Manager {
                     if (rs.next()) {
                         double previousReading = rs.getDouble("reading");
                         double percentageChange = ((latestReading - previousReading) / previousReading) * 100;
-                        return String.format("%.1f%% from last month", percentageChange);
+                        return String.format("%.1f%% consumption from last month", percentageChange);
                     }
                     return "No previous reading";
                 }
@@ -513,11 +513,11 @@ public class Reading_Manager {
 			return Color.GRAY; // Neutral color for no data
 		}
 		
-		double percentageChange = Double.parseDouble(trend.replace("% from last month", ""));
-		if (percentageChange > 0) {
-			return Color.GREEN; // Positive trend
-		} else if (percentageChange < 0) {
-			return Color.RED; // Negative trend
+		double percentageChange = Double.parseDouble(trend.replace("% consumption from last month", ""));
+		if (percentageChange < 0) {
+			return new Color(0,156,74); // Positive trend
+		} else if (percentageChange > 0) {
+			return new Color(255,0,0); // Negative trend
 		} else {
 			return Color.GRAY; // No change
 		}
