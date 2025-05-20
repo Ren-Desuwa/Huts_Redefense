@@ -5,8 +5,7 @@ import javax.swing.JPanel;
 import database.Database_Manager;
 import model.Reading;
 import model.User;
-import view.panel.misc.Graph_Panel;
-import visuals.Bar_Graph_Panel;
+import visuals.Graph_Panel;
 import visuals.Rounded_Panel;
 
 import javax.swing.JLabel;
@@ -181,8 +180,8 @@ public class Home_Panel extends JPanel {
      * Create the content panel with utility information
      */
     private void createContentPanel() {
-        panelInformation = new JPanel();
-        panelInformation.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+        panelInformation = new Rounded_Panel();
+//        panelInformation.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
         panelInformation.setBounds(21, 114, 467, 408);
         panelInformation.setLayout(null);
         add(panelInformation);
@@ -313,7 +312,7 @@ public class Home_Panel extends JPanel {
         add(panelGraphContainer);
         
         // Create Graph_Panel instance
-        graphPanel = new view.panel.misc.Graph_Panel();
+        graphPanel = new visuals.Graph_Panel();
         
         // Add Graph_Panel to the container
         panelGraphContainer.add(graphPanel, BorderLayout.CENTER);

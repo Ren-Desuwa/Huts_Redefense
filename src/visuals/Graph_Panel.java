@@ -1,4 +1,4 @@
-package view.panel.misc;
+package visuals;
 
 import javax.swing.JPanel;
 import javax.swing.BorderFactory;
@@ -7,8 +7,6 @@ import java.awt.CardLayout;
 import java.time.Month;
 import java.util.Map;
 import java.awt.Color;
-
-import visuals.Scrollable_Bar_Graph_Panel;
 
 /**
  * Panel for displaying utility usage graphs with horizontal scrolling

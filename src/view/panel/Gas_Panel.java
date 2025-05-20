@@ -23,6 +23,6 @@ public class Gas_Panel extends JPanel {
 		setPreferredSize(new Dimension(986, 688));
 		setLayout(null);
 		
+		
 	}
-
 }

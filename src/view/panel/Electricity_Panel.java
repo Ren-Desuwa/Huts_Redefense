@@ -12,6 +12,7 @@ import model.User;
 import view.login.Sign_Up_Window;
 import view.panel.misc.Add_Reading_Panel;
 import view.panel.misc.Edit_Reading_Panel;
+import visuals.Rounded_Panel;
 
 import javax.swing.border.LineBorder;
 import java.awt.Color;
@@ -114,9 +115,9 @@ public class Electricity_Panel extends JPanel {
 		lbl_SubTitle_Electricity_Consmption.setBounds(20, 52, 393, 22);
 		panel_Electricity_Consumption_Title.add(lbl_SubTitle_Electricity_Consmption);
 		
-		panel_add_reading = new JPanel();
+		panel_add_reading = new Rounded_Panel(15, Color.BLACK, 1);
 		panel_add_reading.setBackground(new Color(255, 255, 255));
-		panel_add_reading.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+//		panel_add_reading.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		panel_add_reading.setBounds(21, 114, 466, 377);
 		add(panel_add_reading);
 		panel_add_reading.setLayout(null);
