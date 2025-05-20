@@ -2,6 +2,7 @@ package view.panel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -17,6 +18,7 @@ import model.User;
 import view.panel.misc.Change_Password_Window;
 import visuals.Circle_Panel;
 import visuals.Following_Tool_Tip;
+import visuals.Rounded_Button;
 import visuals.Rounded_Panel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -372,8 +374,15 @@ public class Profile_Panel extends JPanel {
      * Create actions section with buttons
      */
     private void createActionsSection() {
-        btnChangePassword = new JButton("Change Password");
+        btnChangePassword = new Rounded_Button("Change Password", 25);
         btnChangePassword.setBounds(760, 286, 165, 40);
+        btnChangePassword.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnChangePassword.setMaximumSize(new Dimension(180, 40));
+        btnChangePassword.setBackground(new Color(192, 192, 192));
+        btnChangePassword.setForeground(Color.BLACK);
+        btnChangePassword.setFocusPainted(false);
+        btnChangePassword.setBorderPainted(false);
+        btnChangePassword.setFont(new Font("Arial", Font.PLAIN, 16));
         contentPanel.add(btnChangePassword);
         
         lblActions = new JLabel("Actions");
