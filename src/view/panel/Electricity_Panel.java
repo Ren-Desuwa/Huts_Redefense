@@ -55,8 +55,8 @@ public class Electricity_Panel extends JPanel {
 	private JPanel panel_Recent_Readings_Container;
 	
 	// Scroll panel fields
-	private JPanel Headerpanel;
-	private JPanel Line;
+	private JPanel panel_Header;
+	private JPanel panel_Line;
 	private JList<String> all_readings;
 	
 	//Graph panel field
@@ -65,7 +65,7 @@ public class Electricity_Panel extends JPanel {
 	private JLabel lbl_Title_Gaph;
 	
 	// Home panel
-	private Home_Panel homepanel;
+	private Home_Panel panel_home;
 	
 	// Title Panel labels
 	private JLabel lbl_Title_Electricity_Consumption;
@@ -74,7 +74,7 @@ public class Electricity_Panel extends JPanel {
 	private JLabel lbl_Time;
 	
 	// Scroll panel components
-	private JScrollPane sP_Recent_Readings;
+	private JScrollPane scrollpane_Recent_Readings;
 	private JLabel lbl_Title_RecentReadings;
 	private JLabel lbl_Head_Date;
 	private JLabel lbl_Head_Readings;
@@ -96,15 +96,20 @@ public class Electricity_Panel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public Electricity_Panel(Database_Manager database_manager, User current_user, Home_Panel homepanel) {
+	public Electricity_Panel(Database_Manager database_manager, User current_user, Home_Panel panel_home) {
 		this.database_manager = database_manager;
 		this.current_user = current_user;
-		this.homepanel = homepanel;
+		this.panel_home = panel_home;
 		
 		setBackground(new Color(213, 213, 213));
 		setPreferredSize(new Dimension(986, 688));
 		setLayout(null);
 		
+		initialize_UI();
+		setupData();
+	}
+	
+	private void initialize_UI() {
 		panel_Title_Electricity_Consumption = new Rounded_Panel();
 		panel_Title_Electricity_Consumption.setBackground(new Color(255, 255, 255));
 		panel_Title_Electricity_Consumption.setLayout(null);
@@ -247,21 +252,21 @@ public class Electricity_Panel extends JPanel {
 		add(panel_Recent_Readings_Container);
 		panel_Recent_Readings_Container.setLayout(null);
 		
-		sP_Recent_Readings = new JScrollPane();
-		sP_Recent_Readings.setBounds(5, 5, 456, 366);
-		sP_Recent_Readings.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		panel_Recent_Readings_Container.add(sP_Recent_Readings);
-		sP_Recent_Readings.setViewportView(all_readings);
+		scrollpane_Recent_Readings = new JScrollPane();
+		scrollpane_Recent_Readings.setBounds(5, 5, 456, 366);
+		scrollpane_Recent_Readings.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		panel_Recent_Readings_Container.add(scrollpane_Recent_Readings);
+		scrollpane_Recent_Readings.setViewportView(all_readings);
 		
-		Headerpanel = new JPanel();
-		Headerpanel.setBackground(new Color(255, 255, 255));
-		sP_Recent_Readings.setColumnHeaderView(Headerpanel);
-		Headerpanel.setLayout(null);
-		Headerpanel.setPreferredSize(new Dimension(466, 70));
+		panel_Header = new JPanel();
+		panel_Header.setBackground(new Color(255, 255, 255));
+		scrollpane_Recent_Readings.setColumnHeaderView(panel_Header);
+		panel_Header.setLayout(null);
+		panel_Header.setPreferredSize(new Dimension(466, 70));
 		
 		lbl_Title_RecentReadings = new JLabel("Recent Readings");
 		lbl_Title_RecentReadings.setBounds(0, 0, 466, 31);
-		Headerpanel.add(lbl_Title_RecentReadings);
+		panel_Header.add(lbl_Title_RecentReadings);
 		lbl_Title_RecentReadings.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_Title_RecentReadings.setFont(new Font("Tahoma", Font.PLAIN, 25));
 		
@@ -269,32 +274,30 @@ public class Electricity_Panel extends JPanel {
 		lbl_Head_Date.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_Head_Date.setBounds(10, 39, 78, 17);
 		lbl_Head_Date.setFont(new Font("Tahoma", Font.BOLD, 15));
-		Headerpanel.add(lbl_Head_Date);
+		panel_Header.add(lbl_Head_Date);
 		
 		lbl_Head_Readings = new JLabel("Readings");
 		lbl_Head_Readings.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_Head_Readings.setBounds(124, 39, 78, 17);
 		lbl_Head_Readings.setFont(new Font("Tahoma", Font.BOLD, 15));
-		Headerpanel.add(lbl_Head_Readings);
+		panel_Header.add(lbl_Head_Readings);
 		
 		lbl_Head_Rate = new JLabel("Rate");
 		lbl_Head_Rate.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_Head_Rate.setBounds(245, 39, 78, 17);
 		lbl_Head_Rate.setFont(new Font("Tahoma", Font.BOLD, 15));
-		Headerpanel.add(lbl_Head_Rate);
+		panel_Header.add(lbl_Head_Rate);
 		
 		lbl_Head_TotalPrice = new JLabel("Total Price");
 		lbl_Head_TotalPrice.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_Head_TotalPrice.setBounds(342, 39, 108, 17);
 		lbl_Head_TotalPrice.setFont(new Font("Tahoma", Font.BOLD, 15));
-		Headerpanel.add(lbl_Head_TotalPrice);
+		panel_Header.add(lbl_Head_TotalPrice);
 		
-		Line = new JPanel();
-		Line.setBorder(new LineBorder(new Color(0, 0, 0), 12));
-		Line.setBounds(10, 64, 446, 3);
-		Headerpanel.add(Line);
-		
-		setupData();
+		panel_Line = new JPanel();
+		panel_Line.setBorder(new LineBorder(new Color(0, 0, 0), 12));
+		panel_Line.setBounds(10, 64, 446, 3);
+		panel_Header.add(panel_Line);
 	}
 	
 	public void Refresh_Graph() {
@@ -322,10 +325,10 @@ public class Electricity_Panel extends JPanel {
 	
 	public void Panel_Refresh() {
 		all_readings = getAllReadings();
-	    sP_Recent_Readings.setViewportView(all_readings);
+	    scrollpane_Recent_Readings.setViewportView(all_readings);
 	    getAllReadings();
 	    setupData(); // Also update the current reading display
-	    homepanel.home_Panel_Refresh();
+	    panel_home.home_Panel_Refresh();
 	}
 	
 	public void setupData() {
