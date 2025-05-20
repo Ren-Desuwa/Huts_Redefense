@@ -52,6 +52,7 @@ public class Edit_Reading_Panel extends JDialog {
 	private Electricity_Panel electricitypanel;
 	private Water_Panel waterpanel;
 	private Gas_Panel gaspanel;
+	private Reading current_reading;
 	
 	private JTextField tf_Reading;
 	private JTextField tf_Rate;
@@ -76,12 +77,13 @@ public class Edit_Reading_Panel extends JDialog {
 	private JLabel lblTime;
 	
 	
-		public Edit_Reading_Panel(JFrame parent, Database_Manager database_manager, User current_user, JPanel panel_type, String type) {
+		public Edit_Reading_Panel(JFrame parent, Database_Manager database_manager, User current_user, JPanel panel_type, String type, Reading reading) {
 			super(parent, "Edit Reading", true);
 			this.database_manager = database_manager;
 			this.current_user = current_user;
 			this.parentPanel = panel_type; // Set the parent panel Electricity_Panel, Water_Panel or Gas_Panel
 		    this.readingType = type;  // Set the reading type electricity, water or gas
+		    this.current_reading = reading; // Set the current reading to be edited
 			
 			setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			setBounds(100, 100, 450, 635);

@@ -1,6 +1,9 @@
 package database;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.event.MouseAdapter;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.Month;
@@ -11,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.JLabel;
+import javax.swing.JList;
 
 import model.*;
 
@@ -661,4 +665,56 @@ public class Reading_Manager {
             }
         }
     }
+	public JList<String> getReadingsAsJList(User user, String type, MouseAdapter mouseListener) {
+	    try {
+	        if (!isReadingExists(user, type)) {
+	            JList<String> list = new JList<>(new String[] {"No readings found.", "Please add a reading."});
+	            list.setFont(new Font("monoFont", Font.PLAIN, 15));
+	            list.setPreferredSize(new Dimension(429, 448));
+	            list.setFixedCellHeight(30);
+	            return list;
+	        }
+	        
+	        List<Reading> allReadings = getAllReadingsByType(user, type);
+	        
+	        String[] readings = new String[allReadings.size()];
+	        for (int i = 0; i < allReadings.size(); i++) {
+	            Reading reading = allReadings.get(i);
+	            String unit = "";
+	            switch(type) {
+	                case "electricity":
+	                    unit = "kWh";
+	                    break;
+	                case "water":
+	                    unit = "m³";
+	                    break;
+	                case "gas":
+	                    unit = "m³";
+	                    break;
+	                default:
+	                    unit = "";
+	                    break;
+	            }
+	            readings[i] = String.format("  %-19s %-21s %-17s %-10s", 
+	                reading.getDate(), 
+	                reading.getReading() + unit, 
+	                reading.getRate() + "Php", 
+	                reading.getTotal_Price() + "Php");
+	        }
+	        
+	        JList<String> list = new JList<>(readings);
+	        list.setFont(new Font("monoFont", Font.PLAIN, 15));
+	        list.setPreferredSize(new Dimension(429, 448));
+	        list.setFixedCellHeight(30);
+	        
+	        if (mouseListener != null) {
+	            list.addMouseListener(mouseListener);
+	        }
+	        
+	        return list;
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        return new JList<>(new String[] {"Error fetching readings."});
+	    }
+	}
 }
