@@ -24,6 +24,8 @@ import model.User;
 import view.panel.Electricity_Panel;
 import view.panel.Gas_Panel;
 import view.panel.Water_Panel;
+import visuals.Rounded_Button;
+import visuals.Rounded_Panel;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -83,19 +85,20 @@ public class Edit_Reading_Panel extends JDialog {
 			
 			setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			setBounds(100, 100, 450, 635);
-			
+			setBackground(new Color(213, 213, 213));
 			setTitle("Edit Reading");
 			setResizable(false);
 			
 			contentPane = new JPanel();
+			contentPane.setBackground(new Color(213, 213, 213));
 			contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 			
 			setContentPane(contentPane);
 			contentPane.setLayout(null);
 			
-			panel_Electricity_Consumption_Title = new JPanel();
+			panel_Electricity_Consumption_Title = new Rounded_Panel();
+			panel_Electricity_Consumption_Title.setBackground(new Color(255, 255, 255));
 			panel_Electricity_Consumption_Title.setLayout(null);
-			panel_Electricity_Consumption_Title.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 			panel_Electricity_Consumption_Title.setBounds(10, 11, 416, 97);
 			contentPane.add(panel_Electricity_Consumption_Title);
 			
@@ -238,22 +241,43 @@ public class Edit_Reading_Panel extends JDialog {
 			tf_TotalPrice.setBounds(10, 496, 416, 45);
 			contentPane.add(tf_TotalPrice);
 			
-			btn_Edit =  new JButton("Update");
+			btn_Edit =  new Rounded_Button("Update", 25);
+			btn_Edit.setBackground(new Color(182, 182, 182));
+			btn_Edit.setForeground(Color.BLACK);
 			btn_Edit.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					updateReading();
+				}
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					btn_Edit.setBackground(new Color(150, 150, 150));
+				}
+				@Override
+				public void mouseExited(MouseEvent e) {
+					btn_Edit.setBackground(new Color(182, 182, 182));
 				}
 			});
 			btn_Edit.setFont(new Font("Tahoma", Font.PLAIN, 15));
 			btn_Edit.setBounds(335, 553, 91, 34);
 			contentPane.add(btn_Edit);
 			
-			btn_Cancel = new JButton("Cancel");
+			btn_Cancel = new Rounded_Button("Cancel", 25);
+			btn_Cancel.setBackground(new Color(182, 182, 182));
+			btn_Cancel.setForeground(Color.BLACK);
 			btn_Cancel.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					cancelAddReading();
+				}
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					btn_Cancel.setBackground(new Color(150, 150, 150));
+				}
+				
+				@Override
+				public void mouseExited(MouseEvent e) {
+					btn_Cancel.setBackground(new Color(182, 182, 182));
 				}
 			});
 			btn_Cancel.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -272,11 +296,21 @@ public class Edit_Reading_Panel extends JDialog {
 			lbl_DateSelected.setBounds(5, 0, 406, 43);
 			panel_Date.add(lbl_DateSelected);
 			
-			btn_Delete = new JButton("Delete");
+			btn_Delete = new Rounded_Button("Delete", 25);
+			btn_Delete.setBackground(new Color(182, 182, 182));
+			btn_Delete.setForeground(Color.BLACK);
 			btn_Delete.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					deleteselectedReading();
+				}
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					btn_Delete.setBackground(new Color(150, 150, 150));
+				}
+				@Override
+				public void mouseExited(MouseEvent e) {
+					btn_Delete.setBackground(new Color(182, 182, 182));
 				}
 			});
 			btn_Delete.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -411,6 +445,7 @@ public class Edit_Reading_Panel extends JDialog {
 				if (parentPanel instanceof Electricity_Panel) {
 					electricitypanel = (Electricity_Panel) parentPanel;
 					electricitypanel.Panel_Refresh();
+					electricitypanel.Refresh_Graph();
 				} 
 				if (parentPanel instanceof Water_Panel) {
 					waterpanel = (Water_Panel) parentPanel;
@@ -466,6 +501,7 @@ public class Edit_Reading_Panel extends JDialog {
 				if (parentPanel instanceof Electricity_Panel) {
 					electricitypanel = (Electricity_Panel) parentPanel;
 					electricitypanel.Panel_Refresh();
+					electricitypanel.Refresh_Graph();
 				} 
 				if (parentPanel instanceof Water_Panel) {
 					waterpanel = (Water_Panel) parentPanel;

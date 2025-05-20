@@ -1,15 +1,12 @@
 package view.panel.misc;
 
-import java.awt.Dimension;
-import java.awt.EventQueue;
+
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -21,6 +18,8 @@ import model.User;
 import view.panel.Electricity_Panel;
 import view.panel.Gas_Panel;
 import view.panel.Water_Panel;
+import visuals.Rounded_Button;
+import visuals.Rounded_Panel;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -29,7 +28,7 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.DefaultComboBoxModel;
+
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
@@ -77,19 +76,20 @@ public class Add_Reading_Panel extends JDialog {
 		
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 535);
-		
+		setBackground(new Color(213, 213, 213));
 		setTitle("Add Reading");
 		setResizable(false);
 		
 		contentPane = new JPanel();
+		contentPane.setBackground(new Color(213, 213, 213));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		panel_Electricity_Consumption_Title = new JPanel();
+		panel_Electricity_Consumption_Title = new Rounded_Panel();
+		panel_Electricity_Consumption_Title.setBackground(new Color(255, 255, 255));
 		panel_Electricity_Consumption_Title.setLayout(null);
-		panel_Electricity_Consumption_Title.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		panel_Electricity_Consumption_Title.setBounds(10, 11, 416, 97);
 		contentPane.add(panel_Electricity_Consumption_Title);
 		
@@ -133,35 +133,30 @@ public class Add_Reading_Panel extends JDialog {
 		lbl_Month.setBounds(157, 143, 114, 22);
 		contentPane.add(lbl_Month);
 		
-		cB_Day = new JComboBox();
-		cB_Day.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		for (int i = 1; i <= 31; i++) {
-			cB_Day.addItem(i);
-			}
-		
 		lbl_Year = new JLabel("Year");
 		lbl_Year.setHorizontalAlignment(SwingConstants.LEFT);
 		lbl_Year.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lbl_Year.setBounds(306, 143, 114, 22);
 		contentPane.add(lbl_Year);
+		
+		cB_Day = new JComboBox();
+		cB_Day.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		cB_Day.setBounds(10, 164, 120, 45);
+		cB_Day.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		contentPane.add(cB_Day);
 		
 		cB_Month = new JComboBox();
 		cB_Month.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		for (int i = 1; i <= 12; i++) {
-			cB_Month.addItem(i);
-			}
 		cB_Month.setBounds(157, 164, 120, 45);
+		cB_Month.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		contentPane.add(cB_Month);
 		
 		cB_Year = new JComboBox();
 		cB_Year.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		for (int i = 1975; i <= 2025; i++) {
-			cB_Year.addItem(i);
-			}
 		cB_Year.setBounds(306, 164, 120, 45);
+		cB_Year.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		contentPane.add(cB_Year);
+		Setup_Date();
 		
 		lbl_Reading = new JLabel("Reading");
 		lbl_Reading.setHorizontalAlignment(SwingConstants.LEFT);
@@ -228,22 +223,44 @@ public class Add_Reading_Panel extends JDialog {
 		tf_TotalPrice.setBounds(10, 401, 416, 45);
 		contentPane.add(tf_TotalPrice);
 		
-		btn_Add =  new JButton("Add");
+		btn_Add =  new Rounded_Button("Add", 25);
+		btn_Add.setBackground(new Color(182, 182, 182));
+		btn_Add.setForeground(Color.BLACK);
 		btn_Add.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				addReading();
 			}
+			@Override
+            public void mouseEntered(MouseEvent e) {
+				btn_Add.setBackground(new Color(150, 150, 150));
+            }
+            
+            @Override
+            public void mouseExited(MouseEvent e) {
+            	btn_Add.setBackground(new Color(182, 182, 182));
+            }
 		});
 		btn_Add.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btn_Add.setBounds(335, 458, 91, 34);
 		contentPane.add(btn_Add);
 		
-		btn_Cancel = new JButton("Cancel");
+		btn_Cancel = new Rounded_Button("Cancel", 25);
+		btn_Cancel.setBackground(new Color(182, 182, 182));
+		btn_Cancel.setForeground(Color.BLACK);
 		btn_Cancel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				cancelAddReading();
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btn_Cancel.setBackground(new Color(150, 150, 150));
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btn_Cancel.setBackground(new Color(182, 182, 182));
 			}
 		});
 		btn_Cancel.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -251,6 +268,29 @@ public class Add_Reading_Panel extends JDialog {
 		contentPane.add(btn_Cancel);
 		
 		setLabels();
+	}
+	
+	private void Setup_Date() {
+		LocalDate now = LocalDate.now();
+		int currentDay = now.getDayOfMonth();
+		int currentMonth = now.getMonthValue();
+		int currentYear = now.getYear();
+		
+		for (int i = 1975; i <= currentYear; i++) {
+		    cB_Year.addItem(i);
+		}
+		cB_Year.setSelectedItem(currentYear);
+
+		for (int i = 1; i <= (cB_Year.getSelectedItem().equals(currentYear) ? currentMonth : 12); i++) {
+		    cB_Month.addItem(i);
+		}
+		cB_Month.setSelectedItem(currentMonth);
+
+		int maxDay = (cB_Year.getSelectedItem().equals(currentYear) && cB_Month.getSelectedItem().equals(currentMonth)) ? currentDay : now.withMonth((int)cB_Month.getSelectedItem()).lengthOfMonth();
+		for (int i = 1; i <= maxDay; i++) {
+		    cB_Day.addItem(i);
+		}
+		cB_Day.setSelectedItem(currentDay);
 	}
 	
 	private void setLabels() {
@@ -320,7 +360,15 @@ public class Add_Reading_Panel extends JDialog {
 		String reading = tf_Reading.getText();
 		String rate = tf_Rate.getText();
 		String totalPrice = tf_TotalPrice.getText();
-		LocalDate date = LocalDate.of((int)cB_Year.getSelectedItem(), (int)cB_Month.getSelectedItem(), (int)cB_Day.getSelectedItem());
+		String Type = readingType;
+		
+		if (Type.equals("electricity")) {
+			reading = reading.replace("Enter Reading (kWh)", "Enter Reading");
+		} else if (Type.equals("water")) {
+			reading = reading.replace("Enter Reading (m³)", "Enter Reading");
+		} else if (Type.equals("gas")) {
+			reading = reading.replace("Enter Reading (Qty)", "Enter Reading");
+		}
 		
 		if (!reading.equals("Enter Reading") || !rate.equals("Enter Rate") || !totalPrice.equals("Total Price")) {
 			int response = javax.swing.JOptionPane.showConfirmDialog(this, "Are you sure you want to cancel?", "Confirm Cancel", javax.swing.JOptionPane.YES_NO_OPTION);
@@ -357,6 +405,7 @@ public class Add_Reading_Panel extends JDialog {
 			if (parentPanel instanceof Electricity_Panel) {
 				electricitypanel = (Electricity_Panel) parentPanel;
 				electricitypanel.Panel_Refresh();
+				electricitypanel.Refresh_Graph();
 			} 
 			if (parentPanel instanceof Water_Panel) {
 				waterpanel = (Water_Panel) parentPanel;
