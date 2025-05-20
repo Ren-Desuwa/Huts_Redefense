@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JLabel;
+
 import model.*;
 
 public class Reading_Manager {
@@ -643,4 +645,20 @@ public class Reading_Manager {
 		}
 		return 0;
 	}
+	public void updateReadingLabel(User current_user,Reading reading, JLabel valueLabel, JLabel trendLabel, String type) {
+        if (reading == null) {
+            valueLabel.setText("No Data");
+            trendLabel.setText("No Data");
+        } else {
+            valueLabel.setText(String.valueOf(reading.getReading()));
+            try {
+                String trend = getTrend(current_user, type);
+                trendLabel.setText(trend);
+                trendLabel.setForeground(getTrendColor(current_user, type));
+            } catch (SQLException e) {
+                e.printStackTrace();
+                trendLabel.setText("Error calculating trend");
+            }
+        }
+    }
 }
