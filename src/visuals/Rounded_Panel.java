@@ -10,7 +10,7 @@ public class Rounded_Panel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	// Constants for default values
-	private static final int DEFAULT_RADIUS = 15;
+	private static final int DEFAULT_RADIUS = 25;
 	private static final Color DEFAULT_BORDER_COLOR = Color.BLACK;
 	private static final int DEFAULT_BORDER_THICKNESS = 2;
 

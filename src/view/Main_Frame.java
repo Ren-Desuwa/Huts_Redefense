@@ -93,7 +93,7 @@ public class Main_Frame extends JFrame {
         
         home_panel = new Home_Panel(database_manager, current_user);
         electricity_panel = new Electricity_Panel(database_manager, current_user, home_panel);
-        water_panel = new Water_Panel(database_manager, current_user);
+        water_panel = new Water_Panel(database_manager, current_user, home_panel);
         gas_panel = new Gas_Panel(database_manager, current_user);
         profile_panel = new Profile_Panel(database_manager, current_user);
         

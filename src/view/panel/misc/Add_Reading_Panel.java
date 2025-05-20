@@ -19,6 +19,7 @@ import javax.swing.border.LineBorder;
 import database.Database_Manager;
 import model.User;
 import view.panel.Electricity_Panel;
+import view.panel.Water_Panel;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -40,6 +41,10 @@ public class Add_Reading_Panel extends JDialog {
 	private JPanel contentPane;
 	private Database_Manager database_manager;
 	private User current_user;
+	private String readingType;
+	private JPanel parentPanel;
+	private Electricity_Panel electricitypanel;
+	private Water_Panel waterpanel;
 	
 	private JTextField tf_Reading;
 	private JTextField tf_Rate;
@@ -59,14 +64,14 @@ public class Add_Reading_Panel extends JDialog {
 	private JLabel lbl_Day;
 	private JLabel lbl_Month;
 	private JLabel lbl_Year;
-	private Electricity_Panel electricitypanel;
 	private JLabel lblTime;
 	
-	public Add_Reading_Panel(JFrame parent ,Database_Manager database_manager, User current_user, Electricity_Panel utilitypanel) {
+	public Add_Reading_Panel(JFrame parent ,Database_Manager database_manager, User current_user,JPanel panel_type, String type) {
 		super(parent, "Add Reading", true);
-		this.database_manager = database_manager;
-		this.current_user = current_user;
-		this.electricitypanel = utilitypanel;
+	    this.database_manager = database_manager;
+	    this.current_user = current_user;
+	    this.parentPanel = panel_type; // Set the parent panel Electricity_Panel, Water_Panel or Gas_Panel
+	    this.readingType = type;  // Set the reading type electricity, water or gas
 		
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 535);
@@ -257,6 +262,8 @@ public class Add_Reading_Panel extends JDialog {
 		contentPane.add(btn_Cancel);
 	}
 	
+	
+	
 	public void cancelAddReading() {
 		String reading = tf_Reading.getText();
 		String rate = tf_Rate.getText();
@@ -293,10 +300,16 @@ public class Add_Reading_Panel extends JDialog {
 				javax.swing.JOptionPane.showMessageDialog(this, "Please enter positive values.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
 				return;
 			}
+			database_manager.getReadingManager().addReading(current_user , date, readingType, readingValue, rateValue, totalPriceValue);
 			
-			database_manager.getReadingManager().addReading(current_user , date, "electricity", readingValue, rateValue, totalPriceValue);
-			
-			electricitypanel.Electricity_Panel_Refresh();
+			if (parentPanel instanceof Electricity_Panel) {
+				electricitypanel = (Electricity_Panel) parentPanel;
+				electricitypanel.Panel_Refresh();
+			} 
+			if (parentPanel instanceof Water_Panel) {
+				waterpanel = (Water_Panel) parentPanel;
+				waterpanel.Panel_Refresh();
+			}
 			
 			javax.swing.JOptionPane.showMessageDialog(this, "Reading added successfully.", "Success", javax.swing.JOptionPane.INFORMATION_MESSAGE);
 			this.dispose();

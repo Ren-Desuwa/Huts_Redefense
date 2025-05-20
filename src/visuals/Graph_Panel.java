@@ -1,4 +1,4 @@
-package view.panel.misc;
+package visuals;
 
 import javax.swing.JPanel;
 import javax.swing.BorderFactory;
@@ -7,8 +7,6 @@ import java.awt.CardLayout;
 import java.time.Month;
 import java.util.Map;
 import java.awt.Color;
-
-import visuals.Scrollable_Bar_Graph_Panel;
 
 /**
  * Panel for displaying utility usage graphs with horizontal scrolling
@@ -31,15 +29,20 @@ public class Graph_Panel extends JPanel {
      * Creates a new graph panel with placeholder
      * WindowBuilder-friendly constructor
      */
-    public Graph_Panel() {
+    public Graph_Panel(JPanel placeholderPanel) {
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createLineBorder(Color.BLACK, 1, true));
         
         // Create simple placeholder that WindowBuilder can understand
-        JPanel placeholder = new JPanel();
+        JPanel placeholder = placeholderPanel;
         placeholder.setLayout(new BorderLayout());
         add(placeholder, BorderLayout.CENTER);
     }
+    
+    public Graph_Panel() {
+		new Graph_Panel(new JPanel());
+	}
+    
     
     /**
      * Initializes the graph panels

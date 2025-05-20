@@ -12,6 +12,7 @@ import model.User;
 import view.login.Sign_Up_Window;
 import view.panel.misc.Add_Reading_Panel;
 import view.panel.misc.Edit_Reading_Panel;
+import visuals.Rounded_Panel;
 
 import javax.swing.border.LineBorder;
 import java.awt.Color;
@@ -40,15 +41,16 @@ public class Electricity_Panel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private Database_Manager database_manager;
+	private User current_user;
+	private Home_Panel homepanel;
 	
 	private JLabel lbl_Electricity_Reading_Value;
-	private User current_user;
+	private JLabel lbl_Title_Electricity_Consumption;
+	private JLabel lbl_SubTitle_Electricity_Consumption;
 	private JPanel panel_Electricity_Consumption_Title;
 	private JPanel panel_add_reading;
 	private JList<String> all_readings;
 	private JScrollPane sP_Recent_Readings;
-	private JLabel lbl_Title_Electricity_Consumption;
-	private JLabel lbl_SubTitle_Electricity_Consmption;
 	private JLabel lbl_Date;
 	private JLabel lbl_Title_Current_Reading;
 	private JLabel lbl_Electricity_Reading_Unit;
@@ -66,7 +68,6 @@ public class Electricity_Panel extends JPanel {
 	private JLabel lbl_Head_Rate;
 	private JLabel lbl_Head_TotalPrice;
 	private JPanel Line;
-	private Home_Panel homepanel;
 	private JLabel lblTime;
 	/**
 	 * Create the panel.
@@ -87,9 +88,9 @@ public class Electricity_Panel extends JPanel {
 		add(panel_Electricity_Consumption_Title);
 		
 		lbl_Title_Electricity_Consumption = new JLabel("Electricity Consumption");
-		lbl_Title_Electricity_Consumption.setHorizontalAlignment(SwingConstants.CENTER);
+		lbl_Title_Electricity_Consumption.setHorizontalAlignment(SwingConstants.LEFT);
 		lbl_Title_Electricity_Consumption.setFont(new Font("Tahoma", Font.PLAIN, 35));
-		lbl_Title_Electricity_Consumption.setBounds(10, 0, 393, 54);
+		lbl_Title_Electricity_Consumption.setBounds(30, 0, 393, 54);
 		panel_Electricity_Consumption_Title.add(lbl_Title_Electricity_Consumption);
 		
 		lbl_Date = new JLabel("Date");
@@ -108,15 +109,15 @@ public class Electricity_Panel extends JPanel {
         lblTime.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm a")));
         panel_Electricity_Consumption_Title.add(lblTime);
 		
-		lbl_SubTitle_Electricity_Consmption = new JLabel("Track and manage your electricity usage ");
-		lbl_SubTitle_Electricity_Consmption.setHorizontalAlignment(SwingConstants.LEFT);
-		lbl_SubTitle_Electricity_Consmption.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		lbl_SubTitle_Electricity_Consmption.setBounds(20, 52, 393, 22);
-		panel_Electricity_Consumption_Title.add(lbl_SubTitle_Electricity_Consmption);
+		lbl_SubTitle_Electricity_Consumption = new JLabel("Track and manage your electricity usage ");
+		lbl_SubTitle_Electricity_Consumption.setHorizontalAlignment(SwingConstants.LEFT);
+		lbl_SubTitle_Electricity_Consumption.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		lbl_SubTitle_Electricity_Consumption.setBounds(20, 52, 393, 22);
+		panel_Electricity_Consumption_Title.add(lbl_SubTitle_Electricity_Consumption);
 		
-		panel_add_reading = new JPanel();
+		panel_add_reading = new Rounded_Panel(15, Color.BLACK, 1);
 		panel_add_reading.setBackground(new Color(255, 255, 255));
-		panel_add_reading.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+//		panel_add_reading.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		panel_add_reading.setBounds(21, 114, 466, 377);
 		add(panel_add_reading);
 		panel_add_reading.setLayout(null);
@@ -249,7 +250,7 @@ public class Electricity_Panel extends JPanel {
 	            try {
 	            	Add_Reading_Panel add_reading_panel = new Add_Reading_Panel(
 		            	    (JFrame) SwingUtilities.getWindowAncestor(Electricity_Panel.this),
-		            	    database_manager, current_user, Electricity_Panel.this
+		            	    database_manager, current_user, Electricity_Panel.this, "electricity"
 		            	);
 		            	add_reading_panel.setVisible(true);
 	            } catch (Exception e) {
@@ -259,7 +260,7 @@ public class Electricity_Panel extends JPanel {
 	    });
 	}
 	
-	public void Electricity_Panel_Refresh() {
+	public void Panel_Refresh() {
 		all_readings = getAllReadings();
 	    sP_Recent_Readings.setViewportView(all_readings);
 	    getAllReadings();
@@ -306,14 +307,14 @@ public class Electricity_Panel extends JPanel {
 			list.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					int response = javax.swing.JOptionPane.showConfirmDialog(null, "Do you want to eddit this reading?", "Edit Reading", javax.swing.JOptionPane.YES_NO_OPTION);
+					int response = javax.swing.JOptionPane.showConfirmDialog(null, "Do you want to edit this reading?", "Edit Reading", javax.swing.JOptionPane.YES_NO_OPTION);
 					if (response == javax.swing.JOptionPane.YES_OPTION) {
 						EventQueue.invokeLater(new Runnable() {
 					        public void run() {
 					            try {
 					            	Edit_Reading_Panel edit_reading_panel = new Edit_Reading_Panel(
 					            	    (JFrame) SwingUtilities.getWindowAncestor(Electricity_Panel.this),
-					            	    database_manager, current_user, Electricity_Panel.this
+					            	    database_manager, current_user, Electricity_Panel.this , "electricity"
 					            	);
 					            	edit_reading_panel.setVisible(true);
 

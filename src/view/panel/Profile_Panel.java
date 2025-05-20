@@ -458,9 +458,21 @@ public class Profile_Panel extends JPanel {
 			}
 		});
 	}
-    	private void openEditProfileWindow() {
+    private void openEditProfileWindow() {
 		// Implement the logic to open the edit profile window
 		// This could be a new JFrame or a dialog that allows the user to edit their profile information
 		System.out.println("Edit Profile clicked");
+		
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					// Create and show the edit profile window
+					// Edit_Profile_Window window = new Edit_Profile_Window(database_manager, current_user);
+					// window.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 }
