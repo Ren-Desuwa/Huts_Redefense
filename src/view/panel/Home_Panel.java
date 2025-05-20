@@ -144,6 +144,7 @@ public class Home_Panel extends JPanel {
      */
     private void createHeaderPanel() {
         panelWelcomeTitle = new Rounded_Panel(25, Color.BLACK, 1);
+        panelWelcomeTitle.setBackground(new Color(255, 255, 255));
         panelWelcomeTitle.setBounds(21, 11, 944, 85);
         panelWelcomeTitle.setLayout(null);
         add(panelWelcomeTitle);
@@ -209,6 +210,7 @@ public class Home_Panel extends JPanel {
      */
     private void createElectricityInfoPanel() {
         panelElectricityInfo = new Rounded_Panel();
+        panelElectricityInfo.setBackground(new Color(220, 220, 220));
         panelElectricityInfo.setBounds(10, 11, 447, 87);
         panelElectricityInfo.setLayout(null);
         panelInformation.add(panelElectricityInfo);
@@ -240,6 +242,7 @@ public class Home_Panel extends JPanel {
      */
     private void createWaterInfoPanel() {
         panelWaterInfo = new Rounded_Panel();
+        panelWaterInfo.setBackground(new Color(220, 220, 220));
         panelWaterInfo.setBounds(10, 109, 447, 87);
         panelWaterInfo.setLayout(null);
         panelInformation.add(panelWaterInfo);
@@ -271,6 +274,7 @@ public class Home_Panel extends JPanel {
      */
     private void createGasInfoPanel() {
         panelGasInfo = new Rounded_Panel();
+        panelGasInfo.setBackground(new Color(220, 220, 220));
         panelGasInfo.setBounds(10, 207, 447, 87);
         panelGasInfo.setLayout(null);
         panelInformation.add(panelGasInfo);
@@ -302,6 +306,7 @@ public class Home_Panel extends JPanel {
      */
     private void createOverallInfoPanel() {
         panelOverallInfo = new Rounded_Panel();
+        panelOverallInfo.setBackground(new Color(220, 220, 220));
         panelOverallInfo.setBounds(10, 305, 447, 87);
         panelOverallInfo.setLayout(null);
         panelInformation.add(panelOverallInfo);
@@ -388,6 +393,7 @@ public class Home_Panel extends JPanel {
      */
     private void createTipsPanel() {
         panelTips = new  Rounded_Panel();
+        panelTips.setBackground(new Color(255, 255, 255));
 //        panelTips.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
         panelTips.setBounds(21, 543, 944, 134);
         panelTips.setLayout(null);
@@ -442,11 +448,11 @@ public class Home_Panel extends JPanel {
             }
             @Override
             public void mouseEntered(MouseEvent e) {
-				panelElectricityInfo.setBackground(new Color(220, 220, 220));
+				panelElectricityInfo.setBackground(new Color(200, 200, 200));
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-				panelElectricityInfo.setBackground(new Color(240, 240, 240));
+				panelElectricityInfo.setBackground(new Color(220, 220, 220));
 			}
         });
         
@@ -458,11 +464,11 @@ public class Home_Panel extends JPanel {
             }
             @Override
             public void mouseEntered(MouseEvent e) {
-            	panelWaterInfo.setBackground(new Color(220, 220, 220));
+            	panelWaterInfo.setBackground(new Color(200, 200, 200));
             }
             @Override
             public void mouseExited(MouseEvent e) {
-				panelWaterInfo.setBackground(new Color(240, 240, 240));
+				panelWaterInfo.setBackground(new Color(220, 220, 220));
             }
         });
         
@@ -474,11 +480,11 @@ public class Home_Panel extends JPanel {
             }
             @Override
             public void mouseEntered(MouseEvent e) {
-				panelGasInfo.setBackground(new Color(220, 220, 220));
+				panelGasInfo.setBackground(new Color(200, 200, 200));
 			}
             @Override
             public void mouseExited(MouseEvent e) {
-            	panelGasInfo.setBackground(new Color(240, 240, 240));
+            	panelGasInfo.setBackground(new Color(220, 220, 220));
             }
             
         });
@@ -491,11 +497,11 @@ public class Home_Panel extends JPanel {
             }
             @Override
             public void mouseEntered(MouseEvent e) {
-            	panelOverallInfo.setBackground(new Color(220, 220, 220));
+            	panelOverallInfo.setBackground(new Color(200, 200, 200));
             }
             @Override
             public void mouseExited(MouseEvent e) {
-				panelOverallInfo.setBackground(new Color(240, 240, 240));
+				panelOverallInfo.setBackground(new Color(220, 220, 220));
 			}
         });
     }

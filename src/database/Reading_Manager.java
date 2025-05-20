@@ -519,7 +519,7 @@ public class Reading_Manager {
 		} else if (percentageChange < 0) {
 			return Color.RED; // Negative trend
 		} else {
-			return Color.YELLOW; // No change
+			return Color.GRAY; // No change
 		}
 	}
 
