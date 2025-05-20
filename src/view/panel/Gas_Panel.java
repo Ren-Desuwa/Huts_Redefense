@@ -9,11 +9,15 @@ import javax.swing.JPanel;
 import database.Database_Manager;
 import model.Reading;
 import model.User;
-import view.login.Sign_Up_Window;
 import view.panel.misc.Add_Reading_Panel;
 import view.panel.misc.Edit_Reading_Panel;
+import visuals.Graph_Panel;
+import visuals.Rounded_Panel;
 
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+
+import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -23,51 +27,71 @@ import java.util.List;
 
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-import javax.swing.JComboBox;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 import javax.swing.JFrame;
-import javax.swing.DefaultComboBoxModel;
 
 public class Gas_Panel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+
+	// Database and User
 	private Database_Manager database_manager;
-	
-	private JLabel lbl_Gas_Reading_Value;
 	private User current_user;
-	private JPanel panel_Gas_Consumption_Title;
-	private JPanel panel_add_reading;
-	private JList<String> all_readings;
+	
+	// Main Panels
+	private JPanel panel_Title_Gas_Consumption;
+	private JPanel panel_Current_Reading;
+	private JPanel panel_Graph_Container;
+	private JPanel panel_tips;
 	private JScrollPane sP_Recent_Readings;
+	
+	// Scroll panel fields
+	private JPanel Headerpanel;
+	private JPanel Line;
+	private JList<String> all_readings;
+
+	// Graph panel fields
+	private JPanel panel_Graph_View;
+	private Graph_Panel graph_Panel;
+	private JLabel lbl_Title_Graph;
+	
+	
+	private JLabel lbl_Head_Date;
+	
+	//Home Panel
+	private Home_Panel homepanel;
+
+	// Title panel labels
 	private JLabel lbl_Title_Gas_Consumption;
 	private JLabel lbl_SubTitle_Gas_Consumption;
+	private JLabel lbl_Time;
 	private JLabel lbl_Date;
-	private JLabel lbl_Title_Current_Reading;
-	private JLabel lbl_Gas_Reading_Unit;
-	private JButton btn_Add_New_Reading;
-	private JPanel panel_Current_Reading;
-	private JPanel panel_tips;
-	private JLabel lbl_Title_Tips;
-	private JLabel lbl_Tips1;
-	private JLabel lbl_Tips2;
-	private JLabel lbl_Title_AddReading_1;
-	private JLabel lbl_Title_AddReading;
-	private JPanel Headerpanel;
-	private JLabel lbl_Head_Date;
+	
+	// Scroll panel labels
+	private JLabel lbl_Title_RecentReadings;
 	private JLabel lbl_Head_Readings;
 	private JLabel lbl_Head_Rate;
 	private JLabel lbl_Head_TotalPrice;
-	private JPanel Line;
-	private Home_Panel homepanel;
-	private JLabel lblTime;
+	
+	// Current Reading components
+	private JLabel lbl_Title_Current_Reading;
+	private JLabel lbl_Gas_Reading_Value;
+	private JLabel lbl_Gas_Reading_Unit;
+	private JButton btn_Add_New_Reading;
+	
+	// Tips panel labels
+	private JLabel lbl_Title_Tips;
+	private JLabel lbl_Tips1;
+	private JLabel lbl_Tips2;
+	
 	/**
 	 * Create the panel.
 	 */
@@ -76,21 +100,22 @@ public class Gas_Panel extends JPanel {
 		this.current_user = current_user;
 		this.homepanel = homepanel;
 		
+		setBackground(new Color(213, 213, 213));
 		setPreferredSize(new Dimension(986, 688));
 		setLayout(null);
 		
-		panel_Gas_Consumption_Title = new JPanel();
-		panel_Gas_Consumption_Title.setBackground(new Color(255, 255, 255));
-		panel_Gas_Consumption_Title.setLayout(null);
-		panel_Gas_Consumption_Title.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		panel_Gas_Consumption_Title.setBounds(21, 11, 944, 85);
-		add(panel_Gas_Consumption_Title);
+		panel_Title_Gas_Consumption = new JPanel();
+		panel_Title_Gas_Consumption.setBackground(new Color(255, 255, 255));
+		panel_Title_Gas_Consumption.setLayout(null);
+		panel_Title_Gas_Consumption.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		panel_Title_Gas_Consumption.setBounds(21, 11, 944, 85);
+		add(panel_Title_Gas_Consumption);
 		
 		lbl_Title_Gas_Consumption = new JLabel("Gas Consumption");
 		lbl_Title_Gas_Consumption.setHorizontalAlignment(SwingConstants.LEFT);
 		lbl_Title_Gas_Consumption.setFont(new Font("Tahoma", Font.PLAIN, 35));
 		lbl_Title_Gas_Consumption.setBounds(20, 0, 393, 54);
-		panel_Gas_Consumption_Title.add(lbl_Title_Gas_Consumption);
+		panel_Title_Gas_Consumption.add(lbl_Title_Gas_Consumption);
 		
 		lbl_Date = new JLabel("Date");
 		lbl_Date.setVerticalAlignment(SwingConstants.TOP);
@@ -98,34 +123,52 @@ public class Gas_Panel extends JPanel {
 		lbl_Date.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		lbl_Date.setBounds(764, 11, 170, 54);
 		lbl_Date.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-		panel_Gas_Consumption_Title.add(lbl_Date);
+		panel_Title_Gas_Consumption.add(lbl_Date);
 		
-		lblTime = new JLabel("Time");
-        lblTime.setVerticalAlignment(SwingConstants.TOP);
-        lblTime.setHorizontalAlignment(SwingConstants.RIGHT);
-        lblTime.setFont(new Font("Tahoma", Font.PLAIN, 30));
-        lblTime.setBounds(764, 46, 170, 41);
-        lblTime.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm a")));
-        panel_Gas_Consumption_Title.add(lblTime);
+		lbl_Time = new JLabel("Time");
+        lbl_Time.setVerticalAlignment(SwingConstants.TOP);
+        lbl_Time.setHorizontalAlignment(SwingConstants.RIGHT);
+        lbl_Time.setFont(new Font("Tahoma", Font.PLAIN, 30));
+        lbl_Time.setBounds(764, 46, 170, 41);
+        lbl_Time.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm a")));
+        panel_Title_Gas_Consumption.add(lbl_Time);
 		
 		lbl_SubTitle_Gas_Consumption = new JLabel("Track and manage your gas usage ");
 		lbl_SubTitle_Gas_Consumption.setHorizontalAlignment(SwingConstants.LEFT);
 		lbl_SubTitle_Gas_Consumption.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		lbl_SubTitle_Gas_Consumption.setBounds(20, 52, 393, 22);
-		panel_Gas_Consumption_Title.add(lbl_SubTitle_Gas_Consumption);
+		panel_Title_Gas_Consumption.add(lbl_SubTitle_Gas_Consumption);
 		
-		panel_add_reading = new JPanel();
-		panel_add_reading.setBackground(new Color(255, 255, 255));
-		panel_add_reading.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		panel_add_reading.setBounds(21, 114, 466, 377);
-		add(panel_add_reading);
-		panel_add_reading.setLayout(null);
+		panel_Graph_Container = new JPanel();
+		panel_Graph_Container.setBackground(new Color(255, 255, 255));
+		panel_Graph_Container.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		panel_Graph_Container.setBounds(21, 114, 466, 377);
+		add(panel_Graph_Container);
+		panel_Graph_Container.setLayout(null);
 		
-		lbl_Title_AddReading = new JLabel("Consumption Trends");
-		lbl_Title_AddReading.setBounds(0, 0, 466, 32);
-		lbl_Title_AddReading.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_Title_AddReading.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		panel_add_reading.add(lbl_Title_AddReading);
+		lbl_Title_Graph = new JLabel("Consumption Trends");
+		lbl_Title_Graph.setBounds(0, 0, 466, 32);
+		lbl_Title_Graph.setHorizontalAlignment(SwingConstants.CENTER);
+		lbl_Title_Graph.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		panel_Graph_Container.add(lbl_Title_Graph);
+		
+		panel_Graph_View = new Rounded_Panel(25, Color.BLACK, 0);
+		panel_Graph_View.setBounds(10, 30, 446, 336);
+		panel_Graph_Container.add(panel_Graph_View);
+        panel_Graph_View.setBorder(new EmptyBorder(5, 5, 5, 5));
+        panel_Graph_View.setBackground(new Color(255, 255, 255));
+        panel_Graph_View.setLayout(new BorderLayout());
+		
+        if (database_manager == null) {
+            JPanel placeholder = new JPanel();
+            placeholder.setBackground(Color.WHITE);
+            panel_Graph_View.add(placeholder);
+        } else {
+            // Create and add actual graph panel at runtime
+            graph_Panel = new Graph_Panel(database_manager.getReadingManager(), current_user, "gas");
+            graph_Panel.setBackground(new Color(255, 255, 255));
+            panel_Graph_View.add(graph_Panel);
+        }
 		
 		all_readings = getAllReadings();
 		sP_Recent_Readings = new JScrollPane();
@@ -140,11 +183,11 @@ public class Gas_Panel extends JPanel {
 		Headerpanel.setLayout(null);
 		Headerpanel.setPreferredSize(new Dimension(466, 70));
 		
-		lbl_Title_AddReading_1 = new JLabel("Recent Readings");
-		lbl_Title_AddReading_1.setBounds(0, 0, 466, 31);
-		Headerpanel.add(lbl_Title_AddReading_1);
-		lbl_Title_AddReading_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_Title_AddReading_1.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		lbl_Title_RecentReadings = new JLabel("Recent Readings");
+		lbl_Title_RecentReadings.setBounds(0, 0, 466, 31);
+		Headerpanel.add(lbl_Title_RecentReadings);
+		lbl_Title_RecentReadings.setHorizontalAlignment(SwingConstants.CENTER);
+		lbl_Title_RecentReadings.setFont(new Font("Tahoma", Font.PLAIN, 25));
 		
 		lbl_Head_Date = new JLabel("Date");
 		lbl_Head_Date.setHorizontalAlignment(SwingConstants.CENTER);
