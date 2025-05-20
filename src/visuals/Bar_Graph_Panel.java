@@ -33,10 +33,10 @@ public class Bar_Graph_Panel extends JPanel {
     public Bar_Graph_Panel(String title, String xAxisTitle, String yAxisTitle) {
         setLayout(new BorderLayout());
         
-        // Create chart
+        // Create chart with auto-sizing
         chart = new CategoryChartBuilder()
-                .width(380)
-                .height(300)
+                .width(800)
+                .height(600)
                 .title(title)
                 .xAxisTitle(xAxisTitle)
                 .yAxisTitle(yAxisTitle)
@@ -46,9 +46,11 @@ public class Bar_Graph_Panel extends JPanel {
         chart.getStyler().setLegendPosition(LegendPosition.InsideNE);
         chart.getStyler().setPlotGridLinesVisible(false);
         chart.getStyler().setXAxisLabelRotation(45);
-
-        // Create chart panel
+        chart.getStyler().setChartBackgroundColor(new Color(0, 0, 0, 0)); // Transparent background
+        
+        // Create chart panel and set it to be transparent
         chartPanel = new XChartPanel<>(chart);
+        chartPanel.setOpaque(false);
         
         // Add to this panel
         add(chartPanel, BorderLayout.CENTER);

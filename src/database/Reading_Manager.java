@@ -1,5 +1,6 @@
 package database;
 
+import java.awt.Color;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.Month;
@@ -483,4 +484,69 @@ public class Reading_Manager {
         
         return totalCost;
     }
+    
+    public String getTrend(User user, String type) throws SQLException {
+        String sqlscript = "SELECT * FROM readings WHERE user_id = ? AND type = ? ORDER BY date DESC LIMIT 2";
+        try (PreparedStatement prepared_statement = connection.prepareStatement(sqlscript)) {
+            prepared_statement.setInt(1, user.getUser_Id());
+            prepared_statement.setString(2, type);
+            try (ResultSet rs = prepared_statement.executeQuery()) {
+                if (rs.next()) {
+                    double latestReading = rs.getDouble("reading");
+                    if (rs.next()) {
+                        double previousReading = rs.getDouble("reading");
+                        double percentageChange = ((latestReading - previousReading) / previousReading) * 100;
+                        return String.format("%.1f%% from last month", percentageChange);
+                    }
+                    return "No previous reading";
+                }
+                return "No readings available";
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "Error calculating trend";
+        }
+    }
+    public Color getTrendColor(User user, String type) throws SQLException {
+		String trend = getTrend(user, type);
+		if (trend.contains("No previous reading") || trend.contains("No readings available")) {
+			return Color.GRAY; // Neutral color for no data
+		}
+		
+		double percentageChange = Double.parseDouble(trend.replace("% from last month", ""));
+		if (percentageChange > 0) {
+			return Color.GREEN; // Positive trend
+		} else if (percentageChange < 0) {
+			return Color.RED; // Negative trend
+		} else {
+			return Color.YELLOW; // No change
+		}
+	}
+
+	public Reading getReadingByMonth(User currentUser, String string, LocalDate previousMonth) {
+		String sqlscript = "SELECT * FROM readings WHERE user_id = ? AND type = ? AND date = ?";
+		try (PreparedStatement prepared_statement = connection.prepareStatement(sqlscript)) {
+			prepared_statement.setInt(1, currentUser.getUser_Id());
+			prepared_statement.setString(2, string);
+			prepared_statement.setString(3, previousMonth.toString());
+			try (ResultSet rs = prepared_statement.executeQuery()) {
+				if (rs.next()) {
+					return new Reading(
+						rs.getInt("reading_id"),
+						rs.getInt("user_id"),
+						LocalDate.parse(rs.getString("date")),
+						rs.getString("type"),
+						rs.getDouble("reading"),
+						rs.getDouble("rate"),
+						rs.getDouble("total_price")
+					);
+				}
+				return null;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+		}
+		return null;
+	}
 }
