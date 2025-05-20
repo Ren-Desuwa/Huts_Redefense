@@ -143,7 +143,7 @@ public class Home_Panel extends JPanel {
      * Create the header panel with welcome title
      */
     private void createHeaderPanel() {
-        panelWelcomeTitle = new Rounded_Panel(25, Color.BLACK, 1);
+        panelWelcomeTitle = new Rounded_Panel();
         panelWelcomeTitle.setBackground(new Color(255, 255, 255));
         panelWelcomeTitle.setBounds(21, 11, 944, 85);
         panelWelcomeTitle.setLayout(null);
@@ -342,7 +342,7 @@ public class Home_Panel extends JPanel {
      */
     private void createGraphPanel() {
         // Create the main graph container (visible to WindowBuilder)
-        panelGraphContainer = new Rounded_Panel();
+        panelGraphContainer = new Rounded_Panel(25, Color.BLACK, 2);
 //        panelGraphContainer.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
         panelGraphContainer.setBorder(new EmptyBorder(5, 5, 5, 5));
         panelGraphContainer.setBounds(504, 157, 413, 365);
@@ -351,7 +351,7 @@ public class Home_Panel extends JPanel {
         add(panelGraphContainer);
         
         // Create Graph_Panel instance
-        Rounded_Panel rounded_Panel = new Rounded_Panel();
+        Rounded_Panel rounded_Panel = new Rounded_Panel(25, Color.BLACK, 2);
         rounded_Panel.setBackground(new Color(255, 255, 255));
         graphPanel = new Graph_Panel(rounded_Panel);
         
@@ -365,19 +365,19 @@ public class Home_Panel extends JPanel {
      * Creates shadow panels for visual design effect behind the graph
      */
     private void createGraphShadowPanels() {
-        panelBehind1 = new Rounded_Panel();
+        panelBehind1 = new Rounded_Panel(25, Color.BLACK, 2);
         panelBehind1.setBackground(new Color(255, 255, 255));
 //        panelBehind1.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
         panelBehind1.setBounds(520, 142, 413, 365);
         add(panelBehind1);
         
-        panelBehind2 = new Rounded_Panel();
+        panelBehind2 = new Rounded_Panel(25, Color.BLACK, 2);
         panelBehind2.setBackground(new Color(255, 255, 255));
 //        panelBehind2.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
         panelBehind2.setBounds(536, 129, 413, 356);
         add(panelBehind2);
         
-        panelBehind3 = new Rounded_Panel();
+        panelBehind3 = new Rounded_Panel(25, Color.BLACK, 2);
         panelBehind3.setBackground(new Color(255, 255, 255));
 //        panelBehind3.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
         panelBehind3.setBounds(552, 114, 413, 347);
