@@ -36,8 +36,8 @@ public class Home_Panel extends JPanel {
     //==============================================================================================
     
     /** Database and user fields */
-    private Database_Manager database_Manager;
-    private User current_User;
+    private Database_Manager database_manager;
+    private User current_user;
     
     /** Main panel containers */
     private JPanel panel_Welcome_Title;
@@ -95,9 +95,9 @@ public class Home_Panel extends JPanel {
     private JLabel lbl_Tip_Type_3;
     private Rounded_Panel panel_Tip_3;
 
-    public Home_Panel(Database_Manager database_Manager, User current_User) {
-        this.database_Manager = database_Manager;
-        this.current_User = current_User;
+    public Home_Panel(Database_Manager database_manager, User current_user) {
+        this.database_manager = database_manager;
+        this.current_user = current_user;
         
         // Set panel properties
         setBackground(new Color(213, 213, 213));
@@ -133,7 +133,7 @@ public class Home_Panel extends JPanel {
         lbl_Username = new JLabel("User");
         lbl_Username.setFont(new Font("Tahoma", Font.PLAIN, 35));
         lbl_Username.setBounds(181, 0, 206, 60);
-        lbl_Username.setText(current_User.getUsername());
+        lbl_Username.setText(current_user.getUsername());
         panel_Welcome_Title.add(lbl_Username);
         
         lbl_Date = new JLabel("Date");
@@ -308,13 +308,13 @@ public class Home_Panel extends JPanel {
         add(panel_Graph_Container);
 
         // Add placeholder panel for design time
-        if (database_Manager == null) {
+        if (database_manager == null) {
             JPanel placeholder = new JPanel();
             placeholder.setBackground(Color.WHITE);
             panel_Graph_Container.add(placeholder);
         } else {
             // Create and add actual graph panel at runtime
-            graph_Panel = new Graph_Panel(database_Manager.getReadingManager(), current_User);
+            graph_Panel = new Graph_Panel(database_manager.getReadingManager(), current_user);
             graph_Panel.setBackground(new Color(255, 255, 255));
             panel_Graph_Container.add(graph_Panel);
         }
@@ -468,8 +468,8 @@ public class Home_Panel extends JPanel {
     private void setup_Data() {
         try {
             // Initialize graph panel if needed
-            if (graph_Panel == null && database_Manager != null) {
-                graph_Panel = new Graph_Panel(database_Manager.getReadingManager(), current_User);
+            if (graph_Panel == null && database_manager != null) {
+                graph_Panel = new Graph_Panel(database_manager.getReadingManager(), current_user);
                 graph_Panel.setBackground(Color.WHITE);
                 panel_Graph_Container.removeAll();
                 panel_Graph_Container.add(graph_Panel);
@@ -478,14 +478,14 @@ public class Home_Panel extends JPanel {
             }
 
             // Get latest readings
-            Reading electricity = database_Manager.getReadingManager().getLatestReadingByType(current_User, "electricity");
-            Reading water = database_Manager.getReadingManager().getLatestReadingByType(current_User, "water");
-            Reading gas = database_Manager.getReadingManager().getLatestReadingByType(current_User, "gas");
+            Reading electricity = database_manager.getReadingManager().getLatestReadingByType(current_user, "electricity");
+            Reading water = database_manager.getReadingManager().getLatestReadingByType(current_user, "water");
+            Reading gas = database_manager.getReadingManager().getLatestReadingByType(current_user, "gas");
 
             // Update each reading's label
-            database_Manager.getReadingManager().updateReadingLabel(current_User,electricity, lbl_Electricity_Reading_Value, lbl_Trend_Of_Reading_Electricity, "electricity");
-            database_Manager.getReadingManager().updateReadingLabel(current_User,water, lbl_Water_Reading_Value, lbl_Trend_Of_Reading_Water, "water");
-            database_Manager.getReadingManager().updateReadingLabel(current_User,gas, lbl_Gas_Reading_Value, lbl_Trend_Of_Reading_Gas, "gas");
+            database_manager.getReadingManager().updateReadingLabel(current_user,electricity, lbl_Electricity_Reading_Value, lbl_Trend_Of_Reading_Electricity, "electricity");
+            database_manager.getReadingManager().updateReadingLabel(current_user,water, lbl_Water_Reading_Value, lbl_Trend_Of_Reading_Water, "water");
+            database_manager.getReadingManager().updateReadingLabel(current_user,gas, lbl_Gas_Reading_Value, lbl_Trend_Of_Reading_Gas, "gas");
 
             // Calculate and update overall reading
             double total = 0;
@@ -498,10 +498,10 @@ public class Home_Panel extends JPanel {
                 lbl_Trend_Of_Reading_Overall.setText("No Data");
             } else {
                 lbl_OverAll_Reading_Value.setText(String.valueOf(total));
-                String trend = database_Manager.getReadingManager().getTrendOverall(current_User);
+                String trend = database_manager.getReadingManager().getTrendOverall(current_user);
                 lbl_Trend_Of_Reading_Overall.setText(trend);
                 lbl_Trend_Of_Reading_Overall.setForeground(
-                    database_Manager.getReadingManager().getTrendColor(current_User, null)
+                    database_manager.getReadingManager().getTrendColor(current_user, null)
                 );
             }
 
