@@ -22,6 +22,7 @@ import database.Database_Manager;
 import model.Reading;
 import model.User;
 import view.panel.Electricity_Panel;
+import view.panel.Gas_Panel;
 import view.panel.Water_Panel;
 
 import java.awt.Color;
@@ -48,6 +49,7 @@ public class Edit_Reading_Panel extends JDialog {
 	private String readingType; // electricity, water or gas
 	private Electricity_Panel electricitypanel;
 	private Water_Panel waterpanel;
+	private Gas_Panel gaspanel;
 	
 	private JTextField tf_Reading;
 	private JTextField tf_Rate;
@@ -338,8 +340,18 @@ public class Edit_Reading_Panel extends JDialog {
 				database_manager.getReadingManager().deleteReading(current_user, selectedReading);
 				
 				getAllReadings();
-				electricitypanel.Panel_Refresh();
-				waterpanel.Panel_Refresh();
+				if (parentPanel instanceof Electricity_Panel) {
+					electricitypanel = (Electricity_Panel) parentPanel;
+					electricitypanel.Panel_Refresh();
+				} 
+				if (parentPanel instanceof Water_Panel) {
+					waterpanel = (Water_Panel) parentPanel;
+					waterpanel.Panel_Refresh();
+				}
+				if (parentPanel instanceof Gas_Panel) {
+					gaspanel = (Gas_Panel) parentPanel;
+					gaspanel.Panel_Refresh();
+				}
 				
 				javax.swing.JOptionPane.showMessageDialog(this, "Reading Deleted successfully.", "Success", javax.swing.JOptionPane.INFORMATION_MESSAGE);
 				
@@ -390,6 +402,10 @@ public class Edit_Reading_Panel extends JDialog {
 				if (parentPanel instanceof Water_Panel) {
 					waterpanel = (Water_Panel) parentPanel;
 					waterpanel.Panel_Refresh();
+				}
+				if (parentPanel instanceof Gas_Panel) {
+					gaspanel = (Gas_Panel) parentPanel;
+					gaspanel.Panel_Refresh();
 				}
 				
 				

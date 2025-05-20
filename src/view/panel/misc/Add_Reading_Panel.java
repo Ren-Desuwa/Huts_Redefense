@@ -19,6 +19,7 @@ import javax.swing.border.LineBorder;
 import database.Database_Manager;
 import model.User;
 import view.panel.Electricity_Panel;
+import view.panel.Gas_Panel;
 import view.panel.Water_Panel;
 
 import java.awt.Color;
@@ -45,6 +46,7 @@ public class Add_Reading_Panel extends JDialog {
 	private JPanel parentPanel;
 	private Electricity_Panel electricitypanel;
 	private Water_Panel waterpanel;
+	private Gas_Panel gaspanel;
 	
 	private JTextField tf_Reading;
 	private JTextField tf_Rate;
@@ -309,6 +311,10 @@ public class Add_Reading_Panel extends JDialog {
 			if (parentPanel instanceof Water_Panel) {
 				waterpanel = (Water_Panel) parentPanel;
 				waterpanel.Panel_Refresh();
+			}
+			if (parentPanel instanceof Gas_Panel) {
+				gaspanel = (Gas_Panel) parentPanel;
+				gaspanel.Panel_Refresh();
 			}
 			
 			javax.swing.JOptionPane.showMessageDialog(this, "Reading added successfully.", "Success", javax.swing.JOptionPane.INFORMATION_MESSAGE);
