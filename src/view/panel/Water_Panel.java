@@ -80,7 +80,7 @@ public class Water_Panel extends JPanel {
 		lbl_Title_Water_Consumption = new JLabel("Water Consumption");
 		lbl_Title_Water_Consumption.setHorizontalAlignment(SwingConstants.LEFT);
 		lbl_Title_Water_Consumption.setFont(new Font("Tahoma", Font.PLAIN, 35));
-		lbl_Title_Water_Consumption.setBounds(30, 0, 393, 54);
+		lbl_Title_Water_Consumption.setBounds(20, 0, 393, 54);
 		panel_Water_Consumption_Title.add(lbl_Title_Water_Consumption);
 		
 		lbl_Date = new JLabel("Date");
@@ -215,18 +215,18 @@ public class Water_Panel extends JPanel {
 		lbl_Title_Tips.setBounds(42, 11, 393, 32);
 		panel_tips.add(lbl_Title_Tips);
 		
-		lbl_Tips1 = new JLabel("<html><ul><li>Unplug chargers when not in use to avoid phantom energy consumption</li></ul></html>");
+		lbl_Tips1 = new JLabel("<html><ul><li>Turn off the tap while brushing your teeth to save gallons of water daily.</li></ul></html>");
 		lbl_Tips1.setVerticalAlignment(SwingConstants.TOP);
-		lbl_Tips1.setBounds(-16, 49, 502, 51);
+		lbl_Tips1.setBounds(-25, 49, 502, 51);
 		panel_tips.add(lbl_Tips1);
 		lbl_Tips1.setHorizontalAlignment(SwingConstants.LEFT);
 		lbl_Tips1.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		
-		lbl_Tips2 = new JLabel("<html><ul><li>Use LED bulbs it consumes 75% less energy than incandescent bulbs</li></ul></html>");
+		lbl_Tips2 = new JLabel("<html><ul><li>Fix leaky faucets and pipes promptly to prevent unnecessary water waste.</li></ul></html>");
 		lbl_Tips2.setVerticalAlignment(SwingConstants.TOP);
 		lbl_Tips2.setHorizontalAlignment(SwingConstants.LEFT);
 		lbl_Tips2.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lbl_Tips2.setBounds(-16, 107, 502, 51);
+		lbl_Tips2.setBounds(-25, 107, 502, 51);
 		panel_tips.add(lbl_Tips2);
 		
 		setupData();
