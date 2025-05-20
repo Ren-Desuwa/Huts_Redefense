@@ -22,11 +22,10 @@ import visuals.Circle_Panel;
 import visuals.Following_Tool_Tip;
 import visuals.Rounded_Button;
 import visuals.Rounded_Panel;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
-import java.awt.event.ActionEvent;
+
 
 public class Profile_Panel extends JPanel {
 
@@ -86,10 +85,13 @@ public class Profile_Panel extends JPanel {
     private JSeparator separator_Statistics;
     private JSeparator separator_Actions;
     
-    // imports
-    private Following_Tool_Tip tooltip_Electricity;
-    private Following_Tool_Tip tooltip_Water;
-    private Following_Tool_Tip tooltip_Gas;
+    
+    @SuppressWarnings("unused")
+	private Following_Tool_Tip tooltip_Electricity;
+    @SuppressWarnings("unused")
+	private Following_Tool_Tip tooltip_Water;
+    @SuppressWarnings("unused")
+	private Following_Tool_Tip tooltip_Gas;
     
     //==============================================================================
     // CONSTRUCTOR
