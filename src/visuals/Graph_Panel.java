@@ -7,6 +7,7 @@ import java.awt.CardLayout;
 import java.time.Month;
 import java.util.Map;
 import java.awt.Color;
+import java.awt.Dimension;
 
 /**
  * Panel for displaying utility usage graphs with horizontal scrolling
@@ -48,6 +49,10 @@ public class Graph_Panel extends JPanel {
      * Initializes the graph panels
      * Called after WindowBuilder has done its work
      */
+    /**
+     * Initializes the graph panels
+     * Called after WindowBuilder has done its work
+     */
     public void initialize() {
         // Clear any existing components
         removeAll();
@@ -55,6 +60,29 @@ public class Graph_Panel extends JPanel {
         // Create card container with CardLayout
         graphCardLayout = new CardLayout();
         cardContainer = new JPanel(graphCardLayout);
+        cardContainer.setOpaque(false);
+        cardContainer.setBackground(new Color(255, 255, 255)); 
+        
+        // Create rounded panels to contain each graph
+        Rounded_Panel electricityContainer = new Rounded_Panel(25, Color.BLACK, 0);
+        electricityContainer.setLayout(new BorderLayout());
+        electricityContainer.setBackground(new Color(255, 255, 255));
+        electricityContainer.setOpaque(false);
+        
+        Rounded_Panel waterContainer = new Rounded_Panel(25, Color.BLACK, 0);
+        waterContainer.setLayout(new BorderLayout());
+        waterContainer.setBackground(new Color(255, 255, 255));
+        waterContainer.setOpaque(false);
+        
+        Rounded_Panel gasContainer = new Rounded_Panel(25, Color.BLACK, 0);
+        gasContainer.setLayout(new BorderLayout());
+        gasContainer.setBackground(new Color(255, 255, 255));
+        gasContainer.setOpaque(false);
+        
+        Rounded_Panel overallContainer = new Rounded_Panel(25, Color.BLACK, 0);
+        overallContainer.setLayout(new BorderLayout());
+        overallContainer.setBackground(new Color(255, 255, 255));
+        overallContainer.setOpaque(false);
         
         // Initialize the individual graph panels with scrollable bar graphs
         electricityGraphPanel = new Scrollable_Bar_Graph_Panel("Monthly Electricity Usage", "Month", "KwH");
@@ -69,14 +97,23 @@ public class Graph_Panel extends JPanel {
         overallGraphPanel = new Scrollable_Bar_Graph_Panel("Monthly Total Expenses", "Month", "Php");
         overallGraphPanel.setBarColor(new Color(128, 100, 162)); // Purple
         
-        // Add graph panels to the card container
-        cardContainer.add(electricityGraphPanel, "electricity");
-        cardContainer.add(waterGraphPanel, "water");
-        cardContainer.add(gasGraphPanel, "gas");
-        cardContainer.add(overallGraphPanel, "overall");
+        // Add graph panels to rounded containers
+        electricityContainer.add(electricityGraphPanel, BorderLayout.CENTER);
+        waterContainer.add(waterGraphPanel, BorderLayout.CENTER);
+        gasContainer.add(gasGraphPanel, BorderLayout.CENTER);
+        overallContainer.add(overallGraphPanel, BorderLayout.CENTER);
+        
+        // Add rounded containers to card container
+        cardContainer.add(electricityContainer, "electricity");
+        cardContainer.add(waterContainer, "water");
+        cardContainer.add(gasContainer, "gas");
+        cardContainer.add(overallContainer, "overall");
         
         // Add card container to this panel
         add(cardContainer, BorderLayout.CENTER);
+        
+        // Remove border to avoid double borders
+        setBorder(null);
         
         // Show electricity graph by default
         showElectricityGraph();
@@ -119,33 +156,65 @@ public class Graph_Panel extends JPanel {
     public void showElectricityGraph() {
         if (graphCardLayout != null && cardContainer != null) {
             graphCardLayout.show(cardContainer, "electricity");
+            electricityGraphPanel.revalidate();
+            electricityGraphPanel.repaint();
+            // Enforce proper sizing
+            adjustPanelSize(electricityGraphPanel);
         }
     }
-    
+
     /**
      * Shows the water graph
      */
     public void showWaterGraph() {
         if (graphCardLayout != null && cardContainer != null) {
             graphCardLayout.show(cardContainer, "water");
+            waterGraphPanel.revalidate();
+            waterGraphPanel.repaint();
+            // Enforce proper sizing
+            adjustPanelSize(waterGraphPanel);
         }
     }
-    
+
     /**
      * Shows the gas graph
      */
     public void showGasGraph() {
         if (graphCardLayout != null && cardContainer != null) {
             graphCardLayout.show(cardContainer, "gas");
+            gasGraphPanel.revalidate();
+            gasGraphPanel.repaint();
+            // Enforce proper sizing
+            adjustPanelSize(gasGraphPanel);
         }
     }
-    
+
     /**
      * Shows the overall expenses graph
      */
     public void showOverallGraph() {
         if (graphCardLayout != null && cardContainer != null) {
             graphCardLayout.show(cardContainer, "overall");
+            overallGraphPanel.revalidate();
+            overallGraphPanel.repaint();
+            // Enforce proper sizing
+            adjustPanelSize(overallGraphPanel);
+        }
+    }
+
+    /**
+     * Helper method to adjust panel size to fit container
+     */
+    private void adjustPanelSize(JPanel panel) {
+        if (panel != null) {
+            panel.setBounds(0, 0, cardContainer.getWidth(), cardContainer.getHeight());
+            
+            // Apply size constraints
+            Dimension size = cardContainer.getSize();
+            panel.setPreferredSize(size);
+            panel.setMaximumSize(size);
+            panel.setMinimumSize(size);
+            panel.revalidate();
         }
     }
 }
