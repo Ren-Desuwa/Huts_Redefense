@@ -77,13 +77,13 @@ public class Edit_Reading_Panel extends JDialog {
 	private JLabel lblTime;
 	
 	
-		public Edit_Reading_Panel(JFrame parent, Database_Manager database_manager, User current_user, JPanel panel_type, String type, Reading reading) {
-			super(parent, "Edit Reading", true);
-			this.database_manager = database_manager;
-			this.current_user = current_user;
-			this.parentPanel = panel_type; // Set the parent panel Electricity_Panel, Water_Panel or Gas_Panel
+		public Edit_Reading_Panel(JFrame parent, Database_Manager database_manager, User current_user, JPanel panel_type, String type) {
+		    // Same as original constructor
+		    super(parent, "Edit Reading", true);
+		    this.database_manager = database_manager;
+		    this.current_user = current_user;
+		    this.parentPanel = panel_type; // Set the parent panel Electricity_Panel, Water_Panel or Gas_Panel
 		    this.readingType = type;  // Set the reading type electricity, water or gas
-		    this.current_reading = reading; // Set the current reading to be edited
 			
 			setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			setBounds(100, 100, 450, 635);
@@ -91,6 +91,21 @@ public class Edit_Reading_Panel extends JDialog {
 			setTitle("Edit Reading");
 			setResizable(false);
 			
+			initialize_UI();
+			setLabels();
+		}
+		
+		public Edit_Reading_Panel(JFrame parent, Database_Manager database_manager, User current_user, JPanel panel_type, String type, Reading selectedReading) {
+			this(parent, database_manager, current_user, panel_type, type); // Call the original constructor
+		
+			// If a specific reading was selected, pre-select it in the combo box
+			if (selectedReading != null) {
+				this.current_reading = selectedReading;
+				preSelectReading(selectedReading);
+			}
+		}
+		
+		private void initialize_UI() {
 			contentPane = new JPanel();
 			contentPane.setBackground(new Color(213, 213, 213));
 			contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -324,9 +339,24 @@ public class Edit_Reading_Panel extends JDialog {
 			lbl_Column_TotalPrice.setFont(new Font("Tahoma", Font.PLAIN, 12));
 			lbl_Column_TotalPrice.setBounds(311, 154, 87, 22);
 			contentPane.add(lbl_Column_TotalPrice);
-			
-			setLabels();
-			
+		}
+		
+		private void preSelectReading(Reading selectedReading) {
+		    // Find the reading in the combo box and select it
+		    for (int i = 0; i < cB_Edit_Reading_Selection.getItemCount(); i++) {
+		        String item = cB_Edit_Reading_Selection.getItemAt(i);
+		        if (item != null && !item.startsWith("No readings") && !item.startsWith("Error")) {
+		            // Extract the date from the combo box item
+		            String date = item.trim().split("\\s+")[0];
+		            
+		            // If the dates match (since readings are uniquely identified by date)
+		            if (date.equals(selectedReading.getDate())) {
+		                cB_Edit_Reading_Selection.setSelectedIndex(i);
+		                selectedReading(); // Call this to populate the fields
+		                break;
+		            }
+		        }
+		    }
 		}
 		
 		private void setLabels() {

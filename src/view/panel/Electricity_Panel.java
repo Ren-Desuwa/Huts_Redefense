@@ -91,6 +91,7 @@ public class Electricity_Panel extends JPanel {
 	private JLabel lbl_Title_Tips;
 	private JLabel lbl_Tips1;
 	private JLabel lbl_Tips2;
+	private JLabel lbl_Trend_Of_Reading_Electricity;
 	
 	
 	/**
@@ -219,6 +220,12 @@ public class Electricity_Panel extends JPanel {
 		btn_Add_New_Reading.setBounds(155, 125, 151, 34);
 		panel_Current_Reading.add(btn_Add_New_Reading);
 		
+		lbl_Trend_Of_Reading_Electricity = new JLabel("No avilable data");
+		lbl_Trend_Of_Reading_Electricity.setHorizontalAlignment(SwingConstants.CENTER);
+		lbl_Trend_Of_Reading_Electricity.setFont(new Font("Dialog", Font.PLAIN, 15));
+		lbl_Trend_Of_Reading_Electricity.setBounds(97, 82, 261, 32);
+		panel_Current_Reading.add(lbl_Trend_Of_Reading_Electricity);
+		
 		panel_tips = new Rounded_Panel();
 		panel_tips.setBackground(new Color(255, 255, 255));
 		panel_tips.setLayout(null);
@@ -325,6 +332,7 @@ public class Electricity_Panel extends JPanel {
 				lbl_Electricity_Reading_Value.setText("No Data");
 			} else {
 				lbl_Electricity_Reading_Value.setText(String.valueOf(electricity_reading.getReading()));
+				database_manager.getReadingManager().updateReadingLabel(current_user,electricity_reading, lbl_Electricity_Reading_Value, lbl_Trend_Of_Reading_Electricity, "electricity");
 			}
 			
 		} catch (Exception e) {
@@ -336,24 +344,36 @@ public class Electricity_Panel extends JPanel {
 	    MouseAdapter listClickListener = new MouseAdapter() {
 	        @Override
 	        public void mouseClicked(MouseEvent e) {
-	            int response = javax.swing.JOptionPane.showConfirmDialog(null, 
-	                "Do you want to edit this reading?", "Edit Reading", 
-	                javax.swing.JOptionPane.YES_NO_OPTION);
-	                
-	            if (response == javax.swing.JOptionPane.YES_OPTION) {
-	                EventQueue.invokeLater(new Runnable() {
-	                    public void run() {
-	                        try {
-	                            Edit_Reading_Panel edit_reading_panel = new Edit_Reading_Panel(
-	                                (JFrame) SwingUtilities.getWindowAncestor(Electricity_Panel.this),
-	                                database_manager, current_user, Electricity_Panel.this, "electricity",
-	                            );
-	                            edit_reading_panel.setVisible(true);
-	                        } catch (Exception e) {
-	                            e.printStackTrace();
+	            JList<?> list = (JList<?>) e.getSource();
+	            int selectedIndex = list.getSelectedIndex();
+	            
+	            if (selectedIndex >= 0) {
+	                int response = javax.swing.JOptionPane.showConfirmDialog(null, 
+	                    "Do you want to edit this reading?", "Edit Reading", 
+	                    javax.swing.JOptionPane.YES_NO_OPTION);
+	                    
+	                if (response == javax.swing.JOptionPane.YES_OPTION) {
+	                    EventQueue.invokeLater(new Runnable() {
+	                        public void run() {
+	                            try {
+	                                List<Reading> allReadings = database_manager.getReadingManager().getAllReadingsByType(current_user, "electricity");
+	                                Reading selectedReading = null;
+	                                
+	                                if (selectedIndex < allReadings.size()) {
+	                                    selectedReading = allReadings.get(selectedIndex);
+	                                }
+	                                
+	                                Edit_Reading_Panel edit_reading_panel = new Edit_Reading_Panel(
+	                                    (JFrame) SwingUtilities.getWindowAncestor(Electricity_Panel.this),
+	                                    database_manager, current_user, Electricity_Panel.this, "electricity", selectedReading
+	                                );
+	                                edit_reading_panel.setVisible(true);
+	                            } catch (Exception ex) {
+	                                ex.printStackTrace();
+	                            }
 	                        }
-	                    }
-	                });
+	                    });
+	                }
 	            }
 	        }
 	    };
