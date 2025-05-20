@@ -22,6 +22,8 @@ import database.Database_Manager;
 import model.Reading;
 import model.User;
 import view.panel.Electricity_Panel;
+import view.panel.Gas_Panel;
+import view.panel.Water_Panel;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -43,6 +45,11 @@ public class Edit_Reading_Panel extends JDialog {
 	private JPanel contentPane;
 	private Database_Manager database_manager;
 	private User current_user;
+	private JPanel parentPanel; // Electricity_Panel, Water_Panel or Gas_Panel
+	private String readingType; // electricity, water or gas
+	private Electricity_Panel electricitypanel;
+	private Water_Panel waterpanel;
+	private Gas_Panel gaspanel;
 	
 	private JTextField tf_Reading;
 	private JTextField tf_Rate;
@@ -59,7 +66,6 @@ public class Edit_Reading_Panel extends JDialog {
 	private JLabel lbl_Column_Date;
 	private JLabel lbl_Column_Reading;
 	private JLabel lbl_Column_Rate;
-	private Electricity_Panel electricitypanel;
 	private JPanel panel_Date;
 	private JLabel lbl_DateSelected;
 	private JButton btn_Delete;
@@ -68,11 +74,12 @@ public class Edit_Reading_Panel extends JDialog {
 	private JLabel lblTime;
 	
 	
-		public Edit_Reading_Panel(JFrame parent, Database_Manager database_manager, User current_user, Electricity_Panel utilitypanel) {
+		public Edit_Reading_Panel(JFrame parent, Database_Manager database_manager, User current_user, JPanel panel_type, String type) {
 			super(parent, "Edit Reading", true);
 			this.database_manager = database_manager;
 			this.current_user = current_user;
-			this.electricitypanel = utilitypanel;
+			this.parentPanel = panel_type; // Set the parent panel Electricity_Panel, Water_Panel or Gas_Panel
+		    this.readingType = type;  // Set the reading type electricity, water or gas
 			
 			setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			setBounds(100, 100, 450, 635);
@@ -323,7 +330,7 @@ public class Edit_Reading_Panel extends JDialog {
 				    javax.swing.JOptionPane.showMessageDialog(this, "No reading selected.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
 				    return;
 				}
-				List<Reading> allReadings = database_manager.getReadingManager().getAllReadingsByType(current_user, "electricity");
+				List<Reading> allReadings = database_manager.getReadingManager().getAllReadingsByType(current_user, readingType);
 				Reading selectedReading = allReadings.get(selectedIndex);
 				
 				selectedReading.setReading(readingValue);
@@ -333,7 +340,18 @@ public class Edit_Reading_Panel extends JDialog {
 				database_manager.getReadingManager().deleteReading(current_user, selectedReading);
 				
 				getAllReadings();
-				electricitypanel.Electricity_Panel_Refresh();
+				if (parentPanel instanceof Electricity_Panel) {
+					electricitypanel = (Electricity_Panel) parentPanel;
+					electricitypanel.Panel_Refresh();
+				} 
+				if (parentPanel instanceof Water_Panel) {
+					waterpanel = (Water_Panel) parentPanel;
+					waterpanel.Panel_Refresh();
+				}
+				if (parentPanel instanceof Gas_Panel) {
+					gaspanel = (Gas_Panel) parentPanel;
+					gaspanel.Panel_Refresh();
+				}
 				
 				javax.swing.JOptionPane.showMessageDialog(this, "Reading Deleted successfully.", "Success", javax.swing.JOptionPane.INFORMATION_MESSAGE);
 				
@@ -366,7 +384,7 @@ public class Edit_Reading_Panel extends JDialog {
 				    javax.swing.JOptionPane.showMessageDialog(this, "No reading selected.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
 				    return;
 				}
-				List<Reading> allReadings = database_manager.getReadingManager().getAllReadingsByType(current_user, "electricity");
+				List<Reading> allReadings = database_manager.getReadingManager().getAllReadingsByType(current_user, readingType);
 				Reading selectedReading = allReadings.get(selectedIndex);
 				
 				selectedReading.setReading(readingValue);
@@ -376,7 +394,21 @@ public class Edit_Reading_Panel extends JDialog {
 				database_manager.getReadingManager().updateReading(current_user,selectedReading);
 				
 				getAllReadings();
-				electricitypanel.Electricity_Panel_Refresh();
+				
+				if (parentPanel instanceof Electricity_Panel) {
+					electricitypanel = (Electricity_Panel) parentPanel;
+					electricitypanel.Panel_Refresh();
+				} 
+				if (parentPanel instanceof Water_Panel) {
+					waterpanel = (Water_Panel) parentPanel;
+					waterpanel.Panel_Refresh();
+				}
+				if (parentPanel instanceof Gas_Panel) {
+					gaspanel = (Gas_Panel) parentPanel;
+					gaspanel.Panel_Refresh();
+				}
+				
+				
 				
 				javax.swing.JOptionPane.showMessageDialog(this, "Reading updated successfully.", "Success", javax.swing.JOptionPane.INFORMATION_MESSAGE);
 				
@@ -405,11 +437,11 @@ public class Edit_Reading_Panel extends JDialog {
 		
 		private JComboBox<String> getAllReadings() {
 			try {
-				if (!database_manager.getReadingManager().isReadingExists(current_user, "electricity")) {
-					cB_Edit_Reading_Selection = new JComboBox<>(new String[] {"No readings found.", "Please add a reading."});
+				if (!database_manager.getReadingManager().isReadingExists(current_user, readingType)) {
+					cB_Edit_Reading_Selection = new JComboBox<>(new String[] {"No readings found in." + readingType , "Please add a reading."});
 					return cB_Edit_Reading_Selection;
 				}
-				List<Reading> all_readings = database_manager.getReadingManager().getAllReadingsByType(current_user, "electricity");
+				List<Reading> all_readings = database_manager.getReadingManager().getAllReadingsByType(current_user, readingType);
 				
 				String[] readings = new String[all_readings.size()];
 				for (int i = 0; i < all_readings.size(); i++) {
