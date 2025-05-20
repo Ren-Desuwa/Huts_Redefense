@@ -34,7 +34,6 @@ public class Utility_Tips_Manager {
     private void initializeElectricityTips() {
         ArrayList<String> tips = new ArrayList<>();
         
-        tips.add("Replace traditional light bulbs with LED bulbs. They use up to 75% less energy and last much longer.");
         tips.add("Unplug electronics and chargers when not in use to prevent 'phantom' energy use.");
         tips.add("Use smart power strips to reduce standby consumption of electronic devices.");
         tips.add("Set your refrigerator temperature to 38°F (3°C) and freezer to 5°F (-15°C) for optimal efficiency.");
@@ -74,7 +73,6 @@ public class Utility_Tips_Manager {
     private void initializeGasTips() {
         ArrayList<String> tips = new ArrayList<>();
         
-        tips.add("Lower your water heater temperature to 120°F to save energy while still providing comfortable hot water.");
         tips.add("Seal gaps around doors and windows to prevent heat loss.");
         tips.add("Add insulation to your attic, walls, and floors to improve energy efficiency.");
         tips.add("Service your heating system annually to ensure it's running efficiently.");

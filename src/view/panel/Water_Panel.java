@@ -118,7 +118,7 @@ public class Water_Panel extends JPanel {
 		lbl_Date = new JLabel("Date");
 		lbl_Date.setVerticalAlignment(SwingConstants.TOP);
 		lbl_Date.setHorizontalAlignment(SwingConstants.RIGHT);
-		lbl_Date.setFont(new Font("Tahoma", Font.PLAIN, 30));
+		lbl_Date.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lbl_Date.setBounds(764, 11, 170, 54);
 		lbl_Date.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
 		panel_Title_Water_Consumption.add(lbl_Date);
@@ -126,8 +126,8 @@ public class Water_Panel extends JPanel {
 		lbl_Time = new JLabel("Time");
         lbl_Time.setVerticalAlignment(SwingConstants.TOP);
         lbl_Time.setHorizontalAlignment(SwingConstants.RIGHT);
-        lbl_Time.setFont(new Font("Tahoma", Font.PLAIN, 30));
-        lbl_Time.setBounds(764, 46, 170, 41);
+        lbl_Time.setFont(new Font("Tahoma", Font.PLAIN, 20));
+        lbl_Time.setBounds(764, 39, 170, 41);
         lbl_Time.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm a")));
         panel_Title_Water_Consumption.add(lbl_Time);
 		
@@ -143,7 +143,7 @@ public class Water_Panel extends JPanel {
 		add(panel_Graph_Container);
 		panel_Graph_Container.setLayout(null);
 		
-		lbl_Title_Graph = new JLabel("Consumption Trends");
+		lbl_Title_Graph = new JLabel("Monthly Water Expenses");
 		lbl_Title_Graph.setBounds(0, 0, 466, 32);
 		lbl_Title_Graph.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_Title_Graph.setFont(new Font("Tahoma", Font.PLAIN, 25));

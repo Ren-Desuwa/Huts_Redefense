@@ -12,6 +12,7 @@ import model.User;
 import view.panel.misc.Add_Reading_Panel;
 import view.panel.misc.Edit_Reading_Panel;
 import visuals.Graph_Panel;
+import visuals.Rounded_Button;
 import visuals.Rounded_Panel;
 
 import javax.swing.border.EmptyBorder;
@@ -51,7 +52,7 @@ public class Gas_Panel extends JPanel {
 	private JPanel panel_Current_Reading;
 	private JPanel panel_Graph_Container;
 	private JPanel panel_tips;
-	private JScrollPane sP_Recent_Readings;
+	private JPanel panel_Recent_Readings_Container;
 	
 	// Scroll panel fields
 	private JPanel Headerpanel;
@@ -75,11 +76,12 @@ public class Gas_Panel extends JPanel {
 	private JLabel lbl_Time;
 	private JLabel lbl_Date;
 	
-	// Scroll panel labels
+	// Scroll panel components
 	private JLabel lbl_Title_RecentReadings;
 	private JLabel lbl_Head_Readings;
 	private JLabel lbl_Head_Rate;
 	private JLabel lbl_Head_TotalPrice;
+	private JScrollPane sP_Recent_Readings;
 	
 	// Current Reading components
 	private JLabel lbl_Title_Current_Reading;
@@ -104,10 +106,9 @@ public class Gas_Panel extends JPanel {
 		setPreferredSize(new Dimension(986, 688));
 		setLayout(null);
 		
-		panel_Title_Gas_Consumption = new JPanel();
+		panel_Title_Gas_Consumption = new Rounded_Panel();
 		panel_Title_Gas_Consumption.setBackground(new Color(255, 255, 255));
 		panel_Title_Gas_Consumption.setLayout(null);
-		panel_Title_Gas_Consumption.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		panel_Title_Gas_Consumption.setBounds(21, 11, 944, 85);
 		add(panel_Title_Gas_Consumption);
 		
@@ -120,7 +121,7 @@ public class Gas_Panel extends JPanel {
 		lbl_Date = new JLabel("Date");
 		lbl_Date.setVerticalAlignment(SwingConstants.TOP);
 		lbl_Date.setHorizontalAlignment(SwingConstants.RIGHT);
-		lbl_Date.setFont(new Font("Tahoma", Font.PLAIN, 30));
+		lbl_Date.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lbl_Date.setBounds(764, 11, 170, 54);
 		lbl_Date.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
 		panel_Title_Gas_Consumption.add(lbl_Date);
@@ -128,8 +129,8 @@ public class Gas_Panel extends JPanel {
 		lbl_Time = new JLabel("Time");
         lbl_Time.setVerticalAlignment(SwingConstants.TOP);
         lbl_Time.setHorizontalAlignment(SwingConstants.RIGHT);
-        lbl_Time.setFont(new Font("Tahoma", Font.PLAIN, 30));
-        lbl_Time.setBounds(764, 46, 170, 41);
+        lbl_Time.setFont(new Font("Tahoma", Font.PLAIN, 20));
+        lbl_Time.setBounds(764, 39, 170, 41);
         lbl_Time.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm a")));
         panel_Title_Gas_Consumption.add(lbl_Time);
 		
@@ -139,14 +140,13 @@ public class Gas_Panel extends JPanel {
 		lbl_SubTitle_Gas_Consumption.setBounds(20, 52, 393, 22);
 		panel_Title_Gas_Consumption.add(lbl_SubTitle_Gas_Consumption);
 		
-		panel_Graph_Container = new JPanel();
+		panel_Graph_Container = new Rounded_Panel();
 		panel_Graph_Container.setBackground(new Color(255, 255, 255));
-		panel_Graph_Container.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		panel_Graph_Container.setBounds(21, 114, 466, 377);
 		add(panel_Graph_Container);
 		panel_Graph_Container.setLayout(null);
 		
-		lbl_Title_Graph = new JLabel("Consumption Trends");
+		lbl_Title_Graph = new JLabel("Monthly Gas Expenses");
 		lbl_Title_Graph.setBounds(0, 0, 466, 32);
 		lbl_Title_Graph.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_Title_Graph.setFont(new Font("Tahoma", Font.PLAIN, 25));
@@ -171,10 +171,16 @@ public class Gas_Panel extends JPanel {
         }
 		
 		all_readings = getAllReadings();
+		panel_Recent_Readings_Container = new Rounded_Panel();
+		panel_Recent_Readings_Container.setBackground(new Color(255, 255, 255));
+		panel_Recent_Readings_Container.setBounds(497, 114, 466, 377);
+		add(panel_Recent_Readings_Container);
+		panel_Recent_Readings_Container.setLayout(null);
+		
 		sP_Recent_Readings = new JScrollPane();
-		sP_Recent_Readings.setBounds(499, 114, 466, 377);
-		sP_Recent_Readings.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		add(sP_Recent_Readings);
+		sP_Recent_Readings.setBounds(5, 5, 456, 366);
+		sP_Recent_Readings.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		panel_Recent_Readings_Container.add(sP_Recent_Readings);
 		sP_Recent_Readings.setViewportView(all_readings);
 		
 		Headerpanel = new JPanel();
@@ -218,10 +224,9 @@ public class Gas_Panel extends JPanel {
 		Line.setBounds(10, 64, 446, 3);
 		Headerpanel.add(Line);
 		
-		panel_Current_Reading = new JPanel();
+		panel_Current_Reading = new Rounded_Panel();
 		panel_Current_Reading.setBackground(new Color(255, 255, 255));
 		panel_Current_Reading.setLayout(null);
-		panel_Current_Reading.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		panel_Current_Reading.setBounds(21, 509, 466, 168);
 		add(panel_Current_Reading);
 		
@@ -242,22 +247,31 @@ public class Gas_Panel extends JPanel {
 		lbl_Gas_Reading_Unit.setBounds(254, 55, 68, 32);
 		panel_Current_Reading.add(lbl_Gas_Reading_Unit);
 		
-		btn_Add_New_Reading = new JButton("Add New Reading");
+		btn_Add_New_Reading = new Rounded_Button("Add New Reading", 25);
 		btn_Add_New_Reading.setBackground(new Color(192, 192, 192));
+		btn_Add_New_Reading.setForeground(Color.BLACK);
 		btn_Add_New_Reading.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				goToAddReading();
 			}
+			@Override
+            public void mouseEntered(MouseEvent e) {
+				btn_Add_New_Reading.setBackground(new Color(150, 150, 150));
+            }
+            
+            @Override
+            public void mouseExited(MouseEvent e) {
+            	btn_Add_New_Reading.setBackground(new Color(192, 192, 192));
+            }
 		});
 		btn_Add_New_Reading.setFont(new Font("Tahoma", Font.BOLD, 10));
 		btn_Add_New_Reading.setBounds(155, 125, 151, 34);
 		panel_Current_Reading.add(btn_Add_New_Reading);
 		
-		panel_tips = new JPanel();
+		panel_tips = new Rounded_Panel();
 		panel_tips.setBackground(new Color(255, 255, 255));
 		panel_tips.setLayout(null);
-		panel_tips.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		panel_tips.setBounds(499, 509, 466, 168);
 		add(panel_tips);
 		
