@@ -338,6 +338,8 @@ public class Edit_Reading_Panel extends JDialog {
 				setTitle("Edit Gas Reading");
 				lbl_Reading.setText("Reading (Qty)");
 				
+				
+				
 				tf_Reading.setText("Enter Reading (Qty)");
 				tf_Reading.addFocusListener(new FocusAdapter() {
 					@Override

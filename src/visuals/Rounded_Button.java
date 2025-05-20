@@ -17,6 +17,10 @@ public class Rounded_Button extends JButton {
         setFont(new Font("Tahoma", Font.PLAIN, 16));
         setBackground(new Color(143, 163, 165)); // soft gray like image
     }
+    
+    public Rounded_Button(String text) {
+		this(text, 15);
+	}
 
     @Override
     protected void paintComponent(Graphics g) {
