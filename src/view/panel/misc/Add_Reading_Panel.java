@@ -302,7 +302,14 @@ public class Add_Reading_Panel extends JDialog {
 			}
 			database_manager.getReadingManager().addReading(current_user , date, readingType, readingValue, rateValue, totalPriceValue);
 			
-			electricitypanel.Electricity_Panel_Refresh();
+			if (parentPanel instanceof Electricity_Panel) {
+				electricitypanel = (Electricity_Panel) parentPanel;
+				electricitypanel.Panel_Refresh();
+			} 
+			if (parentPanel instanceof Water_Panel) {
+				waterpanel = (Water_Panel) parentPanel;
+				waterpanel.Panel_Refresh();
+			}
 			
 			javax.swing.JOptionPane.showMessageDialog(this, "Reading added successfully.", "Success", javax.swing.JOptionPane.INFORMATION_MESSAGE);
 			this.dispose();

@@ -338,7 +338,8 @@ public class Edit_Reading_Panel extends JDialog {
 				database_manager.getReadingManager().deleteReading(current_user, selectedReading);
 				
 				getAllReadings();
-				electricitypanel.Electricity_Panel_Refresh();
+				electricitypanel.Panel_Refresh();
+				waterpanel.Panel_Refresh();
 				
 				javax.swing.JOptionPane.showMessageDialog(this, "Reading Deleted successfully.", "Success", javax.swing.JOptionPane.INFORMATION_MESSAGE);
 				
@@ -381,7 +382,17 @@ public class Edit_Reading_Panel extends JDialog {
 				database_manager.getReadingManager().updateReading(current_user,selectedReading);
 				
 				getAllReadings();
-				electricitypanel.Electricity_Panel_Refresh();
+				
+				if (parentPanel instanceof Electricity_Panel) {
+					electricitypanel = (Electricity_Panel) parentPanel;
+					electricitypanel.Panel_Refresh();
+				} 
+				if (parentPanel instanceof Water_Panel) {
+					waterpanel = (Water_Panel) parentPanel;
+					waterpanel.Panel_Refresh();
+				}
+				
+				
 				
 				javax.swing.JOptionPane.showMessageDialog(this, "Reading updated successfully.", "Success", javax.swing.JOptionPane.INFORMATION_MESSAGE);
 				

@@ -46,7 +46,7 @@ public class Electricity_Panel extends JPanel {
 	
 	private JLabel lbl_Electricity_Reading_Value;
 	private JLabel lbl_Title_Electricity_Consumption;
-	private JLabel lbl_SubTitle_Electricity_Consmption;
+	private JLabel lbl_SubTitle_Electricity_Consumption;
 	private JPanel panel_Electricity_Consumption_Title;
 	private JPanel panel_add_reading;
 	private JList<String> all_readings;
@@ -109,11 +109,11 @@ public class Electricity_Panel extends JPanel {
         lblTime.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm a")));
         panel_Electricity_Consumption_Title.add(lblTime);
 		
-		lbl_SubTitle_Electricity_Consmption = new JLabel("Track and manage your electricity usage ");
-		lbl_SubTitle_Electricity_Consmption.setHorizontalAlignment(SwingConstants.LEFT);
-		lbl_SubTitle_Electricity_Consmption.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		lbl_SubTitle_Electricity_Consmption.setBounds(20, 52, 393, 22);
-		panel_Electricity_Consumption_Title.add(lbl_SubTitle_Electricity_Consmption);
+		lbl_SubTitle_Electricity_Consumption = new JLabel("Track and manage your electricity usage ");
+		lbl_SubTitle_Electricity_Consumption.setHorizontalAlignment(SwingConstants.LEFT);
+		lbl_SubTitle_Electricity_Consumption.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		lbl_SubTitle_Electricity_Consumption.setBounds(20, 52, 393, 22);
+		panel_Electricity_Consumption_Title.add(lbl_SubTitle_Electricity_Consumption);
 		
 		panel_add_reading = new Rounded_Panel(15, Color.BLACK, 1);
 		panel_add_reading.setBackground(new Color(255, 255, 255));
@@ -260,7 +260,7 @@ public class Electricity_Panel extends JPanel {
 	    });
 	}
 	
-	public void Electricity_Panel_Refresh() {
+	public void Panel_Refresh() {
 		all_readings = getAllReadings();
 	    sP_Recent_Readings.setViewportView(all_readings);
 	    getAllReadings();

@@ -35,10 +35,10 @@ public class Water_Panel extends JPanel {
 	private User current_user;
 	private Home_Panel homepanel;
 	
-	private JLabel lbl_Electricity_Reading_Value;
-	private JLabel lbl_Title_Electricity_Consumption;
-	private JLabel lbl_SubTitle_Electricity_Consmption;
-	private JPanel panel_Electricity_Consumption_Title;
+	private JLabel lbl_Water_Reading_Value;
+	private JLabel lbl_Title_Water_Consumption;
+	private JLabel lbl_SubTitle_Water_Consmption;
+	private JPanel panel_Water_Consumption_Title;
 	private JPanel panel_add_reading;
 	private JList<String> all_readings;
 	private JScrollPane sP_Recent_Readings;
@@ -70,18 +70,18 @@ public class Water_Panel extends JPanel {
 		setPreferredSize(new Dimension(986, 688));
 		setLayout(null);
 		
-		panel_Electricity_Consumption_Title = new JPanel();
-		panel_Electricity_Consumption_Title.setBackground(new Color(255, 255, 255));
-		panel_Electricity_Consumption_Title.setLayout(null);
-		panel_Electricity_Consumption_Title.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		panel_Electricity_Consumption_Title.setBounds(21, 11, 944, 85);
-		add(panel_Electricity_Consumption_Title);
+		panel_Water_Consumption_Title = new JPanel();
+		panel_Water_Consumption_Title.setBackground(new Color(255, 255, 255));
+		panel_Water_Consumption_Title.setLayout(null);
+		panel_Water_Consumption_Title.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		panel_Water_Consumption_Title.setBounds(21, 11, 944, 85);
+		add(panel_Water_Consumption_Title);
 		
-		lbl_Title_Electricity_Consumption = new JLabel("Water Consumption");
-		lbl_Title_Electricity_Consumption.setHorizontalAlignment(SwingConstants.LEFT);
-		lbl_Title_Electricity_Consumption.setFont(new Font("Tahoma", Font.PLAIN, 35));
-		lbl_Title_Electricity_Consumption.setBounds(30, 0, 393, 54);
-		panel_Electricity_Consumption_Title.add(lbl_Title_Electricity_Consumption);
+		lbl_Title_Water_Consumption = new JLabel("Water Consumption");
+		lbl_Title_Water_Consumption.setHorizontalAlignment(SwingConstants.LEFT);
+		lbl_Title_Water_Consumption.setFont(new Font("Tahoma", Font.PLAIN, 35));
+		lbl_Title_Water_Consumption.setBounds(30, 0, 393, 54);
+		panel_Water_Consumption_Title.add(lbl_Title_Water_Consumption);
 		
 		lbl_Date = new JLabel("Date");
 		lbl_Date.setVerticalAlignment(SwingConstants.TOP);
@@ -89,7 +89,7 @@ public class Water_Panel extends JPanel {
 		lbl_Date.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		lbl_Date.setBounds(764, 11, 170, 54);
 		lbl_Date.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-		panel_Electricity_Consumption_Title.add(lbl_Date);
+		panel_Water_Consumption_Title.add(lbl_Date);
 		
 		lblTime = new JLabel("Time");
         lblTime.setVerticalAlignment(SwingConstants.TOP);
@@ -97,13 +97,13 @@ public class Water_Panel extends JPanel {
         lblTime.setFont(new Font("Tahoma", Font.PLAIN, 30));
         lblTime.setBounds(764, 46, 170, 41);
         lblTime.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm a")));
-        panel_Electricity_Consumption_Title.add(lblTime);
+        panel_Water_Consumption_Title.add(lblTime);
 		
-		lbl_SubTitle_Electricity_Consmption = new JLabel("Track and manage your water usage ");
-		lbl_SubTitle_Electricity_Consmption.setHorizontalAlignment(SwingConstants.LEFT);
-		lbl_SubTitle_Electricity_Consmption.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		lbl_SubTitle_Electricity_Consmption.setBounds(20, 52, 393, 22);
-		panel_Electricity_Consumption_Title.add(lbl_SubTitle_Electricity_Consmption);
+		lbl_SubTitle_Water_Consmption = new JLabel("Track and manage your water usage ");
+		lbl_SubTitle_Water_Consmption.setHorizontalAlignment(SwingConstants.LEFT);
+		lbl_SubTitle_Water_Consmption.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		lbl_SubTitle_Water_Consmption.setBounds(20, 52, 393, 22);
+		panel_Water_Consumption_Title.add(lbl_SubTitle_Water_Consmption);
 		
 		panel_add_reading = new Rounded_Panel(15, Color.BLACK, 1);
 		panel_add_reading.setBackground(new Color(255, 255, 255));
@@ -179,11 +179,11 @@ public class Water_Panel extends JPanel {
 		lbl_Title_Current_Reading.setBounds(42, 11, 393, 32);
 		panel_Current_Reading.add(lbl_Title_Current_Reading);
 		
-		lbl_Electricity_Reading_Value = new JLabel();
-		lbl_Electricity_Reading_Value.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_Electricity_Reading_Value.setFont(new Font("Tahoma", Font.BOLD, 20));
-		lbl_Electricity_Reading_Value.setBounds(144, 54, 100, 32);
-		panel_Current_Reading.add(lbl_Electricity_Reading_Value);
+		lbl_Water_Reading_Value = new JLabel();
+		lbl_Water_Reading_Value.setHorizontalAlignment(SwingConstants.CENTER);
+		lbl_Water_Reading_Value.setFont(new Font("Tahoma", Font.BOLD, 20));
+		lbl_Water_Reading_Value.setBounds(144, 54, 100, 32);
+		panel_Current_Reading.add(lbl_Water_Reading_Value);
 		
 		lbl_Electricity_Reading_Unit = new JLabel("m³");
 		lbl_Electricity_Reading_Unit.setFont(new Font("Tahoma", Font.PLAIN, 18));
@@ -250,7 +250,7 @@ public class Water_Panel extends JPanel {
 	    });
 	}
 	
-	public void Electricity_Panel_Refresh() {
+	public void Panel_Refresh() {
 		all_readings = getAllReadings();
 	    sP_Recent_Readings.setViewportView(all_readings);
 	    getAllReadings();
@@ -261,12 +261,12 @@ public class Water_Panel extends JPanel {
 	public void setupData() {
 		
 		try {
-			Reading electricity_reading = database_manager.getReadingManager().getLatestReadingByType(current_user, "electricity");
+			Reading water_reading = database_manager.getReadingManager().getLatestReadingByType(current_user, "water");
 			
-			if (electricity_reading == null) {
-				lbl_Electricity_Reading_Value.setText("No Data");
+			if (water_reading == null) {
+				lbl_Water_Reading_Value.setText("No Data");
 			} else {
-				lbl_Electricity_Reading_Value.setText(String.valueOf(electricity_reading.getReading()));
+				lbl_Water_Reading_Value.setText(String.valueOf(water_reading.getReading()));
 			}
 			
 		} catch (Exception e) {
@@ -276,14 +276,14 @@ public class Water_Panel extends JPanel {
 	
 	private JList<String> getAllReadings() {
 		try {
-			if (!database_manager.getReadingManager().isReadingExists(current_user, "electricity")) {
+			if (!database_manager.getReadingManager().isReadingExists(current_user, "water")) {
 				JList<String> list = new JList<>(new String[] {"No readings found.", "Please add a reading."});
 				list.setFont(new Font("monoFont", Font.PLAIN, 15));
 				list.setPreferredSize(new Dimension(429, 448));
 				list.setFixedCellHeight(30);
 				return list;
 			}
-			List<Reading> all_readings = database_manager.getReadingManager().getAllReadingsByType(current_user, "electricity");
+			List<Reading> all_readings = database_manager.getReadingManager().getAllReadingsByType(current_user, "water");
 			
 			String[] readings = new String[all_readings.size()];
 			for (int i = 0; i < all_readings.size(); i++) {
