@@ -133,7 +133,7 @@ public class Home_Panel extends JPanel {
         
         lbl_Username = new JLabel("User");
         lbl_Username.setFont(new Font("Tahoma", Font.PLAIN, 35));
-        lbl_Username.setBounds(181, 0, 206, 60);
+        lbl_Username.setBounds(184, 0, 206, 60);
         lbl_Username.setText(current_User.getUsername());
         panel_Welcome_Title.add(lbl_Username);
         
@@ -142,7 +142,7 @@ public class Home_Panel extends JPanel {
         lbl_Date.setHorizontalAlignment(SwingConstants.RIGHT);
         lbl_Date.setFont(new Font("Tahoma", Font.PLAIN, 20));
         lbl_Date.setBounds(764, 11, 170, 54);
-        lbl_Date.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy  ")));
+        lbl_Date.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         panel_Welcome_Title.add(lbl_Date);
         
         lbl_Time = new JLabel("Time");
@@ -150,7 +150,7 @@ public class Home_Panel extends JPanel {
         lbl_Time.setHorizontalAlignment(SwingConstants.RIGHT);
         lbl_Time.setFont(new Font("Tahoma", Font.PLAIN, 20));
         lbl_Time.setBounds(764, 39, 170, 41);
-        lbl_Time.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm  ")));
+        lbl_Time.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm a")));
         panel_Welcome_Title.add(lbl_Time);
         
         JLabel lbl_SubTitle_Welcome = new JLabel("Here is Your Summary of Expenses\r\n\r\n");
@@ -420,7 +420,7 @@ public class Home_Panel extends JPanel {
         // UI CREATION - TIPS SECTION - TIPS REFRESH TIMER
         //===============================================================================================
         
-        Timer timer = new Timer(60_000, e -> {
+        Timer timer = new Timer(30_000, e -> {
         	lbl_Tip_1.setText("<html>" + utility_Tips_Manager.getRandomTip() + "</html>");
         	lbl_Tip_Type_1.setText(utility_Tips_Manager.getType());
         	lbl_Tip_2.setText("<html>" + utility_Tips_Manager.getRandomTip() + "</html>");
