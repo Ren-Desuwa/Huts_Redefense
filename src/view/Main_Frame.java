@@ -205,7 +205,8 @@ public class Main_Frame extends JFrame {
 	private void setupActionListeners() {
         side_home_button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                card_layout.show(card_panel, HOME_PANEL);
+                home_panel.home_Panel_Refresh();
+            	card_layout.show(card_panel, HOME_PANEL);
             }
         });
         
