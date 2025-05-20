@@ -232,6 +232,7 @@ public class Home_Panel extends JPanel {
         panelElectricityInfo.add(lblElectricityReadingUnit);
         
         lblTrendOfReadingElectricity = new JLabel("No avilable data");
+        lblTrendOfReadingElectricity.setHorizontalAlignment(SwingConstants.CENTER);
         lblTrendOfReadingElectricity.setFont(new Font("Dialog", Font.PLAIN, 15));
         lblTrendOfReadingElectricity.setBounds(176, 44, 261, 32);
         panelElectricityInfo.add(lblTrendOfReadingElectricity);
@@ -264,6 +265,7 @@ public class Home_Panel extends JPanel {
         panelWaterInfo.add(lblWaterReadingUnit);
         
         lblTrendOfReadingWater = new JLabel("No avilable data");
+        lblTrendOfReadingWater.setHorizontalAlignment(SwingConstants.CENTER);
         lblTrendOfReadingWater.setFont(new Font("Dialog", Font.PLAIN, 15));
         lblTrendOfReadingWater.setBounds(176, 44, 261, 32);
         panelWaterInfo.add(lblTrendOfReadingWater);
@@ -296,6 +298,7 @@ public class Home_Panel extends JPanel {
         panelGasInfo.add(lblGasReadingUnit);
         
         lblTrendOfReadingGas = new JLabel("No avilable data");
+        lblTrendOfReadingGas.setHorizontalAlignment(SwingConstants.CENTER);
         lblTrendOfReadingGas.setFont(new Font("Dialog", Font.PLAIN, 15));
         lblTrendOfReadingGas.setBounds(176, 44, 261, 32);
         panelGasInfo.add(lblTrendOfReadingGas);
@@ -328,6 +331,7 @@ public class Home_Panel extends JPanel {
         panelOverallInfo.add(lblOverAllReadingUnit);
         
         lblTrendOfReadingOverall = new JLabel("No avilable data");
+        lblTrendOfReadingOverall.setHorizontalAlignment(SwingConstants.CENTER);
         lblTrendOfReadingOverall.setFont(new Font("Dialog", Font.PLAIN, 15));
         lblTrendOfReadingOverall.setBounds(177, 44, 260, 32);
         panelOverallInfo.add(lblTrendOfReadingOverall);
