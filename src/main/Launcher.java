@@ -10,9 +10,6 @@ import view.Main_Frame;
 
 public class Launcher {
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		// Launch the application
-		
 		// Set Up Needed Database Connections
 		Database_Manager database_manager = Database_Manager.getInstance();
 		
