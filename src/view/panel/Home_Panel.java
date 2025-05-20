@@ -3,7 +3,6 @@ package view.panel;
 import javax.swing.JPanel;
 
 import database.Database_Manager;
-import database.Reading_Manager;
 import model.Reading;
 import model.User;
 import view.panel.misc.Utility_Tips_Manager;
@@ -14,7 +13,6 @@ import javax.swing.JLabel;
 import java.awt.Dimension;
 import javax.swing.border.EmptyBorder;
 
-
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.SwingConstants;
@@ -22,19 +20,14 @@ import javax.swing.Timer;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.Month;
 import java.time.format.DateTimeFormatter;
-import java.util.Map;
+
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.awt.BorderLayout;
 
-
-/**
- * Home Panel for displaying user utility data and graphs
- */
 public class Home_Panel extends JPanel {
 
     private static final long serialVersionUID = 1L;
@@ -102,58 +95,31 @@ public class Home_Panel extends JPanel {
     private JLabel lbl_Tip_3;
     private JLabel lbl_Tip_Type_3;
     private Rounded_Panel panel_Tip_3;
-    
-    //==============================================================================================
-    // CONSTRUCTOR
-    //==============================================================================================
-    
-    /**
-     * Constructor for the Home Panel
-     * 
-     * @param database_Manager Database manager for accessing data
-     * @param current_User The current logged-in user
-     */
+
     public Home_Panel(Database_Manager database_Manager, User current_User) {
         this.database_Manager = database_Manager;
         this.current_User = current_User;
         
-        initialize_Panel_Properties();
+        // Set panel properties
+        setBackground(new Color(213, 213, 213));
+        setPreferredSize(new Dimension(986, 688));
+        setLayout(null);
+
+        // Initialize all UI components
         initialize_UI();
+		create_Action_Listeners();
+        
+        // Setup initial data
         setup_Data();
     }
     
-    //==============================================================================================
-    // INITIALIZATION METHODS
-    //==============================================================================================
-    
-    /**
-     * Initialize the panel's base properties
-     */
-    private void initialize_Panel_Properties() {
-        setPreferredSize(new Dimension(986, 688));
-        setLayout(null);
-    }
-    
-    /**
-     * Initialize all UI components
-     */
     private void initialize_UI() {
-        create_Header_Panel();
-        create_Content_Panel();
-        create_Graph_Panel();
-        create_Tips_Panel();
-        create_Action_Listeners();
-    }
-    
-    //==============================================================================================
-    // UI CREATION - HEADER SECTION
-    //==============================================================================================
-    
-    /**
-     * Create the header panel with welcome title
-     */
-    private void create_Header_Panel() {
-        panel_Welcome_Title = new Rounded_Panel();
+    	
+    	//==============================================================================================
+        // UI CREATION - HEADER SECTION
+        //==============================================================================================
+    	
+    	panel_Welcome_Title = new Rounded_Panel();
         panel_Welcome_Title.setBackground(new Color(255, 255, 255));
         panel_Welcome_Title.setBounds(21, 11, 944, 85);
         panel_Welcome_Title.setLayout(null);
@@ -192,33 +158,21 @@ public class Home_Panel extends JPanel {
         lbl_SubTitle_Welcome.setFont(new Font("Tahoma", Font.PLAIN, 17));
         lbl_SubTitle_Welcome.setBounds(20, 58, 393, 22);
         panel_Welcome_Title.add(lbl_SubTitle_Welcome);
-    }
-    
-    //==============================================================================================
-    // UI CREATION - CONTENT PANELS
-    //==============================================================================================
-    
-    /**
-     * Create the content panel with utility information
-     */
-    private void create_Content_Panel() {
+        
+        //==============================================================================================
+        // UI CREATION - CONTENT PANELS
+        //==============================================================================================
+        
         panel_Information = new Rounded_Panel();
         panel_Information.setBackground(new Color(255, 255, 255));
-//        panel_Information.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
         panel_Information.setBounds(21, 114, 467, 408);
         panel_Information.setLayout(null);
         add(panel_Information);
         
-        create_Electricity_Info_Panel();
-        create_Water_Info_Panel();
-        create_Gas_Info_Panel();
-        create_Overall_Info_Panel();
-    }
-    
-    /**
-     * Create the electricity information panel
-     */
-    private void create_Electricity_Info_Panel() {
+        //==============================================================================================
+        // UI CREATION - UTILITY INFO PANELS - ELECTRICITY INFO PANEL
+        //==============================================================================================
+        
         panel_Electricity_Info = new Rounded_Panel();
         panel_Electricity_Info.setBackground(new Color(220, 220, 220));
         panel_Electricity_Info.setBounds(10, 11, 447, 87);
@@ -246,12 +200,11 @@ public class Home_Panel extends JPanel {
         lbl_Trend_Of_Reading_Electricity.setFont(new Font("Dialog", Font.PLAIN, 15));
         lbl_Trend_Of_Reading_Electricity.setBounds(176, 44, 261, 32);
         panel_Electricity_Info.add(lbl_Trend_Of_Reading_Electricity);
-    }
-    
-    /**
-     * Create the water information panel
-     */
-    private void create_Water_Info_Panel() {
+
+        //==============================================================================================
+        // UI CREATION - UTILITY INFO PANELS - WATER INFO PANEL
+        //==============================================================================================
+        
         panel_Water_Info = new Rounded_Panel();
         panel_Water_Info.setBackground(new Color(220, 220, 220));
         panel_Water_Info.setBounds(10, 109, 447, 87);
@@ -279,12 +232,11 @@ public class Home_Panel extends JPanel {
         lbl_Trend_Of_Reading_Water.setFont(new Font("Dialog", Font.PLAIN, 15));
         lbl_Trend_Of_Reading_Water.setBounds(176, 44, 261, 32);
         panel_Water_Info.add(lbl_Trend_Of_Reading_Water);
-    }
-    
-    /**
-     * Create the gas information panel
-     */
-    private void create_Gas_Info_Panel() {
+
+        //==============================================================================================
+        // UI CREATION - UTILITY INFO PANELS - GAS INFO PANEL
+        //==============================================================================================
+        
         panel_Gas_Info = new Rounded_Panel();
         panel_Gas_Info.setBackground(new Color(220, 220, 220));
         panel_Gas_Info.setBounds(10, 207, 447, 87);
@@ -312,12 +264,11 @@ public class Home_Panel extends JPanel {
         lbl_Trend_Of_Reading_Gas.setFont(new Font("Dialog", Font.PLAIN, 15));
         lbl_Trend_Of_Reading_Gas.setBounds(176, 44, 261, 32);
         panel_Gas_Info.add(lbl_Trend_Of_Reading_Gas);
-    }
-    
-    /**
-     * Create the overall information panel
-     */
-    private void create_Overall_Info_Panel() {
+        
+        //==============================================================================================
+        // UI CREATION - UTILITY INFO PANELS - OVERALL INFO PANEL
+        //==============================================================================================
+        
         panel_Overall_Info = new Rounded_Panel();
         panel_Overall_Info.setBackground(new Color(220, 220, 220));
         panel_Overall_Info.setBounds(10, 305, 447, 87);
@@ -345,17 +296,11 @@ public class Home_Panel extends JPanel {
         lbl_Trend_Of_Reading_Overall.setFont(new Font("Dialog", Font.PLAIN, 15));
         lbl_Trend_Of_Reading_Overall.setBounds(177, 44, 260, 32);
         panel_Overall_Info.add(lbl_Trend_Of_Reading_Overall);
-    }
-    
-    //==============================================================================================
-    // UI CREATION - GRAPH SECTION
-    //==============================================================================================
-    
-    /**
-     * Create the graph panel with CardLayout for different utilities
-     */
-    private void create_Graph_Panel() {
-        // Create the main container panel (visible to WindowBuilder)
+        
+        //==============================================================================================
+        // UI CREATION - GRAPH SECTION
+        //==============================================================================================
+        
         panel_Graph_Container = new Rounded_Panel(25, Color.BLACK, 0);
         panel_Graph_Container.setBorder(new EmptyBorder(5, 5, 5, 5));
         panel_Graph_Container.setBounds(504, 157, 413, 365);
@@ -374,82 +319,42 @@ public class Home_Panel extends JPanel {
             graph_Panel.setBackground(new Color(255, 255, 255));
             panel_Graph_Container.add(graph_Panel);
         }
-
-        create_Graph_Shadow_Panels();
-    }
-    
-    /**
-     * Creates shadow panels for visual design effect behind the graph
-     */
-    private void create_Graph_Shadow_Panels() {
+        
         panel_Behind1 = new Rounded_Panel(25, Color.BLACK, 0);
         panel_Behind1.setBackground(new Color(220, 220, 220));
-//        panel_Behind1.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
         panel_Behind1.setBounds(520, 142, 413, 365);
         add(panel_Behind1);
         
         panel_Behind2 = new Rounded_Panel(25, Color.BLACK, 0);
         panel_Behind2.setBackground(new Color(200, 200, 200));
-//        panel_Behind2.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
         panel_Behind2.setBounds(536, 129, 413, 356);
         add(panel_Behind2);
         
         panel_Behind3 = new Rounded_Panel(25, Color.BLACK, 0);
         panel_Behind3.setBackground(new Color(180, 180, 180));
-//        panel_Behind3.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
         panel_Behind3.setBounds(552, 114, 413, 347);
         add(panel_Behind3);
-    }
-    
-    //==============================================================================================
-    // UI CREATION - TIPS SECTION
-    //==============================================================================================
-    
-    /**
-     * Create the tips panel with money-saving advice
-     */
-    private void create_Tips_Panel() {
-    	utility_Tips_Manager = new Utility_Tips_Manager();
-    	
+        
+        //==============================================================================================
+        // UI CREATION - TIPS SECTION
+        //==============================================================================================
+
+        utility_Tips_Manager = new Utility_Tips_Manager();
+
         panel_Tips = new Rounded_Panel();
         panel_Tips.setBackground(new Color(255, 255, 255));
-//        panel_Tips.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
         panel_Tips.setBounds(21, 533, 944, 144);
         panel_Tips.setLayout(null);
         add(panel_Tips);
+
+        //===============================================================================================
+        // UI CREATION - TIPS PANELS - TIP 1
+        //===============================================================================================
         
         panel_Tip_1 = new Rounded_Panel();
         panel_Tip_1.setLayout(null);
         panel_Tip_1.setBounds(10, 11, 306, 122);
         panel_Tips.add(panel_Tip_1);
-        
-        panel_Tip_2 = new Rounded_Panel();
-		panel_Tip_2.setLayout(null);
-		panel_Tip_2.setBounds(326, 11, 291, 122);
-		panel_Tips.add(panel_Tip_2);
-		
-		panel_Tip_3 = new Rounded_Panel();
-		panel_Tip_3.setLayout(null);
-		panel_Tip_3.setBounds(627, 11, 307, 122);
-		panel_Tips.add(panel_Tip_3);
-        
-        lbl_Tip_1 = new JLabel("Electricity Tip - Replace traditional light bulbs with LED bulbs. They use up to 75% less energy and last much longer.");
-        lbl_Tip_1.setBounds(20, 44, 273, 67);
-        lbl_Tip_1.setHorizontalAlignment(SwingConstants.LEFT);
-        lbl_Tip_1.setFont(new Font("Tahoma", Font.PLAIN, 17));
-        panel_Tip_1.add(lbl_Tip_1);
-        
-        lbl_Tip_2 = new JLabel("<html>Use oven and stovetop efficiently by matching pot size to burner size.</html>");
-		lbl_Tip_2.setHorizontalAlignment(SwingConstants.LEFT);
-		lbl_Tip_2.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		lbl_Tip_2.setBounds(20, 44, 268, 67);
-		panel_Tip_2.add(lbl_Tip_2);
-		
-		lbl_Tip_3 = new JLabel("<html>Use oven and stovetop efficiently by matching pot size to burner size.</html>");
-		lbl_Tip_3.setHorizontalAlignment(SwingConstants.LEFT);
-		lbl_Tip_3.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		lbl_Tip_3.setBounds(20, 44, 277, 67);
-		panel_Tip_3.add(lbl_Tip_3);
         
         lbl_Tip_Type_1 = new JLabel("Money Saving Tips");
         lbl_Tip_Type_1.setForeground(new Color(0, 128, 255));
@@ -459,143 +364,167 @@ public class Home_Panel extends JPanel {
         lbl_Tip_Type_1.setBounds(10, 11, 243, 36);
         panel_Tip_1.add(lbl_Tip_Type_1);
         
+        lbl_Tip_1 = new JLabel("Electricity Tip - Replace traditional light bulbs with LED bulbs. They use up to 75% less energy and last much longer.");
+        lbl_Tip_1.setBounds(20, 44, 273, 67);
+        lbl_Tip_1.setHorizontalAlignment(SwingConstants.LEFT);
+        lbl_Tip_1.setFont(new Font("Tahoma", Font.PLAIN, 17));
+        panel_Tip_1.add(lbl_Tip_1);
+
+        //===============================================================================================
+        // UI CREATION - TIPS PANELS - TIP 2
+        //===============================================================================================
+        
+        panel_Tip_2 = new Rounded_Panel();
+        panel_Tip_2.setLayout(null);
+        panel_Tip_2.setBounds(326, 11, 291, 122);
+        panel_Tips.add(panel_Tip_2);
         
         lbl_Tip_Type_2 = new JLabel("Electricity Tip");
-		lbl_Tip_Type_2.setVerticalAlignment(SwingConstants.TOP);
-		lbl_Tip_Type_2.setHorizontalAlignment(SwingConstants.LEFT);
-		lbl_Tip_Type_2.setForeground(new Color(0, 128, 255));
-		lbl_Tip_Type_2.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lbl_Tip_Type_2.setBounds(10, 11, 243, 36);
-		panel_Tip_2.add(lbl_Tip_Type_2);
-		
-		lbl_Tip_Type_3 = new JLabel("Electricity Tip");
-		lbl_Tip_Type_3.setVerticalAlignment(SwingConstants.TOP);
-		lbl_Tip_Type_3.setHorizontalAlignment(SwingConstants.LEFT);
-		lbl_Tip_Type_3.setForeground(new Color(0, 128, 255));
-		lbl_Tip_Type_3.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lbl_Tip_Type_3.setBounds(10, 11, 243, 36);
-		panel_Tip_3.add(lbl_Tip_Type_3);
-		
+        lbl_Tip_Type_2.setVerticalAlignment(SwingConstants.TOP);
+        lbl_Tip_Type_2.setHorizontalAlignment(SwingConstants.LEFT);
+        lbl_Tip_Type_2.setForeground(new Color(0, 128, 255));
+        lbl_Tip_Type_2.setFont(new Font("Tahoma", Font.PLAIN, 20));
+        lbl_Tip_Type_2.setBounds(10, 11, 243, 36);
+        panel_Tip_2.add(lbl_Tip_Type_2);
+        
+        lbl_Tip_2 = new JLabel("<html>Use oven and stovetop efficiently by matching pot size to burner size.</html>");
+        lbl_Tip_2.setHorizontalAlignment(SwingConstants.LEFT);
+        lbl_Tip_2.setFont(new Font("Tahoma", Font.PLAIN, 17));
+        lbl_Tip_2.setBounds(20, 44, 268, 67);
+        panel_Tip_2.add(lbl_Tip_2);
+        
+        //===============================================================================================
+        // UI CREATION - TIPS PANELS - TIP 3
+        //===============================================================================================
+        
+        panel_Tip_3 = new Rounded_Panel();
+        panel_Tip_3.setLayout(null);
+        panel_Tip_3.setBounds(627, 11, 307, 122);
+        panel_Tips.add(panel_Tip_3);
+
+        lbl_Tip_Type_3 = new JLabel("Electricity Tip");
+        lbl_Tip_Type_3.setVerticalAlignment(SwingConstants.TOP);
+        lbl_Tip_Type_3.setHorizontalAlignment(SwingConstants.LEFT);
+        lbl_Tip_Type_3.setForeground(new Color(0, 128, 255));
+        lbl_Tip_Type_3.setFont(new Font("Tahoma", Font.PLAIN, 20));
+        lbl_Tip_Type_3.setBounds(10, 11, 243, 36);
+        panel_Tip_3.add(lbl_Tip_Type_3);
+
+        lbl_Tip_3 = new JLabel("<html>Use oven and stovetop efficiently by matching pot size to burner size.</html>");
+        lbl_Tip_3.setHorizontalAlignment(SwingConstants.LEFT);
+        lbl_Tip_3.setFont(new Font("Tahoma", Font.PLAIN, 17));
+        lbl_Tip_3.setBounds(20, 44, 277, 67);
+        panel_Tip_3.add(lbl_Tip_3);
+        
+		//==============================================================================================
+        // UI CREATION - TIPS SECTION - TIPS REFRESH TIMER
+        //===============================================================================================
+        
         Timer timer = new Timer(60_000, e -> {
-			lbl_Tip_1.setText("<html>" + utility_Tips_Manager.getRandomTip() + "</html>");
-			lbl_Tip_Type_1.setText(utility_Tips_Manager.getType());
-			lbl_Tip_2.setText("<html>" + utility_Tips_Manager.getRandomTip() + "</html>");
-			lbl_Tip_Type_2.setText(utility_Tips_Manager.getType());
-			lbl_Tip_3.setText("<html>" + utility_Tips_Manager.getRandomTip() + "</html>");
-			lbl_Tip_Type_3.setText(utility_Tips_Manager.getType());
-		});
+        	lbl_Tip_1.setText("<html>" + utility_Tips_Manager.getRandomTip() + "</html>");
+        	lbl_Tip_Type_1.setText(utility_Tips_Manager.getType());
+        	lbl_Tip_2.setText("<html>" + utility_Tips_Manager.getRandomTip() + "</html>");
+        	lbl_Tip_Type_2.setText(utility_Tips_Manager.getType());
+        	lbl_Tip_3.setText("<html>" + utility_Tips_Manager.getRandomTip() + "</html>");
+        	lbl_Tip_Type_3.setText(utility_Tips_Manager.getType());
+        });
         timer.setInitialDelay(0); // Start immediately
         timer.start();
     }
     
     //==============================================================================================
-    // INTERACTION HANDLING
+    // DATA HANDLING & EVENT LISTENERS 
     //==============================================================================================
     
-    /**
-     * Setup event listeners for interactive elements
-     */
+    public void home_Panel_Refresh() {setup_Data();}
+    
     private void create_Action_Listeners() {
-        // Clock update timer
-        Timer timer = new Timer(60_000, e -> update_Clock());
-        timer.setInitialDelay(calculate_Initial_Delay());
-        timer.start();
-        
-        // Panel click events
-        add_Panel_Listeners(panel_Electricity_Info, () -> graph_Panel.showElectricityGraph());
-        add_Panel_Listeners(panel_Water_Info, () -> graph_Panel.showWaterGraph());
-        add_Panel_Listeners(panel_Gas_Info, () -> graph_Panel.showGasGraph());
-        add_Panel_Listeners(panel_Overall_Info, () -> graph_Panel.showOverallGraph());
-    }
-
-    private void update_Clock() {
-        lbl_Time.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm a")));
-    }
-
-    private int calculate_Initial_Delay() {
-        LocalTime now = LocalTime.now();
-        return (60 - now.getSecond()) * 1000 - now.getNano() / 1_000_000;
-    }
-
-    private void add_Panel_Listeners(JPanel panel, Runnable onClick) {
-        panel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                onClick.run();
-            }
-            
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                panel.setBackground(new Color(200, 200, 200));
-            }
-            
-            @Override
-            public void mouseExited(MouseEvent e) {
-                panel.setBackground(new Color(220, 220, 220));
-            }
+        // Clock update every minute
+        Timer timer = new Timer(60_000, e -> {
+            lbl_Time.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm a")));
         });
+        LocalTime now = LocalTime.now();
+        int initialDelay = (60 - now.getSecond()) * 1000 - now.getNano() / 1_000_000;
+        timer.setInitialDelay(initialDelay);
+        timer.start();
+
+        // Panel click listeners
+        panel_Electricity_Info.addMouseListener(createPanelMouseAdapter(() -> graph_Panel.showElectricityGraph()));
+        panel_Water_Info.addMouseListener(createPanelMouseAdapter(() -> graph_Panel.showWaterGraph()));
+        panel_Gas_Info.addMouseListener(createPanelMouseAdapter(() -> graph_Panel.showGasGraph()));
+        panel_Overall_Info.addMouseListener(createPanelMouseAdapter(() -> graph_Panel.showOverallGraph()));
+    }
+    
+    private MouseAdapter createPanelMouseAdapter(Runnable onClick) {
+        return new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {onClick.run();}
+            @Override
+            public void mouseEntered(MouseEvent e) {((JPanel) e.getSource()).setBackground(new Color(200, 200, 200));}
+            @Override
+            public void mouseExited(MouseEvent e) {((JPanel) e.getSource()).setBackground(new Color(220, 220, 220));}
+        };
     }
 
-    
-    //==============================================================================================
-    // DATA HANDLING
-    //==============================================================================================
-    
-    /**
-     * Public method to refresh the panel data
-     */
-    public void home_Panel_Refresh() {
-        setup_Data();
-    }
-    
-    /**
-     * Loads and displays data from the database
-     */
     private void setup_Data() {
         try {
-        	if (graph_Panel == null && database_Manager != null) {
-        	    graph_Panel = new Graph_Panel(database_Manager.getReadingManager(), current_User);
-        	    graph_Panel.setBackground(new Color(255, 255, 255));
-        	    panel_Graph_Container.removeAll();
-        	    panel_Graph_Container.add(graph_Panel);
-        	    panel_Graph_Container.revalidate();
-        	    panel_Graph_Container.repaint();
-        	}
-            // Get latest readings for each utility type
-            Reading electricity_Reading = database_Manager.getReadingManager().getLatestReadingByType(current_User, "electricity");
-            Reading water_Reading = database_Manager.getReadingManager().getLatestReadingByType(current_User, "water");
-            Reading gas_Reading = database_Manager.getReadingManager().getLatestReadingByType(current_User, "gas");
-            
-            // Update labels with latest readings
-            update_Reading_Labels(electricity_Reading, water_Reading, gas_Reading);
-            
-            // Initialize graph panels (needed because we're using a delayed initialization approach)
+            // Initialize graph panel if needed
+            if (graph_Panel == null && database_Manager != null) {
+                graph_Panel = new Graph_Panel(database_Manager.getReadingManager(), current_User);
+                graph_Panel.setBackground(Color.WHITE);
+                panel_Graph_Container.removeAll();
+                panel_Graph_Container.add(graph_Panel);
+                panel_Graph_Container.revalidate();
+                panel_Graph_Container.repaint();
+            }
+
+            // Get latest readings
+            Reading electricity = database_Manager.getReadingManager().getLatestReadingByType(current_User, "electricity");
+            Reading water = database_Manager.getReadingManager().getLatestReadingByType(current_User, "water");
+            Reading gas = database_Manager.getReadingManager().getLatestReadingByType(current_User, "gas");
+
+            // Update each reading's label
+            updateReadingLabel(electricity, lbl_Electricity_Reading_Value, lbl_Trend_Of_Reading_Electricity, "electricity");
+            updateReadingLabel(water, lbl_Water_Reading_Value, lbl_Trend_Of_Reading_Water, "water");
+            updateReadingLabel(gas, lbl_Gas_Reading_Value, lbl_Trend_Of_Reading_Gas, "gas");
+
+            // Calculate and update overall reading
+            double total = 0;
+            if (electricity != null) total += electricity.getTotal_Price();
+            if (water != null) total += water.getTotal_Price();
+            if (gas != null) total += gas.getTotal_Price();
+
+            if (electricity == null && water == null && gas == null) {
+                lbl_OverAll_Reading_Value.setText("No Data");
+                lbl_Trend_Of_Reading_Overall.setText("No Data");
+            } else {
+                lbl_OverAll_Reading_Value.setText(String.valueOf(total));
+                String trend = database_Manager.getReadingManager().getTrendOverall(current_User);
+                lbl_Trend_Of_Reading_Overall.setText(trend);
+                lbl_Trend_Of_Reading_Overall.setForeground(
+                    database_Manager.getReadingManager().getTrendColor(current_User, null)
+                );
+            }
+
+            // Refresh graph content
             graph_Panel.initialize();
-            
-            // Setup the bar graphs with data from past 6 months
             graph_Panel.refreshData();
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
-    /**
-     * Updates the reading value labels based on latest readings
-     */
-    /**
-     * Updates reading displays for a specific utility type
-     */
-    private void update_Utility_Reading(Reading reading, JLabel valueLabel, JLabel trendLabel, String utilityType) {
+
+    private void updateReadingLabel(Reading reading, JLabel valueLabel, JLabel trendLabel, String type) {
         if (reading == null) {
             valueLabel.setText("No Data");
             trendLabel.setText("No Data");
         } else {
             valueLabel.setText(String.valueOf(reading.getReading()));
             try {
-                String trend = database_Manager.getReadingManager().getTrend(current_User, utilityType);
+                String trend = database_Manager.getReadingManager().getTrend(current_User, type);
                 trendLabel.setText(trend);
-                trendLabel.setForeground(database_Manager.getReadingManager().getTrendColor(current_User, utilityType));
+                trendLabel.setForeground(database_Manager.getReadingManager().getTrendColor(current_User, type));
             } catch (SQLException e) {
                 e.printStackTrace();
                 trendLabel.setText("Error calculating trend");
@@ -603,51 +532,4 @@ public class Home_Panel extends JPanel {
         }
     }
 
-    /**
-     * Updates the reading value labels based on latest readings
-     */
-    private void update_Reading_Labels(Reading electricity_Reading, Reading water_Reading, Reading gas_Reading) {
-        // Update individual utility readings
-        update_Utility_Reading(electricity_Reading, lbl_Electricity_Reading_Value, lbl_Trend_Of_Reading_Electricity, "electricity");
-        update_Utility_Reading(water_Reading, lbl_Water_Reading_Value, lbl_Trend_Of_Reading_Water, "water");
-        update_Utility_Reading(gas_Reading, lbl_Gas_Reading_Value, lbl_Trend_Of_Reading_Gas, "gas");
-        
-        // Update overall expenses
-        update_Overall_Expenses(electricity_Reading, water_Reading, gas_Reading);
-    }
-
-    /**
-     * Updates the overall expenses summary based on all utility readings
-     * 
-     * @param electricityReading The latest electricity reading
-     * @param waterReading The latest water reading
-     * @param gasReading The latest gas reading
-     */
-    private void update_Overall_Expenses(Reading electricity_Reading, Reading water_Reading, Reading gas_Reading) {
-        double total_Price = calculate_Total_Price(electricity_Reading, water_Reading, gas_Reading);
-        boolean has_Any_Reading = (electricity_Reading != null || water_Reading != null || gas_Reading != null);
-
-        if (!has_Any_Reading) {
-            lbl_OverAll_Reading_Value.setText("No Data");
-            lbl_Trend_Of_Reading_Overall.setText("No data");
-        } else {
-            lbl_OverAll_Reading_Value.setText(String.valueOf(total_Price));
-            try {
-                String trend = database_Manager.getReadingManager().getTrendOverall(current_User);
-                lbl_Trend_Of_Reading_Overall.setText(trend);
-                lbl_Trend_Of_Reading_Overall.setForeground(database_Manager.getReadingManager().getTrendColor(current_User, null));
-            } catch (SQLException e) {
-                e.printStackTrace();
-                lbl_Trend_Of_Reading_Overall.setText("Error calculating trend");
-            }
-        }
-    }
-
-    private double calculate_Total_Price(Reading electricity_Reading, Reading water_Reading, Reading gas_Reading) {
-        double total_Price = 0.0;
-        if (electricity_Reading != null) total_Price += electricity_Reading.getTotal_Price();
-        if (water_Reading != null) total_Price += water_Reading.getTotal_Price();
-        if (gas_Reading != null) total_Price += gas_Reading.getTotal_Price();
-        return total_Price;
-    }
 }
