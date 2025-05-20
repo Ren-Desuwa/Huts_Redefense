@@ -87,9 +87,9 @@ public class Gas_Panel extends JPanel {
 		add(panel_Gas_Consumption_Title);
 		
 		lbl_Title_Gas_Consumption = new JLabel("Gas Consumption");
-		lbl_Title_Gas_Consumption.setHorizontalAlignment(SwingConstants.CENTER);
+		lbl_Title_Gas_Consumption.setHorizontalAlignment(SwingConstants.LEFT);
 		lbl_Title_Gas_Consumption.setFont(new Font("Tahoma", Font.PLAIN, 35));
-		lbl_Title_Gas_Consumption.setBounds(10, 0, 393, 54);
+		lbl_Title_Gas_Consumption.setBounds(20, 0, 393, 54);
 		panel_Gas_Consumption_Title.add(lbl_Title_Gas_Consumption);
 		
 		lbl_Date = new JLabel("Date");
@@ -224,18 +224,18 @@ public class Gas_Panel extends JPanel {
 		lbl_Title_Tips.setBounds(42, 11, 393, 32);
 		panel_tips.add(lbl_Title_Tips);
 		
-		lbl_Tips1 = new JLabel("<html><ul><li>Unplug chargers when not in use to avoid phantom energy consumption</li></ul></html>");
+		lbl_Tips1 = new JLabel("<html><ul><li>Cover pots with lids while cooking to trap heat and reduce cooking time.</li></ul></html>");
 		lbl_Tips1.setVerticalAlignment(SwingConstants.TOP);
-		lbl_Tips1.setBounds(-16, 49, 502, 51);
+		lbl_Tips1.setBounds(-25, 49, 502, 51);
 		panel_tips.add(lbl_Tips1);
 		lbl_Tips1.setHorizontalAlignment(SwingConstants.LEFT);
 		lbl_Tips1.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		
-		lbl_Tips2 = new JLabel("<html><ul><li>Use LED bulbs it consumes 75% less energy than incandescent bulbs</li></ul></html>");
+		lbl_Tips2 = new JLabel("<html><ul><li>Use flat-bottomed cookware that makes full contact with the burner for better heat transfer.</li></ul></html>");
 		lbl_Tips2.setVerticalAlignment(SwingConstants.TOP);
 		lbl_Tips2.setHorizontalAlignment(SwingConstants.LEFT);
 		lbl_Tips2.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lbl_Tips2.setBounds(-16, 107, 502, 51);
+		lbl_Tips2.setBounds(-25, 107, 502, 51);
 		panel_tips.add(lbl_Tips2);
 		
 		setupData();
