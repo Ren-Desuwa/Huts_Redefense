@@ -11,6 +11,7 @@ import visuals.Rounded_Panel;
 import javax.swing.JLabel;
 import java.awt.Dimension;
 import javax.swing.JButton;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import java.awt.Color;
@@ -146,12 +147,12 @@ public class Home_Panel extends JPanel {
         lblTitleWelcome = new JLabel("Welcome");
         lblTitleWelcome.setHorizontalAlignment(SwingConstants.CENTER);
         lblTitleWelcome.setFont(new Font("Tahoma", Font.PLAIN, 35));
-        lblTitleWelcome.setBounds(10, 0, 182, 87);
+        lblTitleWelcome.setBounds(10, 0, 182, 60);
         panelWelcomeTitle.add(lblTitleWelcome);
         
         lblUsername = new JLabel("User");
         lblUsername.setFont(new Font("Tahoma", Font.PLAIN, 35));
-        lblUsername.setBounds(202, 0, 206, 87);
+        lblUsername.setBounds(202, 0, 206, 60);
         lblUsername.setText(currentUser.getUsername());
         panelWelcomeTitle.add(lblUsername);
         
@@ -170,6 +171,12 @@ public class Home_Panel extends JPanel {
         lblTime.setBounds(764, 46, 170, 41);
         lblTime.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm")));
         panelWelcomeTitle.add(lblTime);
+        
+        JLabel lbl_SubTitle_Welcome = new JLabel("Here is Your Summary of Expenses\r\n\r\n");
+        lbl_SubTitle_Welcome.setHorizontalAlignment(SwingConstants.LEFT);
+        lbl_SubTitle_Welcome.setFont(new Font("Tahoma", Font.PLAIN, 17));
+        lbl_SubTitle_Welcome.setBounds(20, 58, 393, 22);
+        panelWelcomeTitle.add(lbl_SubTitle_Welcome);
     }
     
     //==============================================================================================
@@ -181,6 +188,7 @@ public class Home_Panel extends JPanel {
      */
     private void createContentPanel() {
         panelInformation = new Rounded_Panel();
+        panelInformation.setBackground(new Color(255, 255, 255));
 //        panelInformation.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
         panelInformation.setBounds(21, 114, 467, 408);
         panelInformation.setLayout(null);
@@ -196,7 +204,7 @@ public class Home_Panel extends JPanel {
      * Create the electricity information panel
      */
     private void createElectricityInfoPanel() {
-        panelElectricityInfo = new JPanel();
+        panelElectricityInfo = new Rounded_Panel();
         panelElectricityInfo.setBounds(10, 28, 447, 77);
         panelElectricityInfo.setLayout(null);
         panelInformation.add(panelElectricityInfo);
@@ -222,7 +230,7 @@ public class Home_Panel extends JPanel {
      * Create the water information panel
      */
     private void createWaterInfoPanel() {
-        panelWaterInfo = new JPanel();
+        panelWaterInfo = new Rounded_Panel();
         panelWaterInfo.setBounds(10, 116, 447, 77);
         panelWaterInfo.setLayout(null);
         panelInformation.add(panelWaterInfo);
@@ -248,7 +256,7 @@ public class Home_Panel extends JPanel {
      * Create the gas information panel
      */
     private void createGasInfoPanel() {
-        panelGasInfo = new JPanel();
+        panelGasInfo = new Rounded_Panel();
         panelGasInfo.setBounds(10, 204, 447, 77);
         panelGasInfo.setLayout(null);
         panelInformation.add(panelGasInfo);
@@ -274,7 +282,7 @@ public class Home_Panel extends JPanel {
      * Create the overall information panel
      */
     private void createOverallInfoPanel() {
-        panelOverallInfo = new JPanel();
+        panelOverallInfo = new Rounded_Panel();
         panelOverallInfo.setBounds(10, 292, 447, 77);
         panelOverallInfo.setLayout(null);
         panelInformation.add(panelOverallInfo);
@@ -305,14 +313,17 @@ public class Home_Panel extends JPanel {
      */
     private void createGraphPanel() {
         // Create the main graph container (visible to WindowBuilder)
-        panelGraphContainer = new JPanel();
-        panelGraphContainer.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+        panelGraphContainer = new Rounded_Panel();
+//        panelGraphContainer.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+        panelGraphContainer.setBorder(new EmptyBorder(1, 1, 1, 1));
         panelGraphContainer.setBounds(504, 157, 413, 365);
         panelGraphContainer.setLayout(new BorderLayout()); // Use BorderLayout for easy replacement
         add(panelGraphContainer);
         
         // Create Graph_Panel instance
-        graphPanel = new visuals.Graph_Panel();
+        Rounded_Panel rounded_Panel = new Rounded_Panel();
+        rounded_Panel.setBackground(new Color(255, 255, 255));
+        graphPanel = new Graph_Panel(rounded_Panel);
         
         // Add Graph_Panel to the container
         panelGraphContainer.add(graphPanel, BorderLayout.CENTER);
@@ -324,18 +335,21 @@ public class Home_Panel extends JPanel {
      * Creates shadow panels for visual design effect behind the graph
      */
     private void createGraphShadowPanels() {
-        panelBehind1 = new JPanel();
-        panelBehind1.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+        panelBehind1 = new Rounded_Panel();
+        panelBehind1.setBackground(new Color(255, 255, 255));
+//        panelBehind1.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
         panelBehind1.setBounds(520, 142, 413, 365);
         add(panelBehind1);
         
-        panelBehind2 = new JPanel();
-        panelBehind2.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+        panelBehind2 = new Rounded_Panel();
+        panelBehind2.setBackground(new Color(255, 255, 255));
+//        panelBehind2.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
         panelBehind2.setBounds(536, 129, 413, 356);
         add(panelBehind2);
         
-        panelBehind3 = new JPanel();
-        panelBehind3.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+        panelBehind3 = new Rounded_Panel();
+        panelBehind3.setBackground(new Color(255, 255, 255));
+//        panelBehind3.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
         panelBehind3.setBounds(552, 114, 413, 347);
         add(panelBehind3);
     }
@@ -348,8 +362,8 @@ public class Home_Panel extends JPanel {
      * Create the tips panel with money-saving advice
      */
     private void createTipsPanel() {
-        panelTips = new JPanel();
-        panelTips.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+        panelTips = new  Rounded_Panel();
+//        panelTips.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
         panelTips.setBounds(21, 543, 944, 134);
         panelTips.setLayout(null);
         add(panelTips);
@@ -401,6 +415,14 @@ public class Home_Panel extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 graphPanel.showElectricityGraph();
             }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+				panelElectricityInfo.setBackground(new Color(220, 220, 220));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				panelElectricityInfo.setBackground(new Color(240, 240, 240));
+			}
         });
         
         // Water panel click event
@@ -408,6 +430,14 @@ public class Home_Panel extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 graphPanel.showWaterGraph();
+            }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            	panelWaterInfo.setBackground(new Color(220, 220, 220));
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+				panelWaterInfo.setBackground(new Color(240, 240, 240));
             }
         });
         
@@ -417,6 +447,15 @@ public class Home_Panel extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 graphPanel.showGasGraph();
             }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+				panelGasInfo.setBackground(new Color(220, 220, 220));
+			}
+            @Override
+            public void mouseExited(MouseEvent e) {
+            	panelGasInfo.setBackground(new Color(240, 240, 240));
+            }
+            
         });
         
         // Overall panel click event
@@ -425,6 +464,14 @@ public class Home_Panel extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 graphPanel.showOverallGraph();
             }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            	panelOverallInfo.setBackground(new Color(220, 220, 220));
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+				panelOverallInfo.setBackground(new Color(240, 240, 240));
+			}
         });
     }
     

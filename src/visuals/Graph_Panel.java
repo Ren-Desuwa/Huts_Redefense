@@ -29,15 +29,20 @@ public class Graph_Panel extends JPanel {
      * Creates a new graph panel with placeholder
      * WindowBuilder-friendly constructor
      */
-    public Graph_Panel() {
+    public Graph_Panel(JPanel placeholderPanel) {
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createLineBorder(Color.BLACK, 1, true));
         
         // Create simple placeholder that WindowBuilder can understand
-        JPanel placeholder = new JPanel();
+        JPanel placeholder = placeholderPanel;
         placeholder.setLayout(new BorderLayout());
         add(placeholder, BorderLayout.CENTER);
     }
+    
+    public Graph_Panel() {
+		new Graph_Panel(new JPanel());
+	}
+    
     
     /**
      * Initializes the graph panels
