@@ -91,6 +91,7 @@ public class Electricity_Panel extends JPanel {
 	private JLabel lbl_Title_Tips;
 	private JLabel lbl_Tips1;
 	private JLabel lbl_Tips2;
+	private JLabel lbl_Trend_Of_Reading_Electricity;
 	
 	
 	/**
@@ -219,6 +220,12 @@ public class Electricity_Panel extends JPanel {
 		btn_Add_New_Reading.setBounds(155, 125, 151, 34);
 		panel_Current_Reading.add(btn_Add_New_Reading);
 		
+		lbl_Trend_Of_Reading_Electricity = new JLabel("No avilable data");
+		lbl_Trend_Of_Reading_Electricity.setHorizontalAlignment(SwingConstants.CENTER);
+		lbl_Trend_Of_Reading_Electricity.setFont(new Font("Dialog", Font.PLAIN, 15));
+		lbl_Trend_Of_Reading_Electricity.setBounds(97, 82, 261, 32);
+		panel_Current_Reading.add(lbl_Trend_Of_Reading_Electricity);
+		
 		panel_tips = new Rounded_Panel();
 		panel_tips.setBackground(new Color(255, 255, 255));
 		panel_tips.setLayout(null);
@@ -284,13 +291,13 @@ public class Electricity_Panel extends JPanel {
 		
 		lbl_Head_Rate = new JLabel("Rate");
 		lbl_Head_Rate.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_Head_Rate.setBounds(240, 39, 78, 17);
+		lbl_Head_Rate.setBounds(245, 39, 78, 17);
 		lbl_Head_Rate.setFont(new Font("Tahoma", Font.BOLD, 15));
 		panel_Header.add(lbl_Head_Rate);
 		
 		lbl_Head_TotalPrice = new JLabel("Total Price");
 		lbl_Head_TotalPrice.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_Head_TotalPrice.setBounds(329, 39, 108, 17);
+		lbl_Head_TotalPrice.setBounds(342, 39, 108, 17);
 		lbl_Head_TotalPrice.setFont(new Font("Tahoma", Font.BOLD, 15));
 		panel_Header.add(lbl_Head_TotalPrice);
 		
@@ -306,22 +313,7 @@ public class Electricity_Panel extends JPanel {
 		}
 	}
 	
-	private void goToAddReading() {
-
-		EventQueue.invokeLater(new Runnable() {
-	        public void run() {
-	            try {
-	            	Add_Reading_Panel add_reading_panel = new Add_Reading_Panel(
-		            	    (JFrame) SwingUtilities.getWindowAncestor(Electricity_Panel.this),
-		            	    database_manager, current_user, Electricity_Panel.this, "electricity"
-		            	);
-		            	add_reading_panel.setVisible(true);
-	            } catch (Exception e) {
-	                e.printStackTrace();
-	            }
-	        }
-	    });
-	}
+	
 	
 	public void Panel_Refresh() {
 		all_readings = getAllReadings();
@@ -340,6 +332,7 @@ public class Electricity_Panel extends JPanel {
 				lbl_Electricity_Reading_Value.setText("No Data");
 			} else {
 				lbl_Electricity_Reading_Value.setText(String.valueOf(electricity_reading.getReading()));
+				database_manager.getReadingManager().updateReadingLabel(current_user,electricity_reading, lbl_Electricity_Reading_Value, lbl_Trend_Of_Reading_Electricity, "electricity");
 			}
 			
 		} catch (Exception e) {
@@ -348,52 +341,60 @@ public class Electricity_Panel extends JPanel {
 	}
 	
 	private JList<String> getAllReadings() {
-		try {
-			if (!database_manager.getReadingManager().isReadingExists(current_user, "electricity")) {
-				JList<String> list = new JList<>(new String[] {"No readings found.", "Please add a reading."});
-				list.setFont(new Font("monoFont", Font.PLAIN, 15));
-				list.setPreferredSize(new Dimension(429, 448));
-				list.setFixedCellHeight(30);
-				return list;
-			}
-			List<Reading> all_readings = database_manager.getReadingManager().getAllReadingsByType(current_user, "electricity");
-			
-			String[] readings = new String[all_readings.size()];
-			for (int i = 0; i < all_readings.size(); i++) {
-				Reading reading = all_readings.get(i);
-				readings[i] = String.format("    %-20s %-23s %-19s %-10s", reading.getDate(), reading.getReading() + "kWh", reading.getRate() + "Php", reading.getTotal_Price() + "Php");
-			}
-			JList<String> list = new JList<>(readings);
-			list.setFont(new Font("monoFont", Font.PLAIN, 13));
-			list.setPreferredSize(new Dimension(429, 448));
-			list.setFixedCellHeight(30);
-			list.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					int response = javax.swing.JOptionPane.showConfirmDialog(null, "Do you want to edit this reading?", "Edit Reading", javax.swing.JOptionPane.YES_NO_OPTION);
-					if (response == javax.swing.JOptionPane.YES_OPTION) {
-						EventQueue.invokeLater(new Runnable() {
-					        public void run() {
-					            try {
-					            	Edit_Reading_Panel edit_reading_panel = new Edit_Reading_Panel(
-					            	    (JFrame) SwingUtilities.getWindowAncestor(Electricity_Panel.this),
-					            	    database_manager, current_user, Electricity_Panel.this , "electricity"
-					            	);
-					            	edit_reading_panel.setVisible(true);
+	    MouseAdapter listClickListener = new MouseAdapter() {
+	        @Override
+	        public void mouseClicked(MouseEvent e) {
+	            JList<?> list = (JList<?>) e.getSource();
+	            int selectedIndex = list.getSelectedIndex();
+	            
+	            if (selectedIndex >= 0) {
+	                int response = javax.swing.JOptionPane.showConfirmDialog(null, 
+	                    "Do you want to edit this reading?", "Edit Reading", 
+	                    javax.swing.JOptionPane.YES_NO_OPTION);
+	                    
+	                if (response == javax.swing.JOptionPane.YES_OPTION) {
+	                    EventQueue.invokeLater(new Runnable() {
+	                        public void run() {
+	                            try {
+	                                List<Reading> allReadings = database_manager.getReadingManager().getAllReadingsByType(current_user, "electricity");
+	                                Reading selectedReading = null;
+	                                
+	                                if (selectedIndex < allReadings.size()) {
+	                                    selectedReading = allReadings.get(selectedIndex);
+	                                }
+	                                
+	                                Edit_Reading_Panel edit_reading_panel = new Edit_Reading_Panel(
+	                                    (JFrame) SwingUtilities.getWindowAncestor(Electricity_Panel.this),
+	                                    database_manager, current_user, Electricity_Panel.this, "electricity", selectedReading
+	                                );
+	                                edit_reading_panel.setVisible(true);
+	                            } catch (Exception ex) {
+	                                ex.printStackTrace();
+	                            }
+	                        }
+	                    });
+	                }
+	            }
+	        }
+	    };
+	    
+	    return database_manager.getReadingManager().getReadingsAsJList(current_user, "electricity", listClickListener);
+	}
+	
+	private void goToAddReading() {
 
-					            } catch (Exception e) {
-					                e.printStackTrace();
-					            }
-					        }
-					    });
-					}
-				}
-			});
-			return list;
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			return new JList<>(new String[] {"Error fetching readings."});
-		}
+		EventQueue.invokeLater(new Runnable() {
+	        public void run() {
+	            try {
+	            	Add_Reading_Panel add_reading_panel = new Add_Reading_Panel(
+		            	    (JFrame) SwingUtilities.getWindowAncestor(Electricity_Panel.this),
+		            	    database_manager, current_user, Electricity_Panel.this, "electricity"
+		            	);
+		            	add_reading_panel.setVisible(true);
+	            } catch (Exception e) {
+	                e.printStackTrace();
+	            }
+	        }
+	    });
 	}
 }
