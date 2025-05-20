@@ -53,7 +53,7 @@ public class Add_Reading_Panel extends JDialog {
 	private JTextField tf_TotalPrice;
 	private JPanel panel_Electricity_Consumption_Title;
 	private JLabel lbl_Date;
-	private JLabel lbl_Title_Electricity_Consumption;
+	private JLabel lbl_Title_AddNewReading;
 	private JLabel lbl_Date_1;
 	private JComboBox cB_Day;
 	private JComboBox cB_Month;
@@ -109,11 +109,11 @@ public class Add_Reading_Panel extends JDialog {
 		lbl_Date.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
 		lbl_Date.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		
-		lbl_Title_Electricity_Consumption = new JLabel("Add New Reading");
-		lbl_Title_Electricity_Consumption.setBounds(13, 20, 393, 54);
-		panel_Electricity_Consumption_Title.add(lbl_Title_Electricity_Consumption);
-		lbl_Title_Electricity_Consumption.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_Title_Electricity_Consumption.setFont(new Font("Tahoma", Font.PLAIN, 35));
+		lbl_Title_AddNewReading = new JLabel("Add New Reading");
+		lbl_Title_AddNewReading.setBounds(13, 20, 393, 54);
+		panel_Electricity_Consumption_Title.add(lbl_Title_AddNewReading);
+		lbl_Title_AddNewReading.setHorizontalAlignment(SwingConstants.CENTER);
+		lbl_Title_AddNewReading.setFont(new Font("Tahoma", Font.PLAIN, 35));
 		
 		lbl_Date_1 = new JLabel("Date");
 		lbl_Date_1.setHorizontalAlignment(SwingConstants.LEFT);
@@ -163,28 +163,15 @@ public class Add_Reading_Panel extends JDialog {
 		cB_Year.setBounds(306, 164, 120, 45);
 		contentPane.add(cB_Year);
 		
-		lbl_Reading = new JLabel("Reading (kWh)");
+		lbl_Reading = new JLabel("Reading");
 		lbl_Reading.setHorizontalAlignment(SwingConstants.LEFT);
 		lbl_Reading.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lbl_Reading.setBounds(10, 216, 163, 22);
 		contentPane.add(lbl_Reading);
 		
-		tf_Reading = new JTextField("Enter Reading");
+		tf_Reading = new JTextField();
 		tf_Reading.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		tf_Reading.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				if (tf_Reading.getText().equals("Enter Reading")) {
-					tf_Reading.setText("");
-				}
-			}
-			@Override
-			public void focusLost(FocusEvent e) {
-				if (tf_Reading.getText().isEmpty()) {
-					tf_Reading.setText("Enter Reading");
-				}
-			}
-		});
+		
 		tf_Reading.setColumns(10);
 		tf_Reading.setBounds(10, 241, 416, 45);
 		contentPane.add(tf_Reading);
@@ -262,9 +249,72 @@ public class Add_Reading_Panel extends JDialog {
 		btn_Cancel.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btn_Cancel.setBounds(234, 458, 91, 34);
 		contentPane.add(btn_Cancel);
+		
+		setLabels();
 	}
 	
-	
+	private void setLabels() {
+		if (readingType.equals("electricity")) {
+			setTitle("Edit Electricity Reading");
+			lbl_Reading.setText("Reading (kWh)");
+			
+			tf_Reading.setText("Enter Reading (kWh)");
+			tf_Reading.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusGained(FocusEvent e) {
+					if (tf_Reading.getText().equals("Enter Reading (kWh)")) {
+						tf_Reading.setText("");
+					}
+				}
+				@Override
+				public void focusLost(FocusEvent e) {
+					if (tf_Reading.getText().isEmpty()) {
+						tf_Reading.setText("Enter Reading (kWh)");
+					}
+				}
+			});
+		} 
+		if (readingType.equals("water")) {
+			setTitle("Edit Water Reading");
+			lbl_Reading.setText("Reading (m³)");
+			
+			tf_Reading.setText("Enter Reading (m³)");
+			tf_Reading.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusGained(FocusEvent e) {
+					if (tf_Reading.getText().equals("Enter Reading (m³)")) {
+						tf_Reading.setText("");
+					}
+				}
+				@Override
+				public void focusLost(FocusEvent e) {
+					if (tf_Reading.getText().isEmpty()) {
+						tf_Reading.setText("Enter Reading (m³)");
+					}
+				}
+			});
+		}
+		if (readingType.equals("gas")) {
+			setTitle("Edit Gas Reading");
+			lbl_Reading.setText("Reading (Qty)");
+			
+			tf_Reading.setText("Enter Reading (Qty)");
+			tf_Reading.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusGained(FocusEvent e) {
+					if (tf_Reading.getText().equals("Enter Reading (Qty)")) {
+						tf_Reading.setText("");
+					}
+				}
+				@Override
+				public void focusLost(FocusEvent e) {
+					if (tf_Reading.getText().isEmpty()) {
+						tf_Reading.setText("Enter Reading (Qty)");
+					}
+				}
+			});
+		}
+	}
 	
 	public void cancelAddReading() {
 		String reading = tf_Reading.getText();

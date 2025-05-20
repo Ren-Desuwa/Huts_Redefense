@@ -288,7 +288,7 @@ public class Water_Panel extends JPanel {
 			String[] readings = new String[all_readings.size()];
 			for (int i = 0; i < all_readings.size(); i++) {
 				Reading reading = all_readings.get(i);
-				readings[i] = String.format("  %-19s %-21s %-17s %-10s", reading.getDate(), reading.getReading() + "kWh", reading.getRate() + "Php", reading.getTotal_Price() + "Php");
+				readings[i] = String.format("  %-19s %-21s %-17s %-10s", reading.getDate(), reading.getReading() + "m³", reading.getRate() + "Php", reading.getTotal_Price() + "Php");
 			}
 			JList<String> list = new JList<>(readings);
 			list.setFont(new Font("monoFont", Font.PLAIN, 15));
