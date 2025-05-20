@@ -295,6 +295,11 @@ public class Water_Panel extends JPanel {
 		setupData();
 	}
 	
+	public void Refresh_Graph() {
+		if (graph_Panel != null) {
+			graph_Panel.refreshData();
+		}
+	}
 	
 	private void goToAddReading() {
 
