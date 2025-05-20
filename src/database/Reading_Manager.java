@@ -695,7 +695,7 @@ public class Reading_Manager {
 	                    unit = "";
 	                    break;
 	            }
-	            readings[i] = String.format("  %-19s %-21s %-17s %-10s", 
+	            readings[i] = String.format("    %-21s %-23s %-19s %-10s", 
 	                reading.getDate(), 
 	                reading.getReading() + unit, 
 	                reading.getRate() + "Php", 
@@ -703,7 +703,7 @@ public class Reading_Manager {
 	        }
 	        
 	        JList<String> list = new JList<>(readings);
-	        list.setFont(new Font("monoFont", Font.PLAIN, 15));
+	        list.setFont(new Font("monoFont", Font.PLAIN, 13));
 	        list.setPreferredSize(new Dimension(429, 448));
 	        list.setFixedCellHeight(30);
 	        

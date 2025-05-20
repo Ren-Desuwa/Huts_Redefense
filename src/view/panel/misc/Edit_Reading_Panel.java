@@ -173,14 +173,14 @@ public class Edit_Reading_Panel extends JDialog {
 			lbl_Column_Reading = new JLabel("Reading");
 			lbl_Column_Reading.setHorizontalAlignment(SwingConstants.CENTER);
 			lbl_Column_Reading.setFont(new Font("Tahoma", Font.PLAIN, 12));
-			lbl_Column_Reading.setBounds(124, 154, 98, 22);
+			lbl_Column_Reading.setBounds(116, 154, 98, 22);
 			contentPane.add(lbl_Column_Reading);
 			
 			
 			lbl_Column_Rate = new JLabel("Rate");
 			lbl_Column_Rate.setHorizontalAlignment(SwingConstants.CENTER);
 			lbl_Column_Rate.setFont(new Font("Tahoma", Font.PLAIN, 12));
-			lbl_Column_Rate.setBounds(217, 154, 87, 22);
+			lbl_Column_Rate.setBounds(209, 154, 87, 22);
 			contentPane.add(lbl_Column_Rate);
 			
 			lbl_Reading = new JLabel("Reading");
@@ -340,7 +340,7 @@ public class Edit_Reading_Panel extends JDialog {
 			lbl_Column_TotalPrice = new JLabel("Total Price");
 			lbl_Column_TotalPrice.setHorizontalAlignment(SwingConstants.CENTER);
 			lbl_Column_TotalPrice.setFont(new Font("Tahoma", Font.PLAIN, 12));
-			lbl_Column_TotalPrice.setBounds(311, 154, 87, 22);
+			lbl_Column_TotalPrice.setBounds(310, 154, 87, 22);
 			contentPane.add(lbl_Column_TotalPrice);
 		}
 		
@@ -429,13 +429,22 @@ public class Edit_Reading_Panel extends JDialog {
 		
 		public void selectedReading() {
 			String selected = (String) cB_Edit_Reading_Selection.getSelectedItem();
-			if (selected != null && !selected.startsWith("No readings") && !selected.startsWith("Error")) {
-		        String date = selected.trim().split("\\s+")[0];
-		        String reading = selected.trim().split("\\s+")[1];
-		        String rate = selected.trim().split("\\s+")[2];
-		        String totalPrice = selected.trim().split("\\s+")[3];
+			String[] parts = selected.trim().split("\\s+");
+			if (parts.length >= 4) {
+			    String date = parts[0];
+			    String reading = parts[1];
+			    String rate = parts[2];
+			    String totalPrice = parts[3];
 		        
-		        double readingValue = Double.parseDouble(reading.replace("kWh", ""));
+			    if (readingType.equals("electricity")) {
+			        reading = reading.replace("kWh", "");
+			        } else if (readingType.equals("water")) {
+			        	reading = reading.replace("m³", "");
+			        } else if (readingType.equals("gas")) {
+			        	reading = reading.replace("Qty", "");
+			        }
+			    
+		        double readingValue = Double.parseDouble(reading);
 		        double rateValue = Double.parseDouble(rate.replace("Php", ""));
 		        double totalPriceValue = Double.parseDouble(totalPrice.replace("Php", ""));
 		        
@@ -452,6 +461,14 @@ public class Edit_Reading_Panel extends JDialog {
 			String reading = tf_Reading.getText();
 			String rate = tf_Rate.getText();
 			String totalPrice = tf_TotalPrice.getText();
+			
+			if (readingType.equals("electricity")) {
+				reading = reading.replace("Enter Reading (kWh)", "Enter Reading");
+			} else if (readingType.equals("water")) {
+				reading = reading.replace("Enter Reading (m³)", "Enter Reading");
+			} else if (readingType.equals("gas")) {
+				reading = reading.replace("Enter Reading (Qty)", "Enter Reading");
+			}
 			
 			if (reading.equals("Enter Reading") || rate.equals("Enter Rate") || totalPrice.equals("Total Price")) {
 				javax.swing.JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
@@ -508,6 +525,14 @@ public class Edit_Reading_Panel extends JDialog {
 			String reading = tf_Reading.getText();
 			String rate = tf_Rate.getText();
 			String totalPrice = tf_TotalPrice.getText();
+			
+			if (readingType.equals("electricity")) {
+				reading = reading.replace("Enter Reading (kWh)", "Enter Reading");
+			} else if (readingType.equals("water")) {
+				reading = reading.replace("Enter Reading (m³)", "Enter Reading");
+			} else if (readingType.equals("gas")) {
+				reading = reading.replace("Enter Reading (Qty)", "Enter Reading");
+			}
 			
 			if (reading.equals("Enter Reading") || rate.equals("Enter Rate") || totalPrice.equals("Total Price")) {
 				javax.swing.JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
@@ -568,6 +593,14 @@ public class Edit_Reading_Panel extends JDialog {
 			String rate = tf_Rate.getText();
 			String totalPrice = tf_TotalPrice.getText();
 			
+			if (readingType.equals("electricity")) {
+				reading = reading.replace("Enter Reading (kWh)", "Enter Reading");
+			} else if (readingType.equals("water")) {
+				reading = reading.replace("Enter Reading (m³)", "Enter Reading");
+			} else if (readingType.equals("gas")) {
+				reading = reading.replace("Enter Reading (Qty)", "Enter Reading");
+			}
+			
 			if (!reading.equals("Enter Reading") || !rate.equals("Enter Rate") || !totalPrice.equals("Total Price")) {
 				int response = javax.swing.JOptionPane.showConfirmDialog(this, "Are you sure you want to cancel?", "Confirm Cancel", javax.swing.JOptionPane.YES_NO_OPTION);
 				if (response == javax.swing.JOptionPane.YES_OPTION) {
@@ -586,10 +619,22 @@ public class Edit_Reading_Panel extends JDialog {
 				}
 				List<Reading> all_readings = database_manager.getReadingManager().getAllReadingsByType(current_user, readingType);
 				
+				String Unit = "";
+				String Spacing = "";
+				if(readingType.equals("electricity")) {
+					Unit = "kWh";
+					Spacing = "  %-12s %-11s %-11s %-10s";
+				} else if (readingType.equals("water")) {
+					Unit = "m³";
+					Spacing = "  %-14s %-10s %-11s %-10s";
+				} else if (readingType.equals("gas")) {
+					Unit = "Qty";
+					Spacing = "  %-15s %-10s %-12s %-10s";
+				}
 				String[] readings = new String[all_readings.size()];
 				for (int i = 0; i < all_readings.size(); i++) {
 					Reading reading = all_readings.get(i);
-					readings[i] = String.format("  %-13s %-11s %-9s %-10s", reading.getDate(), reading.getReading() + "kWh", reading.getRate() + "Php", reading.getTotal_Price() + "Php");
+					readings[i] = String.format(Spacing , reading.getDate(), reading.getReading() + Unit , reading.getRate() + "Php", reading.getTotal_Price() + "Php");
 				}
 				cB_Edit_Reading_Selection = new JComboBox<>(readings);
 				return cB_Edit_Reading_Selection;

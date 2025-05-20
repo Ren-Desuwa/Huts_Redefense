@@ -291,13 +291,13 @@ public class Electricity_Panel extends JPanel {
 		
 		lbl_Head_Rate = new JLabel("Rate");
 		lbl_Head_Rate.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_Head_Rate.setBounds(245, 39, 78, 17);
+		lbl_Head_Rate.setBounds(240, 39, 78, 17);
 		lbl_Head_Rate.setFont(new Font("Tahoma", Font.BOLD, 15));
 		panel_Header.add(lbl_Head_Rate);
 		
 		lbl_Head_TotalPrice = new JLabel("Total Price");
 		lbl_Head_TotalPrice.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_Head_TotalPrice.setBounds(342, 39, 108, 17);
+		lbl_Head_TotalPrice.setBounds(329, 39, 108, 17);
 		lbl_Head_TotalPrice.setFont(new Font("Tahoma", Font.BOLD, 15));
 		panel_Header.add(lbl_Head_TotalPrice);
 		
