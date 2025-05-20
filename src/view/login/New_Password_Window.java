@@ -1,5 +1,6 @@
 package view.login;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -19,6 +20,11 @@ import model.User;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
+import visuals.Rounded_Button;
+import visuals.Rounded_Panel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 
 public class New_Password_Window extends JFrame {
 
@@ -29,9 +35,12 @@ public class New_Password_Window extends JFrame {
 	private JPanel contentPane;
 	private JPasswordField pf_Password;
 	private JPasswordField pf_ConfirmPassword;
-	private JLabel lbl_Title_Forgot_Password;
 	private JLabel lbl_New_Password;
 	private JLabel lbl_Confirm_Password;
+	private Rounded_Panel panel_NewPass_Title;
+	private JButton btn_Change_Password;
+	private JLabel lbl_Title_NewPass;
+	private JButton btn_Cancel;
 		
 	public New_Password_Window(Database_Manager database_manager, User current_user) {
 		this.current_user = current_user;
@@ -41,24 +50,34 @@ public class New_Password_Window extends JFrame {
 		setResizable(false);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 692, 637);
+		setBounds(400, 50, 450, 620);
+		setBackground(new Color(213, 213, 213));
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
+		contentPane.setBackground(new Color(213, 213, 213));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		lbl_Title_Forgot_Password = new JLabel("Forgot Password");
-		lbl_Title_Forgot_Password.setBounds(267, 47, 171, 46);
-		lbl_Title_Forgot_Password.setFont(new Font("Tahoma", Font.BOLD, 20));
-		lbl_Title_Forgot_Password.setHorizontalAlignment(SwingConstants.CENTER);
-		contentPane.add(lbl_Title_Forgot_Password);
+		panel_NewPass_Title = new Rounded_Panel();
+		panel_NewPass_Title.setLayout(null);
+		panel_NewPass_Title.setBackground(Color.WHITE);
+		panel_NewPass_Title.setBounds(10, 11, 416, 97);
+		contentPane.add(panel_NewPass_Title);
+		
+		lbl_Title_NewPass = new JLabel("New Password");
+		lbl_Title_NewPass.setHorizontalAlignment(SwingConstants.CENTER);
+		lbl_Title_NewPass.setFont(new Font("Tahoma", Font.BOLD, 35));
+		lbl_Title_NewPass.setBounds(13, 20, 393, 54);
+		panel_NewPass_Title.add(lbl_Title_NewPass);
 		
 		lbl_New_Password = new JLabel("New Password");
-		lbl_New_Password.setBounds(247, 175, 97, 14);
+		lbl_New_Password.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_New_Password.setBounds(10, 181, 211, 22);
 		contentPane.add(lbl_New_Password);
 		
 		pf_Password = new JPasswordField();
+		pf_Password.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		pf_Password.setText("Enter Password");
 		pf_Password.setEchoChar((char) 0);
 		pf_Password.addFocusListener(new FocusAdapter() {
@@ -78,14 +97,16 @@ public class New_Password_Window extends JFrame {
 				}
 			}
 		});
-		pf_Password.setBounds(268, 200, 171, 44);
+		pf_Password.setBounds(20, 214, 396, 45);
 		contentPane.add(pf_Password);
 		
 		lbl_Confirm_Password = new JLabel("Confirm Password");
-		lbl_Confirm_Password.setBounds(247, 253, 97, 14);
+		lbl_Confirm_Password.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_Confirm_Password.setBounds(10, 270, 211, 22);
 		contentPane.add(lbl_Confirm_Password);
 		
 		pf_ConfirmPassword = new JPasswordField();
+		pf_ConfirmPassword.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		pf_ConfirmPassword.setText("Confirm Password");
 		pf_ConfirmPassword.setEchoChar((char) 0);
 		pf_ConfirmPassword.addFocusListener(new FocusAdapter() {
@@ -105,18 +126,83 @@ public class New_Password_Window extends JFrame {
 				}
 			}
 		});
-		pf_ConfirmPassword.setBounds(268, 278, 171, 44);
+		pf_ConfirmPassword.setBounds(20, 303, 396, 45);
 		contentPane.add(pf_ConfirmPassword);
 		
-		JButton btn_Change_Password = new JButton("Change Password");
-		btn_Change_Password.setBounds(285, 385, 138, 44);
-		btn_Change_Password.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		btn_Change_Password = new Rounded_Button("Change Password", 25);
+		btn_Change_Password.setBackground(new Color(182, 182, 182));
+		btn_Change_Password.setForeground(Color.BLACK);
+		btn_Change_Password.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btn_Change_Password.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
 				ChangePassword();
 			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btn_Change_Password.setBackground(new Color(150, 150, 150));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btn_Change_Password.setBackground(new Color(182, 182, 182));
+			}
 		});
+		btn_Change_Password.setBounds(108, 492, 211, 44);
 		contentPane.add(btn_Change_Password);
+		
+		btn_Cancel = new Rounded_Button("Cancel", 25);
+		btn_Cancel.setForeground(Color.BLACK);
+		btn_Cancel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		btn_Cancel.setBackground(new Color(182, 182, 182));
+		btn_Cancel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				cancelNewPass();
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btn_Cancel.setBackground(new Color(150, 150, 150));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btn_Cancel.setBackground(new Color(182, 182, 182));
+			}
+		});
+		btn_Cancel.setBounds(168, 547, 91, 34);
+		contentPane.add(btn_Cancel);
 	}
+	
+	private void cancelNewPass() {
+		String password = String.valueOf(pf_Password.getPassword());
+		String confirmPassword = String.valueOf(pf_ConfirmPassword.getPassword());
+		
+		if (!password.equals("Enter Password") || !confirmPassword.equals("Confirm Password")) {
+			int response = javax.swing.JOptionPane.showConfirmDialog(this, "Are you sure you want to cancel?", "Confirm Cancel", javax.swing.JOptionPane.YES_NO_OPTION);
+			if (response == javax.swing.JOptionPane.YES_OPTION) {
+				this.dispose();
+				openLogIn();
+			}
+		} else {
+			this.dispose();
+			openLogIn();
+		}
+	}
+	
+	private void openLogIn() {
+		EventQueue.invokeLater(new Runnable() {
+	        public void run() {
+	            try {
+	                New_Password_Window.this.dispose();
+	                Log_In_Window loginWindow = new Log_In_Window(database_manager);
+	                loginWindow.setVisible(true);
+	            } catch (Exception e) {
+	                e.printStackTrace();
+	            }
+	        }
+	    });
+	}
+	
+	
 	private void ChangePassword() {
 		String password = String.valueOf(pf_Password.getPassword());
 		String confirmPassword = String.valueOf(pf_ConfirmPassword.getPassword());
@@ -140,12 +226,10 @@ public class New_Password_Window extends JFrame {
 			database_manager.getUserManager().updateUserPassword(current_user, password);
 			System.out.println("Password changed successfully.");
 			
-			JFrame currentFrame = this;
-			
 			EventQueue.invokeLater(new Runnable() {
 		        public void run() {
 		            try {
-		                currentFrame.dispose();
+		                New_Password_Window.this.dispose();
 		                Log_In_Window loginWindow = new Log_In_Window(database_manager);
 		                loginWindow.setVisible(true);
 		            } catch (Exception e) {

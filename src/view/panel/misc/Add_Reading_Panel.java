@@ -11,7 +11,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-import javax.swing.border.LineBorder;
 
 import database.Database_Manager;
 import model.User;
@@ -75,7 +74,7 @@ public class Add_Reading_Panel extends JDialog {
 	    this.readingType = type;  // Set the reading type electricity, water or gas
 		
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 450, 535);
+		setBounds(400, 50, 450, 535);
 		setBackground(new Color(213, 213, 213));
 		setTitle("Add Reading");
 		setResizable(false);

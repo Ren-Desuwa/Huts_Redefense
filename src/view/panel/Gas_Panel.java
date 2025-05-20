@@ -209,13 +209,13 @@ public class Gas_Panel extends JPanel {
 		
 		lbl_Head_Rate = new JLabel("Rate");
 		lbl_Head_Rate.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_Head_Rate.setBounds(245, 39, 78, 17);
+		lbl_Head_Rate.setBounds(240, 39, 78, 17);
 		lbl_Head_Rate.setFont(new Font("Tahoma", Font.BOLD, 15));
 		Headerpanel.add(lbl_Head_Rate);
 		
 		lbl_Head_TotalPrice = new JLabel("Total Price");
 		lbl_Head_TotalPrice.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_Head_TotalPrice.setBounds(342, 39, 108, 17);
+		lbl_Head_TotalPrice.setBounds(329, 39, 108, 17);
 		lbl_Head_TotalPrice.setFont(new Font("Tahoma", Font.BOLD, 15));
 		Headerpanel.add(lbl_Head_TotalPrice);
 		
@@ -359,10 +359,10 @@ public class Gas_Panel extends JPanel {
 			String[] readings = new String[all_readings.size()];
 			for (int i = 0; i < all_readings.size(); i++) {
 				Reading reading = all_readings.get(i);
-				readings[i] = String.format("  %-19s %-21s %-17s %-10s", reading.getDate(), reading.getReading() + "Qty", reading.getRate() + "Php", reading.getTotal_Price() + "Php");
+				readings[i] = String.format("    %-23s %-23s %-19s %-10s", reading.getDate(), reading.getReading() + "Qty", reading.getRate() + "Php", reading.getTotal_Price() + "Php");
 			}
 			JList<String> list = new JList<>(readings);
-			list.setFont(new Font("monoFont", Font.PLAIN, 15));
+			list.setFont(new Font("monoFont", Font.PLAIN, 13));
 			list.setPreferredSize(new Dimension(429, 448));
 			list.setFixedCellHeight(30);
 			list.addMouseListener(new MouseAdapter() {

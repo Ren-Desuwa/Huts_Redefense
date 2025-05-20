@@ -8,10 +8,12 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import database.Database_Manager;
 import model.User;
@@ -454,7 +456,7 @@ public class Profile_Panel extends JPanel {
     	EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Change_Password_Window window = new Change_Password_Window(database_manager, current_user);
+					Change_Password_Window window = new Change_Password_Window((JFrame) SwingUtilities.getWindowAncestor(Profile_Panel.this), database_manager, current_user);
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();

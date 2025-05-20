@@ -84,7 +84,7 @@ public class Edit_Reading_Panel extends JDialog {
 		    this.readingType = type;  // Set the reading type electricity, water or gas
 			
 			setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			setBounds(100, 100, 450, 635);
+			setBounds(400, 50, 450, 635);
 			setBackground(new Color(213, 213, 213));
 			setTitle("Edit Reading");
 			setResizable(false);

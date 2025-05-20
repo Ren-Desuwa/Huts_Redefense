@@ -1,5 +1,6 @@
 package view.login;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -23,6 +24,9 @@ import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import visuals.Rounded_Button;
+import visuals.Rounded_Panel;
+
 public class Sign_Up_Window extends JFrame {
 	
 	private Database_Manager database_manager;
@@ -33,11 +37,14 @@ public class Sign_Up_Window extends JFrame {
 	private JTextField tf_Email;
 	private JPasswordField pf_Password;
 	private JPasswordField pf_ConfirmPassword;
-	private JLabel lbl_Title_Sign_Up;
 	private JLabel lbl_Username;
 	private JLabel lbl_Email;
 	private JLabel lbl_Password;
 	private JLabel lbl_Confirm_Password;
+	private Rounded_Panel panel_SignUp_Title;
+	private JLabel lbl_Title_SignUp;
+	private JButton btn_Sign_Up;
+	private JLabel lbl_Login;
 	
 	public Sign_Up_Window(Database_Manager database_manager) {
 		this.database_manager = database_manager;
@@ -45,24 +52,34 @@ public class Sign_Up_Window extends JFrame {
 		setTitle("Sign Up");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 692, 637);
+		setBounds(400, 50, 450, 620);
+		setBackground(new Color(213, 213, 213));
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
+		contentPane.setBackground(new Color(213, 213, 213));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		lbl_Title_Sign_Up = new JLabel("Sign Up");
-		lbl_Title_Sign_Up.setBounds(285, 47, 138, 46);
-		lbl_Title_Sign_Up.setFont(new Font("Tahoma", Font.BOLD, 20));
-		lbl_Title_Sign_Up.setHorizontalAlignment(SwingConstants.CENTER);
-		contentPane.add(lbl_Title_Sign_Up);
+		panel_SignUp_Title = new Rounded_Panel();
+		panel_SignUp_Title.setLayout(null);
+		panel_SignUp_Title.setBackground(Color.WHITE);
+		panel_SignUp_Title.setBounds(10, 11, 416, 97);
+		contentPane.add(panel_SignUp_Title);
+		
+		lbl_Title_SignUp = new JLabel("Sign Up");
+		lbl_Title_SignUp.setHorizontalAlignment(SwingConstants.CENTER);
+		lbl_Title_SignUp.setFont(new Font("Tahoma", Font.BOLD, 35));
+		lbl_Title_SignUp.setBounds(13, 20, 393, 54);
+		panel_SignUp_Title.add(lbl_Title_SignUp);
 		
 		lbl_Username = new JLabel("Username");
-		lbl_Username.setBounds(246, 123, 97, 14);
+		lbl_Username.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_Username.setBounds(12, 119,114, 22);
 		contentPane.add(lbl_Username);
 		
 		tf_Username = new JTextField();
+		tf_Username.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		tf_Username.setText("Enter Username");
 		tf_Username.addFocusListener(new FocusAdapter() {
 			@Override
@@ -78,15 +95,17 @@ public class Sign_Up_Window extends JFrame {
 				}
 			}
 		});
-		tf_Username.setBounds(267, 148, 171, 44);
+		tf_Username.setBounds(22, 151, 396, 45);
 		contentPane.add(tf_Username);
 		tf_Username.setColumns(10);
 		
 		lbl_Email = new JLabel("Email");
-		lbl_Email.setBounds(246, 199, 97, 14);
+		lbl_Email.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_Email.setBounds(12, 207, 114, 22);
 		contentPane.add(lbl_Email);
 		
 		tf_Email = new JTextField();
+		tf_Email.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		tf_Email.setText("Enter Email");
 		tf_Email.addFocusListener(new FocusAdapter() {
 			@Override
@@ -102,15 +121,17 @@ public class Sign_Up_Window extends JFrame {
 				}
 			}
 		});
-		tf_Email.setBounds(267, 224, 171, 44);
+		tf_Email.setBounds(22, 240, 396, 45);
 		tf_Email.setColumns(10);
 		contentPane.add(tf_Email);
 		
 		lbl_Password = new JLabel("Password");
-		lbl_Password.setBounds(246, 275, 97, 14);
+		lbl_Password.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_Password.setBounds(12, 296, 114, 22);
 		contentPane.add(lbl_Password);
 		
 		pf_Password = new JPasswordField();
+		pf_Password.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		pf_Password.setText("Enter Password");
 		pf_Password.setEchoChar((char) 0);
 		pf_Password.addFocusListener(new FocusAdapter() {
@@ -130,14 +151,16 @@ public class Sign_Up_Window extends JFrame {
 				}
 			}
 		});
-		pf_Password.setBounds(267, 300, 171, 44);
+		pf_Password.setBounds(22, 329, 396, 45);
 		contentPane.add(pf_Password);
 		
 		lbl_Confirm_Password = new JLabel("Confirm Password");
-		lbl_Confirm_Password.setBounds(246, 353, 119, 14);
+		lbl_Confirm_Password.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_Confirm_Password.setBounds(12, 385, 212, 22);
 		contentPane.add(lbl_Confirm_Password);
 		
 		pf_ConfirmPassword = new JPasswordField();
+		pf_ConfirmPassword.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		pf_ConfirmPassword.setText("Confirm Password");
 		pf_ConfirmPassword.setEchoChar((char) 0);
 		pf_ConfirmPassword.addFocusListener(new FocusAdapter() {
@@ -157,19 +180,34 @@ public class Sign_Up_Window extends JFrame {
 				}
 			}
 		});
-		pf_ConfirmPassword.setBounds(267, 378, 171, 44);
+		pf_ConfirmPassword.setBounds(24, 418, 396, 45);
 		contentPane.add(pf_ConfirmPassword);
 		
-		JButton btn_Sign_Up = new JButton("Sign Up");
-		btn_Sign_Up.setBounds(300, 463, 109, 44);
-		btn_Sign_Up.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		btn_Sign_Up = new Rounded_Button("Sign Up", 25);
+		btn_Sign_Up.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btn_Sign_Up.setBackground(new Color(182, 182, 182));
+		btn_Sign_Up.setForeground(Color.BLACK);
+		btn_Sign_Up.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
 				SignUp();
 			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btn_Sign_Up.setBackground(new Color(150, 150, 150));
+				btn_Sign_Up.setForeground(Color.BLACK);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btn_Sign_Up.setBackground(new Color(182, 182, 182));
+				btn_Sign_Up.setForeground(Color.BLACK);
+			}
 		});
+		btn_Sign_Up.setBounds(160, 492, 109, 44);
 		contentPane.add(btn_Sign_Up);
 		
-		JLabel lbl_Login = new JLabel("Log in");
+		lbl_Login = new JLabel("Log in");
+		lbl_Login.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lbl_Login.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -184,19 +222,17 @@ public class Sign_Up_Window extends JFrame {
 				lbl_Login.setText("Log in");
 			}
 		});
-		lbl_Login.setBounds(321, 518, 70, 25);
+		lbl_Login.setBounds(181, 547, 70, 25);
 		lbl_Login.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(lbl_Login);
 	}
 	
 	private void openLogIn() {
-		// Close the current window
-		JFrame currentFrame = this;
 		
 		EventQueue.invokeLater(new Runnable() {
 	        public void run() {
 	            try {
-	                currentFrame.dispose();
+	            	Sign_Up_Window.this.dispose();
 	                Log_In_Window logInWindow = new Log_In_Window(database_manager);
 	                logInWindow.setVisible(true);
 	            } catch (Exception e) {
@@ -233,12 +269,11 @@ public class Sign_Up_Window extends JFrame {
 			System.out.println("User registered successfully.");
 			
 			// Optionally, you can close the window or redirect to another page
-			JFrame currentFrame = this;
 			
 			EventQueue.invokeLater(new Runnable() {
 		        public void run() {
 		            try {
-		                currentFrame.dispose();
+		                Sign_Up_Window.this.dispose();
 		                Main_Frame mainFrame = new Main_Frame(database_manager, new User(username, password, email));
 		                mainFrame.setVisible(true);
 		            } catch (Exception e) {
