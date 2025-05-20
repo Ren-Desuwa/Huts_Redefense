@@ -166,7 +166,8 @@ public class Water_Panel extends JPanel {
             graph_Panel.setBackground(new Color(255, 255, 255));
             panel_Graph_View.add(graph_Panel);
         }
-		
+        
+        all_readings = getAllReadings();
         panel_Recent_Readings_Container = new Rounded_Panel();
 		panel_Recent_Readings_Container.setBackground(new Color(255, 255, 255));
 		panel_Recent_Readings_Container.setBounds(497, 114, 466, 377);
