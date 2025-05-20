@@ -16,6 +16,7 @@ import javax.swing.SwingConstants;
 import database.Database_Manager;
 import model.User;
 import view.panel.misc.Change_Password_Window;
+import view.panel.misc.Edit_Profile_Window;
 import visuals.Circle_Panel;
 import visuals.Following_Tool_Tip;
 import visuals.Rounded_Button;
@@ -28,6 +29,7 @@ public class Profile_Panel extends JPanel {
     private static final long serialVersionUID = 1L;
     
     // Data fields
+    private Profile_Panel instance;
     private Database_Manager database_manager;
     private User current_user;
     
@@ -94,7 +96,7 @@ public class Profile_Panel extends JPanel {
         createStatisticsPanel();
         createActionsSection();
         createActionListeners();
-        updateUserInfo();
+        updateUserInfo(current_user);
     }
     
     /**
@@ -424,7 +426,8 @@ public class Profile_Panel extends JPanel {
      * Update the panel with user information
      * Note: This method would be called after construction to populate user data
      */
-    private void updateUserInfo() {
+    public void updateUserInfo(User user) {
+    	this.current_user = user;
         if (current_user == null) {
             return;
         }
@@ -470,18 +473,22 @@ public class Profile_Panel extends JPanel {
     private void openEditProfileWindow() {
 		// Implement the logic to open the edit profile window
 		// This could be a new JFrame or a dialog that allows the user to edit their profile information
-		System.out.println("Edit Profile clicked");
+
 		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					// Create and show the edit profile window
-					// Edit_Profile_Window window = new Edit_Profile_Window(database_manager, current_user);
-					// window.setVisible(true);
+					 Edit_Profile_Window window = new Edit_Profile_Window(profile_Panel ,database_manager, current_user);
+					 window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
+	}
+    
+    public Profile_Panel getProfile_Panel() {
+		return profile_Panel;
 	}
 }

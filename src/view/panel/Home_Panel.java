@@ -350,23 +350,26 @@ public class Home_Panel extends JPanel {
      * Create the graph panel with CardLayout for different utilities
      */
     private void create_Graph_Panel() {
-        // Create the main graph container (visible to WindowBuilder)
+        // Create the main container panel (visible to WindowBuilder)
         panel_Graph_Container = new Rounded_Panel(25, Color.BLACK, 0);
         panel_Graph_Container.setBorder(new EmptyBorder(5, 5, 5, 5));
         panel_Graph_Container.setBounds(504, 157, 413, 365);
         panel_Graph_Container.setBackground(new Color(255, 255, 255));
-        panel_Graph_Container.setLayout(new BorderLayout()); // Use BorderLayout for easy replacement
+        panel_Graph_Container.setLayout(new BorderLayout());
         add(panel_Graph_Container);
-        
-        // Create Graph_Panel instance
-        Rounded_Panel rounded_Panel = new Rounded_Panel(25, Color.BLACK, 0);
-        rounded_Panel.setBackground(new Color(255, 255, 255));
-        graph_Panel = new Graph_Panel(rounded_Panel);
-        graph_Panel.setBackground(new Color(255, 255, 255));
-        
-        // Add Graph_Panel to the container
-        panel_Graph_Container.add(graph_Panel, BorderLayout.CENTER);
-        
+
+        // Add placeholder panel for design time
+        if (database_Manager == null) {
+            JPanel placeholder = new JPanel();
+            placeholder.setBackground(Color.WHITE);
+            panel_Graph_Container.add(placeholder);
+        } else {
+            // Create and add actual graph panel at runtime
+            graph_Panel = new Graph_Panel(database_Manager.getReadingManager(), current_User);
+            graph_Panel.setBackground(new Color(255, 255, 255));
+            panel_Graph_Container.add(graph_Panel);
+        }
+
         create_Graph_Shadow_Panels();
     }
     
@@ -464,7 +467,7 @@ public class Home_Panel extends JPanel {
     }
 
     private void update_Clock() {
-        lbl_Time.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")));
+        lbl_Time.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm a")));
     }
 
     private int calculate_Initial_Delay() {
@@ -508,6 +511,14 @@ public class Home_Panel extends JPanel {
      */
     private void setup_Data() {
         try {
+        	if (graph_Panel == null && database_Manager != null) {
+        	    graph_Panel = new Graph_Panel(database_Manager.getReadingManager(), current_User);
+        	    graph_Panel.setBackground(new Color(255, 255, 255));
+        	    panel_Graph_Container.removeAll();
+        	    panel_Graph_Container.add(graph_Panel);
+        	    panel_Graph_Container.revalidate();
+        	    panel_Graph_Container.repaint();
+        	}
             // Get latest readings for each utility type
             Reading electricity_Reading = database_Manager.getReadingManager().getLatestReadingByType(current_User, "electricity");
             Reading water_Reading = database_Manager.getReadingManager().getLatestReadingByType(current_User, "water");
@@ -520,7 +531,7 @@ public class Home_Panel extends JPanel {
             graph_Panel.initialize();
             
             // Setup the bar graphs with data from past 6 months
-            update_Bar_Graphs();
+            graph_Panel.refreshData();
             
         } catch (Exception e) {
             e.printStackTrace();
@@ -561,26 +572,6 @@ public class Home_Panel extends JPanel {
         
         // Update overall expenses
         update_Overall_Expenses(electricity_Reading, water_Reading, gas_Reading);
-    }
-
-    /**
-     * Updates all bar graphs with latest data
-     */
-    private void update_Bar_Graphs() {
-        try {
-            Reading_Manager rm = database_Manager.getReadingManager();
-            
-            // Get data directly from Reading_Manager
-            Map<Month, Double> electricity_Data = rm.getMonthlyUtilityData(current_User, "electricity", 6, false);
-            Map<Month, Double> water_Data = rm.getMonthlyUtilityData(current_User, "water", 6, false);
-            Map<Month, Double> gas_Data = rm.getMonthlyUtilityData(current_User, "gas", 6, false);
-            Map<Month, Double> overall_Data = rm.getMonthlyTotalExpenses(current_User, 6);
-            
-            // Update graphs with collected data
-            graph_Panel.updateGraphs(electricity_Data, water_Data, gas_Data, overall_Data, 5);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
