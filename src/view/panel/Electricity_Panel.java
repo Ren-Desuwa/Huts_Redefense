@@ -10,7 +10,7 @@ import database.Database_Manager;
 import model.Reading;
 import model.User;
 import view.panel.misc.Add_Reading_Panel;
-import view.panel.misc.Edit_Reading_Panel;
+import view.panel.misc.Utility_Tips_Manager;
 import visuals.Graph_Panel;
 import visuals.Rounded_Panel;
 import visuals.Rounded_Button;
@@ -24,10 +24,10 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 
 import java.awt.Font;
-import java.util.List;
 
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import java.time.LocalDate;
@@ -45,6 +45,7 @@ public class Electricity_Panel extends JPanel {
 	
 	// Database and user fields
 	private Database_Manager database_manager;
+	private Utility_Tips_Manager utility_Tips_Manager = Utility_Tips_Manager.getInstance();
 	private User current_user;
 	
 	// Main panel fields
@@ -86,8 +87,7 @@ public class Electricity_Panel extends JPanel {
 	
 	// Tips panel labels
 	private JLabel lbl_Title_Tips;
-	private JLabel lbl_Tips1;
-	private JLabel lbl_Tips2;
+	private JLabel lbl_Tips_1;
 	private JLabel lbl_Trend_Of_Reading_Electricity;
 	
 	
@@ -103,6 +103,8 @@ public class Electricity_Panel extends JPanel {
 		setLayout(null);
 		
 		initialize_UI();
+		create_Actions_Listeners();
+		
 		setupData();
 	}
 	
@@ -197,21 +199,6 @@ public class Electricity_Panel extends JPanel {
 		btn_Add_New_Reading = new Rounded_Button("Add New Reading", 25);
 		btn_Add_New_Reading.setBackground(new Color(192, 192, 192));
 		btn_Add_New_Reading.setForeground(Color.BLACK);
-		btn_Add_New_Reading.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				goToAddReading();
-			}
-			@Override
-            public void mouseEntered(MouseEvent e) {
-				btn_Add_New_Reading.setBackground(new Color(150, 150, 150));
-            }
-            
-            @Override
-            public void mouseExited(MouseEvent e) {
-            	btn_Add_New_Reading.setBackground(new Color(192, 192, 192));
-            }
-		});
 		btn_Add_New_Reading.setFont(new Font("Tahoma", Font.BOLD, 10));
 		btn_Add_New_Reading.setBounds(155, 125, 151, 34);
 		panel_Current_Reading.add(btn_Add_New_Reading);
@@ -234,21 +221,13 @@ public class Electricity_Panel extends JPanel {
 		lbl_Title_Tips.setBounds(42, 11, 393, 32);
 		panel_tips.add(lbl_Title_Tips);
 		
-		lbl_Tips1 = new JLabel("<html><ul><li>Unplug chargers when not in use to avoid phantom energy consumption.</li></ul></html>");
-		lbl_Tips1.setVerticalAlignment(SwingConstants.TOP);
-		lbl_Tips1.setBounds(-34, 49, 502, 51);
-		panel_tips.add(lbl_Tips1);
-		lbl_Tips1.setHorizontalAlignment(SwingConstants.LEFT);
-		lbl_Tips1.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lbl_Tips_1 = new JLabel("<html><ul><li>Unplug chargers when not in use to avoid phantom energy consumption.</li></ul></html>");
+		lbl_Tips_1.setVerticalAlignment(SwingConstants.TOP);
+		lbl_Tips_1.setBounds(-17, 38, 473, 119);
+		panel_tips.add(lbl_Tips_1);
+		lbl_Tips_1.setHorizontalAlignment(SwingConstants.LEFT);
+		lbl_Tips_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		
-		lbl_Tips2 = new JLabel("<html><ul><li>Use LED bulbs it consumes 75% less energy than incandescent bulbs.</li></ul></html>");
-		lbl_Tips2.setVerticalAlignment(SwingConstants.TOP);
-		lbl_Tips2.setHorizontalAlignment(SwingConstants.LEFT);
-		lbl_Tips2.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lbl_Tips2.setBounds(-34, 107, 502, 51);
-		panel_tips.add(lbl_Tips2);
-		
-		all_readings = getAllReadings();
 		panel_Recent_Readings_Container = new Rounded_Panel();
 		panel_Recent_Readings_Container.setBackground(new Color(255, 255, 255));
 		panel_Recent_Readings_Container.setBounds(497, 114, 466, 377);
@@ -259,7 +238,6 @@ public class Electricity_Panel extends JPanel {
 		scrollpane_Recent_Readings.setBounds(5, 5, 456, 366);
 		scrollpane_Recent_Readings.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		panel_Recent_Readings_Container.add(scrollpane_Recent_Readings);
-		scrollpane_Recent_Readings.setViewportView(all_readings);
 		
 		panel_Header = new JPanel();
 		panel_Header.setBackground(new Color(255, 255, 255));
@@ -269,9 +247,9 @@ public class Electricity_Panel extends JPanel {
 		
 		lbl_Title_RecentReadings = new JLabel("Recent Readings");
 		lbl_Title_RecentReadings.setBounds(0, 0, 466, 31);
-		panel_Header.add(lbl_Title_RecentReadings);
 		lbl_Title_RecentReadings.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_Title_RecentReadings.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		panel_Header.add(lbl_Title_RecentReadings);
 		
 		lbl_Head_Date = new JLabel("Date");
 		lbl_Head_Date.setHorizontalAlignment(SwingConstants.CENTER);
@@ -301,6 +279,47 @@ public class Electricity_Panel extends JPanel {
 		panel_Line.setBorder(new LineBorder(new Color(0, 0, 0), 12));
 		panel_Line.setBounds(10, 64, 446, 3);
 		panel_Header.add(panel_Line);
+		
+		Timer clock_timer = new Timer(60_000, e -> {
+            lbl_Time.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm a")));
+        });
+        LocalTime now = LocalTime.now();
+        int initialDelay = (60 - now.getSecond()) * 1000 - now.getNano() / 1_000_000;
+        clock_timer.setInitialDelay(initialDelay);
+        clock_timer.start();
+        
+        Timer tips_timer = new Timer(30_000, e -> {
+        	lbl_Tips_1.setText("<html><ul><li>" + utility_Tips_Manager.getRandomTip("electricity") + "</li>" + "<br>"
+        							   + "<li>" + utility_Tips_Manager.getRandomTip("electricity") + "</li></ul></html>");
+        });
+        tips_timer.setInitialDelay(0); // Start immediately
+        tips_timer.start();
+	}
+	
+	private void create_Actions_Listeners() {
+		btn_Add_New_Reading.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				goToAddReading();
+			}
+			@Override
+            public void mouseEntered(MouseEvent e) {
+				btn_Add_New_Reading.setBackground(new Color(150, 150, 150));
+            }
+            
+            @Override
+            public void mouseExited(MouseEvent e) {
+            	btn_Add_New_Reading.setBackground(new Color(192, 192, 192));
+            }
+		});
+		
+		lbl_Title_Tips.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lbl_Tips_1.setText("<html><ul><li>" + utility_Tips_Manager.getRandomTip("electricity") + "</li><br>"
+							   			   + "<li>" + utility_Tips_Manager.getRandomTip("electricity") + "</li></ul></html>");
+			}
+		});
 	}
 	
 	public void Refresh_Graph() {
@@ -308,17 +327,14 @@ public class Electricity_Panel extends JPanel {
 			graph_Panel.refreshData();
 		}
 	}
-	
-	
-	
+
 	public void Panel_Refresh() {
-		all_readings = getAllReadings();
-	    scrollpane_Recent_Readings.setViewportView(all_readings);
-	    getAllReadings();
-	    setupData(); // Also update the current reading display
+	    setupData(); // update the current reading display
 	}
 	
-	public void setupData() {
+	private void setupData() {
+		all_readings = database_manager.getReadingManager().getReadingsAsJList(this, database_manager, current_user, "electricity");
+		scrollpane_Recent_Readings.setViewportView(all_readings);
 		
 		try {
 			Reading electricity_reading = database_manager.getReadingManager().getLatestReadingByType(current_user, "electricity");
@@ -335,49 +351,7 @@ public class Electricity_Panel extends JPanel {
 		}
 	}
 	
-	private JList<String> getAllReadings() {
-	    MouseAdapter listClickListener = new MouseAdapter() {
-	        @Override
-	        public void mouseClicked(MouseEvent e) {
-	            JList<?> list = (JList<?>) e.getSource();
-	            int selectedIndex = list.getSelectedIndex();
-	            
-	            if (selectedIndex >= 0) {
-	                int response = javax.swing.JOptionPane.showConfirmDialog(null, 
-	                    "Do you want to edit this reading?", "Edit Reading", 
-	                    javax.swing.JOptionPane.YES_NO_OPTION);
-	                    
-	                if (response == javax.swing.JOptionPane.YES_OPTION) {
-	                    EventQueue.invokeLater(new Runnable() {
-	                        public void run() {
-	                            try {
-	                                List<Reading> allReadings = database_manager.getReadingManager().getAllReadingsByType(current_user, "electricity");
-	                                Reading selectedReading = null;
-	                                
-	                                if (selectedIndex < allReadings.size()) {
-	                                    selectedReading = allReadings.get(selectedIndex);
-	                                }
-	                                
-	                                Edit_Reading_Panel edit_reading_panel = new Edit_Reading_Panel(
-	                                    (JFrame) SwingUtilities.getWindowAncestor(Electricity_Panel.this),
-	                                    database_manager, current_user, Electricity_Panel.this, "electricity", selectedReading
-	                                );
-	                                edit_reading_panel.setVisible(true);
-	                            } catch (Exception ex) {
-	                                ex.printStackTrace();
-	                            }
-	                        }
-	                    });
-	                }
-	            }
-	        }
-	    };
-	    
-	    return database_manager.getReadingManager().getReadingsAsJList(current_user, "electricity", listClickListener);
-	}
-	
 	private void goToAddReading() {
-
 		EventQueue.invokeLater(new Runnable() {
 	        public void run() {
 	            try {

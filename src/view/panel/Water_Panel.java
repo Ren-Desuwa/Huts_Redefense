@@ -11,6 +11,7 @@ import model.Reading;
 import model.User;
 import view.panel.misc.Add_Reading_Panel;
 import view.panel.misc.Edit_Reading_Panel;
+import view.panel.misc.Utility_Tips_Manager;
 import visuals.Graph_Panel;
 import visuals.Rounded_Button;
 import visuals.Rounded_Panel;
@@ -28,6 +29,7 @@ import java.util.List;
 
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import java.time.LocalDate;
@@ -45,6 +47,7 @@ public class Water_Panel extends JPanel {
 	
 	// Database and user fields
 	private Database_Manager database_manager;
+	private Utility_Tips_Manager utility_Tips_Manager = Utility_Tips_Manager.getInstance();
 	private User current_user;
 	
 	// Main panel fields
@@ -83,12 +86,12 @@ public class Water_Panel extends JPanel {
 	private JLabel lbl_Title_Current_Reading;
 	private JLabel lbl_Water_Reading_Value;
 	private JLabel lbl_Water_Reading_Unit;
+	private JLabel lbl_Trend_Of_Reading_Water;
 	private JButton btn_Add_New_Reading;
 	
 	// Tips panel labels
 	private JLabel lbl_Title_Tips;
-	private JLabel lbl_Tips1;
-	private JLabel lbl_Tips2;
+	private JLabel lbl_Tips_1;
 	
 
 
@@ -100,6 +103,12 @@ public class Water_Panel extends JPanel {
 		setPreferredSize(new Dimension(986, 688));
 		setLayout(null);
 		
+		
+		initialize_UI();
+		setupData();
+	}
+	
+	private void initialize_UI() {
 		panel_Title_Water_Consumption = new Rounded_Panel();
 		panel_Title_Water_Consumption.setBackground(new Color(255, 255, 255));
 		panel_Title_Water_Consumption.setLayout(null);
@@ -170,6 +179,8 @@ public class Water_Panel extends JPanel {
 		panel_Recent_Readings_Container.setBounds(497, 114, 466, 377);
 		add(panel_Recent_Readings_Container);
 		panel_Recent_Readings_Container.setLayout(null);
+		
+		
 		
 		sP_Recent_Readings = new JScrollPane();
 		sP_Recent_Readings.setBounds(5, 5, 456, 366);
@@ -263,6 +274,12 @@ public class Water_Panel extends JPanel {
 		btn_Add_New_Reading.setBounds(155, 125, 151, 34);
 		panel_Current_Reading.add(btn_Add_New_Reading);
 		
+		lbl_Trend_Of_Reading_Water = new JLabel("No avilable data");
+		lbl_Trend_Of_Reading_Water.setHorizontalAlignment(SwingConstants.CENTER);
+		lbl_Trend_Of_Reading_Water.setFont(new Font("Dialog", Font.PLAIN, 15));
+		lbl_Trend_Of_Reading_Water.setBounds(97, 82, 261, 32);
+		panel_Current_Reading.add(lbl_Trend_Of_Reading_Water);
+		
 		panel_tips = new Rounded_Panel();
 		panel_tips.setBackground(new Color(255, 255, 255));
 		panel_tips.setLayout(null);
@@ -275,21 +292,28 @@ public class Water_Panel extends JPanel {
 		lbl_Title_Tips.setBounds(42, 11, 393, 32);
 		panel_tips.add(lbl_Title_Tips);
 		
-		lbl_Tips1 = new JLabel("<html><ul><li>Turn off the tap while brushing your teeth to save gallons of water daily.</li></ul></html>");
-		lbl_Tips1.setVerticalAlignment(SwingConstants.TOP);
-		lbl_Tips1.setBounds(-25, 49, 502, 51);
-		panel_tips.add(lbl_Tips1);
-		lbl_Tips1.setHorizontalAlignment(SwingConstants.LEFT);
-		lbl_Tips1.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lbl_Tips_1 = new JLabel("<html><ul><li>Turn off the tap while brushing your teeth to save gallons of water daily.</li></ul></html>");
+		lbl_Tips_1.setVerticalAlignment(SwingConstants.TOP);
+		lbl_Tips_1.setBounds(-17, 38, 473, 119);
+		panel_tips.add(lbl_Tips_1);
+		lbl_Tips_1.setHorizontalAlignment(SwingConstants.LEFT);
+		lbl_Tips_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		
-		lbl_Tips2 = new JLabel("<html><ul><li>Fix leaky faucets and pipes promptly to prevent unnecessary water waste.</li></ul></html>");
-		lbl_Tips2.setVerticalAlignment(SwingConstants.TOP);
-		lbl_Tips2.setHorizontalAlignment(SwingConstants.LEFT);
-		lbl_Tips2.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lbl_Tips2.setBounds(-25, 107, 502, 51);
-		panel_tips.add(lbl_Tips2);
-		
-		setupData();
+		Timer clock_timer = new Timer(60_000, e -> {
+            lbl_Time.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm a")));
+        });
+        LocalTime now = LocalTime.now();
+        int initialDelay = (60 - now.getSecond()) * 1000 - now.getNano() / 1_000_000;
+        clock_timer.setInitialDelay(initialDelay);
+        clock_timer.start();
+        
+        Timer tips_timer = new Timer(30_000, e -> {
+        	lbl_Tips_1.setText("<html><ul><li>" + utility_Tips_Manager.getRandomTip("water") + "</li><br>"
+					   				   + "<li>" + utility_Tips_Manager.getRandomTip("water") + "</li></ul></html>");
+
+        });
+        tips_timer.setInitialDelay(0); // Start immediately
+        tips_timer.start();
 	}
 	
 	public void Refresh_Graph() {
@@ -331,6 +355,7 @@ public class Water_Panel extends JPanel {
 				lbl_Water_Reading_Value.setText("No Data");
 			} else {
 				lbl_Water_Reading_Value.setText(String.valueOf(water_reading.getReading()));
+				database_manager.getReadingManager().updateReadingLabel(current_user,water_reading, lbl_Water_Reading_Value, lbl_Trend_Of_Reading_Water, "water");
 			}
 			
 		} catch (Exception e) {

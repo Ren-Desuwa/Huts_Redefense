@@ -2,8 +2,10 @@ package database;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.Month;
@@ -13,10 +15,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import model.*;
+import view.panel.Electricity_Panel;
+import view.panel.Water_Panel;
+import view.panel.misc.Edit_Reading_Panel;
 
 public class Reading_Manager {
 	
@@ -665,7 +673,44 @@ public class Reading_Manager {
             }
         }
     }
-	public JList<String> getReadingsAsJList(User user, String type, MouseAdapter mouseListener) {
+	public JList<String> getReadingsAsJList(JPanel utility_panel, Database_Manager database_manager, User user, String type) {
+		MouseAdapter listClickListener = new MouseAdapter() {
+	        @Override
+	        public void mouseClicked(MouseEvent e) {
+	            JList<?> list = (JList<?>) e.getSource();
+	            int selectedIndex = list.getSelectedIndex();
+	            
+	            if (selectedIndex >= 0) {
+	                int response = javax.swing.JOptionPane.showConfirmDialog(null, 
+	                    "Do you want to edit this reading?", "Edit Reading", 
+	                    javax.swing.JOptionPane.YES_NO_OPTION);
+	                    
+	                if (response == javax.swing.JOptionPane.YES_OPTION) {
+	                    EventQueue.invokeLater(new Runnable() {
+	                        public void run() {
+	                            try {
+	                                List<Reading> allReadings = getAllReadingsByType(user, "electricity");
+	                                Reading selectedReading = null;
+	                                
+	                                if (selectedIndex < allReadings.size()) {
+	                                    selectedReading = allReadings.get(selectedIndex);
+	                                }
+	                                
+	                                Edit_Reading_Panel edit_reading_panel = new Edit_Reading_Panel(
+	                                		(JFrame) SwingUtilities.getWindowAncestor(utility_panel),
+	                                    database_manager, user, utility_panel, type, selectedReading
+	                                );
+	                                edit_reading_panel.setVisible(true);
+	                            } catch (Exception ex) {
+	                                ex.printStackTrace();
+	                            }
+	                        }
+	                    });
+	                }
+	            }
+	        }
+	    };
+	    
 	    try {
 	        if (!isReadingExists(user, type)) {
 	            JList<String> list = new JList<>(new String[] {"No readings found.", "Please add a reading."});
@@ -706,10 +751,8 @@ public class Reading_Manager {
 	        list.setFont(new Font("monoFont", Font.PLAIN, 13));
 	        list.setPreferredSize(new Dimension(429, 448));
 	        list.setFixedCellHeight(30);
-	        
-	        if (mouseListener != null) {
-	            list.addMouseListener(mouseListener);
-	        }
+	        list.addMouseListener(listClickListener);
+
 	        
 	        return list;
 	    } catch (SQLException e) {

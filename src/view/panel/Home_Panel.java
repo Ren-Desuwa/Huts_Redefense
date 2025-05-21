@@ -37,6 +37,7 @@ public class Home_Panel extends JPanel {
     
     /** Database and user fields */
     private Database_Manager database_Manager;
+    private Utility_Tips_Manager utility_Tips_Manager = Utility_Tips_Manager.getInstance();
     private User current_User;
     
     /** Main panel containers */
@@ -78,22 +79,23 @@ public class Home_Panel extends JPanel {
     private JPanel panel_Behind1;
     private JPanel panel_Behind2;
     private JPanel panel_Behind3;
-    private JLabel lbl_Trend_Of_Reading_Overall;
-    private JLabel lbl_Trend_Of_Reading_Gas;
-    private JLabel lbl_Trend_Of_Reading_Water;
     private JLabel lbl_Trend_Of_Reading_Electricity;
+    private JLabel lbl_Trend_Of_Reading_Water;
+    private JLabel lbl_Trend_Of_Reading_Gas;
+    private JLabel lbl_Trend_Of_Reading_Overall;
     
     /** Tips panel components */
-    private Utility_Tips_Manager utility_Tips_Manager;
-    private JPanel panel_Tip_1;
+    private Rounded_Panel panel_Tip_1;
+    private Rounded_Panel panel_Tip_2;
+    private Rounded_Panel panel_Tip_3;
+    
+    /** Tip labels */
     private JLabel lbl_Tip_1;
+    private JLabel lbl_Tip_2;
+    private JLabel lbl_Tip_3;
     private JLabel lbl_Tip_Type_1;
     private JLabel lbl_Tip_Type_2;
-    private JLabel lbl_Tip_2;
-    private Rounded_Panel panel_Tip_2;
-    private JLabel lbl_Tip_3;
     private JLabel lbl_Tip_Type_3;
-    private Rounded_Panel panel_Tip_3;
 
     public Home_Panel(Database_Manager database_Manager, User current_User) {
         this.database_Manager = database_Manager;
@@ -337,9 +339,7 @@ public class Home_Panel extends JPanel {
         //==============================================================================================
         // UI CREATION - TIPS SECTION
         //==============================================================================================
-
-        utility_Tips_Manager = new Utility_Tips_Manager();
-
+        
         panel_Tips = new Rounded_Panel();
         panel_Tips.setBackground(new Color(255, 255, 255));
         panel_Tips.setBounds(21, 533, 944, 144);
@@ -414,16 +414,11 @@ public class Home_Panel extends JPanel {
         lbl_Tip_3.setFont(new Font("Tahoma", Font.PLAIN, 17));
         lbl_Tip_3.setBounds(20, 44, 277, 67);
         panel_Tip_3.add(lbl_Tip_3);
-    }
-    
-    //==============================================================================================
-    // DATA HANDLING & EVENT LISTENERS 
-    //==============================================================================================
-    
-    public void home_Panel_Refresh() {setup_Data();}
-    
-    private void create_Action_Listeners() {
-        // Clock update every minute
+        
+        //==============================================================================================
+        // UI CREATION - TIPS SECTION - TIMER
+        //==============================================================================================
+        
         Timer clock_timer = new Timer(60_000, e -> {
             lbl_Time.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm a")));
         });
@@ -442,6 +437,16 @@ public class Home_Panel extends JPanel {
         });
         tips_timer.setInitialDelay(0); // Start immediately
         tips_timer.start();
+    }
+    
+    //==============================================================================================
+    // DATA HANDLING & EVENT LISTENERS 
+    //==============================================================================================
+    
+    public void home_Panel_Refresh() {setup_Data();}
+    
+    private void create_Action_Listeners() {
+        
         
         // Panel click listeners
         panel_Electricity_Info.addMouseListener(createPanelMouseAdapter(() -> graph_Panel.showElectricityGraph()));

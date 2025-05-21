@@ -212,8 +212,9 @@ public class Retrive_Window extends JFrame {
 		}
 		
 		try {
-			if (database_manager.getUserManager().UsernamePasswordMatch(username, email)) {
+			if (!database_manager.getUserManager().UsernameEmailMatch(username, email)) {
 				System.out.println("Username and email do not match.");
+				return;
 			}
 			
 			User current_user = database_manager.getUserManager().getUserByUsername(username);

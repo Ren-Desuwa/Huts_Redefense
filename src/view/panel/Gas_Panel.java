@@ -11,6 +11,7 @@ import model.Reading;
 import model.User;
 import view.panel.misc.Add_Reading_Panel;
 import view.panel.misc.Edit_Reading_Panel;
+import view.panel.misc.Utility_Tips_Manager;
 import visuals.Graph_Panel;
 import visuals.Rounded_Button;
 import visuals.Rounded_Panel;
@@ -28,6 +29,7 @@ import java.util.List;
 
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import java.time.LocalDate;
@@ -45,6 +47,7 @@ public class Gas_Panel extends JPanel {
 
 	// Database and User
 	private Database_Manager database_manager;
+	private Utility_Tips_Manager utility_Tips_Manager = Utility_Tips_Manager.getInstance();
 	private User current_user;
 	
 	// Main Panels
@@ -84,16 +87,13 @@ public class Gas_Panel extends JPanel {
 	private JLabel lbl_Title_Current_Reading;
 	private JLabel lbl_Gas_Reading_Value;
 	private JLabel lbl_Gas_Reading_Unit;
+	private JLabel lbl_Trend_Of_Reading_Gas;
 	private JButton btn_Add_New_Reading;
 	
 	// Tips panel labels
 	private JLabel lbl_Title_Tips;
-	private JLabel lbl_Tips1;
-	private JLabel lbl_Tips2;
+	private JLabel lbl_Tips_1;
 	
-	/**
-	 * Create the panel.
-	 */
 	public Gas_Panel(Database_Manager database_manager, User current_user) {
 		this.database_manager = database_manager;
 		this.current_user = current_user;
@@ -102,6 +102,12 @@ public class Gas_Panel extends JPanel {
 		setPreferredSize(new Dimension(986, 688));
 		setLayout(null);
 		
+		initialize_UI();
+		create_Actions_Listeners();
+		setupData();
+	}
+	
+	private void initialize_UI() {
 		panel_Title_Gas_Consumption = new Rounded_Panel();
 		panel_Title_Gas_Consumption.setBackground(new Color(255, 255, 255));
 		panel_Title_Gas_Consumption.setLayout(null);
@@ -166,7 +172,6 @@ public class Gas_Panel extends JPanel {
             panel_Graph_View.add(graph_Panel);
         }
 		
-		all_readings = getAllReadings();
 		panel_Recent_Readings_Container = new Rounded_Panel();
 		panel_Recent_Readings_Container.setBackground(new Color(255, 255, 255));
 		panel_Recent_Readings_Container.setBounds(497, 114, 466, 377);
@@ -246,6 +251,53 @@ public class Gas_Panel extends JPanel {
 		btn_Add_New_Reading = new Rounded_Button("Add New Reading", 25);
 		btn_Add_New_Reading.setBackground(new Color(192, 192, 192));
 		btn_Add_New_Reading.setForeground(Color.BLACK);
+		btn_Add_New_Reading.setFont(new Font("Tahoma", Font.BOLD, 10));
+		btn_Add_New_Reading.setBounds(155, 125, 151, 34);
+		panel_Current_Reading.add(btn_Add_New_Reading);
+		
+		lbl_Trend_Of_Reading_Gas = new JLabel("No avilable data");
+		lbl_Trend_Of_Reading_Gas.setHorizontalAlignment(SwingConstants.CENTER);
+		lbl_Trend_Of_Reading_Gas.setFont(new Font("Dialog", Font.PLAIN, 15));
+		lbl_Trend_Of_Reading_Gas.setBounds(97, 82, 261, 32);
+		panel_Current_Reading.add(lbl_Trend_Of_Reading_Gas);
+		
+		panel_tips = new Rounded_Panel();
+		panel_tips.setBackground(new Color(255, 255, 255));
+		panel_tips.setLayout(null);
+		panel_tips.setBounds(499, 509, 466, 168);
+		add(panel_tips);
+		
+		lbl_Title_Tips = new JLabel("Gas Saving Tips");
+		lbl_Title_Tips.setHorizontalAlignment(SwingConstants.CENTER);
+		lbl_Title_Tips.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		lbl_Title_Tips.setBounds(42, 11, 393, 32);
+		panel_tips.add(lbl_Title_Tips);
+		
+		lbl_Tips_1 = new JLabel("<html><ul><li>Cover pots with lids while cooking to trap heat and reduce cooking time.</li></ul></html>");
+		lbl_Tips_1.setVerticalAlignment(SwingConstants.TOP);
+		lbl_Tips_1.setBounds(-17, 38, 473, 119);
+		panel_tips.add(lbl_Tips_1);
+		lbl_Tips_1.setHorizontalAlignment(SwingConstants.LEFT);
+		lbl_Tips_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		
+		Timer clock_timer = new Timer(60_000, e -> {
+            lbl_Time.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm a")));
+        });
+        LocalTime now = LocalTime.now();
+        int initialDelay = (60 - now.getSecond()) * 1000 - now.getNano() / 1_000_000;
+        clock_timer.setInitialDelay(initialDelay);
+        clock_timer.start();
+        
+        Timer tips_timer = new Timer(30_000, e -> {
+        	lbl_Tips_1.setText("<html><ul><li>" + utility_Tips_Manager.getRandomTip("gas") + "</li><br>"
+					   				   + "<li>" + utility_Tips_Manager.getRandomTip("gas") + "</li></ul></html>");
+
+        });
+        tips_timer.setInitialDelay(0); // Start immediately
+        tips_timer.start();
+	}
+	
+	private void create_Actions_Listeners() {
 		btn_Add_New_Reading.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -261,37 +313,14 @@ public class Gas_Panel extends JPanel {
             	btn_Add_New_Reading.setBackground(new Color(192, 192, 192));
             }
 		});
-		btn_Add_New_Reading.setFont(new Font("Tahoma", Font.BOLD, 10));
-		btn_Add_New_Reading.setBounds(155, 125, 151, 34);
-		panel_Current_Reading.add(btn_Add_New_Reading);
 		
-		panel_tips = new Rounded_Panel();
-		panel_tips.setBackground(new Color(255, 255, 255));
-		panel_tips.setLayout(null);
-		panel_tips.setBounds(499, 509, 466, 168);
-		add(panel_tips);
-		
-		lbl_Title_Tips = new JLabel("Energy Saving Tips");
-		lbl_Title_Tips.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_Title_Tips.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		lbl_Title_Tips.setBounds(42, 11, 393, 32);
-		panel_tips.add(lbl_Title_Tips);
-		
-		lbl_Tips1 = new JLabel("<html><ul><li>Cover pots with lids while cooking to trap heat and reduce cooking time.</li></ul></html>");
-		lbl_Tips1.setVerticalAlignment(SwingConstants.TOP);
-		lbl_Tips1.setBounds(-25, 49, 502, 51);
-		panel_tips.add(lbl_Tips1);
-		lbl_Tips1.setHorizontalAlignment(SwingConstants.LEFT);
-		lbl_Tips1.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		
-		lbl_Tips2 = new JLabel("<html><ul><li>Use flat-bottomed cookware that makes full contact with the burner for better heat transfer.</li></ul></html>");
-		lbl_Tips2.setVerticalAlignment(SwingConstants.TOP);
-		lbl_Tips2.setHorizontalAlignment(SwingConstants.LEFT);
-		lbl_Tips2.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lbl_Tips2.setBounds(-25, 107, 502, 51);
-		panel_tips.add(lbl_Tips2);
-		
-		setupData();
+		lbl_Title_Tips.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lbl_Tips_1.setText("<html><ul><li>" + utility_Tips_Manager.getRandomTip("electricity") + "</li><br>"
+							   			   + "<li>" + utility_Tips_Manager.getRandomTip("electricity") + "</li></ul></html>");
+			}
+		});
 	}
 	
 	public void Refresh_Graph() {
@@ -301,7 +330,6 @@ public class Gas_Panel extends JPanel {
 	}
 	
 	private void goToAddReading() {
-
 		EventQueue.invokeLater(new Runnable() {
 	        public void run() {
 	            try {
@@ -318,13 +346,13 @@ public class Gas_Panel extends JPanel {
 	}
 	
 	public void Panel_Refresh() {
-		all_readings = getAllReadings();
-	    sP_Recent_Readings.setViewportView(all_readings);
-	    getAllReadings();
 	    setupData(); // Also update the current reading display
 	}
 	
 	public void setupData() {
+		
+		all_readings = database_manager.getReadingManager().getReadingsAsJList(this, database_manager, current_user, "gas");
+		sP_Recent_Readings.setViewportView(all_readings);
 		
 		try {
 			Reading gas_reading = database_manager.getReadingManager().getLatestReadingByType(current_user, "gas");
@@ -333,6 +361,7 @@ public class Gas_Panel extends JPanel {
 				lbl_Gas_Reading_Value.setText("No Data");
 			} else {
 				lbl_Gas_Reading_Value.setText(String.valueOf(gas_reading.getReading()));
+				database_manager.getReadingManager().updateReadingLabel(current_user,gas_reading, lbl_Gas_Reading_Value, lbl_Trend_Of_Reading_Gas, "gas");
 			}
 			
 		} catch (Exception e) {
@@ -340,53 +369,4 @@ public class Gas_Panel extends JPanel {
 		}
 	}
 	
-	private JList<String> getAllReadings() {
-		try {
-			if (!database_manager.getReadingManager().isReadingExists(current_user, "gas")) {
-				JList<String> list = new JList<>(new String[] {"No readings found.", "Please add a reading."});
-				list.setFont(new Font("monoFont", Font.PLAIN, 15));
-				list.setPreferredSize(new Dimension(429, 448));
-				list.setFixedCellHeight(30);
-				return list;
-			}
-			List<Reading> all_readings = database_manager.getReadingManager().getAllReadingsByType(current_user, "gas");
-			
-			String[] readings = new String[all_readings.size()];
-			for (int i = 0; i < all_readings.size(); i++) {
-				Reading reading = all_readings.get(i);
-				readings[i] = String.format("    %-23s %-23s %-19s %-10s", reading.getDate(), reading.getReading() + "Qty", reading.getRate() + "Php", reading.getTotal_Price() + "Php");
-			}
-			JList<String> list = new JList<>(readings);
-			list.setFont(new Font("monoFont", Font.PLAIN, 13));
-			list.setPreferredSize(new Dimension(429, 448));
-			list.setFixedCellHeight(30);
-			list.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					int response = javax.swing.JOptionPane.showConfirmDialog(null, "Do you want to edit this reading?", "Edit Reading", javax.swing.JOptionPane.YES_NO_OPTION);
-					if (response == javax.swing.JOptionPane.YES_OPTION) {
-						EventQueue.invokeLater(new Runnable() {
-					        public void run() {
-					            try {
-					            	Edit_Reading_Panel edit_reading_panel = new Edit_Reading_Panel(
-					            	    (JFrame) SwingUtilities.getWindowAncestor(Gas_Panel.this),
-					            	    database_manager, current_user, Gas_Panel.this, "gas"
-					            	);
-					            	edit_reading_panel.setVisible(true);
-
-					            } catch (Exception e) {
-					                e.printStackTrace();
-					            }
-					        }
-					    });
-					}
-				}
-			});
-			return list;
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			return new JList<>(new String[] {"Error fetching readings."});
-		}
-	}
 }
