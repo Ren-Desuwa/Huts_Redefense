@@ -216,16 +216,12 @@ public class Add_Reading_Panel extends JDialog {
 	
 	private void create_Action_Listeners() {
 		combo_box_Year.addActionListener(e -> {
-			if (LocalDate.now().getYear() == (int) combo_box_Year.getSelectedItem()) {
-				updateMonthComboBox();
-				updateDayComboBox();
-			}
+			updateMonthComboBox();
+			updateDayComboBox();
 		});
 
 		combo_box_Month.addActionListener(e -> {
-			if(LocalDate.now().getYear() == (int) combo_box_Year.getSelectedItem() && LocalDate.now().getMonthValue() == (int) combo_box_Month.getSelectedItem()) {
-				updateDayComboBox();
-			}
+			updateDayComboBox();
 		});
 		
 		tf_Rate.addFocusListener(new FocusAdapter() {
@@ -253,31 +249,23 @@ public class Add_Reading_Panel extends JDialog {
 	
 	@SuppressWarnings("unchecked")
 	private void setup_data() {
-		LocalDate now = LocalDate.now();
-		int currentDay = now.getDayOfMonth();
-		int currentMonth = now.getMonthValue();
-		int currentYear = now.getYear();
+		int currentYear = LocalDate.now().getYear();
 		
-		for (int i = 1975; i <= currentYear; i++) {
+		for (int i = currentYear; i >= 1975; i--) {
 		    combo_box_Year.addItem(i);
 		}
 		combo_box_Year.setSelectedItem(currentYear);
-
-		for (int i = 1; i <= (combo_box_Year.getSelectedItem().equals(currentYear) ? currentMonth : 12); i++) {
-		    combo_box_Month.addItem(i);
-		}
-		combo_box_Month.setSelectedItem(currentMonth);
-
-		int maxDay = (combo_box_Year.getSelectedItem().equals(currentYear) && combo_box_Month.getSelectedItem().equals(currentMonth)) ? currentDay : now.withMonth((int)combo_box_Month.getSelectedItem()).lengthOfMonth();
-		for (int i = 1; i <= maxDay; i++) {
-		    combo_box_Day.addItem(i);
-		}
-		combo_box_Day.setSelectedItem(currentDay);
+		updateMonthComboBox();
+		updateDayComboBox();
 		
 		configureReadingUI(readingType);
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void updateMonthComboBox() {
+		
+		if (combo_box_Year.getSelectedItem() == null) return;
+		
 	    int selectedYear = (int) combo_box_Year.getSelectedItem();
 	    int currentYear = LocalDate.now().getYear();
 	    int currentMonth = LocalDate.now().getMonthValue();
@@ -289,7 +277,11 @@ public class Add_Reading_Panel extends JDialog {
 	    }
 	}
 
+	@SuppressWarnings("unchecked")
 	private void updateDayComboBox() {
+		
+		if (combo_box_Year.getSelectedItem() == null || combo_box_Month.getSelectedItem() == null) return;
+		
 	    Integer selectedYear = (Integer) combo_box_Year.getSelectedItem();
 	    Integer selectedMonth = (Integer) combo_box_Month.getSelectedItem();
 

@@ -34,7 +34,7 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
     private static final int BAR_WIDTH = 50;         // Width of each bar
     private static final int BAR_SPACING = 20;       // Space between bars
     private static final int TOP_MARGIN = 30;        // Top margin for content (reduced since header is separate)
-    private static final int BOTTOM_MARGIN = 60;     // Bottom margin for x-axis labels
+    private static final int BOTTOM_MARGIN = 90;     // Bottom margin for x-axis labels
     private static final int Y_AXIS_WIDTH = 60;      // Width of y-axis panel
     private static final int HEADER_HEIGHT = 40;     // Height of the header panel
     private static final int DEFAULT_HEIGHT = 300;   // Default height of the panel
@@ -301,7 +301,7 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
         g2d.setFont(new Font("SansSerif", Font.BOLD, 12));
         FontMetrics fm = g2d.getFontMetrics();
         int xLabelWidth = fm.stringWidth(xAxisLabel);
-        g2d.drawString(xAxisLabel, (calculateChartWidth() - xLabelWidth) / 2, TOP_MARGIN + height + 40);
+        g2d.drawString(xAxisLabel, (calculateChartWidth() - xLabelWidth) / 2, TOP_MARGIN + height + 30);
         
         // Draw the bars and x-axis labels
         g2d.setFont(new Font("SansSerif", Font.PLAIN, 10));
