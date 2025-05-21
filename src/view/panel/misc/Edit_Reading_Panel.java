@@ -481,7 +481,7 @@ public class Edit_Reading_Panel extends JDialog {
 				    javax.swing.JOptionPane.showMessageDialog(this, "No reading selected.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
 				    return;
 				}
-				List<Reading> allReadings = database_manager.getReadingManager().getAllReadingsByType(current_user, readingType);
+				List<Reading> allReadings = database_manager.getReadingManager().getAll_Readings_By_Type(current_user, readingType);
 				Reading selectedReading = allReadings.get(selectedIndex);
 				
 				selectedReading.setReading(readingValue);
@@ -546,7 +546,7 @@ public class Edit_Reading_Panel extends JDialog {
 				    javax.swing.JOptionPane.showMessageDialog(this, "No reading selected.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
 				    return;
 				}
-				List<Reading> allReadings = database_manager.getReadingManager().getAllReadingsByType(current_user, readingType);
+				List<Reading> allReadings = database_manager.getReadingManager().getAll_Readings_By_Type(current_user, readingType);
 				Reading selectedReading = allReadings.get(selectedIndex);
 				
 				selectedReading.setReading(readingValue);
@@ -610,11 +610,11 @@ public class Edit_Reading_Panel extends JDialog {
 		
 		private JComboBox<String> getAllReadings() {
 			try {
-				if (!database_manager.getReadingManager().isReadingExists(current_user, readingType)) {
+				if (!database_manager.getReadingManager().isReading_Exists(current_user, readingType)) {
 					cB_Edit_Reading_Selection = new JComboBox<>(new String[] {"No readings found in." + readingType , "Please add a reading."});
 					return cB_Edit_Reading_Selection;
 				}
-				List<Reading> all_readings = database_manager.getReadingManager().getAllReadingsByType(current_user, readingType);
+				List<Reading> all_readings = database_manager.getReadingManager().getAll_Readings_By_Type(current_user, readingType);
 				
 				String Unit = "";
 				String Spacing = "";

@@ -148,10 +148,10 @@ public class Graph_Panel extends JPanel {
 
     private void updateGraphData() {
         try {
-            Map<Month, Double> electricity_data = reading_manager.getMonthlyUtilityData(current_user, "electricity", 6, false);
-            Map<Month, Double> water_data = reading_manager.getMonthlyUtilityData(current_user, "water", 6, false);
-            Map<Month, Double> gas_data = reading_manager.getMonthlyUtilityData(current_user, "gas", 6, false);
-            Map<Month, Double> overall_data = reading_manager.getMonthlyTotalExpenses(current_user, 6);
+            Map<Month, Double> electricity_data = reading_manager.getMonthly_Utility_Data(current_user, "electricity", 6, false);
+            Map<Month, Double> water_data = reading_manager.getMonthly_Utility_Data(current_user, "water", 6, false);
+            Map<Month, Double> gas_data = reading_manager.getMonthly_Utility_Data(current_user, "gas", 6, false);
+            Map<Month, Double> overall_data = reading_manager.getMonthly_Total_Expenses(current_user, 6);
 
             electricity_graph.setMonthlyData("Electricity", electricity_data, 6);
             water_graph.setMonthlyData("Water", water_data, 6);
@@ -164,7 +164,7 @@ public class Graph_Panel extends JPanel {
 
     private void updateSingleGraphData() {
         try {
-            Map<Month, Double> data = reading_manager.getMonthlyUtilityData(current_user, utility_type, 6, true);
+            Map<Month, Double> data = reading_manager.getMonthly_Utility_Data(current_user, utility_type, 6, true);
             switch (utility_type) {
                 case "electricity" -> electricity_graph.setMonthlyData("Electricity", data, 6);
                 case "water" -> water_graph.setMonthlyData("Water", data, 6);
