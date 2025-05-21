@@ -1,6 +1,9 @@
 package database;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.event.MouseAdapter;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.Month;
@@ -10,11 +13,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JLabel;
+import javax.swing.JList;
+
 import model.*;
 
 public class Reading_Manager {
 	
 	private Connection connection;
+	private double lastTrendPercentage;
 	
 	public Reading_Manager(Connection connection) {
 		this.connection = connection;
@@ -385,6 +392,7 @@ public class Reading_Manager {
         return groupReadingsByMonth(readings, usePrice);
     }
     
+    
     /**
      * Gets combined monthly expense data for all utilities
      * 
@@ -486,42 +494,119 @@ public class Reading_Manager {
     }
     
     public String getTrend(User user, String type) throws SQLException {
-        String sqlscript = "SELECT * FROM readings WHERE user_id = ? AND type = ? ORDER BY date DESC LIMIT 2";
-        try (PreparedStatement prepared_statement = connection.prepareStatement(sqlscript)) {
-            prepared_statement.setInt(1, user.getUser_Id());
-            prepared_statement.setString(2, type);
-            try (ResultSet rs = prepared_statement.executeQuery()) {
-                if (rs.next()) {
-                    double latestReading = rs.getDouble("reading");
-                    if (rs.next()) {
-                        double previousReading = rs.getDouble("reading");
-                        double percentageChange = ((latestReading - previousReading) / previousReading) * 100;
-                        return String.format("%.1f%% from last month", percentageChange);
+        LocalDate currentDate = LocalDate.now();
+        LocalDate firstDayCurrentMonth = currentDate.withDayOfMonth(1);
+        LocalDate firstDayPreviousMonth = firstDayCurrentMonth.minusMonths(1);
+        LocalDate lastDayPreviousMonth = firstDayCurrentMonth.minusDays(1);
+
+        String sqlCurrentMonth = "SELECT SUM(reading) as total FROM readings WHERE user_id = ? AND type = ? AND date >= ? AND date <= ?";
+        String sqlPreviousMonth = "SELECT SUM(reading) as total FROM readings WHERE user_id = ? AND type = ? AND date >= ? AND date <= ?";
+
+        try {
+            double currentMonthTotal = 0;
+            double previousMonthTotal = 0;
+
+            // Get current month total
+            try (PreparedStatement stmt = connection.prepareStatement(sqlCurrentMonth)) {
+                stmt.setInt(1, user.getUser_Id());
+                stmt.setString(2, type);
+                stmt.setString(3, firstDayCurrentMonth.toString());
+                stmt.setString(4, currentDate.toString());
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next() && rs.getObject("total") != null) {
+                        currentMonthTotal = rs.getDouble("total");
                     }
-                    return "No previous reading";
                 }
-                return "No readings available";
             }
+
+            // Get previous month total
+            try (PreparedStatement stmt = connection.prepareStatement(sqlPreviousMonth)) {
+                stmt.setInt(1, user.getUser_Id());
+                stmt.setString(2, type);
+                stmt.setString(3, firstDayPreviousMonth.toString());
+                stmt.setString(4, lastDayPreviousMonth.toString());
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next() && rs.getObject("total") != null) {
+                        previousMonthTotal = rs.getDouble("total");
+                    }
+                }
+            }
+
+            if (previousMonthTotal > 0 && currentMonthTotal > 0) {
+                lastTrendPercentage = ((currentMonthTotal - previousMonthTotal) / previousMonthTotal) * 100;
+                return String.format("%.1f%% from last month", lastTrendPercentage);
+            }
+            lastTrendPercentage = 0;
+            return "No previous data";
+
         } catch (SQLException e) {
             e.printStackTrace();
+            lastTrendPercentage = 0;
             return "Error calculating trend";
         }
     }
-    public Color getTrendColor(User user, String type) throws SQLException {
-		String trend = getTrend(user, type);
-		if (trend.contains("No previous reading") || trend.contains("No readings available")) {
-			return Color.GRAY; // Neutral color for no data
-		}
-		
-		double percentageChange = Double.parseDouble(trend.replace("% from last month", ""));
-		if (percentageChange > 0) {
-			return Color.GREEN; // Positive trend
-		} else if (percentageChange < 0) {
-			return Color.RED; // Negative trend
-		} else {
-			return Color.YELLOW; // No change
-		}
-	}
+    
+    public String getTrendOverall(User user) throws SQLException {
+        LocalDate currentDate = LocalDate.now();
+        LocalDate firstDayCurrentMonth = currentDate.withDayOfMonth(1);
+        LocalDate firstDayPreviousMonth = firstDayCurrentMonth.minusMonths(1);
+        LocalDate lastDayPreviousMonth = firstDayCurrentMonth.minusDays(1);
+
+        String sqlCurrentMonth = "SELECT SUM(reading) as total FROM readings WHERE user_id = ? AND date >= ? AND date <= ?";
+        String sqlPreviousMonth = "SELECT SUM(reading) as total FROM readings WHERE user_id = ? AND date >= ? AND date <= ?";
+
+        try {
+            double currentMonthTotal = 0;
+            double previousMonthTotal = 0;
+
+            // Get current month total
+            try (PreparedStatement stmt = connection.prepareStatement(sqlCurrentMonth)) {
+                stmt.setInt(1, user.getUser_Id());
+                stmt.setString(2, firstDayCurrentMonth.toString());
+                stmt.setString(3, currentDate.toString());
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next() && rs.getObject("total") != null) {
+                        currentMonthTotal = rs.getDouble("total");
+                    }
+                }
+            }
+
+            // Get previous month total
+            try (PreparedStatement stmt = connection.prepareStatement(sqlPreviousMonth)) {
+                stmt.setInt(1, user.getUser_Id());
+                stmt.setString(2, firstDayPreviousMonth.toString());
+                stmt.setString(3, lastDayPreviousMonth.toString());
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next() && rs.getObject("total") != null) {
+                        previousMonthTotal = rs.getDouble("total");
+                    }
+                }
+            }
+
+            if (previousMonthTotal > 0 && currentMonthTotal > 0) {
+                lastTrendPercentage = ((currentMonthTotal - previousMonthTotal) / previousMonthTotal) * 100;
+                return String.format("%.1f%% from last month", lastTrendPercentage);
+            }
+            lastTrendPercentage = 0;
+            return "No previous data";
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            lastTrendPercentage = 0;
+            return "Error calculating trend";
+        }
+    }
+
+    
+    public Color getTrendColor(User user, String type) {
+        if (lastTrendPercentage < 0) {
+            return new Color(0, 150, 0); // Green for decrease
+        } else if (lastTrendPercentage > 0) {
+            return new Color(255, 0, 0); // Red for increase
+        } else {
+            return Color.GRAY; // Gray for no change or no data
+        }
+    }
 
 	public Reading getReadingByMonth(User currentUser, String string, LocalDate previousMonth) {
 		String sqlscript = "SELECT * FROM readings WHERE user_id = ? AND type = ? AND date = ?";
@@ -548,5 +633,88 @@ public class Reading_Manager {
 			
 		}
 		return null;
+	}
+	public int getTotalReadings(User currentUser) {
+		String sqlscript = "SELECT COUNT(*) as total FROM readings WHERE user_id = ?";
+		try (PreparedStatement prepared_statement = connection.prepareStatement(sqlscript)) {
+			prepared_statement.setInt(1, currentUser.getUser_Id());
+			try (ResultSet rs = prepared_statement.executeQuery()) {
+				if (rs.next()) {
+					return rs.getInt("total");
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+		}
+		return 0;
+	}
+	public void updateReadingLabel(User current_user,Reading reading, JLabel valueLabel, JLabel trendLabel, String type) {
+        if (reading == null) {
+            valueLabel.setText("No Data");
+            trendLabel.setText("No Data");
+        } else {
+            valueLabel.setText(String.valueOf(reading.getReading()));
+            try {
+                String trend = getTrend(current_user, type);
+                trendLabel.setText(trend);
+                trendLabel.setForeground(getTrendColor(current_user, type));
+            } catch (SQLException e) {
+                e.printStackTrace();
+                trendLabel.setText("Error calculating trend");
+            }
+        }
+    }
+	public JList<String> getReadingsAsJList(User user, String type, MouseAdapter mouseListener) {
+	    try {
+	        if (!isReadingExists(user, type)) {
+	            JList<String> list = new JList<>(new String[] {"No readings found.", "Please add a reading."});
+	            list.setFont(new Font("monoFont", Font.PLAIN, 15));
+	            list.setPreferredSize(new Dimension(429, 448));
+	            list.setFixedCellHeight(30);
+	            return list;
+	        }
+	        
+	        List<Reading> allReadings = getAllReadingsByType(user, type);
+	        
+	        String[] readings = new String[allReadings.size()];
+	        for (int i = 0; i < allReadings.size(); i++) {
+	            Reading reading = allReadings.get(i);
+	            String unit = "";
+	            switch(type) {
+	                case "electricity":
+	                    unit = "kWh";
+	                    break;
+	                case "water":
+	                    unit = "m³";
+	                    break;
+	                case "gas":
+	                    unit = "m³";
+	                    break;
+	                default:
+	                    unit = "";
+	                    break;
+	            }
+	            readings[i] = String.format("    %-21s %-23s %-19s %-10s", 
+	                reading.getDate(), 
+	                reading.getReading() + unit, 
+	                reading.getRate() + "Php", 
+	                reading.getTotal_Price() + "Php");
+	        }
+	        
+	        JList<String> list = new JList<>(readings);
+	        list.setFont(new Font("monoFont", Font.PLAIN, 13));
+	        list.setPreferredSize(new Dimension(429, 448));
+	        list.setFixedCellHeight(30);
+	        
+	        if (mouseListener != null) {
+	            list.addMouseListener(mouseListener);
+	        }
+	        
+	        return list;
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        return new JList<>(new String[] {"Error fetching readings."});
+	    }
 	}
 }

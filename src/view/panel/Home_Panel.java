@@ -5,14 +5,13 @@ import javax.swing.JPanel;
 import database.Database_Manager;
 import model.Reading;
 import model.User;
+import view.panel.misc.Utility_Tips_Manager;
 import visuals.Graph_Panel;
 import visuals.Rounded_Panel;
 
 import javax.swing.JLabel;
 import java.awt.Dimension;
-import javax.swing.JButton;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -20,23 +19,14 @@ import javax.swing.SwingConstants;
 import javax.swing.Timer;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.Month;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.sql.SQLException;
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
 
-/**
- * Home Panel for displaying user utility data and graphs
- */
 public class Home_Panel extends JPanel {
 
     private static final long serialVersionUID = 1L;
@@ -46,689 +36,477 @@ public class Home_Panel extends JPanel {
     //==============================================================================================
     
     /** Database and user fields */
-    private Database_Manager databaseManager;
-    private User currentUser;
+    private Database_Manager database_Manager;
+    private User current_User;
     
     /** Main panel containers */
-    private JPanel panelWelcomeTitle;
-    private JPanel panelInformation;
-    private JPanel panelTips;
-    private JPanel panelGraphContainer;
+    private JPanel panel_Welcome_Title;
+    private JPanel panel_Information;
+    private JPanel panel_Tips;
+    private JPanel panel_Graph_Container;
     
     /** Utility info panels */
-    private JPanel panelElectricityInfo;
-    private JPanel panelWaterInfo;
-    private JPanel panelGasInfo;
-    private JPanel panelOverallInfo;
+    private JPanel panel_Electricity_Info;
+    private JPanel panel_Water_Info;
+    private JPanel panel_Gas_Info;
+    private JPanel panel_Overall_Info;
     
     /** Reading value labels */
-    private JLabel lblElectricityReadingValue;
-    private JLabel lblWaterReadingValue;
-    private JLabel lblGasReadingValue;
-    private JLabel lblOverAllReadingValue;
+    private JLabel lbl_Electricity_Reading_Value;
+    private JLabel lbl_Water_Reading_Value;
+    private JLabel lbl_Gas_Reading_Value;
+    private JLabel lbl_OverAll_Reading_Value;
     
     /** Panel title labels */
-    private JLabel lblTitleWelcome;
-    private JLabel lblUsername;
-    private JLabel lblDate;
-    private JLabel lblTime;
-    private JLabel lblTitleElectricityInfo;
-    private JLabel lblTitleWaterInfo;
-    private JLabel lblTitleGasInfo;
-    private JLabel lblTitleOverAllInfo;
+    private JLabel lbl_Title_Welcome;
+    private JLabel lbl_Username;
+    private JLabel lbl_Date;
+    private JLabel lbl_Time;
+    private JLabel lbl_Title_Electricity_Info;
+    private JLabel lbl_Title_Water_Info;
+    private JLabel lbl_Title_Gas_Info;
+    private JLabel lbl_Title_OverAll_Info;
     
     /** Unit labels */
-    private JLabel lblElectricityReadingUnit;
-    private JLabel lblWaterReadingUnit;
-    private JLabel lblGasReadingUnit;
-    private JLabel lblOverAllReadingUnit;
+    private JLabel lbl_Electricity_Reading_Unit;
+    private JLabel lbl_Water_Reading_Unit;
+    private JLabel lbl_Gas_Reading_Unit;
+    private JLabel lbl_OverAll_Reading_Unit;
     
     /** Graph components */
-    private Graph_Panel graphPanel;
-    private JPanel panelBehind1;
-    private JPanel panelBehind2;
-    private JPanel panelBehind3;
-    private JLabel lblTrendOfReadingOverall;
-    private JLabel lblTrendOfReadingGas;
-    private JLabel lblTrendOfReadingWater;
-    private JLabel lblTrendOfReadingElectricity;
+    private Graph_Panel graph_Panel;
+    private JPanel panel_Behind1;
+    private JPanel panel_Behind2;
+    private JPanel panel_Behind3;
+    private JLabel lbl_Trend_Of_Reading_Overall;
+    private JLabel lbl_Trend_Of_Reading_Gas;
+    private JLabel lbl_Trend_Of_Reading_Water;
+    private JLabel lbl_Trend_Of_Reading_Electricity;
     
-    //==============================================================================================
-    // CONSTRUCTOR
-    //==============================================================================================
-    
-    /**
-     * Constructor for the Home Panel
-     * 
-     * @param databaseManager Database manager for accessing data
-     * @param currentUser The current logged-in user
-     */
-    public Home_Panel(Database_Manager databaseManager, User currentUser) {
-        this.databaseManager = databaseManager;
-        this.currentUser = currentUser;
+    /** Tips panel components */
+    private Utility_Tips_Manager utility_Tips_Manager;
+    private JPanel panel_Tip_1;
+    private JLabel lbl_Tip_1;
+    private JLabel lbl_Tip_Type_1;
+    private JLabel lbl_Tip_Type_2;
+    private JLabel lbl_Tip_2;
+    private Rounded_Panel panel_Tip_2;
+    private JLabel lbl_Tip_3;
+    private JLabel lbl_Tip_Type_3;
+    private Rounded_Panel panel_Tip_3;
+
+    public Home_Panel(Database_Manager database_Manager, User current_User) {
+        this.database_Manager = database_Manager;
+        this.current_User = current_User;
         
-        initializePanelProperties();
-        initializeUI();
-        setupData();
-    }
-    
-    //==============================================================================================
-    // INITIALIZATION METHODS
-    //==============================================================================================
-    
-    /**
-     * Initialize the panel's base properties
-     */
-    private void initializePanelProperties() {
+        // Set panel properties
+        setBackground(new Color(213, 213, 213));
         setPreferredSize(new Dimension(986, 688));
         setLayout(null);
+
+        // Initialize all UI components
+        initialize_UI();
+		create_Action_Listeners();
+        
+        // Setup initial data
+        setup_Data();
     }
     
-    /**
-     * Initialize all UI components
-     */
-    private void initializeUI() {
-        createHeaderPanel();
-        createContentPanel();
-        createGraphPanel();
-        createTipsPanel();
-        createActionListeners();
-    }
-    
-    //==============================================================================================
-    // UI CREATION - HEADER SECTION
-    //==============================================================================================
-    
-    /**
-     * Create the header panel with welcome title
-     */
-    private void createHeaderPanel() {
-        panelWelcomeTitle = new Rounded_Panel(25, Color.BLACK, 1);
-        panelWelcomeTitle.setBounds(21, 11, 944, 85);
-        panelWelcomeTitle.setLayout(null);
-        add(panelWelcomeTitle);
+    private void initialize_UI() {
+    	
+    	//==============================================================================================
+        // UI CREATION - HEADER SECTION
+        //==============================================================================================
+    	
+    	panel_Welcome_Title = new Rounded_Panel();
+        panel_Welcome_Title.setBackground(new Color(255, 255, 255));
+        panel_Welcome_Title.setBounds(21, 11, 944, 85);
+        panel_Welcome_Title.setLayout(null);
+        add(panel_Welcome_Title);
         
-        lblTitleWelcome = new JLabel("Welcome");
-        lblTitleWelcome.setHorizontalAlignment(SwingConstants.CENTER);
-        lblTitleWelcome.setFont(new Font("Tahoma", Font.PLAIN, 35));
-        lblTitleWelcome.setBounds(10, 0, 182, 60);
-        panelWelcomeTitle.add(lblTitleWelcome);
+        lbl_Title_Welcome = new JLabel("Welcome,");
+        lbl_Title_Welcome.setHorizontalAlignment(SwingConstants.CENTER);
+        lbl_Title_Welcome.setFont(new Font("Tahoma", Font.PLAIN, 35));
+        lbl_Title_Welcome.setBounds(10, 0, 182, 60);
+        panel_Welcome_Title.add(lbl_Title_Welcome);
         
-        lblUsername = new JLabel("User");
-        lblUsername.setFont(new Font("Tahoma", Font.PLAIN, 35));
-        lblUsername.setBounds(202, 0, 206, 60);
-        lblUsername.setText(currentUser.getUsername());
-        panelWelcomeTitle.add(lblUsername);
+        lbl_Username = new JLabel("User");
+        lbl_Username.setFont(new Font("Tahoma", Font.PLAIN, 35));
+        lbl_Username.setBounds(184, 0, 206, 60);
+        lbl_Username.setText(current_User.getUsername());
+        panel_Welcome_Title.add(lbl_Username);
         
-        lblDate = new JLabel("Date");
-        lblDate.setVerticalAlignment(SwingConstants.TOP);
-        lblDate.setHorizontalAlignment(SwingConstants.RIGHT);
-        lblDate.setFont(new Font("Tahoma", Font.PLAIN, 30));
-        lblDate.setBounds(764, 11, 170, 54);
-        lblDate.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-        panelWelcomeTitle.add(lblDate);
+        lbl_Date = new JLabel("Date");
+        lbl_Date.setVerticalAlignment(SwingConstants.TOP);
+        lbl_Date.setHorizontalAlignment(SwingConstants.RIGHT);
+        lbl_Date.setFont(new Font("Tahoma", Font.PLAIN, 20));
+        lbl_Date.setBounds(764, 11, 170, 54);
+        lbl_Date.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        panel_Welcome_Title.add(lbl_Date);
         
-        lblTime = new JLabel("Time");
-        lblTime.setVerticalAlignment(SwingConstants.TOP);
-        lblTime.setHorizontalAlignment(SwingConstants.RIGHT);
-        lblTime.setFont(new Font("Tahoma", Font.PLAIN, 30));
-        lblTime.setBounds(764, 46, 170, 41);
-        lblTime.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm")));
-        panelWelcomeTitle.add(lblTime);
+        lbl_Time = new JLabel("Time");
+        lbl_Time.setVerticalAlignment(SwingConstants.TOP);
+        lbl_Time.setHorizontalAlignment(SwingConstants.RIGHT);
+        lbl_Time.setFont(new Font("Tahoma", Font.PLAIN, 20));
+        lbl_Time.setBounds(764, 39, 170, 41);
+        lbl_Time.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm a")));
+        panel_Welcome_Title.add(lbl_Time);
         
         JLabel lbl_SubTitle_Welcome = new JLabel("Here is Your Summary of Expenses\r\n\r\n");
         lbl_SubTitle_Welcome.setHorizontalAlignment(SwingConstants.LEFT);
         lbl_SubTitle_Welcome.setFont(new Font("Tahoma", Font.PLAIN, 17));
         lbl_SubTitle_Welcome.setBounds(20, 58, 393, 22);
-        panelWelcomeTitle.add(lbl_SubTitle_Welcome);
+        panel_Welcome_Title.add(lbl_SubTitle_Welcome);
+        
+        //==============================================================================================
+        // UI CREATION - CONTENT PANELS
+        //==============================================================================================
+        
+        panel_Information = new Rounded_Panel();
+        panel_Information.setBackground(new Color(255, 255, 255));
+        panel_Information.setBounds(21, 114, 467, 408);
+        panel_Information.setLayout(null);
+        add(panel_Information);
+        
+        //==============================================================================================
+        // UI CREATION - UTILITY INFO PANELS - ELECTRICITY INFO PANEL
+        //==============================================================================================
+        
+        panel_Electricity_Info = new Rounded_Panel();
+        panel_Electricity_Info.setBackground(new Color(220, 220, 220));
+        panel_Electricity_Info.setBounds(10, 11, 447, 87);
+        panel_Electricity_Info.setLayout(null);
+        panel_Information.add(panel_Electricity_Info);
+        
+        lbl_Title_Electricity_Info = new JLabel("Electricity");
+        lbl_Title_Electricity_Info.setFont(new Font("Dialog", Font.PLAIN, 20));
+        lbl_Title_Electricity_Info.setBounds(10, 15, 156, 32);
+        panel_Electricity_Info.add(lbl_Title_Electricity_Info);
+        
+        lbl_Electricity_Reading_Value = new JLabel();
+        lbl_Electricity_Reading_Value.setHorizontalAlignment(SwingConstants.CENTER);
+        lbl_Electricity_Reading_Value.setFont(new Font("Tahoma", Font.BOLD, 20));
+        lbl_Electricity_Reading_Value.setBounds(259, 15, 100, 32);
+        panel_Electricity_Info.add(lbl_Electricity_Reading_Value);
+        
+        lbl_Electricity_Reading_Unit = new JLabel("KwH");
+        lbl_Electricity_Reading_Unit.setFont(new Font("Tahoma", Font.PLAIN, 18));
+        lbl_Electricity_Reading_Unit.setBounds(369, 15, 68, 32);
+        panel_Electricity_Info.add(lbl_Electricity_Reading_Unit);
+        
+        lbl_Trend_Of_Reading_Electricity = new JLabel("No avilable data");
+        lbl_Trend_Of_Reading_Electricity.setHorizontalAlignment(SwingConstants.CENTER);
+        lbl_Trend_Of_Reading_Electricity.setFont(new Font("Dialog", Font.PLAIN, 15));
+        lbl_Trend_Of_Reading_Electricity.setBounds(176, 44, 261, 32);
+        panel_Electricity_Info.add(lbl_Trend_Of_Reading_Electricity);
+
+        //==============================================================================================
+        // UI CREATION - UTILITY INFO PANELS - WATER INFO PANEL
+        //==============================================================================================
+        
+        panel_Water_Info = new Rounded_Panel();
+        panel_Water_Info.setBackground(new Color(220, 220, 220));
+        panel_Water_Info.setBounds(10, 109, 447, 87);
+        panel_Water_Info.setLayout(null);
+        panel_Information.add(panel_Water_Info);
+        
+        lbl_Title_Water_Info = new JLabel("Water");
+        lbl_Title_Water_Info.setFont(new Font("Dialog", Font.PLAIN, 20));
+        lbl_Title_Water_Info.setBounds(10, 15, 156, 32);
+        panel_Water_Info.add(lbl_Title_Water_Info);
+        
+        lbl_Water_Reading_Value = new JLabel();
+        lbl_Water_Reading_Value.setHorizontalAlignment(SwingConstants.CENTER);
+        lbl_Water_Reading_Value.setFont(new Font("Tahoma", Font.BOLD, 20));
+        lbl_Water_Reading_Value.setBounds(261, 15, 100, 32);
+        panel_Water_Info.add(lbl_Water_Reading_Value);
+        
+        lbl_Water_Reading_Unit = new JLabel("m³");
+        lbl_Water_Reading_Unit.setFont(new Font("Tahoma", Font.PLAIN, 18));
+        lbl_Water_Reading_Unit.setBounds(369, 15, 68, 32);
+        panel_Water_Info.add(lbl_Water_Reading_Unit);
+        
+        lbl_Trend_Of_Reading_Water = new JLabel("No avilable data");
+        lbl_Trend_Of_Reading_Water.setHorizontalAlignment(SwingConstants.CENTER);
+        lbl_Trend_Of_Reading_Water.setFont(new Font("Dialog", Font.PLAIN, 15));
+        lbl_Trend_Of_Reading_Water.setBounds(176, 44, 261, 32);
+        panel_Water_Info.add(lbl_Trend_Of_Reading_Water);
+
+        //==============================================================================================
+        // UI CREATION - UTILITY INFO PANELS - GAS INFO PANEL
+        //==============================================================================================
+        
+        panel_Gas_Info = new Rounded_Panel();
+        panel_Gas_Info.setBackground(new Color(220, 220, 220));
+        panel_Gas_Info.setBounds(10, 207, 447, 87);
+        panel_Gas_Info.setLayout(null);
+        panel_Information.add(panel_Gas_Info);
+        
+        lbl_Title_Gas_Info = new JLabel("Gas");
+        lbl_Title_Gas_Info.setFont(new Font("Dialog", Font.PLAIN, 20));
+        lbl_Title_Gas_Info.setBounds(10, 15, 156, 32);
+        panel_Gas_Info.add(lbl_Title_Gas_Info);
+        
+        lbl_Gas_Reading_Value = new JLabel();
+        lbl_Gas_Reading_Value.setHorizontalAlignment(SwingConstants.CENTER);
+        lbl_Gas_Reading_Value.setFont(new Font("Tahoma", Font.BOLD, 20));
+        lbl_Gas_Reading_Value.setBounds(259, 15, 100, 32);
+        panel_Gas_Info.add(lbl_Gas_Reading_Value);
+        
+        lbl_Gas_Reading_Unit = new JLabel("Qty");
+        lbl_Gas_Reading_Unit.setFont(new Font("Tahoma", Font.PLAIN, 18));
+        lbl_Gas_Reading_Unit.setBounds(369, 15, 68, 32);
+        panel_Gas_Info.add(lbl_Gas_Reading_Unit);
+        
+        lbl_Trend_Of_Reading_Gas = new JLabel("No avilable data");
+        lbl_Trend_Of_Reading_Gas.setHorizontalAlignment(SwingConstants.CENTER);
+        lbl_Trend_Of_Reading_Gas.setFont(new Font("Dialog", Font.PLAIN, 15));
+        lbl_Trend_Of_Reading_Gas.setBounds(176, 44, 261, 32);
+        panel_Gas_Info.add(lbl_Trend_Of_Reading_Gas);
+        
+        //==============================================================================================
+        // UI CREATION - UTILITY INFO PANELS - OVERALL INFO PANEL
+        //==============================================================================================
+        
+        panel_Overall_Info = new Rounded_Panel();
+        panel_Overall_Info.setBackground(new Color(220, 220, 220));
+        panel_Overall_Info.setBounds(10, 305, 447, 87);
+        panel_Overall_Info.setLayout(null);
+        panel_Information.add(panel_Overall_Info);
+        
+        lbl_Title_OverAll_Info = new JLabel("Overall Expenses");
+        lbl_Title_OverAll_Info.setFont(new Font("Dialog", Font.PLAIN, 20));
+        lbl_Title_OverAll_Info.setBounds(10, 15, 260, 32);
+        panel_Overall_Info.add(lbl_Title_OverAll_Info);
+        
+        lbl_OverAll_Reading_Value = new JLabel();
+        lbl_OverAll_Reading_Value.setHorizontalAlignment(SwingConstants.CENTER);
+        lbl_OverAll_Reading_Value.setFont(new Font("Tahoma", Font.BOLD, 20));
+        lbl_OverAll_Reading_Value.setBounds(258, 15, 101, 32);
+        panel_Overall_Info.add(lbl_OverAll_Reading_Value);
+        
+        lbl_OverAll_Reading_Unit = new JLabel("Php");
+        lbl_OverAll_Reading_Unit.setFont(new Font("Tahoma", Font.PLAIN, 18));
+        lbl_OverAll_Reading_Unit.setBounds(369, 15, 68, 32);
+        panel_Overall_Info.add(lbl_OverAll_Reading_Unit);
+        
+        lbl_Trend_Of_Reading_Overall = new JLabel("No avilable data");
+        lbl_Trend_Of_Reading_Overall.setHorizontalAlignment(SwingConstants.CENTER);
+        lbl_Trend_Of_Reading_Overall.setFont(new Font("Dialog", Font.PLAIN, 15));
+        lbl_Trend_Of_Reading_Overall.setBounds(177, 44, 260, 32);
+        panel_Overall_Info.add(lbl_Trend_Of_Reading_Overall);
+        
+        //==============================================================================================
+        // UI CREATION - GRAPH SECTION
+        //==============================================================================================
+        
+        panel_Graph_Container = new Rounded_Panel(25, Color.BLACK, 0);
+        panel_Graph_Container.setBorder(new EmptyBorder(5, 5, 5, 5));
+        panel_Graph_Container.setBounds(504, 157, 413, 365);
+        panel_Graph_Container.setBackground(new Color(255, 255, 255));
+        panel_Graph_Container.setLayout(new BorderLayout());
+        add(panel_Graph_Container);
+
+        // Add placeholder panel for design time
+        if (database_Manager == null) {
+            JPanel placeholder = new JPanel();
+            placeholder.setBackground(Color.WHITE);
+            panel_Graph_Container.add(placeholder);
+        } else {
+            // Create and add actual graph panel at runtime
+            graph_Panel = new Graph_Panel(database_Manager.getReadingManager(), current_User);
+            graph_Panel.setBackground(new Color(255, 255, 255));
+            panel_Graph_Container.add(graph_Panel);
+        }
+        
+        panel_Behind1 = new Rounded_Panel(25, Color.BLACK, 0);
+        panel_Behind1.setBackground(new Color(220, 220, 220));
+        panel_Behind1.setBounds(520, 142, 413, 365);
+        add(panel_Behind1);
+        
+        panel_Behind2 = new Rounded_Panel(25, Color.BLACK, 0);
+        panel_Behind2.setBackground(new Color(200, 200, 200));
+        panel_Behind2.setBounds(536, 129, 413, 356);
+        add(panel_Behind2);
+        
+        panel_Behind3 = new Rounded_Panel(25, Color.BLACK, 0);
+        panel_Behind3.setBackground(new Color(180, 180, 180));
+        panel_Behind3.setBounds(552, 114, 413, 347);
+        add(panel_Behind3);
+        
+        //==============================================================================================
+        // UI CREATION - TIPS SECTION
+        //==============================================================================================
+
+        utility_Tips_Manager = new Utility_Tips_Manager();
+
+        panel_Tips = new Rounded_Panel();
+        panel_Tips.setBackground(new Color(255, 255, 255));
+        panel_Tips.setBounds(21, 533, 944, 144);
+        panel_Tips.setLayout(null);
+        add(panel_Tips);
+
+        //===============================================================================================
+        // UI CREATION - TIPS PANELS - TIP 1
+        //===============================================================================================
+        
+        panel_Tip_1 = new Rounded_Panel();
+        panel_Tip_1.setLayout(null);
+        panel_Tip_1.setBounds(10, 11, 306, 122);
+        panel_Tips.add(panel_Tip_1);
+        
+        lbl_Tip_Type_1 = new JLabel("Money Saving Tips");
+        lbl_Tip_Type_1.setForeground(new Color(0, 128, 255));
+        lbl_Tip_Type_1.setVerticalAlignment(SwingConstants.TOP);
+        lbl_Tip_Type_1.setHorizontalAlignment(SwingConstants.LEFT);
+        lbl_Tip_Type_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
+        lbl_Tip_Type_1.setBounds(10, 11, 243, 36);
+        panel_Tip_1.add(lbl_Tip_Type_1);
+        
+        lbl_Tip_1 = new JLabel("Electricity Tip - Replace traditional light bulbs with LED bulbs. They use up to 75% less energy and last much longer.");
+        lbl_Tip_1.setBounds(20, 44, 273, 67);
+        lbl_Tip_1.setHorizontalAlignment(SwingConstants.LEFT);
+        lbl_Tip_1.setFont(new Font("Tahoma", Font.PLAIN, 17));
+        panel_Tip_1.add(lbl_Tip_1);
+
+        //===============================================================================================
+        // UI CREATION - TIPS PANELS - TIP 2
+        //===============================================================================================
+        
+        panel_Tip_2 = new Rounded_Panel();
+        panel_Tip_2.setLayout(null);
+        panel_Tip_2.setBounds(326, 11, 291, 122);
+        panel_Tips.add(panel_Tip_2);
+        
+        lbl_Tip_Type_2 = new JLabel("Electricity Tip");
+        lbl_Tip_Type_2.setVerticalAlignment(SwingConstants.TOP);
+        lbl_Tip_Type_2.setHorizontalAlignment(SwingConstants.LEFT);
+        lbl_Tip_Type_2.setForeground(new Color(0, 128, 255));
+        lbl_Tip_Type_2.setFont(new Font("Tahoma", Font.PLAIN, 20));
+        lbl_Tip_Type_2.setBounds(10, 11, 243, 36);
+        panel_Tip_2.add(lbl_Tip_Type_2);
+        
+        lbl_Tip_2 = new JLabel("<html>Use oven and stovetop efficiently by matching pot size to burner size.</html>");
+        lbl_Tip_2.setHorizontalAlignment(SwingConstants.LEFT);
+        lbl_Tip_2.setFont(new Font("Tahoma", Font.PLAIN, 17));
+        lbl_Tip_2.setBounds(20, 44, 268, 67);
+        panel_Tip_2.add(lbl_Tip_2);
+        
+        //===============================================================================================
+        // UI CREATION - TIPS PANELS - TIP 3
+        //===============================================================================================
+        
+        panel_Tip_3 = new Rounded_Panel();
+        panel_Tip_3.setLayout(null);
+        panel_Tip_3.setBounds(627, 11, 307, 122);
+        panel_Tips.add(panel_Tip_3);
+
+        lbl_Tip_Type_3 = new JLabel("Electricity Tip");
+        lbl_Tip_Type_3.setVerticalAlignment(SwingConstants.TOP);
+        lbl_Tip_Type_3.setHorizontalAlignment(SwingConstants.LEFT);
+        lbl_Tip_Type_3.setForeground(new Color(0, 128, 255));
+        lbl_Tip_Type_3.setFont(new Font("Tahoma", Font.PLAIN, 20));
+        lbl_Tip_Type_3.setBounds(10, 11, 243, 36);
+        panel_Tip_3.add(lbl_Tip_Type_3);
+
+        lbl_Tip_3 = new JLabel("<html>Use oven and stovetop efficiently by matching pot size to burner size.</html>");
+        lbl_Tip_3.setHorizontalAlignment(SwingConstants.LEFT);
+        lbl_Tip_3.setFont(new Font("Tahoma", Font.PLAIN, 17));
+        lbl_Tip_3.setBounds(20, 44, 277, 67);
+        panel_Tip_3.add(lbl_Tip_3);
     }
     
     //==============================================================================================
-    // UI CREATION - CONTENT PANELS
+    // DATA HANDLING & EVENT LISTENERS 
     //==============================================================================================
     
-    /**
-     * Create the content panel with utility information
-     */
-    private void createContentPanel() {
-        panelInformation = new Rounded_Panel();
-        panelInformation.setBackground(new Color(255, 255, 255));
-//        panelInformation.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-        panelInformation.setBounds(21, 114, 467, 408);
-        panelInformation.setLayout(null);
-        add(panelInformation);
-        
-        createElectricityInfoPanel();
-        createWaterInfoPanel();
-        createGasInfoPanel();
-        createOverallInfoPanel();
-    }
+    public void home_Panel_Refresh() {setup_Data();}
     
-    /**
-     * Create the electricity information panel
-     */
-    private void createElectricityInfoPanel() {
-        panelElectricityInfo = new Rounded_Panel();
-        panelElectricityInfo.setBounds(10, 11, 447, 87);
-        panelElectricityInfo.setLayout(null);
-        panelInformation.add(panelElectricityInfo);
-        
-        lblTitleElectricityInfo = new JLabel("Electricity");
-        lblTitleElectricityInfo.setFont(new Font("Dialog", Font.PLAIN, 20));
-        lblTitleElectricityInfo.setBounds(10, 15, 156, 32);
-        panelElectricityInfo.add(lblTitleElectricityInfo);
-        
-        lblElectricityReadingValue = new JLabel();
-        lblElectricityReadingValue.setHorizontalAlignment(SwingConstants.CENTER);
-        lblElectricityReadingValue.setFont(new Font("Tahoma", Font.BOLD, 20));
-        lblElectricityReadingValue.setBounds(259, 15, 100, 32);
-        panelElectricityInfo.add(lblElectricityReadingValue);
-        
-        lblElectricityReadingUnit = new JLabel("KwH");
-        lblElectricityReadingUnit.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        lblElectricityReadingUnit.setBounds(369, 15, 68, 32);
-        panelElectricityInfo.add(lblElectricityReadingUnit);
-        
-        lblTrendOfReadingElectricity = new JLabel("No avilable data");
-        lblTrendOfReadingElectricity.setFont(new Font("Dialog", Font.PLAIN, 15));
-        lblTrendOfReadingElectricity.setBounds(230, 44, 207, 32);
-        panelElectricityInfo.add(lblTrendOfReadingElectricity);
-    }
-    
-    /**
-     * Create the water information panel
-     */
-    private void createWaterInfoPanel() {
-        panelWaterInfo = new Rounded_Panel();
-        panelWaterInfo.setBounds(10, 109, 447, 87);
-        panelWaterInfo.setLayout(null);
-        panelInformation.add(panelWaterInfo);
-        
-        lblTitleWaterInfo = new JLabel("Water");
-        lblTitleWaterInfo.setFont(new Font("Dialog", Font.PLAIN, 20));
-        lblTitleWaterInfo.setBounds(10, 15, 156, 32);
-        panelWaterInfo.add(lblTitleWaterInfo);
-        
-        lblWaterReadingValue = new JLabel();
-        lblWaterReadingValue.setHorizontalAlignment(SwingConstants.CENTER);
-        lblWaterReadingValue.setFont(new Font("Tahoma", Font.BOLD, 20));
-        lblWaterReadingValue.setBounds(261, 15, 100, 32);
-        panelWaterInfo.add(lblWaterReadingValue);
-        
-        lblWaterReadingUnit = new JLabel("m³");
-        lblWaterReadingUnit.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        lblWaterReadingUnit.setBounds(369, 15, 68, 32);
-        panelWaterInfo.add(lblWaterReadingUnit);
-        
-        lblTrendOfReadingWater = new JLabel("No avilable data");
-        lblTrendOfReadingWater.setFont(new Font("Dialog", Font.PLAIN, 15));
-        lblTrendOfReadingWater.setBounds(230, 44, 207, 32);
-        panelWaterInfo.add(lblTrendOfReadingWater);
-    }
-    
-    /**
-     * Create the gas information panel
-     */
-    private void createGasInfoPanel() {
-        panelGasInfo = new Rounded_Panel();
-        panelGasInfo.setBounds(10, 207, 447, 87);
-        panelGasInfo.setLayout(null);
-        panelInformation.add(panelGasInfo);
-        
-        lblTitleGasInfo = new JLabel("Gas");
-        lblTitleGasInfo.setFont(new Font("Dialog", Font.PLAIN, 20));
-        lblTitleGasInfo.setBounds(10, 15, 156, 32);
-        panelGasInfo.add(lblTitleGasInfo);
-        
-        lblGasReadingValue = new JLabel();
-        lblGasReadingValue.setHorizontalAlignment(SwingConstants.CENTER);
-        lblGasReadingValue.setFont(new Font("Tahoma", Font.BOLD, 20));
-        lblGasReadingValue.setBounds(259, 15, 100, 32);
-        panelGasInfo.add(lblGasReadingValue);
-        
-        lblGasReadingUnit = new JLabel("Qty");
-        lblGasReadingUnit.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        lblGasReadingUnit.setBounds(369, 15, 68, 32);
-        panelGasInfo.add(lblGasReadingUnit);
-        
-        lblTrendOfReadingGas = new JLabel("No avilable data");
-        lblTrendOfReadingGas.setFont(new Font("Dialog", Font.PLAIN, 15));
-        lblTrendOfReadingGas.setBounds(230, 44, 207, 32);
-        panelGasInfo.add(lblTrendOfReadingGas);
-    }
-    
-    /**
-     * Create the overall information panel
-     */
-    private void createOverallInfoPanel() {
-        panelOverallInfo = new Rounded_Panel();
-        panelOverallInfo.setBounds(10, 305, 447, 87);
-        panelOverallInfo.setLayout(null);
-        panelInformation.add(panelOverallInfo);
-        
-        lblTitleOverAllInfo = new JLabel("Overall Expenses");
-        lblTitleOverAllInfo.setFont(new Font("Dialog", Font.PLAIN, 20));
-        lblTitleOverAllInfo.setBounds(10, 15, 260, 32);
-        panelOverallInfo.add(lblTitleOverAllInfo);
-        
-        lblOverAllReadingValue = new JLabel();
-        lblOverAllReadingValue.setHorizontalAlignment(SwingConstants.CENTER);
-        lblOverAllReadingValue.setFont(new Font("Tahoma", Font.BOLD, 20));
-        lblOverAllReadingValue.setBounds(258, 15, 101, 32);
-        panelOverallInfo.add(lblOverAllReadingValue);
-        
-        lblOverAllReadingUnit = new JLabel("Php");
-        lblOverAllReadingUnit.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        lblOverAllReadingUnit.setBounds(369, 15, 68, 32);
-        panelOverallInfo.add(lblOverAllReadingUnit);
-        
-        lblTrendOfReadingOverall = new JLabel("No avilable data");
-        lblTrendOfReadingOverall.setFont(new Font("Dialog", Font.PLAIN, 15));
-        lblTrendOfReadingOverall.setBounds(230, 44, 207, 32);
-        panelOverallInfo.add(lblTrendOfReadingOverall);
-    }
-    
-    //==============================================================================================
-    // UI CREATION - GRAPH SECTION
-    //==============================================================================================
-    
-    /**
-     * Create the graph panel with CardLayout for different utilities
-     */
-    private void createGraphPanel() {
-        // Create the main graph container (visible to WindowBuilder)
-        panelGraphContainer = new Rounded_Panel();
-//        panelGraphContainer.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-        panelGraphContainer.setBorder(new EmptyBorder(5, 5, 5, 5));
-        panelGraphContainer.setBounds(504, 157, 413, 365);
-        panelGraphContainer.setBackground(new Color(255, 255, 255));
-        panelGraphContainer.setLayout(new BorderLayout()); // Use BorderLayout for easy replacement
-        add(panelGraphContainer);
-        
-        // Create Graph_Panel instance
-        Rounded_Panel rounded_Panel = new Rounded_Panel();
-        rounded_Panel.setBackground(new Color(255, 255, 255));
-        graphPanel = new Graph_Panel(rounded_Panel);
-        
-        // Add Graph_Panel to the container
-        panelGraphContainer.add(graphPanel, BorderLayout.CENTER);
-        
-        createGraphShadowPanels();
-    }
-    
-    /**
-     * Creates shadow panels for visual design effect behind the graph
-     */
-    private void createGraphShadowPanels() {
-        panelBehind1 = new Rounded_Panel();
-        panelBehind1.setBackground(new Color(255, 255, 255));
-//        panelBehind1.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-        panelBehind1.setBounds(520, 142, 413, 365);
-        add(panelBehind1);
-        
-        panelBehind2 = new Rounded_Panel();
-        panelBehind2.setBackground(new Color(255, 255, 255));
-//        panelBehind2.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-        panelBehind2.setBounds(536, 129, 413, 356);
-        add(panelBehind2);
-        
-        panelBehind3 = new Rounded_Panel();
-        panelBehind3.setBackground(new Color(255, 255, 255));
-//        panelBehind3.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-        panelBehind3.setBounds(552, 114, 413, 347);
-        add(panelBehind3);
-    }
-    
-    //==============================================================================================
-    // UI CREATION - TIPS SECTION
-    //==============================================================================================
-    
-    /**
-     * Create the tips panel with money-saving advice
-     */
-    private void createTipsPanel() {
-        panelTips = new  Rounded_Panel();
-//        panelTips.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-        panelTips.setBounds(21, 543, 944, 134);
-        panelTips.setLayout(null);
-        add(panelTips);
-        
-        JLabel lblTitleTips = new JLabel("Money Saving Tips");
-        lblTitleTips.setBounds(10, 0, 243, 36);
-        lblTitleTips.setHorizontalAlignment(SwingConstants.LEFT);
-        lblTitleTips.setFont(new Font("Tahoma", Font.PLAIN, 25));
-        panelTips.add(lblTitleTips);
-        
-        JLabel lblElectricityTips = new JLabel("Electricity Tip - Replace traditional light bulbs with LED bulbs. They use up to 75% less energy and last much longer.");
-        lblElectricityTips.setHorizontalAlignment(SwingConstants.LEFT);
-        lblElectricityTips.setFont(new Font("Tahoma", Font.PLAIN, 17));
-        lblElectricityTips.setBounds(10, 43, 902, 29);
-        panelTips.add(lblElectricityTips);
-        
-        JLabel lblWaterTips = new JLabel("Gas Tip - Lower your water heater temperature to 120°F to save energy while still providing comfortable hot water.");
-        lblWaterTips.setHorizontalAlignment(SwingConstants.LEFT);
-        lblWaterTips.setFont(new Font("Tahoma", Font.PLAIN, 17));
-        lblWaterTips.setBounds(10, 104, 909, 21);
-        panelTips.add(lblWaterTips);
-        
-        JLabel lblGasTips = new JLabel("Water Tip - Fix leaky faucets promptly. Even a small drip can waste several gallons of water per day.");
-        lblGasTips.setHorizontalAlignment(SwingConstants.LEFT);
-        lblGasTips.setFont(new Font("Tahoma", Font.PLAIN, 17));
-        lblGasTips.setBounds(10, 77, 924, 21);
-        panelTips.add(lblGasTips);
-    }
-    
-    //==============================================================================================
-    // INTERACTION HANDLING
-    //==============================================================================================
-    
-    /**
-     * Setup event listeners for interactive elements
-     */
-    private void createActionListeners() {
-        Timer timer = new Timer(60_000, e -> {
-            lblTime.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")));
+    private void create_Action_Listeners() {
+        // Clock update every minute
+        Timer clock_timer = new Timer(60_000, e -> {
+            lbl_Time.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm a")));
         });
         LocalTime now = LocalTime.now();
-        int millisUntilNextMinute = (60 - now.getSecond()) * 1000 - now.getNano() / 1_000_000;
-        timer.setInitialDelay(millisUntilNextMinute); // optional: sync with real time
-        timer.start();
+        int initialDelay = (60 - now.getSecond()) * 1000 - now.getNano() / 1_000_000;
+        clock_timer.setInitialDelay(initialDelay);
+        clock_timer.start();
         
-        // Electricity panel click event
-        panelElectricityInfo.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                graphPanel.showElectricityGraph();
-            }
-            @Override
-            public void mouseEntered(MouseEvent e) {
-				panelElectricityInfo.setBackground(new Color(220, 220, 220));
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				panelElectricityInfo.setBackground(new Color(240, 240, 240));
-			}
+        Timer tips_timer = new Timer(30_000, e -> {
+        	lbl_Tip_1.setText("<html>" + utility_Tips_Manager.getRandomTip() + "</html>");
+        	lbl_Tip_Type_1.setText(utility_Tips_Manager.getType());
+        	lbl_Tip_2.setText("<html>" + utility_Tips_Manager.getRandomTip() + "</html>");
+        	lbl_Tip_Type_2.setText(utility_Tips_Manager.getType());
+        	lbl_Tip_3.setText("<html>" + utility_Tips_Manager.getRandomTip() + "</html>");
+        	lbl_Tip_Type_3.setText(utility_Tips_Manager.getType());
         });
+        tips_timer.setInitialDelay(0); // Start immediately
+        tips_timer.start();
         
-        // Water panel click event
-        panelWaterInfo.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                graphPanel.showWaterGraph();
-            }
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            	panelWaterInfo.setBackground(new Color(220, 220, 220));
-            }
-            @Override
-            public void mouseExited(MouseEvent e) {
-				panelWaterInfo.setBackground(new Color(240, 240, 240));
-            }
-        });
-        
-        // Gas panel click event
-        panelGasInfo.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                graphPanel.showGasGraph();
-            }
-            @Override
-            public void mouseEntered(MouseEvent e) {
-				panelGasInfo.setBackground(new Color(220, 220, 220));
-			}
-            @Override
-            public void mouseExited(MouseEvent e) {
-            	panelGasInfo.setBackground(new Color(240, 240, 240));
-            }
-            
-        });
-        
-        // Overall panel click event
-        panelOverallInfo.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                graphPanel.showOverallGraph();
-            }
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            	panelOverallInfo.setBackground(new Color(220, 220, 220));
-            }
-            @Override
-            public void mouseExited(MouseEvent e) {
-				panelOverallInfo.setBackground(new Color(240, 240, 240));
-			}
-        });
+        // Panel click listeners
+        panel_Electricity_Info.addMouseListener(createPanelMouseAdapter(() -> graph_Panel.showElectricityGraph()));
+        panel_Water_Info.addMouseListener(createPanelMouseAdapter(() -> graph_Panel.showWaterGraph()));
+        panel_Gas_Info.addMouseListener(createPanelMouseAdapter(() -> graph_Panel.showGasGraph()));
+        panel_Overall_Info.addMouseListener(createPanelMouseAdapter(() -> graph_Panel.showOverallGraph()));
     }
     
-    //==============================================================================================
-    // DATA HANDLING
-    //==============================================================================================
-    
-    /**
-     * Public method to refresh the panel data
-     */
-    public void Home_Panel_Refresh() {
-        setupData();
+    private MouseAdapter createPanelMouseAdapter(Runnable onClick) {
+        return new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {onClick.run();}
+            @Override
+            public void mouseEntered(MouseEvent e) {((JPanel) e.getSource()).setBackground(new Color(200, 200, 200));}
+            @Override
+            public void mouseExited(MouseEvent e) {((JPanel) e.getSource()).setBackground(new Color(220, 220, 220));}
+        };
     }
-    
-    /**
-     * Loads and displays data from the database
-     */
-    private void setupData() {
+
+    private void setup_Data() {
         try {
-            // Get latest readings for each utility type
-            Reading electricityReading = databaseManager.getReadingManager().getLatestReadingByType(currentUser, "electricity");
-            Reading waterReading = databaseManager.getReadingManager().getLatestReadingByType(currentUser, "water");
-            Reading gasReading = databaseManager.getReadingManager().getLatestReadingByType(currentUser, "gas");
-            
-            // Update labels with latest readings
-            updateReadingLabels(electricityReading, waterReading, gasReading);
-            
-            // Initialize graph panels (needed because we're using a delayed initialization approach)
-            graphPanel.initialize();
-            
-            // Setup the bar graphs with data from past 6 months
-            updateBarGraphs();
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    
-    /**
-     * Updates the reading value labels based on latest readings
-     */
-    private void updateReadingLabels(Reading electricityReading, Reading waterReading, Reading gasReading) {
-        // Set electricity reading value
-        if (electricityReading == null) {
-            lblElectricityReadingValue.setText("No Data");
-        } else {
-            lblElectricityReadingValue.setText(String.valueOf(electricityReading.getReading()));
-            
-            try {
-            	lblTrendOfReadingElectricity.setText(databaseManager.getReadingManager().getTrend(currentUser, "electricity"));
-                lblTrendOfReadingElectricity.setForeground(databaseManager.getReadingManager().getTrendColor(currentUser, "electricity"));
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-        }
-        
-        // Set water reading value
-        if (waterReading == null) {
-            lblWaterReadingValue.setText("No Data");
-        } else {
-            lblWaterReadingValue.setText(String.valueOf(waterReading.getReading()));
-            
-            try {
-            	lblTrendOfReadingWater.setText(databaseManager.getReadingManager().getTrend(currentUser, "water"));
-                lblTrendOfReadingWater.setForeground(databaseManager.getReadingManager().getTrendColor(currentUser, "water"));
-            } catch (SQLException e) {
-            	e.printStackTrace();
+            // Initialize graph panel if needed
+            if (graph_Panel == null && database_Manager != null) {
+                graph_Panel = new Graph_Panel(database_Manager.getReadingManager(), current_User);
+                graph_Panel.setBackground(Color.WHITE);
+                panel_Graph_Container.removeAll();
+                panel_Graph_Container.add(graph_Panel);
+                panel_Graph_Container.revalidate();
+                panel_Graph_Container.repaint();
             }
-        }
-        
-        // Set gas reading value
-        if (gasReading == null) {
-            lblGasReadingValue.setText("No Data");
-        } else {
-            lblGasReadingValue.setText(String.valueOf(gasReading.getReading()));
-            
-            try {
-            	lblTrendOfReadingGas.setText(databaseManager.getReadingManager().getTrend(currentUser, "gas"));
-                lblTrendOfReadingGas.setForeground(databaseManager.getReadingManager().getTrendColor(currentUser, "gas"));
-            } catch (SQLException e) {
-            	e.printStackTrace();
-            }
-        }
-        
-     // Calculate and set overall expenses
-        double totalPrice = 0.0;
-        boolean hasAnyReading = false;
 
-        // Add electricity price if available
-        if (electricityReading != null) {
-            totalPrice += electricityReading.getTotal_Price();
-            hasAnyReading = true;
-        }
+            // Get latest readings
+            Reading electricity = database_Manager.getReadingManager().getLatestReadingByType(current_User, "electricity");
+            Reading water = database_Manager.getReadingManager().getLatestReadingByType(current_User, "water");
+            Reading gas = database_Manager.getReadingManager().getLatestReadingByType(current_User, "gas");
 
-        // Add water price if available
-        if (waterReading != null) {
-            totalPrice += waterReading.getTotal_Price();
-            hasAnyReading = true;
-        }
+            // Update each reading's label
+            database_Manager.getReadingManager().updateReadingLabel(current_User,electricity, lbl_Electricity_Reading_Value, lbl_Trend_Of_Reading_Electricity, "electricity");
+            database_Manager.getReadingManager().updateReadingLabel(current_User,water, lbl_Water_Reading_Value, lbl_Trend_Of_Reading_Water, "water");
+            database_Manager.getReadingManager().updateReadingLabel(current_User,gas, lbl_Gas_Reading_Value, lbl_Trend_Of_Reading_Gas, "gas");
 
-        // Add gas price if available
-        if (gasReading != null) {
-            totalPrice += gasReading.getTotal_Price();
-            hasAnyReading = true;
-        }
+            // Calculate and update overall reading
+            double total = 0;
+            if (electricity != null) total += electricity.getTotal_Price();
+            if (water != null) total += water.getTotal_Price();
+            if (gas != null) total += gas.getTotal_Price();
 
-        if (!hasAnyReading) {
-            lblOverAllReadingValue.setText("No Data");
-        } else {
-            lblOverAllReadingValue.setText(String.valueOf(totalPrice));
-            
-            // Get previous month's total expenses
-            LocalDate currentDate = LocalDate.now();
-            LocalDate previousMonth = currentDate.minusMonths(1);
-            
-            double previousMonthTotal = 0.0;
-            boolean hasPreviousReading = false;
-            
-            Reading previousElectricity = databaseManager.getReadingManager().getReadingByMonth(currentUser, "electricity", previousMonth);
-            Reading previousWater = databaseManager.getReadingManager().getReadingByMonth(currentUser, "water", previousMonth);
-            Reading previousGas = databaseManager.getReadingManager().getReadingByMonth(currentUser, "gas", previousMonth);
-            
-            // Add previous electricity price if available
-            if (previousElectricity != null && electricityReading != null) {
-                previousMonthTotal += previousElectricity.getTotal_Price();
-                hasPreviousReading = true;
-            }
-            
-            // Add previous water price if available
-            if (previousWater != null && waterReading != null) {
-                previousMonthTotal += previousWater.getTotal_Price();
-                hasPreviousReading = true;
-            }
-            
-            // Add previous gas price if available
-            if (previousGas != null && gasReading != null) {
-                previousMonthTotal += previousGas.getTotal_Price();
-                hasPreviousReading = true;
-            }
-            
-            if (hasPreviousReading && previousMonthTotal > 0) {
-                double percentageChange = ((totalPrice - previousMonthTotal) / previousMonthTotal) * 100;
-                String trendText = String.format("%.1f%% from last month", percentageChange);
-                lblTrendOfReadingOverall.setText(trendText);
-                
-                // Set color based on trend (red for increase, green for decrease)
-                Color trendColor = percentageChange > 0 ? new Color(255, 0, 0) : new Color(0, 150, 0);
-                lblTrendOfReadingOverall.setForeground(trendColor);
+            if (electricity == null && water == null && gas == null) {
+                lbl_OverAll_Reading_Value.setText("No Data");
+                lbl_Trend_Of_Reading_Overall.setText("No Data");
             } else {
-                lblTrendOfReadingOverall.setText("No previous data");
+                lbl_OverAll_Reading_Value.setText(String.valueOf(total));
+                String trend = database_Manager.getReadingManager().getTrendOverall(current_User);
+                lbl_Trend_Of_Reading_Overall.setText(trend);
+                lbl_Trend_Of_Reading_Overall.setForeground(
+                    database_Manager.getReadingManager().getTrendColor(current_User, null)
+                );
             }
-        }
 
+            // Refresh graph content
+            graph_Panel.initialize();
+            graph_Panel.refreshData();
 
-    }
-    
-    /**
-     * Updates all bar graphs with latest data
-     * This is a placeholder implementation that could be filled in later
-     */
-    private void updateBarGraphs() {
-        try {
-            // Prepare monthly data maps
-            Map<Month, Double> electricityData = new HashMap<>();
-            Map<Month, Double> waterData = new HashMap<>();
-            Map<Month, Double> gasData = new HashMap<>();
-            Map<Month, Double> overallData = new HashMap<>();
-            
-            // Fetch last 6 months of readings
-            LocalDate endDate = LocalDate.now();
-            LocalDate startDate = endDate.minusMonths(6);
-            
-            List<Reading> electricityReadings = databaseManager.getReadingManager()
-                .getReadingsByDateAndType(currentUser, startDate, endDate, "electricity");
-            List<Reading> waterReadings = databaseManager.getReadingManager()
-                .getReadingsByDateAndType(currentUser, startDate, endDate, "water");
-            List<Reading> gasReadings = databaseManager.getReadingManager()
-                .getReadingsByDateAndType(currentUser, startDate, endDate, "gas");
-            
-            // Group readings by month
-            electricityData = groupReadingsByMonth(electricityReadings, false);
-            waterData = groupReadingsByMonth(waterReadings, false);
-            gasData = groupReadingsByMonth(gasReadings, false);
-            
-            // Group price data by month for overall expenses
-            Map<Month, Double> electricityPrices = groupReadingsByMonth(electricityReadings, true);
-            Map<Month, Double> waterPrices = groupReadingsByMonth(waterReadings, true);
-            Map<Month, Double> gasPrices = groupReadingsByMonth(gasReadings, true);
-            
-            // Combine all price data for total expenses
-            for (Month month : electricityPrices.keySet()) {
-                double totalPrice = electricityPrices.getOrDefault(month, 0.0) +
-                                    waterPrices.getOrDefault(month, 0.0) +
-                                    gasPrices.getOrDefault(month, 0.0);
-                overallData.put(month, totalPrice);
-            }
-            
-            // Update graphs with data
-            graphPanel.updateGraphs(electricityData, waterData, gasData, overallData, 5);
-            
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-    
-    //==============================================================================================
-    // UTILITY METHODS
-    //==============================================================================================
-    
-    /**
-     * Groups readings by month and calculates either sum of readings or sum of total price
-     * This is kept as a placeholder for future implementation
-     * 
-     * @param readings List of readings to group
-     * @param usePrice If true, uses total_price field; if false, uses reading field
-     * @return Map with Month as key and summed value as value
-     */
-    private Map<Month, Double> groupReadingsByMonth(List<Reading> readings, boolean usePrice) {
-        Map<Month, Double> monthlyData = new HashMap<>();
-        
-        if (readings != null) {
-            for (Reading reading : readings) {
-                LocalDate readingDate = reading.getDate();
-                Month month = readingDate.getMonth();
-                
-                double value = usePrice ? reading.getTotal_Price() : reading.getReading();
-                
-                // Add value to existing month or create new entry
-                monthlyData.put(month, monthlyData.getOrDefault(month, 0.0) + value);
-            }
-        }
-        
-        return monthlyData;
     }
 }

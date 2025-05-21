@@ -9,12 +9,16 @@ import javax.swing.JPanel;
 import database.Database_Manager;
 import model.Reading;
 import model.User;
-import view.login.Sign_Up_Window;
 import view.panel.misc.Add_Reading_Panel;
 import view.panel.misc.Edit_Reading_Panel;
+import visuals.Graph_Panel;
 import visuals.Rounded_Panel;
+import visuals.Rounded_Button;
 
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+
+import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -24,162 +28,156 @@ import java.util.List;
 
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-import javax.swing.JComboBox;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 import javax.swing.JFrame;
-import javax.swing.DefaultComboBoxModel;
 
 public class Electricity_Panel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+	
+	// Database and user fields
 	private Database_Manager database_manager;
 	private User current_user;
-	private Home_Panel homepanel;
 	
-	private JLabel lbl_Electricity_Reading_Value;
+	// Main panel fields
+	private JPanel panel_Title_Electricity_Consumption;
+	private JPanel panel_Current_Reading;
+	private JPanel panel_Graph_Container;
+	private JPanel panel_tips;
+	private JPanel panel_Recent_Readings_Container;
+	
+	// Scroll panel fields
+	private JPanel panel_Header;
+	private JPanel panel_Line;
+	private JList<String> all_readings;
+	
+	//Graph panel field
+	private JPanel panel_Graph_View;
+	private Graph_Panel graph_Panel;
+	private JLabel lbl_Title_Gaph;
+	
+	// Home panel
+	private Home_Panel panel_home;
+	
+	// Title Panel labels
 	private JLabel lbl_Title_Electricity_Consumption;
 	private JLabel lbl_SubTitle_Electricity_Consumption;
-	private JPanel panel_Electricity_Consumption_Title;
-	private JPanel panel_add_reading;
-	private JList<String> all_readings;
-	private JScrollPane sP_Recent_Readings;
 	private JLabel lbl_Date;
-	private JLabel lbl_Title_Current_Reading;
-	private JLabel lbl_Electricity_Reading_Unit;
-	private JButton btn_Add_New_Reading;
-	private JPanel panel_Current_Reading;
-	private JPanel panel_tips;
-	private JLabel lbl_Title_Tips;
-	private JLabel lbl_Tips1;
-	private JLabel lbl_Tips2;
-	private JLabel lbl_Title_AddReading_1;
-	private JLabel lbl_Title_AddReading;
-	private JPanel Headerpanel;
+	private JLabel lbl_Time;
+	
+	// Scroll panel components
+	private JScrollPane scrollpane_Recent_Readings;
+	private JLabel lbl_Title_RecentReadings;
 	private JLabel lbl_Head_Date;
 	private JLabel lbl_Head_Readings;
 	private JLabel lbl_Head_Rate;
 	private JLabel lbl_Head_TotalPrice;
-	private JPanel Line;
-	private JLabel lblTime;
+	
+	// Current Reading panel components
+	private JLabel lbl_Electricity_Reading_Value;
+	private JLabel lbl_Title_Current_Reading;
+	private JLabel lbl_Electricity_Reading_Unit;
+	private JButton btn_Add_New_Reading;
+	
+	// Tips panel labels
+	private JLabel lbl_Title_Tips;
+	private JLabel lbl_Tips1;
+	private JLabel lbl_Tips2;
+	private JLabel lbl_Trend_Of_Reading_Electricity;
+	
+	
 	/**
 	 * Create the panel.
 	 */
-	public Electricity_Panel(Database_Manager database_manager, User current_user, Home_Panel homepanel) {
+	public Electricity_Panel(Database_Manager database_manager, User current_user, Home_Panel panel_home) {
 		this.database_manager = database_manager;
 		this.current_user = current_user;
-		this.homepanel = homepanel;
+		this.panel_home = panel_home;
 		
+		setBackground(new Color(213, 213, 213));
 		setPreferredSize(new Dimension(986, 688));
 		setLayout(null);
 		
-		panel_Electricity_Consumption_Title = new JPanel();
-		panel_Electricity_Consumption_Title.setBackground(new Color(255, 255, 255));
-		panel_Electricity_Consumption_Title.setLayout(null);
-		panel_Electricity_Consumption_Title.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		panel_Electricity_Consumption_Title.setBounds(21, 11, 944, 85);
-		add(panel_Electricity_Consumption_Title);
+		initialize_UI();
+		setupData();
+	}
+	
+	private void initialize_UI() {
+		panel_Title_Electricity_Consumption = new Rounded_Panel();
+		panel_Title_Electricity_Consumption.setBackground(new Color(255, 255, 255));
+		panel_Title_Electricity_Consumption.setLayout(null);
+		panel_Title_Electricity_Consumption.setBounds(21, 11, 944, 85);
+		add(panel_Title_Electricity_Consumption);
 		
 		lbl_Title_Electricity_Consumption = new JLabel("Electricity Consumption");
 		lbl_Title_Electricity_Consumption.setHorizontalAlignment(SwingConstants.LEFT);
 		lbl_Title_Electricity_Consumption.setFont(new Font("Tahoma", Font.PLAIN, 35));
 		lbl_Title_Electricity_Consumption.setBounds(20, 0, 393, 54);
-		panel_Electricity_Consumption_Title.add(lbl_Title_Electricity_Consumption);
+		panel_Title_Electricity_Consumption.add(lbl_Title_Electricity_Consumption);
 		
 		lbl_Date = new JLabel("Date");
 		lbl_Date.setVerticalAlignment(SwingConstants.TOP);
 		lbl_Date.setHorizontalAlignment(SwingConstants.RIGHT);
-		lbl_Date.setFont(new Font("Tahoma", Font.PLAIN, 30));
+		lbl_Date.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lbl_Date.setBounds(764, 11, 170, 54);
 		lbl_Date.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-		panel_Electricity_Consumption_Title.add(lbl_Date);
+		panel_Title_Electricity_Consumption.add(lbl_Date);
 		
-		lblTime = new JLabel("Time");
-        lblTime.setVerticalAlignment(SwingConstants.TOP);
-        lblTime.setHorizontalAlignment(SwingConstants.RIGHT);
-        lblTime.setFont(new Font("Tahoma", Font.PLAIN, 30));
-        lblTime.setBounds(764, 46, 170, 41);
-        lblTime.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm a")));
-        panel_Electricity_Consumption_Title.add(lblTime);
+		lbl_Time = new JLabel("Time");
+        lbl_Time.setVerticalAlignment(SwingConstants.TOP);
+        lbl_Time.setHorizontalAlignment(SwingConstants.RIGHT);
+        lbl_Time.setFont(new Font("Tahoma", Font.PLAIN, 20));
+        lbl_Time.setBounds(764, 39, 170, 41);
+        lbl_Time.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm a")));
+        panel_Title_Electricity_Consumption.add(lbl_Time);
 		
 		lbl_SubTitle_Electricity_Consumption = new JLabel("Track and manage your electricity usage ");
 		lbl_SubTitle_Electricity_Consumption.setHorizontalAlignment(SwingConstants.LEFT);
 		lbl_SubTitle_Electricity_Consumption.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		lbl_SubTitle_Electricity_Consumption.setBounds(20, 52, 393, 22);
-		panel_Electricity_Consumption_Title.add(lbl_SubTitle_Electricity_Consumption);
+		panel_Title_Electricity_Consumption.add(lbl_SubTitle_Electricity_Consumption);
 		
-		panel_add_reading = new Rounded_Panel(15, Color.BLACK, 1);
-		panel_add_reading.setBackground(new Color(255, 255, 255));
-//		panel_add_reading.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		panel_add_reading.setBounds(21, 114, 466, 377);
-		add(panel_add_reading);
-		panel_add_reading.setLayout(null);
+		panel_Graph_Container = new Rounded_Panel();
+		panel_Graph_Container.setBackground(new Color(255, 255, 255));
+		panel_Graph_Container.setBounds(21, 114, 466, 377);
+		add(panel_Graph_Container);
+		panel_Graph_Container.setLayout(null);
 		
-		lbl_Title_AddReading = new JLabel("Consumption Trends");
-		lbl_Title_AddReading.setBounds(0, 0, 466, 32);
-		lbl_Title_AddReading.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_Title_AddReading.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		panel_add_reading.add(lbl_Title_AddReading);
+		lbl_Title_Gaph = new JLabel("Monthly Electricity Expenses");
+		lbl_Title_Gaph.setBounds(0, 0, 466, 32);
+		lbl_Title_Gaph.setHorizontalAlignment(SwingConstants.CENTER);
+		lbl_Title_Gaph.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		panel_Graph_Container.add(lbl_Title_Gaph);
 		
-		all_readings = getAllReadings();
-		sP_Recent_Readings = new JScrollPane();
-		sP_Recent_Readings.setBounds(499, 114, 466, 377);
-		sP_Recent_Readings.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		add(sP_Recent_Readings);
-		sP_Recent_Readings.setViewportView(all_readings);
+		panel_Graph_View = new Rounded_Panel(25, Color.BLACK, 0);
+		panel_Graph_View.setBounds(10, 30, 446, 336);
+		panel_Graph_Container.add(panel_Graph_View);
+        panel_Graph_View.setBorder(new EmptyBorder(5, 5, 5, 5));
+        panel_Graph_View.setBackground(new Color(255, 255, 255));
+        panel_Graph_View.setLayout(new BorderLayout());
 		
-		Headerpanel = new JPanel();
-		Headerpanel.setBackground(new Color(255, 255, 255));
-		sP_Recent_Readings.setColumnHeaderView(Headerpanel);
-		Headerpanel.setLayout(null);
-		Headerpanel.setPreferredSize(new Dimension(466, 70));
+        if (database_manager == null) {
+            JPanel placeholder = new JPanel();
+            placeholder.setBackground(Color.WHITE);
+            panel_Graph_View.add(placeholder);
+        } else {
+            // Create and add actual graph panel at runtime
+            graph_Panel = new Graph_Panel(database_manager.getReadingManager(), current_user, "electricity");
+            graph_Panel.setBackground(new Color(255, 255, 255));
+            panel_Graph_View.add(graph_Panel);
+        }
 		
-		lbl_Title_AddReading_1 = new JLabel("Recent Readings");
-		lbl_Title_AddReading_1.setBounds(0, 0, 466, 31);
-		Headerpanel.add(lbl_Title_AddReading_1);
-		lbl_Title_AddReading_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_Title_AddReading_1.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		
-		lbl_Head_Date = new JLabel("Date");
-		lbl_Head_Date.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_Head_Date.setBounds(10, 39, 78, 17);
-		lbl_Head_Date.setFont(new Font("Tahoma", Font.BOLD, 15));
-		Headerpanel.add(lbl_Head_Date);
-		
-		lbl_Head_Readings = new JLabel("Readings");
-		lbl_Head_Readings.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_Head_Readings.setBounds(124, 39, 78, 17);
-		lbl_Head_Readings.setFont(new Font("Tahoma", Font.BOLD, 15));
-		Headerpanel.add(lbl_Head_Readings);
-		
-		lbl_Head_Rate = new JLabel("Rate");
-		lbl_Head_Rate.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_Head_Rate.setBounds(245, 39, 78, 17);
-		lbl_Head_Rate.setFont(new Font("Tahoma", Font.BOLD, 15));
-		Headerpanel.add(lbl_Head_Rate);
-		
-		lbl_Head_TotalPrice = new JLabel("Total Price");
-		lbl_Head_TotalPrice.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_Head_TotalPrice.setBounds(342, 39, 108, 17);
-		lbl_Head_TotalPrice.setFont(new Font("Tahoma", Font.BOLD, 15));
-		Headerpanel.add(lbl_Head_TotalPrice);
-		
-		Line = new JPanel();
-		Line.setBorder(new LineBorder(new Color(0, 0, 0), 12));
-		Line.setBounds(10, 64, 446, 3);
-		Headerpanel.add(Line);
-		
-		panel_Current_Reading = new JPanel();
+		panel_Current_Reading = new Rounded_Panel();
 		panel_Current_Reading.setBackground(new Color(255, 255, 255));
 		panel_Current_Reading.setLayout(null);
-		panel_Current_Reading.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		panel_Current_Reading.setBounds(21, 509, 466, 168);
 		add(panel_Current_Reading);
 		
@@ -200,22 +198,37 @@ public class Electricity_Panel extends JPanel {
 		lbl_Electricity_Reading_Unit.setBounds(254, 55, 68, 32);
 		panel_Current_Reading.add(lbl_Electricity_Reading_Unit);
 		
-		btn_Add_New_Reading = new JButton("Add New Reading");
+		btn_Add_New_Reading = new Rounded_Button("Add New Reading", 25);
 		btn_Add_New_Reading.setBackground(new Color(192, 192, 192));
+		btn_Add_New_Reading.setForeground(Color.BLACK);
 		btn_Add_New_Reading.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				goToAddReading();
 			}
+			@Override
+            public void mouseEntered(MouseEvent e) {
+				btn_Add_New_Reading.setBackground(new Color(150, 150, 150));
+            }
+            
+            @Override
+            public void mouseExited(MouseEvent e) {
+            	btn_Add_New_Reading.setBackground(new Color(192, 192, 192));
+            }
 		});
 		btn_Add_New_Reading.setFont(new Font("Tahoma", Font.BOLD, 10));
 		btn_Add_New_Reading.setBounds(155, 125, 151, 34);
 		panel_Current_Reading.add(btn_Add_New_Reading);
 		
-		panel_tips = new JPanel();
+		lbl_Trend_Of_Reading_Electricity = new JLabel("No avilable data");
+		lbl_Trend_Of_Reading_Electricity.setHorizontalAlignment(SwingConstants.CENTER);
+		lbl_Trend_Of_Reading_Electricity.setFont(new Font("Dialog", Font.PLAIN, 15));
+		lbl_Trend_Of_Reading_Electricity.setBounds(97, 82, 261, 32);
+		panel_Current_Reading.add(lbl_Trend_Of_Reading_Electricity);
+		
+		panel_tips = new Rounded_Panel();
 		panel_tips.setBackground(new Color(255, 255, 255));
 		panel_tips.setLayout(null);
-		panel_tips.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		panel_tips.setBounds(499, 509, 466, 168);
 		add(panel_tips);
 		
@@ -239,9 +252,134 @@ public class Electricity_Panel extends JPanel {
 		lbl_Tips2.setBounds(-34, 107, 502, 51);
 		panel_tips.add(lbl_Tips2);
 		
-		setupData();
+		all_readings = getAllReadings();
+		panel_Recent_Readings_Container = new Rounded_Panel();
+		panel_Recent_Readings_Container.setBackground(new Color(255, 255, 255));
+		panel_Recent_Readings_Container.setBounds(497, 114, 466, 377);
+		add(panel_Recent_Readings_Container);
+		panel_Recent_Readings_Container.setLayout(null);
+		
+		scrollpane_Recent_Readings = new JScrollPane();
+		scrollpane_Recent_Readings.setBounds(5, 5, 456, 366);
+		scrollpane_Recent_Readings.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		panel_Recent_Readings_Container.add(scrollpane_Recent_Readings);
+		scrollpane_Recent_Readings.setViewportView(all_readings);
+		
+		panel_Header = new JPanel();
+		panel_Header.setBackground(new Color(255, 255, 255));
+		scrollpane_Recent_Readings.setColumnHeaderView(panel_Header);
+		panel_Header.setLayout(null);
+		panel_Header.setPreferredSize(new Dimension(466, 70));
+		
+		lbl_Title_RecentReadings = new JLabel("Recent Readings");
+		lbl_Title_RecentReadings.setBounds(0, 0, 466, 31);
+		panel_Header.add(lbl_Title_RecentReadings);
+		lbl_Title_RecentReadings.setHorizontalAlignment(SwingConstants.CENTER);
+		lbl_Title_RecentReadings.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		
+		lbl_Head_Date = new JLabel("Date");
+		lbl_Head_Date.setHorizontalAlignment(SwingConstants.CENTER);
+		lbl_Head_Date.setBounds(10, 39, 78, 17);
+		lbl_Head_Date.setFont(new Font("Tahoma", Font.BOLD, 15));
+		panel_Header.add(lbl_Head_Date);
+		
+		lbl_Head_Readings = new JLabel("Readings");
+		lbl_Head_Readings.setHorizontalAlignment(SwingConstants.CENTER);
+		lbl_Head_Readings.setBounds(124, 39, 78, 17);
+		lbl_Head_Readings.setFont(new Font("Tahoma", Font.BOLD, 15));
+		panel_Header.add(lbl_Head_Readings);
+		
+		lbl_Head_Rate = new JLabel("Rate");
+		lbl_Head_Rate.setHorizontalAlignment(SwingConstants.CENTER);
+		lbl_Head_Rate.setBounds(240, 39, 78, 17);
+		lbl_Head_Rate.setFont(new Font("Tahoma", Font.BOLD, 15));
+		panel_Header.add(lbl_Head_Rate);
+		
+		lbl_Head_TotalPrice = new JLabel("Total Price");
+		lbl_Head_TotalPrice.setHorizontalAlignment(SwingConstants.CENTER);
+		lbl_Head_TotalPrice.setBounds(329, 39, 108, 17);
+		lbl_Head_TotalPrice.setFont(new Font("Tahoma", Font.BOLD, 15));
+		panel_Header.add(lbl_Head_TotalPrice);
+		
+		panel_Line = new JPanel();
+		panel_Line.setBorder(new LineBorder(new Color(0, 0, 0), 12));
+		panel_Line.setBounds(10, 64, 446, 3);
+		panel_Header.add(panel_Line);
 	}
 	
+	public void Refresh_Graph() {
+		if (graph_Panel != null) {
+			graph_Panel.refreshData();
+		}
+	}
+	
+	
+	
+	public void Panel_Refresh() {
+		all_readings = getAllReadings();
+	    scrollpane_Recent_Readings.setViewportView(all_readings);
+	    getAllReadings();
+	    setupData(); // Also update the current reading display
+	    panel_home.home_Panel_Refresh();
+	}
+	
+	public void setupData() {
+		
+		try {
+			Reading electricity_reading = database_manager.getReadingManager().getLatestReadingByType(current_user, "electricity");
+			
+			if (electricity_reading == null) {
+				lbl_Electricity_Reading_Value.setText("No Data");
+			} else {
+				lbl_Electricity_Reading_Value.setText(String.valueOf(electricity_reading.getReading()));
+				database_manager.getReadingManager().updateReadingLabel(current_user,electricity_reading, lbl_Electricity_Reading_Value, lbl_Trend_Of_Reading_Electricity, "electricity");
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private JList<String> getAllReadings() {
+	    MouseAdapter listClickListener = new MouseAdapter() {
+	        @Override
+	        public void mouseClicked(MouseEvent e) {
+	            JList<?> list = (JList<?>) e.getSource();
+	            int selectedIndex = list.getSelectedIndex();
+	            
+	            if (selectedIndex >= 0) {
+	                int response = javax.swing.JOptionPane.showConfirmDialog(null, 
+	                    "Do you want to edit this reading?", "Edit Reading", 
+	                    javax.swing.JOptionPane.YES_NO_OPTION);
+	                    
+	                if (response == javax.swing.JOptionPane.YES_OPTION) {
+	                    EventQueue.invokeLater(new Runnable() {
+	                        public void run() {
+	                            try {
+	                                List<Reading> allReadings = database_manager.getReadingManager().getAllReadingsByType(current_user, "electricity");
+	                                Reading selectedReading = null;
+	                                
+	                                if (selectedIndex < allReadings.size()) {
+	                                    selectedReading = allReadings.get(selectedIndex);
+	                                }
+	                                
+	                                Edit_Reading_Panel edit_reading_panel = new Edit_Reading_Panel(
+	                                    (JFrame) SwingUtilities.getWindowAncestor(Electricity_Panel.this),
+	                                    database_manager, current_user, Electricity_Panel.this, "electricity", selectedReading
+	                                );
+	                                edit_reading_panel.setVisible(true);
+	                            } catch (Exception ex) {
+	                                ex.printStackTrace();
+	                            }
+	                        }
+	                    });
+	                }
+	            }
+	        }
+	    };
+	    
+	    return database_manager.getReadingManager().getReadingsAsJList(current_user, "electricity", listClickListener);
+	}
 	
 	private void goToAddReading() {
 
@@ -258,79 +396,5 @@ public class Electricity_Panel extends JPanel {
 	            }
 	        }
 	    });
-	}
-	
-	public void Panel_Refresh() {
-		all_readings = getAllReadings();
-	    sP_Recent_Readings.setViewportView(all_readings);
-	    getAllReadings();
-	    setupData(); // Also update the current reading display
-	    homepanel.Home_Panel_Refresh();
-	}
-	
-	public void setupData() {
-		
-		try {
-			Reading electricity_reading = database_manager.getReadingManager().getLatestReadingByType(current_user, "electricity");
-			
-			if (electricity_reading == null) {
-				lbl_Electricity_Reading_Value.setText("No Data");
-			} else {
-				lbl_Electricity_Reading_Value.setText(String.valueOf(electricity_reading.getReading()));
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	private JList<String> getAllReadings() {
-		try {
-			if (!database_manager.getReadingManager().isReadingExists(current_user, "electricity")) {
-				JList<String> list = new JList<>(new String[] {"No readings found.", "Please add a reading."});
-				list.setFont(new Font("monoFont", Font.PLAIN, 15));
-				list.setPreferredSize(new Dimension(429, 448));
-				list.setFixedCellHeight(30);
-				return list;
-			}
-			List<Reading> all_readings = database_manager.getReadingManager().getAllReadingsByType(current_user, "electricity");
-			
-			String[] readings = new String[all_readings.size()];
-			for (int i = 0; i < all_readings.size(); i++) {
-				Reading reading = all_readings.get(i);
-				readings[i] = String.format("  %-19s %-21s %-17s %-10s", reading.getDate(), reading.getReading() + "kWh", reading.getRate() + "Php", reading.getTotal_Price() + "Php");
-			}
-			JList<String> list = new JList<>(readings);
-			list.setFont(new Font("monoFont", Font.PLAIN, 15));
-			list.setPreferredSize(new Dimension(429, 448));
-			list.setFixedCellHeight(30);
-			list.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					int response = javax.swing.JOptionPane.showConfirmDialog(null, "Do you want to edit this reading?", "Edit Reading", javax.swing.JOptionPane.YES_NO_OPTION);
-					if (response == javax.swing.JOptionPane.YES_OPTION) {
-						EventQueue.invokeLater(new Runnable() {
-					        public void run() {
-					            try {
-					            	Edit_Reading_Panel edit_reading_panel = new Edit_Reading_Panel(
-					            	    (JFrame) SwingUtilities.getWindowAncestor(Electricity_Panel.this),
-					            	    database_manager, current_user, Electricity_Panel.this , "electricity"
-					            	);
-					            	edit_reading_panel.setVisible(true);
-
-					            } catch (Exception e) {
-					                e.printStackTrace();
-					            }
-					        }
-					    });
-					}
-				}
-			});
-			return list;
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			return new JList<>(new String[] {"Error fetching readings."});
-		}
 	}
 }
