@@ -267,6 +267,7 @@ public class Water_Panel extends JPanel {
 		
 		lbl_Title_Tips = new JLabel("Water Saving Tips");
 		lbl_Title_Tips.setHorizontalAlignment(SwingConstants.CENTER);
+		lbl_Title_Tips.setForeground(new Color(79, 129, 189));
 		lbl_Title_Tips.setFont(new Font("Tahoma", Font.PLAIN, 25));
 		lbl_Title_Tips.setBounds(42, 11, 393, 32);
 		panel_tips.add(lbl_Title_Tips);

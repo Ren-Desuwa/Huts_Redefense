@@ -353,14 +353,14 @@ public class Home_Panel extends JPanel {
         panel_Tip_1 = new Rounded_Panel();
         panel_Tip_1.setLayout(null);
         panel_Tip_1.setBounds(10, 11, 306, 122);
-        panel_Tip_1.setBackground(new Color(220, 220, 220));
+        panel_Tip_1.setBackground(new Color(235, 235, 235));
         panel_Tips.add(panel_Tip_1);
         
         lbl_Tip_Type_1 = new JLabel("Tip 1");
         lbl_Tip_Type_1.setForeground(new Color(0, 128, 255));
         lbl_Tip_Type_1.setVerticalAlignment(SwingConstants.TOP);
         lbl_Tip_Type_1.setHorizontalAlignment(SwingConstants.LEFT);
-        lbl_Tip_Type_1.setFont(new Font("Tahoma", Font.BOLD, 20));
+        lbl_Tip_Type_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
         lbl_Tip_Type_1.setBounds(10, 11, 243, 36);
         panel_Tip_1.add(lbl_Tip_Type_1);
         
@@ -377,14 +377,14 @@ public class Home_Panel extends JPanel {
         panel_Tip_2 = new Rounded_Panel();
         panel_Tip_2.setLayout(null);
         panel_Tip_2.setBounds(326, 11, 291, 122);
-        panel_Tip_2.setBackground(new Color(220, 220, 220));
+        panel_Tip_2.setBackground(new Color(235, 235, 235));
         panel_Tips.add(panel_Tip_2);
         
         lbl_Tip_Type_2 = new JLabel("Tip 2");
         lbl_Tip_Type_2.setVerticalAlignment(SwingConstants.TOP);
         lbl_Tip_Type_2.setHorizontalAlignment(SwingConstants.LEFT);
         lbl_Tip_Type_2.setForeground(new Color(235, 235, 0));
-        lbl_Tip_Type_2.setFont(new Font("Tahoma", Font.BOLD, 20));
+        lbl_Tip_Type_2.setFont(new Font("Tahoma", Font.PLAIN, 20));
         lbl_Tip_Type_2.setBounds(10, 11, 243, 36);
         panel_Tip_2.add(lbl_Tip_Type_2);
         
@@ -401,14 +401,14 @@ public class Home_Panel extends JPanel {
         panel_Tip_3 = new Rounded_Panel();
         panel_Tip_3.setLayout(null);
         panel_Tip_3.setBounds(627, 11, 307, 122);
-        panel_Tip_3.setBackground(new Color(220, 220, 220));
+        panel_Tip_3.setBackground(new Color(235, 235, 235));
         panel_Tips.add(panel_Tip_3);
 
         lbl_Tip_Type_3 = new JLabel("Tip 3");
         lbl_Tip_Type_3.setVerticalAlignment(SwingConstants.TOP);
         lbl_Tip_Type_3.setHorizontalAlignment(SwingConstants.LEFT);
         lbl_Tip_Type_3.setForeground(new Color(0, 128, 255));
-        lbl_Tip_Type_3.setFont(new Font("Tahoma", Font.BOLD, 20));
+        lbl_Tip_Type_3.setFont(new Font("Tahoma", Font.PLAIN, 20));
         lbl_Tip_Type_3.setBounds(10, 11, 243, 36);
         panel_Tip_3.add(lbl_Tip_Type_3);
 
