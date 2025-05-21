@@ -2,11 +2,12 @@ package view.panel.misc;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 
@@ -24,31 +25,27 @@ import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JFormattedTextField;
 
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
-import java.text.NumberFormat;
+
 
 public class Add_Reading_Panel extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private Database_Manager database_manager;
-	private NumberFormat numberFormat = NumberFormat.getNumberInstance();
 	private User current_user;
 	private String readingType;
 	private JPanel parentPanel;
-	private Electricity_Panel electricitypanel;
-	private Water_Panel waterpanel;
-	private Gas_Panel gaspanel;
+
 	
-	private JFormattedTextField tf_Reading;
-	private JFormattedTextField tf_Rate;
-	private JFormattedTextField tf_TotalPrice;
+	private JTextField tf_Reading;
+	private JTextField tf_Rate;
+	private JTextField tf_TotalPrice;
 	private JPanel panel_Electricity_Consumption_Title;
 	private JLabel lbl_Date;
 	private JLabel lbl_Title_AddNewReading;
@@ -67,7 +64,6 @@ public class Add_Reading_Panel extends JDialog {
 	private JLabel lbl_Day;
 	private JLabel lbl_Month;
 	private JLabel lbl_Year;
-	private JLabel lblTime;
 	
 	public Add_Reading_Panel(JFrame parent ,Database_Manager database_manager, User current_user,JPanel panel_type, String type) {
 		super(parent, "Add Reading", true);
@@ -102,14 +98,6 @@ public class Add_Reading_Panel extends JDialog {
 		panel_Electricity_Consumption_Title.setLayout(null);
 		panel_Electricity_Consumption_Title.setBounds(10, 11, 416, 97);
 		contentPane.add(panel_Electricity_Consumption_Title);
-		
-		lblTime = new JLabel("Time");
-		lblTime.setVerticalAlignment(SwingConstants.TOP);
-		lblTime.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblTime.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		lblTime.setBounds(134, 8, 170, 41);
-		lblTime.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm a")));
-        panel_Electricity_Consumption_Title.add(lblTime);
 		
 		lbl_Date = new JLabel("Date");
 		lbl_Date.setBounds(236, 8, 170, 54);
@@ -149,7 +137,6 @@ public class Add_Reading_Panel extends JDialog {
 		lbl_Year.setBounds(306, 143, 114, 22);
 		contentPane.add(lbl_Year);
 		
-		
 		combo_box_Day = new JComboBox();
 		combo_box_Day.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		combo_box_Day.setBounds(10, 164, 120, 45);
@@ -174,7 +161,7 @@ public class Add_Reading_Panel extends JDialog {
 		lbl_Reading.setBounds(10, 216, 163, 22);
 		contentPane.add(lbl_Reading);
 		
-		tf_Reading = new JFormattedTextField(numberFormat);
+		tf_Reading = new JTextField();
 		tf_Reading.setText("Enter Reading");
 		tf_Reading.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		
@@ -188,7 +175,7 @@ public class Add_Reading_Panel extends JDialog {
 		lbl_Rate.setBounds(10, 297, 141, 22);
 		contentPane.add(lbl_Rate);
 		
-		tf_Rate = new JFormattedTextField(numberFormat);
+		tf_Rate = new JTextField();
 		tf_Rate.setText("Enter Rate");
 		tf_Rate.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		
@@ -202,7 +189,7 @@ public class Add_Reading_Panel extends JDialog {
 		lbl_TotalPrice.setBounds(10, 377, 192, 22);
 		contentPane.add(lbl_TotalPrice);
 		
-		tf_TotalPrice = new JFormattedTextField(numberFormat);
+		tf_TotalPrice = new JTextField();
 		tf_TotalPrice.setText("Total Price");
 		tf_TotalPrice.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		
@@ -325,84 +312,89 @@ public class Add_Reading_Panel extends JDialog {
 	}
 	
 	public void cancelAddReading() {
-		String reading = tf_Reading.getText();
-		String rate = tf_Rate.getText();
-		String totalPrice = tf_TotalPrice.getText();
-		String Type = readingType;
-		
-		switch (Type) {
-			case "electricity":
-				reading = reading.replace("Enter Reading (kWh)", "Enter Reading");
-				break;
-			case "water":
-				reading = reading.replace("Enter Reading (m³)", "Enter Reading");
-				break;
-			case "gas":
-				reading = reading.replace("Enter Reading (Qty)", "Enter Reading");
-				break;
-			default:
-				System.out.println("Invalid reading type"); // Handle error
-				break;
-		}
-		
-		if (!reading.equals("Enter Reading") || !rate.equals("Enter Rate") || !totalPrice.equals("Total Price")) {
-			int response = javax.swing.JOptionPane.showConfirmDialog(this, "Are you sure you want to cancel?", "Confirm Cancel", javax.swing.JOptionPane.YES_NO_OPTION);
-			if (response == javax.swing.JOptionPane.YES_OPTION) {
-				this.dispose();
-			}
-		} else {
-			this.dispose();
-		}
+	    String reading = tf_Reading.getText();
+	    String rate = tf_Rate.getText();
+	    String totalPrice = tf_TotalPrice.getText();
+
+	    // Inline normalization of placeholder
+	    if (readingType.equals("electricity") && reading.equals("Enter Reading (kWh)")) {
+	        reading = "Enter Reading";
+	    } else if (readingType.equals("water") && reading.equals("Enter Reading (m³)")) {
+	        reading = "Enter Reading";
+	    } else if (readingType.equals("gas") && reading.equals("Enter Reading (Qty)")) {
+	        reading = "Enter Reading";
+	    }
+
+	    // Placeholder checks inline
+	    if (!reading.equals("Enter Reading") || 
+	        !rate.equals("Enter Rate") || 
+	        !totalPrice.equals("Total Price")) {
+	        
+	        int response = JOptionPane.showConfirmDialog(
+	            this, "Are you sure you want to cancel?", "Confirm Cancel", JOptionPane.YES_NO_OPTION
+	        );
+	        if (response == JOptionPane.YES_OPTION) {
+	            this.dispose();
+	        }
+	    } else {
+	        this.dispose();
+	    }
 	}
-	
+
 	public void addReading() {
-		String reading = tf_Reading.getText();
-		String rate = tf_Rate.getText();
-		String totalPrice = tf_TotalPrice.getText();
-		LocalDate date = LocalDate.of((int)combo_box_Year.getSelectedItem(), (int)combo_box_Month.getSelectedItem(), (int)combo_box_Day.getSelectedItem());
-		
-		if (reading.equals("Enter Reading") || rate.equals("Enter Rate") || totalPrice.equals("Total Price")) {
-			javax.swing.JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-			return;
-		}
-		
-		try {
-			double readingValue = Double.parseDouble(reading);
-			double rateValue = Double.parseDouble(rate);
-			double totalPriceValue = Double.parseDouble(totalPrice);
-			
-			if (readingValue < 0 || rateValue < 0 || totalPriceValue < 0) {
-				javax.swing.JOptionPane.showMessageDialog(this, "Please enter positive values.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-				return;
-			}
-			database_manager.getReadingManager().addReading(current_user , date, readingType, readingValue, rateValue, totalPriceValue);
-			
-			if (parentPanel instanceof Electricity_Panel) {
-				electricitypanel = (Electricity_Panel) parentPanel;
-				electricitypanel.Panel_Refresh();
-				electricitypanel.Refresh_Graph();
-			} 
-			if (parentPanel instanceof Water_Panel) {
-				waterpanel = (Water_Panel) parentPanel;
-				waterpanel.Panel_Refresh();
-				waterpanel.Refresh_Graph();
-			}
-			if (parentPanel instanceof Gas_Panel) {
-				gaspanel = (Gas_Panel) parentPanel;
-				gaspanel.Panel_Refresh();
-				gaspanel.Refresh_Graph();
-			}
-			
-			javax.swing.JOptionPane.showMessageDialog(this, "Reading added successfully.", "Success", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-			this.dispose();
-			
-		} catch (NumberFormatException e) {
-			javax.swing.JOptionPane.showMessageDialog(this, "Please enter valid numbers.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-		} catch (SQLException e) {
-			javax.swing.JOptionPane.showMessageDialog(this, "Error adding reading: " + e.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-		} catch (Exception e) {
-			e.printStackTrace();
-			javax.swing.JOptionPane.showMessageDialog(this, "An unexpected error occurred.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-		}
+	    String reading = tf_Reading.getText();
+	    String rate = tf_Rate.getText();
+	    String totalPrice = tf_TotalPrice.getText();
+
+	    // Inline placeholder checks
+	    if (reading.equals("Enter Reading") || 
+	        rate.equals("Enter Rate") || 
+	        totalPrice.equals("Total Price")) {
+	        
+	        JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
+	        return;
+	    }
+
+	    try {
+	        double readingVal = Double.parseDouble(reading);
+	        double rateVal = Double.parseDouble(rate);
+	        double totalVal = Double.parseDouble(totalPrice);
+
+	        if (readingVal < 0 || rateVal < 0 || totalVal < 0) {
+	            JOptionPane.showMessageDialog(this, "Please enter positive values.", "Error", JOptionPane.ERROR_MESSAGE);
+	            return;
+	        }
+
+	        LocalDate date = LocalDate.of(
+	            (int) combo_box_Year.getSelectedItem(),
+	            (int) combo_box_Month.getSelectedItem(),
+	            (int) combo_box_Day.getSelectedItem()
+	        );
+
+	        database_manager.getReadingManager().addReading(current_user, date, readingType, readingVal, rateVal, totalVal);
+
+	        if (parentPanel instanceof Electricity_Panel) {
+	            ((Electricity_Panel) parentPanel).Panel_Refresh();
+	            ((Electricity_Panel) parentPanel).Refresh_Graph();
+	        } else if (parentPanel instanceof Water_Panel) {
+	            ((Water_Panel) parentPanel).Panel_Refresh();
+	            ((Water_Panel) parentPanel).Refresh_Graph();
+	        } else if (parentPanel instanceof Gas_Panel) {
+	            ((Gas_Panel) parentPanel).Panel_Refresh();
+	            ((Gas_Panel) parentPanel).Refresh_Graph();
+	        }
+
+	        JOptionPane.showMessageDialog(this, "Reading added successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+	        this.dispose();
+
+	    } catch (NumberFormatException e) {
+	        JOptionPane.showMessageDialog(this, "Please enter valid numbers.", "Error", JOptionPane.ERROR_MESSAGE);
+	    } catch (SQLException e) {
+	        JOptionPane.showMessageDialog(this, "Error adding reading: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        JOptionPane.showMessageDialog(this, "An unexpected error occurred.", "Error", JOptionPane.ERROR_MESSAGE);
+	    }
 	}
+
 }

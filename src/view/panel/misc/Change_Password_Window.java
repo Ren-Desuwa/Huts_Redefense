@@ -60,6 +60,10 @@ public class Change_Password_Window extends JDialog {
 		setBounds(400, 50, 450, 620);
 		setBackground(new Color(213, 213, 213));
 		
+		initialize_UI();
+	}
+	
+	private void initialize_UI() {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setBackground(new Color(213, 213, 213));
