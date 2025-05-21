@@ -264,18 +264,18 @@ public class Gas_Panel extends JPanel {
     lbl_Gas_Reading_Unit.setBounds(254, 55, 68, 32);
     panel_Current_Reading.add(lbl_Gas_Reading_Unit);
 
-    btn_Add_New_Reading = new Rounded_Button("Add New Reading", 25);
-    btn_Add_New_Reading.setBackground(Color.LIGHT_GRAY);
-    btn_Add_New_Reading.setForeground(Color.BLACK);
-    btn_Add_New_Reading.setFont(new Font("Tahoma", Font.BOLD, 10));
-    btn_Add_New_Reading.setBounds(155, 125, 151, 34);
-    panel_Current_Reading.add(btn_Add_New_Reading);
-
     lbl_Trend_Of_Reading_Gas = new JLabel("No available data");
     lbl_Trend_Of_Reading_Gas.setHorizontalAlignment(SwingConstants.CENTER);
     lbl_Trend_Of_Reading_Gas.setFont(new Font("Dialog", Font.PLAIN, 15));
     lbl_Trend_Of_Reading_Gas.setBounds(97, 82, 261, 32);
     panel_Current_Reading.add(lbl_Trend_Of_Reading_Gas);
+  
+    btn_Add_New_Reading = new Rounded_Button("Add Reading", 25);
+    btn_Add_New_Reading.setBackground(new Color(192, 192, 192));
+    btn_Add_New_Reading.setForeground(Color.BLACK);
+    btn_Add_New_Reading.setFont(new Font("Arial", Font.PLAIN, 16));
+    btn_Add_New_Reading.setBounds(168, 120,137, 40);
+    panel_Current_Reading.add(btn_Add_New_Reading);
 
     //===============================================================================================
     // UI CREATION - MAIN SECTION - TIPS

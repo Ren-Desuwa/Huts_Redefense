@@ -214,11 +214,11 @@ public class Electricity_Panel extends JPanel {
 	    lbl_Trend_Of_Reading_Electricity.setBounds(97, 82, 261, 32);
 	    panel_Current_Reading.add(lbl_Trend_Of_Reading_Electricity);
 
-	    btn_Add_New_Reading = new Rounded_Button("Add New Reading", 25);
+	    btn_Add_New_Reading = new Rounded_Button("Add Reading", 25);
 	    btn_Add_New_Reading.setBackground(new Color(192, 192, 192));
 	    btn_Add_New_Reading.setForeground(Color.BLACK);
-	    btn_Add_New_Reading.setFont(new Font("Tahoma", Font.BOLD, 10));
-	    btn_Add_New_Reading.setBounds(155, 125, 151, 34);
+	    btn_Add_New_Reading.setFont(new Font("Arial", Font.PLAIN, 16));
+	    btn_Add_New_Reading.setBounds(168, 120,137, 40);
 	    panel_Current_Reading.add(btn_Add_New_Reading);
 
 	    //==============================================================================================
