@@ -149,10 +149,9 @@ public class Electricity_Panel extends JPanel {
 	    panel_Title_Electricity_Consumption.add(lbl_SubTitle_Electricity_Consumption);
 
 	    //==============================================================================================
-	    // UI CREATION - CONTENT PANELS
+	    // UI CREATION - CONTENT PANELS - GRAPH
 	    //==============================================================================================
 
-	    // Graph Container Panel
 	    panel_Graph_Container = new Rounded_Panel();
 	    panel_Graph_Container.setBackground(new Color(255, 255, 255));
 	    panel_Graph_Container.setBounds(21, 114, 466, 377);
@@ -182,7 +181,10 @@ public class Electricity_Panel extends JPanel {
 	        panel_Graph_View.add(graph_Panel);
 	    }
 
-	    // Current Reading Panel
+	    //==============================================================================================
+	    // UI CREATION - CONTENT PANELS - CURRENT READING 
+	    //==============================================================================================
+	    
 	    panel_Current_Reading = new Rounded_Panel();
 	    panel_Current_Reading.setBackground(new Color(255, 255, 255));
 	    panel_Current_Reading.setLayout(null);
@@ -219,7 +221,10 @@ public class Electricity_Panel extends JPanel {
 	    btn_Add_New_Reading.setBounds(155, 125, 151, 34);
 	    panel_Current_Reading.add(btn_Add_New_Reading);
 
-	    // Tips Panel
+	    //==============================================================================================
+	    // UI CREATION - CONTENT PANELS - TIPS
+	    //==============================================================================================
+	    
 	    panel_tips = new Rounded_Panel();
 	    panel_tips.setBackground(new Color(255, 255, 255));
 	    panel_tips.setLayout(null);
@@ -239,7 +244,10 @@ public class Electricity_Panel extends JPanel {
 	    lbl_Tips_1.setBounds(-17, 38, 473, 119);
 	    panel_tips.add(lbl_Tips_1);
 
-	    // Recent Readings Panel
+	    //==============================================================================================
+	    // UI CREATION - CONTENT PANELS - RECENT READINGS
+	    //==============================================================================================
+	    
 	    panel_Recent_Readings_Container = new Rounded_Panel();
 	    panel_Recent_Readings_Container.setBackground(new Color(255, 255, 255));
 	    panel_Recent_Readings_Container.setBounds(497, 114, 466, 377);
@@ -250,6 +258,10 @@ public class Electricity_Panel extends JPanel {
 	    scrollpane_Recent_Readings.setBounds(5, 5, 456, 366);
 	    scrollpane_Recent_Readings.setBorder(BorderFactory.createEmptyBorder());
 	    panel_Recent_Readings_Container.add(scrollpane_Recent_Readings);
+	    
+	    //===============================================================================================
+	    // UI CREATION - SCROLLPANE HEADER
+	    //===============================================================================================
 
 	    panel_Header = new JPanel();
 	    panel_Header.setBackground(Color.WHITE);

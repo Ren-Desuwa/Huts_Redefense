@@ -25,6 +25,7 @@ public class Rounded_Border implements Border {
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setColor(Color.WHITE); // Border color (can be different if you want)
+        g2.setBackground(new Color(255, 255, 255)); // Background color
         g2.drawRoundRect(x, y, width - 1, height - 1, radius, radius);
         g2.dispose();
     }

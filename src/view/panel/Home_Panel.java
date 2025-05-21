@@ -312,7 +312,7 @@ public class Home_Panel extends JPanel {
         // Add placeholder panel for design time
         if (database_Manager == null) {
             JPanel placeholder = new JPanel();
-            placeholder.setBackground(Color.WHITE);
+            placeholder.setBackground(new Color(255, 255, 255));
             panel_Graph_Container.add(placeholder);
         } else {
             // Create and add actual graph panel at runtime

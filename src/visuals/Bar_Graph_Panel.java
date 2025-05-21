@@ -32,6 +32,7 @@ public class Bar_Graph_Panel extends JPanel {
      */
     public Bar_Graph_Panel(String title, String xAxisTitle, String yAxisTitle) {
         setLayout(new BorderLayout());
+        setBackground(new Color(255, 255, 255));
         
         // Create chart with auto-sizing
         chart = new CategoryChartBuilder()

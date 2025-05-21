@@ -34,8 +34,10 @@ public class Graph_Panel extends JPanel {
         this.is_single_utility = false;
 
         setLayout(new BorderLayout());
+        setBackground(new Color(255, 255, 255));
         card_layout = new CardLayout();
         graph_container = new JPanel(card_layout);
+        graph_container.setBackground(new Color(255, 255, 255));
         add(graph_container, BorderLayout.CENTER);
 
         initialize();
