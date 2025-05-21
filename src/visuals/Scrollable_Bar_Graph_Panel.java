@@ -75,6 +75,7 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
      */
     private void initializeUI() {
         setLayout(new BorderLayout());
+        setBackground(new Color(255, 255, 255));
         
         // Create header panel for title and series name (fixed at the top)
         headerPanel = new JPanel() {

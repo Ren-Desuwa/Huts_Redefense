@@ -10,7 +10,6 @@ import database.Database_Manager;
 import model.Reading;
 import model.User;
 import view.panel.misc.Add_Reading_Panel;
-import view.panel.misc.Edit_Reading_Panel;
 import view.panel.misc.Utility_Tips_Manager;
 import visuals.Graph_Panel;
 import visuals.Rounded_Button;
@@ -25,7 +24,6 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 
 import java.awt.Font;
-import java.util.List;
 
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -75,7 +73,7 @@ public class Water_Panel extends JPanel {
 	private JLabel lbl_Time;
 	
 	// Scroll label components
-	private JScrollPane sP_Recent_Readings;
+	private JScrollPane scrollpane_Recent_Readings;
 	private JLabel lbl_Title_RecentReadings;
 	private JLabel lbl_Head_Date;
 	private JLabel lbl_Head_Readings;
@@ -103,8 +101,8 @@ public class Water_Panel extends JPanel {
 		setPreferredSize(new Dimension(986, 688));
 		setLayout(null);
 		
-		
 		initialize_UI();
+		create_Actions_Listeners();
 		setupData();
 	}
 	
@@ -173,24 +171,20 @@ public class Water_Panel extends JPanel {
             panel_Graph_View.add(graph_Panel);
         }
         
-        all_readings = getAllReadings();
         panel_Recent_Readings_Container = new Rounded_Panel();
 		panel_Recent_Readings_Container.setBackground(new Color(255, 255, 255));
 		panel_Recent_Readings_Container.setBounds(497, 114, 466, 377);
 		add(panel_Recent_Readings_Container);
 		panel_Recent_Readings_Container.setLayout(null);
 		
-		
-		
-		sP_Recent_Readings = new JScrollPane();
-		sP_Recent_Readings.setBounds(5, 5, 456, 366);
-		sP_Recent_Readings.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		panel_Recent_Readings_Container.add(sP_Recent_Readings);
-		sP_Recent_Readings.setViewportView(all_readings);
+		scrollpane_Recent_Readings = new JScrollPane();
+		scrollpane_Recent_Readings.setBounds(5, 5, 456, 366);
+		scrollpane_Recent_Readings.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		panel_Recent_Readings_Container.add(scrollpane_Recent_Readings);
 		
 		Headerpanel = new JPanel();
 		Headerpanel.setBackground(new Color(255, 255, 255));
-		sP_Recent_Readings.setColumnHeaderView(Headerpanel);
+		scrollpane_Recent_Readings.setColumnHeaderView(Headerpanel);
 		Headerpanel.setLayout(null);
 		Headerpanel.setPreferredSize(new Dimension(466, 70));
 		
@@ -255,21 +249,6 @@ public class Water_Panel extends JPanel {
 		btn_Add_New_Reading = new Rounded_Button("Add New Reading", 25);
 		btn_Add_New_Reading.setBackground(new Color(192, 192, 192));
 		btn_Add_New_Reading.setForeground(Color.BLACK);
-		btn_Add_New_Reading.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				goToAddReading();
-			}
-			@Override
-            public void mouseEntered(MouseEvent e) {
-				btn_Add_New_Reading.setBackground(new Color(150, 150, 150));
-            }
-            
-            @Override
-            public void mouseExited(MouseEvent e) {
-            	btn_Add_New_Reading.setBackground(new Color(192, 192, 192));
-            }
-		});
 		btn_Add_New_Reading.setFont(new Font("Tahoma", Font.BOLD, 10));
 		btn_Add_New_Reading.setBounds(155, 125, 151, 34);
 		panel_Current_Reading.add(btn_Add_New_Reading);
@@ -316,38 +295,47 @@ public class Water_Panel extends JPanel {
         tips_timer.start();
 	}
 	
+	private void create_Actions_Listeners() {
+		btn_Add_New_Reading.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				goToAddReading();
+			}
+			@Override
+            public void mouseEntered(MouseEvent e) {
+				btn_Add_New_Reading.setBackground(new Color(150, 150, 150));
+            }
+            
+            @Override
+            public void mouseExited(MouseEvent e) {
+            	btn_Add_New_Reading.setBackground(new Color(192, 192, 192));
+            }
+		});
+		
+		lbl_Title_Tips.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				lbl_Tips_1.setText("<html><ul><li>" + utility_Tips_Manager.getRandomTip("electricity") + "</li><br>"
+							   			   + "<li>" + utility_Tips_Manager.getRandomTip("electricity") + "</li></ul></html>");
+			}
+		});
+	}
+	
+	
 	public void Refresh_Graph() {
 		if (graph_Panel != null) {
 			graph_Panel.refreshData();
 		}
 	}
 	
-	private void goToAddReading() {
-
-		EventQueue.invokeLater(new Runnable() {
-	        public void run() {
-	            try {
-	            	Add_Reading_Panel add_reading_panel = new Add_Reading_Panel(
-		            	    (JFrame) SwingUtilities.getWindowAncestor(Water_Panel.this),
-		            	    database_manager, current_user, Water_Panel.this, "water"
-		            	);
-		            	add_reading_panel.setVisible(true);
-	            } catch (Exception e) {
-	                e.printStackTrace();
-	            }
-	        }
-	    });
-	}
-	
 	public void Panel_Refresh() {
-		all_readings = getAllReadings();
-	    sP_Recent_Readings.setViewportView(all_readings);
-	    getAllReadings();
 	    setupData(); // Also update the current reading display
 	}
 	
-	public void setupData() {
-		
+	private void setupData() {
+		all_readings = database_manager.getReadingManager().getReadingsAsJList(this, database_manager, current_user, "water");
+	    scrollpane_Recent_Readings.setViewportView(all_readings);
+	    
 		try {
 			Reading water_reading = database_manager.getReadingManager().getLatestReadingByType(current_user, "water");
 			
@@ -363,53 +351,19 @@ public class Water_Panel extends JPanel {
 		}
 	}
 	
-	private JList<String> getAllReadings() {
-		try {
-			if (!database_manager.getReadingManager().isReadingExists(current_user, "water")) {
-				JList<String> list = new JList<>(new String[] {"No readings found.", "Please add a reading."});
-				list.setFont(new Font("monoFont", Font.PLAIN, 15));
-				list.setPreferredSize(new Dimension(429, 448));
-				list.setFixedCellHeight(30);
-				return list;
-			}
-			List<Reading> all_readings = database_manager.getReadingManager().getAllReadingsByType(current_user, "water");
-			
-			String[] readings = new String[all_readings.size()];
-			for (int i = 0; i < all_readings.size(); i++) {
-				Reading reading = all_readings.get(i);
-				readings[i] = String.format("    %-23s %-21s %-19s %-10s", reading.getDate(), reading.getReading() + "m³", reading.getRate() + "Php", reading.getTotal_Price() + "Php");
-			}
-			JList<String> list = new JList<>(readings);
-			list.setFont(new Font("monoFont", Font.PLAIN, 13));
-			list.setPreferredSize(new Dimension(429, 448));
-			list.setFixedCellHeight(30);
-			list.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					int response = javax.swing.JOptionPane.showConfirmDialog(null, "Do you want to eddit this reading?", "Edit Reading", javax.swing.JOptionPane.YES_NO_OPTION);
-					if (response == javax.swing.JOptionPane.YES_OPTION) {
-						EventQueue.invokeLater(new Runnable() {
-					        public void run() {
-					            try {
-					            	Edit_Reading_Panel edit_reading_panel = new Edit_Reading_Panel(
-				            			(JFrame) SwingUtilities.getWindowAncestor(Water_Panel.this),
-					            	    database_manager, current_user, Water_Panel.this, "water"
-					            	);
-					            	edit_reading_panel.setVisible(true);
-
-					            } catch (Exception e) {
-					                e.printStackTrace();
-					            }
-					        }
-					    });
-					}
-				}
-			});
-			return list;
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			return new JList<>(new String[] {"Error fetching readings."});
-		}
+	private void goToAddReading() {
+		EventQueue.invokeLater(new Runnable() {
+	        public void run() {
+	            try {
+	            	Add_Reading_Panel add_reading_panel = new Add_Reading_Panel(
+		            	    (JFrame) SwingUtilities.getWindowAncestor(Water_Panel.this),
+		            	    database_manager, current_user, Water_Panel.this, "water"
+		            	);
+		            	add_reading_panel.setVisible(true);
+	            } catch (Exception e) {
+	                e.printStackTrace();
+	            }
+	        }
+	    });
 	}
 }

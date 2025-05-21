@@ -10,7 +10,6 @@ import database.Database_Manager;
 import model.Reading;
 import model.User;
 import view.panel.misc.Add_Reading_Panel;
-import view.panel.misc.Edit_Reading_Panel;
 import view.panel.misc.Utility_Tips_Manager;
 import visuals.Graph_Panel;
 import visuals.Rounded_Button;
@@ -25,7 +24,6 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 
 import java.awt.Font;
-import java.util.List;
 
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -301,7 +299,7 @@ public class Gas_Panel extends JPanel {
 		btn_Add_New_Reading.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				goToAddReading();
+				openAddReading();
 			}
 			@Override
             public void mouseEntered(MouseEvent e) {
@@ -329,7 +327,7 @@ public class Gas_Panel extends JPanel {
 		}
 	}
 	
-	private void goToAddReading() {
+	private void openAddReading() {
 		EventQueue.invokeLater(new Runnable() {
 	        public void run() {
 	            try {
@@ -349,8 +347,7 @@ public class Gas_Panel extends JPanel {
 	    setupData(); // Also update the current reading display
 	}
 	
-	public void setupData() {
-		
+	private void setupData() {
 		all_readings = database_manager.getReadingManager().getReadingsAsJList(this, database_manager, current_user, "gas");
 		sP_Recent_Readings.setViewportView(all_readings);
 		

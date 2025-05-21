@@ -51,8 +51,10 @@ public class Graph_Panel extends JPanel {
         this.is_single_utility = true;
 
         setLayout(new BorderLayout());
+        setBackground(new Color(255, 255, 255));
         card_layout = new CardLayout();
         graph_container = new JPanel(card_layout);
+        graph_container.setBackground(new Color(255, 255, 255));
         add(graph_container, BorderLayout.CENTER);
 
         initializeSingleUtility();
@@ -70,9 +72,13 @@ public class Graph_Panel extends JPanel {
 
         // Set layouts and properties
         electricity_container.setLayout(new BorderLayout());
+        electricity_container.setBackground(new Color(255, 255, 255));
         water_container.setLayout(new BorderLayout());
+        water_container.setBackground(new Color(255, 255, 255));
         gas_container.setLayout(new BorderLayout());
+        gas_container.setBackground(new Color(255, 255, 255));
         overall_container.setLayout(new BorderLayout());
+        overall_container.setBackground(new Color(255, 255, 255));
 
         // Initialize scrollable bar graphs
         electricity_graph = new Scrollable_Bar_Graph_Panel("Monthly Electricity Usage", "Month", "KwH");
@@ -107,6 +113,7 @@ public class Graph_Panel extends JPanel {
     private void initializeSingleUtility() {
         Rounded_Panel container = new Rounded_Panel(25, Color.BLACK, 0);
         container.setLayout(new BorderLayout());
+        container.setBackground(new Color(255, 255, 255));
 
         String units = switch (utility_type) {
             case "electricity" -> "Total Price (Php)";

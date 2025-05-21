@@ -4,7 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Rounded_Button extends JButton {
-    private int radius;
+
+	private static final long serialVersionUID = 1L;
+	private int radius;
 
     public Rounded_Button(String text, int radius) {
         super(text);
@@ -36,6 +38,6 @@ public class Rounded_Button extends JButton {
 
     @Override
     public void paintBorder(Graphics g) {
-        // No border
+    	
     }
 }
