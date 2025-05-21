@@ -485,14 +485,14 @@ public class Home_Panel extends JPanel {
             }
 
             // Get latest readings
-            Reading electricity = database_Manager.getReadingManager().getLatestReadingByType(current_User, "electricity");
-            Reading water = database_Manager.getReadingManager().getLatestReadingByType(current_User, "water");
-            Reading gas = database_Manager.getReadingManager().getLatestReadingByType(current_User, "gas");
+            Reading electricity = database_Manager.getReadingManager().getLatest_Reading_By_Type(current_User, "electricity");
+            Reading water = database_Manager.getReadingManager().getLatest_Reading_By_Type(current_User, "water");
+            Reading gas = database_Manager.getReadingManager().getLatest_Reading_By_Type(current_User, "gas");
 
             // Update each reading's label
-            database_Manager.getReadingManager().updateReadingLabel(current_User,electricity, lbl_Electricity_Reading_Value, lbl_Trend_Of_Reading_Electricity, "electricity");
-            database_Manager.getReadingManager().updateReadingLabel(current_User,water, lbl_Water_Reading_Value, lbl_Trend_Of_Reading_Water, "water");
-            database_Manager.getReadingManager().updateReadingLabel(current_User,gas, lbl_Gas_Reading_Value, lbl_Trend_Of_Reading_Gas, "gas");
+            database_Manager.getReadingManager().updateReading_Label(current_User,electricity, lbl_Electricity_Reading_Value, lbl_Trend_Of_Reading_Electricity, "electricity");
+            database_Manager.getReadingManager().updateReading_Label(current_User,water, lbl_Water_Reading_Value, lbl_Trend_Of_Reading_Water, "water");
+            database_Manager.getReadingManager().updateReading_Label(current_User,gas, lbl_Gas_Reading_Value, lbl_Trend_Of_Reading_Gas, "gas");
 
             // Calculate and update overall reading
             double total = 0;
@@ -505,10 +505,10 @@ public class Home_Panel extends JPanel {
                 lbl_Trend_Of_Reading_Overall.setText("No Data");
             } else {
                 lbl_OverAll_Reading_Value.setText(String.valueOf(total));
-                String trend = database_Manager.getReadingManager().getTrendOverall(current_User);
+                String trend = database_Manager.getReadingManager().getTrend_Overall(current_User);
                 lbl_Trend_Of_Reading_Overall.setText(trend);
                 lbl_Trend_Of_Reading_Overall.setForeground(
-                    database_Manager.getReadingManager().getTrendColor(current_User, null)
+                    database_Manager.getReadingManager().getTrend_Color(current_User, null)
                 );
             }
 

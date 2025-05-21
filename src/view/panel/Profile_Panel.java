@@ -428,10 +428,10 @@ public class Profile_Panel extends JPanel {
         int gasCount; // Assuming getter exists
         
         try {
-			totalSubmissions = database_manager.getReadingManager().getTotalReadings(current_user);
-			electricityCount = database_manager.getReadingManager().getAllReadingsByType(current_user, "electricity").size();
-			waterCount = database_manager.getReadingManager().getAllReadingsByType(current_user, "water").size();
-			gasCount = database_manager.getReadingManager().getAllReadingsByType(current_user, "gas").size();
+			totalSubmissions = database_manager.getReadingManager().getTotal_Readings(current_user);
+			electricityCount = database_manager.getReadingManager().getAll_Readings_By_Type(current_user, "electricity").size();
+			waterCount = database_manager.getReadingManager().getAll_Readings_By_Type(current_user, "water").size();
+			gasCount = database_manager.getReadingManager().getAll_Readings_By_Type(current_user, "gas").size();
 			
 		} catch (SQLException e) {
 			totalSubmissions = 0; // Default to 0 if there's an error

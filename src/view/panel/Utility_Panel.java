@@ -398,17 +398,17 @@ public class Utility_Panel extends JPanel {
      * Sets up the data for the panel
      */
     private void setupData() {
-        all_readings = database_manager.getReadingManager().getReadingsAsJList(this, database_manager, current_user, utility_type);
+        all_readings = database_manager.getReadingManager().getReadings_As_JList(this, database_manager, current_user, utility_type);
         scrollpane_Recent_Readings.setViewportView(all_readings);
         
         try {
-            Reading latest_reading = database_manager.getReadingManager().getLatestReadingByType(current_user, utility_type);
+            Reading latest_reading = database_manager.getReadingManager().getLatest_Reading_By_Type(current_user, utility_type);
             
             if (latest_reading == null) {
                 lbl_Reading_Value.setText("No Data");
             } else {
                 lbl_Reading_Value.setText(String.valueOf(latest_reading.getReading()));
-                database_manager.getReadingManager().updateReadingLabel(current_user, latest_reading, lbl_Reading_Value, lbl_Trend_Of_Reading, utility_type);
+                database_manager.getReadingManager().updateReading_Label(current_user, latest_reading, lbl_Reading_Value, lbl_Trend_Of_Reading, utility_type);
             }
             
         } catch (Exception e) {
