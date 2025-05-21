@@ -64,8 +64,6 @@ public class Water_Panel extends JPanel {
 	private Graph_Panel graph_Panel;
 	private JLabel lbl_Title_Graph;
 	
-	// Home panel
-	private Home_Panel homepanel;
 	
 	// Title panel label
 	private JLabel lbl_Title_Water_Consumption;
@@ -94,8 +92,7 @@ public class Water_Panel extends JPanel {
 	
 
 
-	public Water_Panel(Database_Manager database_manager, User current_user, Home_Panel homepanel) {
-		this.homepanel = homepanel;
+	public Water_Panel(Database_Manager database_manager, User current_user) {
 		this.database_manager = database_manager;
 		this.current_user = current_user;
 		
@@ -323,7 +320,6 @@ public class Water_Panel extends JPanel {
 	    sP_Recent_Readings.setViewportView(all_readings);
 	    getAllReadings();
 	    setupData(); // Also update the current reading display
-	    homepanel.home_Panel_Refresh();
 	}
 	
 	public void setupData() {

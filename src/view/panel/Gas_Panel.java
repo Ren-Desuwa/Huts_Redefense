@@ -66,9 +66,6 @@ public class Gas_Panel extends JPanel {
 	
 	
 	private JLabel lbl_Head_Date;
-	
-	//Home Panel
-	private Home_Panel homepanel;
 
 	// Title panel labels
 	private JLabel lbl_Title_Gas_Consumption;
@@ -97,10 +94,9 @@ public class Gas_Panel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public Gas_Panel(Database_Manager database_manager, User current_user, Home_Panel homepanel) {
+	public Gas_Panel(Database_Manager database_manager, User current_user) {
 		this.database_manager = database_manager;
 		this.current_user = current_user;
-		this.homepanel = homepanel;
 		
 		setBackground(new Color(213, 213, 213));
 		setPreferredSize(new Dimension(986, 688));
@@ -326,7 +322,6 @@ public class Gas_Panel extends JPanel {
 	    sP_Recent_Readings.setViewportView(all_readings);
 	    getAllReadings();
 	    setupData(); // Also update the current reading display
-	    homepanel.home_Panel_Refresh();
 	}
 	
 	public void setupData() {

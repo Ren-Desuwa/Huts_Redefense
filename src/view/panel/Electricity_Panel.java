@@ -64,9 +64,6 @@ public class Electricity_Panel extends JPanel {
 	private Graph_Panel graph_Panel;
 	private JLabel lbl_Title_Gaph;
 	
-	// Home panel
-	private Home_Panel panel_home;
-	
 	// Title Panel labels
 	private JLabel lbl_Title_Electricity_Consumption;
 	private JLabel lbl_SubTitle_Electricity_Consumption;
@@ -97,10 +94,9 @@ public class Electricity_Panel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public Electricity_Panel(Database_Manager database_manager, User current_user, Home_Panel panel_home) {
+	public Electricity_Panel(Database_Manager database_manager, User current_user) {
 		this.database_manager = database_manager;
 		this.current_user = current_user;
-		this.panel_home = panel_home;
 		
 		setBackground(new Color(213, 213, 213));
 		setPreferredSize(new Dimension(986, 688));
@@ -320,7 +316,6 @@ public class Electricity_Panel extends JPanel {
 	    scrollpane_Recent_Readings.setViewportView(all_readings);
 	    getAllReadings();
 	    setupData(); // Also update the current reading display
-	    panel_home.home_Panel_Refresh();
 	}
 	
 	public void setupData() {
