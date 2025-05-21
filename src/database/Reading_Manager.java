@@ -734,13 +734,14 @@ public class Reading_Manager {
 	                    unit = "m³";
 	                    break;
 	                case "gas":
-	                    unit = "m³";
+	                    unit = "Qty";
 	                    break;
 	                default:
 	                    unit = "";
+	                    
 	                    break;
 	            }
-	            readings[i] = String.format("    %-21s %-23s %-19s %-10s", 
+	            readings[i] = String.format("    %-23s %-23s %-19s %-10s", 
 	                reading.getDate(), 
 	                reading.getReading() + unit, 
 	                reading.getRate() + "Php", 
