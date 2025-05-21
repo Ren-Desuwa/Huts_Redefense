@@ -307,7 +307,7 @@ public class Water_Panel extends JPanel {
 		//===============================================================================================
 		
 		Timer clock_timer = new Timer(60_000, e -> {
-            lbl_Time.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm a")));
+            lbl_Time.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm a")));
         });
         LocalTime now = LocalTime.now();
         int initialDelay = (60 - now.getSecond()) * 1000 - now.getNano() / 1_000_000;
