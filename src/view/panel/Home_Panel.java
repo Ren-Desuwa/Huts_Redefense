@@ -414,21 +414,6 @@ public class Home_Panel extends JPanel {
         lbl_Tip_3.setFont(new Font("Tahoma", Font.PLAIN, 17));
         lbl_Tip_3.setBounds(20, 44, 277, 67);
         panel_Tip_3.add(lbl_Tip_3);
-        
-		//==============================================================================================
-        // UI CREATION - TIPS SECTION - TIPS REFRESH TIMER
-        //===============================================================================================
-        
-        Timer timer = new Timer(30_000, e -> {
-        	lbl_Tip_1.setText("<html>" + utility_Tips_Manager.getRandomTip() + "</html>");
-        	lbl_Tip_Type_1.setText(utility_Tips_Manager.getType());
-        	lbl_Tip_2.setText("<html>" + utility_Tips_Manager.getRandomTip() + "</html>");
-        	lbl_Tip_Type_2.setText(utility_Tips_Manager.getType());
-        	lbl_Tip_3.setText("<html>" + utility_Tips_Manager.getRandomTip() + "</html>");
-        	lbl_Tip_Type_3.setText(utility_Tips_Manager.getType());
-        });
-        timer.setInitialDelay(0); // Start immediately
-        timer.start();
     }
     
     //==============================================================================================
@@ -439,14 +424,25 @@ public class Home_Panel extends JPanel {
     
     private void create_Action_Listeners() {
         // Clock update every minute
-        Timer timer = new Timer(60_000, e -> {
+        Timer clock_timer = new Timer(60_000, e -> {
             lbl_Time.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm a")));
         });
         LocalTime now = LocalTime.now();
         int initialDelay = (60 - now.getSecond()) * 1000 - now.getNano() / 1_000_000;
-        timer.setInitialDelay(initialDelay);
-        timer.start();
-
+        clock_timer.setInitialDelay(initialDelay);
+        clock_timer.start();
+        
+        Timer tips_timer = new Timer(30_000, e -> {
+        	lbl_Tip_1.setText("<html>" + utility_Tips_Manager.getRandomTip() + "</html>");
+        	lbl_Tip_Type_1.setText(utility_Tips_Manager.getType());
+        	lbl_Tip_2.setText("<html>" + utility_Tips_Manager.getRandomTip() + "</html>");
+        	lbl_Tip_Type_2.setText(utility_Tips_Manager.getType());
+        	lbl_Tip_3.setText("<html>" + utility_Tips_Manager.getRandomTip() + "</html>");
+        	lbl_Tip_Type_3.setText(utility_Tips_Manager.getType());
+        });
+        tips_timer.setInitialDelay(0); // Start immediately
+        tips_timer.start();
+        
         // Panel click listeners
         panel_Electricity_Info.addMouseListener(createPanelMouseAdapter(() -> graph_Panel.showElectricityGraph()));
         panel_Water_Info.addMouseListener(createPanelMouseAdapter(() -> graph_Panel.showWaterGraph()));
