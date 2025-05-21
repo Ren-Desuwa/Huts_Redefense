@@ -215,6 +215,18 @@ public class Add_Reading_Panel extends JDialog {
 	}
 	
 	private void create_Action_Listeners() {
+		combo_box_Year.addActionListener(e -> {
+			if (LocalDate.now().getYear() == (int) combo_box_Year.getSelectedItem()) {
+				updateMonthComboBox();
+				updateDayComboBox();
+			}
+		});
+
+		combo_box_Month.addActionListener(e -> {
+			if(LocalDate.now().getYear() == (int) combo_box_Year.getSelectedItem() && LocalDate.now().getMonthValue() == (int) combo_box_Month.getSelectedItem()) {
+				updateDayComboBox();
+			}
+		});
 		
 		tf_Rate.addFocusListener(new FocusAdapter() {
 			@Override public void focusGained(FocusEvent e) {if (tf_Rate.getText().equals("Enter Rate")) tf_Rate.setText("");}
@@ -263,6 +275,39 @@ public class Add_Reading_Panel extends JDialog {
 		combo_box_Day.setSelectedItem(currentDay);
 		
 		configureReadingUI(readingType);
+	}
+	
+	private void updateMonthComboBox() {
+	    int selectedYear = (int) combo_box_Year.getSelectedItem();
+	    int currentYear = LocalDate.now().getYear();
+	    int currentMonth = LocalDate.now().getMonthValue();
+
+	    combo_box_Month.removeAllItems();
+	    int maxMonth = selectedYear == currentYear ? currentMonth : 12;
+	    for (int i = maxMonth; i >= 1; i--) {
+	        combo_box_Month.addItem(i);
+	    }
+	}
+
+	private void updateDayComboBox() {
+	    Integer selectedYear = (Integer) combo_box_Year.getSelectedItem();
+	    Integer selectedMonth = (Integer) combo_box_Month.getSelectedItem();
+
+	    if (selectedYear == null || selectedMonth == null) return;
+
+	    int currentYear = LocalDate.now().getYear();
+	    int currentMonth = LocalDate.now().getMonthValue();
+	    int currentDay = LocalDate.now().getDayOfMonth();
+
+	    int maxDay = LocalDate.of(selectedYear, selectedMonth, 1).lengthOfMonth();
+	    if (selectedYear == currentYear && selectedMonth == currentMonth) {
+	        maxDay = currentDay;
+	    }
+
+	    combo_box_Day.removeAllItems();
+	    for (int i = maxDay; i >= 1; i--) {
+	        combo_box_Day.addItem(i);
+	    }
 	}
 	
 	private void configureReadingUI(String readingType) {
