@@ -734,7 +734,7 @@ public class Reading_Manager {
 	                    unit = "m³";
 	                    break;
 	                case "gas":
-	                    unit = "m³";
+	                    unit = "Qty";
 	                    break;
 	                default:
 	                    unit = "";
