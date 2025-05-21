@@ -124,7 +124,7 @@ public class Graph_Panel extends JPanel {
             default -> "";
         };
 
-        Scrollable_Bar_Graph_Panel utility_graph = new Scrollable_Bar_Graph_Panel("", "Month", units);
+        Scrollable_Bar_Graph_Panel utility_graph = new Scrollable_Bar_Graph_Panel("Month", units);
         Color barColor = switch (utility_type) {
             case "electricity" -> new Color(255,206,0); // Yellow for Electricity
             case "water" -> new Color(79, 129, 189); // Blue for Water
