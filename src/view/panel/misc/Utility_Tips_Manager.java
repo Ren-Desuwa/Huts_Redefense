@@ -1,5 +1,6 @@
 package view.panel.misc;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,17 +28,14 @@ public class Utility_Tips_Manager {
         ArrayList<String> electricity_tips = new ArrayList<>();
         electricity_tips.add("Unplug electronics and chargers when not in use to prevent 'phantom' energy use.");
         electricity_tips.add("Use smart power strips to reduce standby consumption of electronic devices.");
-        electricity_tips.add("Set your refrigerator temperature to 38°F (3°C) and freezer to 5°F (-15°C) for optimal efficiency.");
         electricity_tips.add("Clean or replace air filters regularly to improve HVAC system efficiency.");
         electricity_tips.add("Use natural light when possible and turn off lights in unoccupied rooms.");
         electricity_tips.add("Wash clothes in cold water to save on water heating costs.");
         electricity_tips.add("Air-dry clothes instead of using a dryer when weather permits.");
-        electricity_tips.add("Install a programmable thermostat to regulate temperature based on your schedule.");
         electricity_tips.add("Use ceiling fans to circulate air and reduce the need for air conditioning.");
         tipsByUtility.put("electricity", electricity_tips);
         
         ArrayList<String> water_tips = new ArrayList<>();
-        water_tips.add("Fix leaky faucets promptly. Even a small drip can waste several gallons of water per day.");
         water_tips.add("Install low-flow showerheads and faucet aerators to reduce water usage.");
         water_tips.add("Take shorter showers to conserve hot water and energy.");
         water_tips.add("Turn off the water while brushing teeth or shaving.");
@@ -73,6 +71,19 @@ public class Utility_Tips_Manager {
 			default:
 			return "Unknown Tip"; // this should never happen
     	}
+    }
+    
+    public Color setcolor() {
+		switch (randomIndex) {
+			case 0:
+			return new Color(255,167,0); // Yellow for Electricity
+			case 1:
+			return new Color(79, 129, 189); // Blue for Water
+			case 2:
+			return new Color(255,77,0); // Red for Gas
+			default:
+			return new Color(0, 0, 0); // Black for unknown
+		}
     }
     
     public String getRandomTip() {
