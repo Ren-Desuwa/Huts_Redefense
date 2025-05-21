@@ -6,8 +6,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -52,12 +50,6 @@ public class Main_Frame extends JFrame {
 	private JButton side_gas_button;
 	private JButton side_profile_button;
 	private JButton side_logout_button;
-	
-	//dev stuff
-	private Development_Panel development_panel;
-	private JButton side_dev_button;
-	private static final String DEV_PANEL = "Development";
-	
 	
 	public Main_Frame(Database_Manager database_manager, User user) {
 		this.database_manager = database_manager;
@@ -106,11 +98,6 @@ public class Main_Frame extends JFrame {
         card_panel.add(water_panel, WATER_PANEL);
         card_panel.add(gas_panel, GAS_PANEL);
         card_panel.add(profile_panel, PROFILE_PANEL);
-        
-        // dev panel
-        development_panel = new Development_Panel(database_manager, current_user);
-        card_panel.add(development_panel, DEV_PANEL);
-        
 	}
 	
 	private void initializeComponents() {
@@ -169,17 +156,6 @@ public class Main_Frame extends JFrame {
 		side_logout_button.setBorderPainted(false);
 		side_logout_button.setFont(new Font("Arial", Font.PLAIN, 16));
 		
-		//development button
-		side_dev_button = new Rounded_Button("Development");
-		
-		side_dev_button.setAlignmentX(Component.CENTER_ALIGNMENT);
-		side_dev_button.setMaximumSize(new Dimension(180, 40));
-		side_dev_button.setBackground(new Color(70, 70, 70));
-		side_dev_button.setForeground(Color.WHITE);
-		side_dev_button.setFocusPainted(false);
-		side_dev_button.setBorderPainted(false);
-		side_dev_button.setFont(new Font("Arial", Font.PLAIN, 16));
-		
 	}
 	
 	private void addComponentsToFrame() {
@@ -195,8 +171,6 @@ public class Main_Frame extends JFrame {
 		side_panel.add(Box.createRigidArea(new Dimension(0, 10)));
 		side_panel.add(side_gas_button);
 		side_panel.add(Box.createVerticalGlue());// Push remaining items to bottom
-		side_panel.add(Box.createRigidArea(new Dimension(0, 10))); // Development button
-		side_panel.add(side_dev_button);
 		side_panel.add(Box.createRigidArea(new Dimension(0, 10))); // Profile panel at bottom
 		side_panel.add(side_profile_button);
 		side_panel.add(Box.createRigidArea(new Dimension(0, 10))); // Logout button
@@ -213,7 +187,6 @@ public class Main_Frame extends JFrame {
 	    addHoverEffectToButton(side_gas_button);
 	    addHoverEffectToButton(side_profile_button);
 	    addHoverEffectToButton(side_logout_button);
-	    addHoverEffectToButton(side_dev_button);
 
 	    // Setup click listeners
 	    side_home_button.addActionListener(e -> {
@@ -244,11 +217,6 @@ public class Main_Frame extends JFrame {
 	            new Log_In_Window(database_manager).setVisible(true);
 	        }
 	    });
-
-	    side_dev_button.addActionListener(e -> {
-	        card_layout.show(card_panel, DEV_PANEL);
-	        development_panel.updateDimensions(side_panel);
-	    });
 	}
 
 	private void addHoverEffectToButton(JButton button) {
@@ -270,6 +238,6 @@ public class Main_Frame extends JFrame {
 	public void showGasPanel() {card_layout.show(card_panel, GAS_PANEL);}
 	public void showHomePanel() {card_layout.show(card_panel, HOME_PANEL);}
 	public void showProfilePanel() {card_layout.show(card_panel, PROFILE_PANEL);}
-	public void showDevelopmentPanel() {card_layout.show(card_panel, DEV_PANEL);}
+
 	
 }
