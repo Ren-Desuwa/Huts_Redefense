@@ -42,7 +42,7 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
     // Color scheme
     private Color barColor = new Color(79, 129, 189); // Blue color for bars
     private Color textColor = Color.BLACK;
-    private Color backgroundColor = new Color(0,0,0,0); // Transparent background
+    private Color backgroundColor = Color.WHITE; // Transparent background
     
     /**
      * Default constructor for WindowBuilder compatibility

@@ -73,6 +73,10 @@ public class Utility_Panel extends JPanel {
     
     // Graph panel field
     private JPanel panel_Graph_View;
+    private JLabel lbl_Prev_Button;
+	private JLabel lbl_Next_Button;
+	private JLabel lbl_CurrentYear;
+	private JPanel panel_Graph_Button_Container;
     private Graph_Panel graph_Panel;
     private JLabel lbl_Title_Graph;
     
@@ -177,7 +181,6 @@ public class Utility_Panel extends JPanel {
         //==============================================================================================
         // UI CREATION - CONTENT PANELS - GRAPH
         //==============================================================================================
-
         panel_Graph_Container = new Rounded_Panel();
         panel_Graph_Container.setBackground(new Color(255, 255, 255));
         panel_Graph_Container.setBounds(21, 114, 466, 377);
@@ -185,27 +188,58 @@ public class Utility_Panel extends JPanel {
         add(panel_Graph_Container);
 
         lbl_Title_Graph = new JLabel("Monthly " + panel_title.replace("Consumption", "Expenses"));
-        lbl_Title_Graph.setHorizontalAlignment(SwingConstants.CENTER);
-        lbl_Title_Graph.setFont(new Font("Tahoma", Font.PLAIN, 25));
-        lbl_Title_Graph.setBounds(0, 0, 466, 32);
-        panel_Graph_Container.add(lbl_Title_Graph);
+	    lbl_Title_Graph.setHorizontalAlignment(SwingConstants.CENTER);
+	    lbl_Title_Graph.setFont(new Font("Tahoma", Font.PLAIN, 25));
+	    lbl_Title_Graph.setBounds(0, 0, 466, 32);
+	    panel_Graph_Container.add(lbl_Title_Graph);
 
-        panel_Graph_View = new Rounded_Panel(25, Color.BLACK, 0);
-        panel_Graph_View.setBackground(Color.WHITE);
-        panel_Graph_View.setBorder(new EmptyBorder(5, 5, 5, 5));
-        panel_Graph_View.setLayout(new BorderLayout());
-        panel_Graph_View.setBounds(10, 30, 446, 336);
-        panel_Graph_Container.add(panel_Graph_View);
+	    panel_Graph_View = new JPanel();
+	    panel_Graph_View.setBackground(Color.WHITE);
+	    panel_Graph_View.setBorder(new EmptyBorder(5, 5, 5, 5));
+	    panel_Graph_View.setLayout(new BorderLayout());
+	    panel_Graph_View.setBounds(10, 74, 446, 292);
+	    panel_Graph_Container.add(panel_Graph_View);
 
-        if (database_manager == null) {
-            JPanel placeholder = new JPanel();
-            placeholder.setBackground(Color.WHITE);
-            panel_Graph_View.add(placeholder);
-        } else {
-            graph_Panel = new Graph_Panel(database_manager.getReadingManager(), current_user, utility_type);
-            graph_Panel.setBackground(Color.WHITE);
-            panel_Graph_View.add(graph_Panel);
-        }
+	    panel_Graph_Button_Container = new JPanel();
+	    panel_Graph_Button_Container.setBounds(0, 37, 466, 46);
+	    panel_Graph_Container.add(panel_Graph_Button_Container);
+	    panel_Graph_Button_Container.setOpaque(false);
+	    panel_Graph_Button_Container.setPreferredSize(new Dimension(446, 70));
+	    panel_Graph_Button_Container.setLayout(null);
+
+	    lbl_Prev_Button = new JLabel("<");
+	    lbl_Prev_Button.setVerticalAlignment(SwingConstants.TOP);
+	    lbl_Prev_Button.setHorizontalAlignment(SwingConstants.CENTER);
+	    lbl_Prev_Button.setFont(new Font("Tahoma", Font.PLAIN, 35));
+	    lbl_Prev_Button.setBounds(59, -8, 80, 48);
+	    lbl_Prev_Button.setForeground(new Color(172, 172, 172));
+	    panel_Graph_Button_Container.add(lbl_Prev_Button);
+
+	    lbl_Next_Button = new JLabel(">");
+	    lbl_Next_Button.setVerticalAlignment(SwingConstants.TOP);
+	    lbl_Next_Button.setHorizontalAlignment(SwingConstants.CENTER);
+	    lbl_Next_Button.setFont(new Font("Tahoma", Font.PLAIN, 35));
+	    lbl_Next_Button.setBounds(315, -8, 80, 48);
+	    lbl_Next_Button.setForeground(new Color(172, 172, 172));
+	    panel_Graph_Button_Container.add(lbl_Next_Button);
+
+	    lbl_CurrentYear = new JLabel("<Year>");
+	    lbl_CurrentYear.setHorizontalAlignment(SwingConstants.CENTER);
+	    lbl_CurrentYear.setFont(new Font("Tahoma", Font.PLAIN, 20));
+	    lbl_CurrentYear.setBounds(170, 0, 111, 32);
+	    panel_Graph_Button_Container.add(lbl_CurrentYear);
+
+	    // Add graph panel or placeholder based on database manager availability
+	    if (database_manager == null) {
+	    	JPanel placeholder = new JPanel();
+	    	placeholder.setBackground(Color.WHITE);
+	    	panel_Graph_View.add(placeholder);
+	    } else {
+	    	graph_Panel = new Graph_Panel(database_manager.getReadingManager(), current_user, utility_type);
+	    	graph_Panel.setBackground(Color.WHITE);
+	    	panel_Graph_View.add(graph_Panel);
+	    }
+
 
         //==============================================================================================
         // UI CREATION - CONTENT PANELS - CURRENT READING 
@@ -353,6 +387,37 @@ public class Utility_Panel extends JPanel {
 
     
     private void create_Actions_Listeners() {
+    	lbl_Prev_Button.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+//				graph_Panel.previousYear();
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				lbl_Prev_Button.setForeground(new Color(90, 90, 90));
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				lbl_Prev_Button.setForeground(new Color(172, 172, 172));
+			}
+		});
+		
+		lbl_Next_Button.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+//				graph_Panel.nextYear();
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				lbl_Next_Button.setForeground(new Color(90, 90, 90));
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				lbl_Next_Button.setForeground(new Color(172, 172, 172));
+			}
+		});
         btn_Add_New_Reading.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

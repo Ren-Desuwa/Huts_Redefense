@@ -12,6 +12,8 @@ public class Reading {
 	private double rate;
 	private double total_price;
 	
+	public Reading() {}
+	
 	public Reading(int user_id, LocalDate date, String type, double reading, double rate, double total_price) {
 		this.user_id = user_id;
 		this.date = date;

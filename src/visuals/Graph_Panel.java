@@ -67,10 +67,10 @@ public class Graph_Panel extends JPanel {
      */
     public void initialize() {
         // Create rounded panels for each graph
-        Rounded_Panel electricity_container = new Rounded_Panel(25, Color.BLACK, 0);
-        Rounded_Panel water_container = new Rounded_Panel(25, Color.BLACK, 0);
-        Rounded_Panel gas_container = new Rounded_Panel(25, Color.BLACK, 0);
-        Rounded_Panel overall_container = new Rounded_Panel(25, Color.BLACK, 0);
+        JPanel electricity_container = new JPanel();
+        JPanel water_container = new JPanel();
+        JPanel gas_container = new JPanel();
+        JPanel overall_container = new JPanel();
 
         // Set layouts and properties
         electricity_container.setLayout(new BorderLayout());
@@ -113,7 +113,7 @@ public class Graph_Panel extends JPanel {
      * Initialize graph for single utility view
      */
     private void initializeSingleUtility() {
-        Rounded_Panel container = new Rounded_Panel(25, Color.BLACK, 0);
+        JPanel container = new JPanel();
         container.setLayout(new BorderLayout());
         container.setBackground(new Color(255, 255, 255));
 
