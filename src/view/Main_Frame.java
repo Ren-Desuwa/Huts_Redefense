@@ -230,8 +230,10 @@ public class Main_Frame extends JFrame {
 	    side_gas_button.addActionListener(e -> 
 	        card_layout.show(card_panel, GAS_PANEL));
 
-	    side_profile_button.addActionListener(e -> 
-	        card_layout.show(card_panel, PROFILE_PANEL));
+	    side_profile_button.addActionListener(e -> {
+	    	profile_panel.updateUserInfo(current_user);
+	        card_layout.show(card_panel, PROFILE_PANEL);
+	    });
 
 	    side_logout_button.addActionListener(e -> {
 	        int response = JOptionPane.showConfirmDialog(null, 
