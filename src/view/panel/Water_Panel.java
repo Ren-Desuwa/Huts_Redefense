@@ -57,7 +57,7 @@ public class Water_Panel extends JPanel {
 	
 	// Scroll panel fields
 	private JPanel Headerpanel;
-	private JPanel Line;
+	private JPanel panel_Line;
 	private JList<String> all_readings;
 	
 	// Graph panel fields
@@ -107,6 +107,9 @@ public class Water_Panel extends JPanel {
 	}
 	
 	private void initialize_UI() {
+	    //==============================================================================================
+		// UI CREATION - HEADER SECTION
+	    //==============================================================================================
 		panel_Title_Water_Consumption = new Rounded_Panel();
 		panel_Title_Water_Consumption.setBackground(new Color(255, 255, 255));
 		panel_Title_Water_Consumption.setLayout(null);
@@ -141,6 +144,10 @@ public class Water_Panel extends JPanel {
 		lbl_SubTitle_Water_Consmption.setBounds(20, 52, 393, 22);
 		panel_Title_Water_Consumption.add(lbl_SubTitle_Water_Consmption);
 		
+		//==============================================================================================
+		// UI CREATION - CONTENT PANELS - GRAPH
+		//==============================================================================================
+		
 		panel_Graph_Container = new Rounded_Panel();
 		panel_Graph_Container.setBackground(new Color(255, 255, 255));
 		panel_Graph_Container.setBounds(21, 114, 466, 377);
@@ -171,6 +178,74 @@ public class Water_Panel extends JPanel {
             panel_Graph_View.add(graph_Panel);
         }
         
+        //==============================================================================================
+        // UI CREATION - CONTENT PANELS - CURRENT READINGS
+        //==============================================================================================
+        
+        panel_Current_Reading = new Rounded_Panel();
+        panel_Current_Reading.setBackground(new Color(255, 255, 255));
+        panel_Current_Reading.setLayout(null);
+        panel_Current_Reading.setBounds(21, 509, 466, 168);
+        add(panel_Current_Reading);
+        
+        lbl_Title_Current_Reading = new JLabel("Current Reading");
+        lbl_Title_Current_Reading.setHorizontalAlignment(SwingConstants.CENTER);
+        lbl_Title_Current_Reading.setFont(new Font("Tahoma", Font.PLAIN, 25));
+        lbl_Title_Current_Reading.setBounds(42, 11, 393, 32);
+        panel_Current_Reading.add(lbl_Title_Current_Reading);
+        
+        lbl_Water_Reading_Value = new JLabel();
+        lbl_Water_Reading_Value.setHorizontalAlignment(SwingConstants.CENTER);
+        lbl_Water_Reading_Value.setFont(new Font("Tahoma", Font.BOLD, 20));
+        lbl_Water_Reading_Value.setBounds(144, 54, 100, 32);
+        panel_Current_Reading.add(lbl_Water_Reading_Value);
+        
+        lbl_Water_Reading_Unit = new JLabel("m³");
+        lbl_Water_Reading_Unit.setFont(new Font("Tahoma", Font.PLAIN, 18));
+        lbl_Water_Reading_Unit.setBounds(254, 55, 68, 32);
+        panel_Current_Reading.add(lbl_Water_Reading_Unit);
+        
+        lbl_Trend_Of_Reading_Water = new JLabel("No avilable data");
+		lbl_Trend_Of_Reading_Water.setHorizontalAlignment(SwingConstants.CENTER);
+		lbl_Trend_Of_Reading_Water.setFont(new Font("Dialog", Font.PLAIN, 15));
+		lbl_Trend_Of_Reading_Water.setBounds(97, 82, 261, 32);
+		panel_Current_Reading.add(lbl_Trend_Of_Reading_Water);
+        
+        btn_Add_New_Reading = new Rounded_Button("Add New Reading", 25);
+        btn_Add_New_Reading.setBackground(new Color(192, 192, 192));
+        btn_Add_New_Reading.setForeground(Color.BLACK);
+        btn_Add_New_Reading.setFont(new Font("Tahoma", Font.BOLD, 10));
+        btn_Add_New_Reading.setBounds(155, 125, 151, 34);
+        panel_Current_Reading.add(btn_Add_New_Reading);
+        
+        //==============================================================================================
+        // UI CREATION - CONTENT PANELS - TIPS
+        //==============================================================================================
+        
+        panel_tips = new Rounded_Panel();
+		panel_tips.setBackground(new Color(255, 255, 255));
+		panel_tips.setLayout(null);
+		panel_tips.setBounds(499, 509, 466, 168);
+		add(panel_tips);
+		
+		lbl_Title_Tips = new JLabel("Water Saving Tips");
+		lbl_Title_Tips.setHorizontalAlignment(SwingConstants.CENTER);
+		lbl_Title_Tips.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		lbl_Title_Tips.setForeground(new Color(79, 129, 189));
+		lbl_Title_Tips.setBounds(42, 11, 393, 32);
+		panel_tips.add(lbl_Title_Tips);
+		
+		lbl_Tips_1 = new JLabel("<html><ul><li>Turn off the tap while brushing your teeth to save gallons of water daily.</li></ul></html>");
+		lbl_Tips_1.setVerticalAlignment(SwingConstants.TOP);
+		lbl_Tips_1.setHorizontalAlignment(SwingConstants.LEFT);
+		lbl_Tips_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lbl_Tips_1.setBounds(-17, 38, 473, 119);
+		panel_tips.add(lbl_Tips_1);
+        
+        //==============================================================================================
+        // UI CREATION - CONTENT PANELS - RECENT READINGS
+        //==============================================================================================
+        
         panel_Recent_Readings_Container = new Rounded_Panel();
 		panel_Recent_Readings_Container.setBackground(new Color(255, 255, 255));
 		panel_Recent_Readings_Container.setBounds(497, 114, 466, 377);
@@ -181,6 +256,10 @@ public class Water_Panel extends JPanel {
 		scrollpane_Recent_Readings.setBounds(5, 5, 456, 366);
 		scrollpane_Recent_Readings.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		panel_Recent_Readings_Container.add(scrollpane_Recent_Readings);
+		
+		//===============================================================================================
+		// UI CREATION - SCROLLPANE HEADER
+		//===============================================================================================
 		
 		Headerpanel = new JPanel();
 		Headerpanel.setBackground(new Color(255, 255, 255));
@@ -218,66 +297,14 @@ public class Water_Panel extends JPanel {
 		lbl_Head_TotalPrice.setFont(new Font("Tahoma", Font.BOLD, 15));
 		Headerpanel.add(lbl_Head_TotalPrice);
 		
-		Line = new JPanel();
-		Line.setBorder(new LineBorder(new Color(0, 0, 0), 12));
-		Line.setBounds(10, 64, 446, 3);
-		Headerpanel.add(Line);
+		panel_Line = new JPanel();
+		panel_Line.setBorder(new LineBorder(new Color(0, 0, 0), 12));
+		panel_Line.setBounds(10, 64, 446, 3);
+		Headerpanel.add(panel_Line);
 		
-		panel_Current_Reading = new Rounded_Panel();
-		panel_Current_Reading.setBackground(new Color(255, 255, 255));
-		panel_Current_Reading.setLayout(null);
-		panel_Current_Reading.setBounds(21, 509, 466, 168);
-		add(panel_Current_Reading);
-		
-		lbl_Title_Current_Reading = new JLabel("Current Reading");
-		lbl_Title_Current_Reading.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_Title_Current_Reading.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		lbl_Title_Current_Reading.setBounds(42, 11, 393, 32);
-		panel_Current_Reading.add(lbl_Title_Current_Reading);
-		
-		lbl_Water_Reading_Value = new JLabel();
-		lbl_Water_Reading_Value.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_Water_Reading_Value.setFont(new Font("Tahoma", Font.BOLD, 20));
-		lbl_Water_Reading_Value.setBounds(144, 54, 100, 32);
-		panel_Current_Reading.add(lbl_Water_Reading_Value);
-		
-		lbl_Water_Reading_Unit = new JLabel("m³");
-		lbl_Water_Reading_Unit.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lbl_Water_Reading_Unit.setBounds(254, 55, 68, 32);
-		panel_Current_Reading.add(lbl_Water_Reading_Unit);
-		
-		btn_Add_New_Reading = new Rounded_Button("Add New Reading", 25);
-		btn_Add_New_Reading.setBackground(new Color(192, 192, 192));
-		btn_Add_New_Reading.setForeground(Color.BLACK);
-		btn_Add_New_Reading.setFont(new Font("Tahoma", Font.BOLD, 10));
-		btn_Add_New_Reading.setBounds(155, 125, 151, 34);
-		panel_Current_Reading.add(btn_Add_New_Reading);
-		
-		lbl_Trend_Of_Reading_Water = new JLabel("No avilable data");
-		lbl_Trend_Of_Reading_Water.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_Trend_Of_Reading_Water.setFont(new Font("Dialog", Font.PLAIN, 15));
-		lbl_Trend_Of_Reading_Water.setBounds(97, 82, 261, 32);
-		panel_Current_Reading.add(lbl_Trend_Of_Reading_Water);
-		
-		panel_tips = new Rounded_Panel();
-		panel_tips.setBackground(new Color(255, 255, 255));
-		panel_tips.setLayout(null);
-		panel_tips.setBounds(499, 509, 466, 168);
-		add(panel_tips);
-		
-		lbl_Title_Tips = new JLabel("Water Saving Tips");
-		lbl_Title_Tips.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_Title_Tips.setForeground(new Color(79, 129, 189));
-		lbl_Title_Tips.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		lbl_Title_Tips.setBounds(42, 11, 393, 32);
-		panel_tips.add(lbl_Title_Tips);
-		
-		lbl_Tips_1 = new JLabel("<html><ul><li>Turn off the tap while brushing your teeth to save gallons of water daily.</li></ul></html>");
-		lbl_Tips_1.setVerticalAlignment(SwingConstants.TOP);
-		lbl_Tips_1.setBounds(-17, 38, 473, 119);
-		panel_tips.add(lbl_Tips_1);
-		lbl_Tips_1.setHorizontalAlignment(SwingConstants.LEFT);
-		lbl_Tips_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		//===============================================================================================
+		// UI CREATION - TIMER
+		//===============================================================================================
 		
 		Timer clock_timer = new Timer(60_000, e -> {
             lbl_Time.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm a")));
