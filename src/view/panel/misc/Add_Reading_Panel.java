@@ -22,6 +22,7 @@ import visuals.Rounded_Panel;
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.SwingConstants;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -140,19 +141,19 @@ public class Add_Reading_Panel extends JDialog {
 		combo_box_Day = new JComboBox();
 		combo_box_Day.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		combo_box_Day.setBounds(10, 164, 120, 45);
-		combo_box_Day.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		combo_box_Day.setBorder(BorderFactory.createEmptyBorder());
 		contentPane.add(combo_box_Day);
 		
 		combo_box_Month = new JComboBox();
 		combo_box_Month.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		combo_box_Month.setBounds(157, 164, 120, 45);
-		combo_box_Month.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		combo_box_Month.setBorder(BorderFactory.createEmptyBorder());
 		contentPane.add(combo_box_Month);
 		
 		combo_box_Year = new JComboBox();
 		combo_box_Year.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		combo_box_Year.setBounds(306, 164, 120, 45);
-		combo_box_Year.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		combo_box_Year.setBorder(BorderFactory.createEmptyBorder());
 		contentPane.add(combo_box_Year);
 		
 		lbl_Reading = new JLabel("Reading");
