@@ -89,10 +89,10 @@ public class Graph_Panel extends JPanel {
         overall_graph = new Scrollable_Bar_Graph_Panel("Monthly Total Expenses", "Month", "Php");
 
         // Set bar colors
-        electricity_graph.setBarColor(new Color(213,205,0));
-        water_graph.setBarColor(new Color(79, 129, 189));
-        gas_graph.setBarColor(new Color(192, 80, 77));
-        overall_graph.setBarColor(new Color(128, 100, 162));
+        electricity_graph.setBarColor(new Color(255,206,0)); // Yellow for Electricity
+        water_graph.setBarColor(new Color(79, 129, 189)); // Blue for Water
+        gas_graph.setBarColor(new Color(192, 80, 77)); // Red for Gas
+        overall_graph.setBarColor(new Color(128, 100, 162)); // Purple for Overall
 
         // Add graphs to containers
         electricity_container.add(electricity_graph, BorderLayout.CENTER);
@@ -126,9 +126,9 @@ public class Graph_Panel extends JPanel {
 
         Scrollable_Bar_Graph_Panel utility_graph = new Scrollable_Bar_Graph_Panel("", "Month", units);
         Color barColor = switch (utility_type) {
-            case "electricity" -> new Color(213,205,0);
-            case "water" -> new Color(79, 129, 189);
-            case "gas" -> new Color(192, 80, 77);
+            case "electricity" -> new Color(255,206,0); // Yellow for Electricity
+            case "water" -> new Color(79, 129, 189); // Blue for Water
+            case "gas" -> new Color(192, 80, 77); // Red for Gas
             default -> Color.GRAY;
         };
         utility_graph.setBarColor(barColor);

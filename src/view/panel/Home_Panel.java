@@ -353,17 +353,18 @@ public class Home_Panel extends JPanel {
         panel_Tip_1 = new Rounded_Panel();
         panel_Tip_1.setLayout(null);
         panel_Tip_1.setBounds(10, 11, 306, 122);
+        panel_Tip_1.setBackground(new Color(220, 220, 220));
         panel_Tips.add(panel_Tip_1);
         
-        lbl_Tip_Type_1 = new JLabel("Money Saving Tips");
+        lbl_Tip_Type_1 = new JLabel("Tip 1");
         lbl_Tip_Type_1.setForeground(new Color(0, 128, 255));
         lbl_Tip_Type_1.setVerticalAlignment(SwingConstants.TOP);
         lbl_Tip_Type_1.setHorizontalAlignment(SwingConstants.LEFT);
-        lbl_Tip_Type_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
+        lbl_Tip_Type_1.setFont(new Font("Tahoma", Font.BOLD, 20));
         lbl_Tip_Type_1.setBounds(10, 11, 243, 36);
         panel_Tip_1.add(lbl_Tip_Type_1);
         
-        lbl_Tip_1 = new JLabel("Electricity Tip - Replace traditional light bulbs with LED bulbs. They use up to 75% less energy and last much longer.");
+        lbl_Tip_1 = new JLabel("<html>Info</html>");
         lbl_Tip_1.setBounds(20, 44, 273, 67);
         lbl_Tip_1.setHorizontalAlignment(SwingConstants.LEFT);
         lbl_Tip_1.setFont(new Font("Tahoma", Font.PLAIN, 17));
@@ -376,17 +377,18 @@ public class Home_Panel extends JPanel {
         panel_Tip_2 = new Rounded_Panel();
         panel_Tip_2.setLayout(null);
         panel_Tip_2.setBounds(326, 11, 291, 122);
+        panel_Tip_2.setBackground(new Color(220, 220, 220));
         panel_Tips.add(panel_Tip_2);
         
-        lbl_Tip_Type_2 = new JLabel("Electricity Tip");
+        lbl_Tip_Type_2 = new JLabel("Tip 2");
         lbl_Tip_Type_2.setVerticalAlignment(SwingConstants.TOP);
         lbl_Tip_Type_2.setHorizontalAlignment(SwingConstants.LEFT);
-        lbl_Tip_Type_2.setForeground(new Color(0, 128, 255));
-        lbl_Tip_Type_2.setFont(new Font("Tahoma", Font.PLAIN, 20));
+        lbl_Tip_Type_2.setForeground(new Color(235, 235, 0));
+        lbl_Tip_Type_2.setFont(new Font("Tahoma", Font.BOLD, 20));
         lbl_Tip_Type_2.setBounds(10, 11, 243, 36);
         panel_Tip_2.add(lbl_Tip_Type_2);
         
-        lbl_Tip_2 = new JLabel("<html>Use oven and stovetop efficiently by matching pot size to burner size.</html>");
+        lbl_Tip_2 = new JLabel("<html>Info</html>");
         lbl_Tip_2.setHorizontalAlignment(SwingConstants.LEFT);
         lbl_Tip_2.setFont(new Font("Tahoma", Font.PLAIN, 17));
         lbl_Tip_2.setBounds(20, 44, 268, 67);
@@ -399,17 +401,18 @@ public class Home_Panel extends JPanel {
         panel_Tip_3 = new Rounded_Panel();
         panel_Tip_3.setLayout(null);
         panel_Tip_3.setBounds(627, 11, 307, 122);
+        panel_Tip_3.setBackground(new Color(220, 220, 220));
         panel_Tips.add(panel_Tip_3);
 
-        lbl_Tip_Type_3 = new JLabel("Electricity Tip");
+        lbl_Tip_Type_3 = new JLabel("Tip 3");
         lbl_Tip_Type_3.setVerticalAlignment(SwingConstants.TOP);
         lbl_Tip_Type_3.setHorizontalAlignment(SwingConstants.LEFT);
         lbl_Tip_Type_3.setForeground(new Color(0, 128, 255));
-        lbl_Tip_Type_3.setFont(new Font("Tahoma", Font.PLAIN, 20));
+        lbl_Tip_Type_3.setFont(new Font("Tahoma", Font.BOLD, 20));
         lbl_Tip_Type_3.setBounds(10, 11, 243, 36);
         panel_Tip_3.add(lbl_Tip_Type_3);
 
-        lbl_Tip_3 = new JLabel("<html>Use oven and stovetop efficiently by matching pot size to burner size.</html>");
+        lbl_Tip_3 = new JLabel("<html>Info</html>");
         lbl_Tip_3.setHorizontalAlignment(SwingConstants.LEFT);
         lbl_Tip_3.setFont(new Font("Tahoma", Font.PLAIN, 17));
         lbl_Tip_3.setBounds(20, 44, 277, 67);
@@ -430,10 +433,13 @@ public class Home_Panel extends JPanel {
         Timer tips_timer = new Timer(30_000, e -> {
         	lbl_Tip_1.setText("<html>" + utility_Tips_Manager.getRandomTip() + "</html>");
         	lbl_Tip_Type_1.setText(utility_Tips_Manager.getType());
+        	lbl_Tip_Type_1.setForeground(utility_Tips_Manager.setcolor());
         	lbl_Tip_2.setText("<html>" + utility_Tips_Manager.getRandomTip() + "</html>");
         	lbl_Tip_Type_2.setText(utility_Tips_Manager.getType());
+        	lbl_Tip_Type_2.setForeground(utility_Tips_Manager.setcolor());
         	lbl_Tip_3.setText("<html>" + utility_Tips_Manager.getRandomTip() + "</html>");
         	lbl_Tip_Type_3.setText(utility_Tips_Manager.getType());
+        	lbl_Tip_Type_3.setForeground(utility_Tips_Manager.setcolor());
         });
         tips_timer.setInitialDelay(0); // Start immediately
         tips_timer.start();
