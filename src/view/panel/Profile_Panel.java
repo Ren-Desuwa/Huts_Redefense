@@ -393,6 +393,10 @@ public class Profile_Panel extends JPanel {
     
     private void createActionListeners() {
         btn_Change_Password.addActionListener(e -> createChangePasswordWindow());
+        btn_Change_Password.addMouseListener(new MouseAdapter() {
+			public void mouseEntered(MouseEvent e) {btn_Change_Password.setBackground(new Color(128, 128, 128));}
+			public void mouseExited(MouseEvent e) {btn_Change_Password.setBackground(new Color(192, 192, 192));}
+		});
 
         lbl_Edit_Profile.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {openEditProfileWindow();}

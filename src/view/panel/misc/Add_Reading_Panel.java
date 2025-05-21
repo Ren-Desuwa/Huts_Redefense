@@ -1,7 +1,5 @@
 package view.panel.misc;
 
-
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -23,22 +21,24 @@ import visuals.Rounded_Panel;
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.SwingConstants;
-import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFormattedTextField;
 
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
+import java.text.NumberFormat;
 
 public class Add_Reading_Panel extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private Database_Manager database_manager;
+	private NumberFormat numberFormat = NumberFormat.getNumberInstance();
 	private User current_user;
 	private String readingType;
 	private JPanel parentPanel;
@@ -46,16 +46,19 @@ public class Add_Reading_Panel extends JDialog {
 	private Water_Panel waterpanel;
 	private Gas_Panel gaspanel;
 	
-	private JTextField tf_Reading;
-	private JTextField tf_Rate;
-	private JTextField tf_TotalPrice;
+	private JFormattedTextField tf_Reading;
+	private JFormattedTextField tf_Rate;
+	private JFormattedTextField tf_TotalPrice;
 	private JPanel panel_Electricity_Consumption_Title;
 	private JLabel lbl_Date;
 	private JLabel lbl_Title_AddNewReading;
 	private JLabel lbl_Date_1;
-	private JComboBox cB_Day;
-	private JComboBox cB_Month;
-	private JComboBox cB_Year;
+	@SuppressWarnings("rawtypes")
+	private JComboBox combo_box_Day; 
+	@SuppressWarnings("rawtypes")
+	private JComboBox combo_box_Month;
+	@SuppressWarnings("rawtypes")
+	private JComboBox combo_box_Year;
 	private JLabel lbl_Reading;
 	private JLabel lbl_Rate;
 	private JLabel lbl_TotalPrice;
@@ -79,6 +82,14 @@ public class Add_Reading_Panel extends JDialog {
 		setTitle("Add Reading");
 		setResizable(false);
 		
+		initialize_UI();
+		create_Action_Listeners();
+
+		setup_data();
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private void initialize_UI() {
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(213, 213, 213));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -138,24 +149,24 @@ public class Add_Reading_Panel extends JDialog {
 		lbl_Year.setBounds(306, 143, 114, 22);
 		contentPane.add(lbl_Year);
 		
-		cB_Day = new JComboBox();
-		cB_Day.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		cB_Day.setBounds(10, 164, 120, 45);
-		cB_Day.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		contentPane.add(cB_Day);
 		
-		cB_Month = new JComboBox();
-		cB_Month.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		cB_Month.setBounds(157, 164, 120, 45);
-		cB_Month.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		contentPane.add(cB_Month);
+		combo_box_Day = new JComboBox();
+		combo_box_Day.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		combo_box_Day.setBounds(10, 164, 120, 45);
+		combo_box_Day.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		contentPane.add(combo_box_Day);
 		
-		cB_Year = new JComboBox();
-		cB_Year.setFont(new Font("Tahoma", Font.PLAIN, 17));
-		cB_Year.setBounds(306, 164, 120, 45);
-		cB_Year.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		contentPane.add(cB_Year);
-		Setup_Date();
+		combo_box_Month = new JComboBox();
+		combo_box_Month.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		combo_box_Month.setBounds(157, 164, 120, 45);
+		combo_box_Month.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		contentPane.add(combo_box_Month);
+		
+		combo_box_Year = new JComboBox();
+		combo_box_Year.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		combo_box_Year.setBounds(306, 164, 120, 45);
+		combo_box_Year.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		contentPane.add(combo_box_Year);
 		
 		lbl_Reading = new JLabel("Reading");
 		lbl_Reading.setHorizontalAlignment(SwingConstants.LEFT);
@@ -163,7 +174,8 @@ public class Add_Reading_Panel extends JDialog {
 		lbl_Reading.setBounds(10, 216, 163, 22);
 		contentPane.add(lbl_Reading);
 		
-		tf_Reading = new JTextField();
+		tf_Reading = new JFormattedTextField(numberFormat);
+		tf_Reading.setText("Enter Reading");
 		tf_Reading.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		
 		tf_Reading.setColumns(10);
@@ -176,22 +188,10 @@ public class Add_Reading_Panel extends JDialog {
 		lbl_Rate.setBounds(10, 297, 141, 22);
 		contentPane.add(lbl_Rate);
 		
-		tf_Rate = new JTextField("Enter Rate");
+		tf_Rate = new JFormattedTextField(numberFormat);
+		tf_Rate.setText("Enter Rate");
 		tf_Rate.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		tf_Rate.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				if (tf_Rate.getText().equals("Enter Rate")) {
-					tf_Rate.setText("");
-				}
-			}
-			@Override
-			public void focusLost(FocusEvent e) {
-				if (tf_Rate.getText().isEmpty()) {
-					tf_Rate.setText("Enter Rate");
-				}
-			}
-		});
+		
 		tf_Rate.setColumns(10);
 		tf_Rate.setBounds(10, 321, 416, 45);
 		contentPane.add(tf_Rate);
@@ -202,22 +202,10 @@ public class Add_Reading_Panel extends JDialog {
 		lbl_TotalPrice.setBounds(10, 377, 192, 22);
 		contentPane.add(lbl_TotalPrice);
 		
-		tf_TotalPrice = new JTextField("Total Price");
+		tf_TotalPrice = new JFormattedTextField(numberFormat);
+		tf_TotalPrice.setText("Total Price");
 		tf_TotalPrice.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		tf_TotalPrice.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				if (tf_TotalPrice.getText().equals("Total Price")) {
-					tf_TotalPrice.setText("");
-				}
-			}
-			@Override
-			public void focusLost(FocusEvent e) {
-				if (tf_TotalPrice.getText().isEmpty()) {
-					tf_TotalPrice.setText("Total Price");
-				}
-			}
-		});
+		
 		tf_TotalPrice.setColumns(10);
 		tf_TotalPrice.setBounds(10, 401, 416, 45);
 		contentPane.add(tf_TotalPrice);
@@ -225,21 +213,7 @@ public class Add_Reading_Panel extends JDialog {
 		btn_Add =  new Rounded_Button("Add", 25);
 		btn_Add.setBackground(new Color(182, 182, 182));
 		btn_Add.setForeground(Color.BLACK);
-		btn_Add.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				addReading();
-			}
-			@Override
-            public void mouseEntered(MouseEvent e) {
-				btn_Add.setBackground(new Color(150, 150, 150));
-            }
-            
-            @Override
-            public void mouseExited(MouseEvent e) {
-            	btn_Add.setBackground(new Color(182, 182, 182));
-            }
-		});
+		
 		btn_Add.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btn_Add.setBounds(335, 458, 91, 34);
 		contentPane.add(btn_Add);
@@ -247,112 +221,107 @@ public class Add_Reading_Panel extends JDialog {
 		btn_Cancel = new Rounded_Button("Cancel", 25);
 		btn_Cancel.setBackground(new Color(182, 182, 182));
 		btn_Cancel.setForeground(Color.BLACK);
-		btn_Cancel.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				cancelAddReading();
-			}
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btn_Cancel.setBackground(new Color(150, 150, 150));
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btn_Cancel.setBackground(new Color(182, 182, 182));
-			}
-		});
+		
 		btn_Cancel.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btn_Cancel.setBounds(234, 458, 91, 34);
 		contentPane.add(btn_Cancel);
-		
-		setLabels();
 	}
 	
-	private void Setup_Date() {
+	private void create_Action_Listeners() {
+		
+		tf_Rate.addFocusListener(new FocusAdapter() {
+			@Override public void focusGained(FocusEvent e) {if (tf_Rate.getText().equals("Enter Rate")) tf_Rate.setText("");}
+			@Override public void focusLost(FocusEvent e) {if (tf_Rate.getText().isEmpty()) tf_Rate.setText("Enter Rate");}
+		});
+		
+		tf_TotalPrice.addFocusListener(new FocusAdapter() {
+			@Override public void focusGained(FocusEvent e) {if (tf_TotalPrice.getText().equals("Total Price")) tf_TotalPrice.setText("");}
+			@Override public void focusLost(FocusEvent e) {if (tf_TotalPrice.getText().isEmpty()) tf_TotalPrice.setText("Total Price");}
+		});
+		
+		btn_Add.addMouseListener(new MouseAdapter() {
+			@Override public void mouseClicked(MouseEvent e) {addReading();}
+			@Override public void mouseEntered(MouseEvent e) {btn_Add.setBackground(new Color(150, 150, 150));}
+            @Override public void mouseExited(MouseEvent e) {btn_Add.setBackground(new Color(182, 182, 182));}
+		});
+		
+		btn_Cancel.addMouseListener(new MouseAdapter() {
+			@Override public void mouseClicked(MouseEvent e) {cancelAddReading();}
+			@Override public void mouseEntered(MouseEvent e) {btn_Cancel.setBackground(new Color(150, 150, 150));}
+			@Override public void mouseExited(MouseEvent e) {btn_Cancel.setBackground(new Color(182, 182, 182));}
+		});
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void setup_data() {
 		LocalDate now = LocalDate.now();
 		int currentDay = now.getDayOfMonth();
 		int currentMonth = now.getMonthValue();
 		int currentYear = now.getYear();
 		
 		for (int i = 1975; i <= currentYear; i++) {
-		    cB_Year.addItem(i);
+		    combo_box_Year.addItem(i);
 		}
-		cB_Year.setSelectedItem(currentYear);
+		combo_box_Year.setSelectedItem(currentYear);
 
-		for (int i = 1; i <= (cB_Year.getSelectedItem().equals(currentYear) ? currentMonth : 12); i++) {
-		    cB_Month.addItem(i);
+		for (int i = 1; i <= (combo_box_Year.getSelectedItem().equals(currentYear) ? currentMonth : 12); i++) {
+		    combo_box_Month.addItem(i);
 		}
-		cB_Month.setSelectedItem(currentMonth);
+		combo_box_Month.setSelectedItem(currentMonth);
 
-		int maxDay = (cB_Year.getSelectedItem().equals(currentYear) && cB_Month.getSelectedItem().equals(currentMonth)) ? currentDay : now.withMonth((int)cB_Month.getSelectedItem()).lengthOfMonth();
+		int maxDay = (combo_box_Year.getSelectedItem().equals(currentYear) && combo_box_Month.getSelectedItem().equals(currentMonth)) ? currentDay : now.withMonth((int)combo_box_Month.getSelectedItem()).lengthOfMonth();
 		for (int i = 1; i <= maxDay; i++) {
-		    cB_Day.addItem(i);
+		    combo_box_Day.addItem(i);
 		}
-		cB_Day.setSelectedItem(currentDay);
+		combo_box_Day.setSelectedItem(currentDay);
+		
+		configureReadingUI(readingType);
 	}
 	
-	private void setLabels() {
-		if (readingType.equals("electricity")) {
-			setTitle("Edit Electricity Reading");
-			lbl_Reading.setText("Reading (kWh)");
-			
-			tf_Reading.setText("Enter Reading (kWh)");
-			tf_Reading.addFocusListener(new FocusAdapter() {
-				@Override
-				public void focusGained(FocusEvent e) {
-					if (tf_Reading.getText().equals("Enter Reading (kWh)")) {
-						tf_Reading.setText("");
-					}
-				}
-				@Override
-				public void focusLost(FocusEvent e) {
-					if (tf_Reading.getText().isEmpty()) {
-						tf_Reading.setText("Enter Reading (kWh)");
-					}
-				}
-			});
-		} 
-		if (readingType.equals("water")) {
-			setTitle("Edit Water Reading");
-			lbl_Reading.setText("Reading (m³)");
-			
-			tf_Reading.setText("Enter Reading (m³)");
-			tf_Reading.addFocusListener(new FocusAdapter() {
-				@Override
-				public void focusGained(FocusEvent e) {
-					if (tf_Reading.getText().equals("Enter Reading (m³)")) {
-						tf_Reading.setText("");
-					}
-				}
-				@Override
-				public void focusLost(FocusEvent e) {
-					if (tf_Reading.getText().isEmpty()) {
-						tf_Reading.setText("Enter Reading (m³)");
-					}
-				}
-			});
-		}
-		if (readingType.equals("gas")) {
-			setTitle("Edit Gas Reading");
-			lbl_Reading.setText("Reading (Qty)");
-			
-			tf_Reading.setText("Enter Reading (Qty)");
-			tf_Reading.addFocusListener(new FocusAdapter() {
-				@Override
-				public void focusGained(FocusEvent e) {
-					if (tf_Reading.getText().equals("Enter Reading (Qty)")) {
-						tf_Reading.setText("");
-					}
-				}
-				@Override
-				public void focusLost(FocusEvent e) {
-					if (tf_Reading.getText().isEmpty()) {
-						tf_Reading.setText("Enter Reading (Qty)");
-					}
-				}
-			});
-		}
+	private void configureReadingUI(String readingType) {
+	    String title;
+	    String label;
+	    String placeholder;
+
+	    switch (readingType.toLowerCase()) {
+	        case "electricity":
+	            title = "Edit Electricity Reading";
+	            label = "Reading (kWh)";
+	            placeholder = "Enter Reading (kWh)";
+	            break;
+	        case "water":
+	            title = "Edit Water Reading";
+	            label = "Reading (m³)";
+	            placeholder = "Enter Reading (m³)";
+	            break;
+	        case "gas":
+	            title = "Edit Gas Reading";
+	            label = "Reading (Qty)";
+	            placeholder = "Enter Reading (Qty)";
+	            break;
+	        default:
+	            throw new IllegalArgumentException("Unknown reading type: " + readingType);
+	    }
+
+	    setTitle(title);
+	    lbl_Reading.setText(label);
+	    tf_Reading.setText(placeholder);
+	    
+	    tf_Reading.addFocusListener(new FocusAdapter() {
+	        @Override
+	        public void focusGained(FocusEvent e) {
+	            if (tf_Reading.getText().equals(placeholder)) {
+	                tf_Reading.setText("");
+	            }
+	        }
+
+	        @Override
+	        public void focusLost(FocusEvent e) {
+	            if (tf_Reading.getText().isEmpty()) {
+	                tf_Reading.setText(placeholder);
+	            }
+	        }
+	    });
 	}
 	
 	public void cancelAddReading() {
@@ -361,12 +330,19 @@ public class Add_Reading_Panel extends JDialog {
 		String totalPrice = tf_TotalPrice.getText();
 		String Type = readingType;
 		
-		if (Type.equals("electricity")) {
-			reading = reading.replace("Enter Reading (kWh)", "Enter Reading");
-		} else if (Type.equals("water")) {
-			reading = reading.replace("Enter Reading (m³)", "Enter Reading");
-		} else if (Type.equals("gas")) {
-			reading = reading.replace("Enter Reading (Qty)", "Enter Reading");
+		switch (Type) {
+			case "electricity":
+				reading = reading.replace("Enter Reading (kWh)", "Enter Reading");
+				break;
+			case "water":
+				reading = reading.replace("Enter Reading (m³)", "Enter Reading");
+				break;
+			case "gas":
+				reading = reading.replace("Enter Reading (Qty)", "Enter Reading");
+				break;
+			default:
+				System.out.println("Invalid reading type"); // Handle error
+				break;
 		}
 		
 		if (!reading.equals("Enter Reading") || !rate.equals("Enter Rate") || !totalPrice.equals("Total Price")) {
@@ -383,7 +359,7 @@ public class Add_Reading_Panel extends JDialog {
 		String reading = tf_Reading.getText();
 		String rate = tf_Rate.getText();
 		String totalPrice = tf_TotalPrice.getText();
-		LocalDate date = LocalDate.of((int)cB_Year.getSelectedItem(), (int)cB_Month.getSelectedItem(), (int)cB_Day.getSelectedItem());
+		LocalDate date = LocalDate.of((int)combo_box_Year.getSelectedItem(), (int)combo_box_Month.getSelectedItem(), (int)combo_box_Day.getSelectedItem());
 		
 		if (reading.equals("Enter Reading") || rate.equals("Enter Rate") || totalPrice.equals("Total Price")) {
 			javax.swing.JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);

@@ -3,7 +3,6 @@ package main;
 import java.awt.EventQueue;
 
 import database.Database_Manager;
-import model.Reading;
 import model.User;
 import view.login.*;
 import view.Main_Frame;
@@ -21,8 +20,8 @@ public class Launcher {
 					User RenUser = database_manager.getUserManager().getUserById(1);
 					// Create and show the main window
 //					Main_Frame window = new Main_Frame(database_manager,Test_User);
-					Main_Frame window = new Main_Frame(database_manager,Ren);
-//					Main_Frame window = new Main_Frame(database_manager,RenUser);
+//					Main_Frame window = new Main_Frame(database_manager,Ren);
+					Main_Frame window = new Main_Frame(database_manager,RenUser);
 //					Log_In_Window window = new Log_In_Window(database_manager);
 					
 					window.setVisible(true);
