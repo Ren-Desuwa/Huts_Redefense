@@ -42,7 +42,7 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
     // Color scheme
     private Color barColor = new Color(79, 129, 189); // Blue color for bars
     private Color textColor = Color.BLACK;
-    private Color backgroundColor = Color.WHITE;
+    private Color backgroundColor = new Color(0,0,0,0); // Transparent background
     
     /**
      * Default constructor for WindowBuilder compatibility
@@ -75,7 +75,7 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
      */
     private void initializeUI() {
         setLayout(new BorderLayout());
-        setBackground(new Color(255, 255, 255));
+        setBackground(new Color(0,0,0,0)); // Transparent background
         
         // Create header panel for title and series name (fixed at the top)
         headerPanel = new JPanel() {
@@ -123,6 +123,7 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
         JPanel contentPanel = new JPanel(new BorderLayout());
         contentPanel.add(axisLabelPanel, BorderLayout.WEST);
         contentPanel.add(scrollPane, BorderLayout.CENTER);
+        contentPanel.setBackground(backgroundColor);
         
         // Add components to the main panel
         add(headerPanel, BorderLayout.NORTH);

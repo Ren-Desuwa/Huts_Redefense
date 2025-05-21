@@ -39,6 +39,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Electricity_Panel extends JPanel {
 
@@ -90,6 +92,10 @@ public class Electricity_Panel extends JPanel {
 	private JLabel lbl_Title_Tips;
 	private JLabel lbl_Tips_1;
 	private JLabel lbl_Trend_Of_Reading_Electricity;
+	private JLabel lbl_Prev_Button;
+	private JLabel lbl_Next_Button;
+	private JLabel lbl_CurrentYear;
+	private JPanel panel_Graph_Button_Container;
 	
 	
 	/**
@@ -157,18 +163,48 @@ public class Electricity_Panel extends JPanel {
 	    panel_Graph_Container.setBounds(21, 114, 466, 377);
 	    panel_Graph_Container.setLayout(null);
 	    add(panel_Graph_Container);
-
+	    
 	    lbl_Title_Gaph = new JLabel("Monthly Electricity Expenses");
 	    lbl_Title_Gaph.setHorizontalAlignment(SwingConstants.CENTER);
 	    lbl_Title_Gaph.setFont(new Font("Tahoma", Font.PLAIN, 25));
-	    lbl_Title_Gaph.setBounds(0, 0, 466, 32);
+	    lbl_Title_Gaph.setBounds(0, 5, 466, 32);
 	    panel_Graph_Container.add(lbl_Title_Gaph);
+	    
+	    panel_Graph_Button_Container = new JPanel();
+	    panel_Graph_Button_Container.setBounds(0, 37, 466, 46);
+	    panel_Graph_Container.add(panel_Graph_Button_Container);
+        panel_Graph_Button_Container.setOpaque(false);
+	    panel_Graph_Button_Container.setPreferredSize(new Dimension(446, 70));
+	    panel_Graph_Button_Container.setLayout(null);
+	    
+	    lbl_Prev_Button = new JLabel("<");
+	    lbl_Prev_Button.setVerticalAlignment(SwingConstants.TOP);
+	    lbl_Prev_Button.setHorizontalAlignment(SwingConstants.CENTER);
+	    lbl_Prev_Button.setFont(new Font("Tahoma", Font.PLAIN, 35));
+	    lbl_Prev_Button.setBounds(59, -8, 80, 48);
+	    lbl_Prev_Button.setForeground(new Color(172, 172, 172));
+	    panel_Graph_Button_Container.add(lbl_Prev_Button);
+	    
+	    lbl_Next_Button = new JLabel(">");
+	    lbl_Next_Button.setVerticalAlignment(SwingConstants.TOP);
+	    lbl_Next_Button.setHorizontalAlignment(SwingConstants.CENTER);
+	    lbl_Next_Button.setFont(new Font("Tahoma", Font.PLAIN, 35));
+	    lbl_Next_Button.setBounds(315, -8, 80, 48);
+	    lbl_Next_Button.setForeground(new Color(172, 172, 172));
+	    panel_Graph_Button_Container.add(lbl_Next_Button);
+	    
+	    lbl_CurrentYear = new JLabel("<Year>");
+	    lbl_CurrentYear.setHorizontalAlignment(SwingConstants.CENTER);
+	    lbl_CurrentYear.setFont(new Font("Tahoma", Font.PLAIN, 20));
+	    lbl_CurrentYear.setBounds(170, 0, 111, 32);
+	    panel_Graph_Button_Container.add(lbl_CurrentYear);
 
 	    panel_Graph_View = new Rounded_Panel(25, Color.BLACK, 0);
-	    panel_Graph_View.setBackground(Color.WHITE);
+	    panel_Graph_View.setOpaque(false);
+	    panel_Graph_View.setBackground(new Color(0, 0, 0, 0));
 	    panel_Graph_View.setBorder(new EmptyBorder(5, 5, 5, 5));
 	    panel_Graph_View.setLayout(new BorderLayout());
-	    panel_Graph_View.setBounds(10, 30, 446, 336);
+	    panel_Graph_View.setBounds(10, 5, 446, 361);
 	    panel_Graph_Container.add(panel_Graph_View);
 
 	    if (database_manager == null) {
@@ -310,7 +346,7 @@ public class Electricity_Panel extends JPanel {
 	    //==============================================================================================
 
 	    Timer clock_timer = new Timer(60_000, e -> {
-	        lbl_Time.setText(LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm a")));
+	        lbl_Time.setText(LocalTime.now().format(DateTimeFormatter.ofPattern(":mm a")));
 	    });
 	    LocalTime now = LocalTime.now();
 	    int initialDelay = (60 - now.getSecond()) * 1000 - now.getNano() / 1_000_000;
@@ -327,6 +363,39 @@ public class Electricity_Panel extends JPanel {
 
 	
 	private void create_Actions_Listeners() {
+		
+		lbl_Prev_Button.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+//				graph_Panel.previousYear();
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				lbl_Prev_Button.setForeground(new Color(90, 90, 90));
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				lbl_Prev_Button.setForeground(new Color(172, 172, 172));
+			}
+		});
+		
+		lbl_Next_Button.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+//				graph_Panel.nextYear();
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				lbl_Next_Button.setForeground(new Color(90, 90, 90));
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				lbl_Next_Button.setForeground(new Color(172, 172, 172));
+			}
+		});
+		
 		btn_Add_New_Reading.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
