@@ -77,9 +77,6 @@ public class Edit_Reading_Panel extends JDialog {
 	private JLabel lblTime;
 	
 	
-		/**
-		 * @wbp.parser.constructor
-		 */
 		public Edit_Reading_Panel(JFrame parent, Database_Manager database_manager, User current_user, JPanel panel_type, String type) {
 		    // Same as original constructor
 		    super(parent, "Edit Reading", true);
