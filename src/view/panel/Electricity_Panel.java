@@ -18,7 +18,7 @@ public class Electricity_Panel extends Utility_Panel {
             "Track and manage your Energy usage",   // panel subtitle
             "kWh",                               // reading unit
             "Electricity Saving Tips",                   // tips title
-            new Color(255, 77, 0)                // tips title color (red-orange)
+            new Color(255, 167, 0)                // tips title color (yellow-orange)
         );
     }
 }
