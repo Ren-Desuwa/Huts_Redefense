@@ -502,24 +502,38 @@ public class Reading_Manager {
      */
     public Map<Month, Double> groupReadings_By_Month(List<Reading> readings, int year, boolean use_price) {
         Map<Month, Double> monthly_data = new HashMap<>();
-        
-        if (readings != null) {
-            for (Reading reading : readings) {
-                LocalDate reading_date = reading.getDate();
-                
-                // Only process readings from the selected year
-                if (reading_date.getYear() == year) {
-                    Month month = reading_date.getMonth();
-                    double value = use_price ? reading.getTotal_Price() : reading.getReading();
-                    
-                    // Add value to existing month or create new entry
-                    monthly_data.put(month, monthly_data.getOrDefault(month, 0.0) + value);
-                }
+
+        if (readings == null || readings.isEmpty()) {
+            return monthly_data;
+        }
+
+        // Track the earliest and latest months that have readings
+        int earliestMonth = 12;
+        int latestMonth = 1;
+
+        for (Reading reading : readings) {
+            LocalDate date = reading.getDate();
+            if (date.getYear() == year) {
+                int monthValue = date.getMonthValue();
+                Month month = date.getMonth();
+                double value = use_price ? reading.getTotal_Price() : reading.getReading();
+
+                monthly_data.put(month, monthly_data.getOrDefault(month, 0.0) + value);
+
+                if (monthValue < earliestMonth) earliestMonth = monthValue;
+                if (monthValue > latestMonth) latestMonth = monthValue;
             }
         }
-        
+
+        // Fill in missing months within the range
+        for (int m = earliestMonth; m <= latestMonth; m++) {
+            Month month = Month.of(m);
+            monthly_data.putIfAbsent(month, 0.0);
+        }
+
         return monthly_data;
     }
+
 
     // Update the getMonthly_Utility_Data method to include year parameter
     public Map<Month, Double> getMonthly_Utility_Data(User user, String utility_type, int months, int year, boolean use_price) 
@@ -619,57 +633,48 @@ public class Reading_Manager {
      * @throws SQLException If database operation fails
      */
     public String getTrend(User user, String type) throws SQLException {
-        LocalDate current_date = LocalDate.now();
-        LocalDate first_day_current_month = current_date.withDayOfMonth(1);
-        LocalDate first_day_previous_month = first_day_current_month.minusMonths(1);
-        LocalDate last_day_previous_month = first_day_current_month.minusDays(1);
+        String sql = """
+            SELECT strftime('%Y-%m', date) AS month, SUM(reading) as total
+            FROM readings
+            WHERE user_id = ? AND type = ?
+            GROUP BY month
+            ORDER BY month DESC
+            LIMIT 2
+        """;
 
-        String sql_current_month = "SELECT SUM(reading) as total FROM readings WHERE user_id = ? AND type = ? AND date >= ? AND date <= ?";
-        String sql_previous_month = "SELECT SUM(reading) as total FROM readings WHERE user_id = ? AND type = ? AND date >= ? AND date <= ?";
+        try (PreparedStatement statement = database_connection.prepareStatement(sql)) {
+            statement.setInt(1, user.getUser_Id());
+            statement.setString(2, type);
 
-        try {
-            double current_month_total = 0;
-            double previous_month_total = 0;
+            try (ResultSet rs = statement.executeQuery()) {
+                List<Double> totals = new ArrayList<>();
+                while (rs.next()) {
+                    totals.add(rs.getDouble("total"));
+                }
 
-            // Get current month total
-            try (PreparedStatement statement = database_connection.prepareStatement(sql_current_month)) {
-                statement.setInt(1, user.getUser_Id());
-                statement.setString(2, type);
-                statement.setString(3, first_day_current_month.toString());
-                statement.setString(4, current_date.toString());
-                try (ResultSet result_set = statement.executeQuery()) {
-                    if (result_set.next() && result_set.getObject("total") != null) {
-                        current_month_total = result_set.getDouble("total");
-                    }
+                if (totals.size() < 2) {
+                    last_trend_percentage = 0;
+                    return "Not enough monthly data";
+                }
+
+                double latest = totals.get(0);
+                double previous = totals.get(1);
+
+                if (previous > 0) {
+                    last_trend_percentage = ((latest - previous) / previous) * 100;
+                    return String.format("%.1f%% from previous month", last_trend_percentage);
+                } else {
+                    last_trend_percentage = 0;
+                    return "Previous month's reading is 0";
                 }
             }
-
-            // Get previous month total
-            try (PreparedStatement statement = database_connection.prepareStatement(sql_previous_month)) {
-                statement.setInt(1, user.getUser_Id());
-                statement.setString(2, type);
-                statement.setString(3, first_day_previous_month.toString());
-                statement.setString(4, last_day_previous_month.toString());
-                try (ResultSet result_set = statement.executeQuery()) {
-                    if (result_set.next() && result_set.getObject("total") != null) {
-                        previous_month_total = result_set.getDouble("total");
-                    }
-                }
-            }
-
-            if (previous_month_total > 0 && current_month_total > 0) {
-                last_trend_percentage = ((current_month_total - previous_month_total) / previous_month_total) * 100;
-                return String.format("%.1f%% from last month", last_trend_percentage);
-            }
-            last_trend_percentage = 0;
-            return "No previous data";
-
         } catch (SQLException e) {
             e.printStackTrace();
             last_trend_percentage = 0;
             throw e;
         }
     }
+
     
     /**
      * Gets the overall trend comparing current month to previous month across all utility types
