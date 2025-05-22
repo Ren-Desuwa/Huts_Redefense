@@ -366,21 +366,33 @@ public class Sign_Up_Window extends JFrame {
 		// Validate inputs
 		if (username.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
 			System.out.println("Please fill in all fields.");
+			lbl_Incorrect_Signage1.setVisible(true);
+			lbl_Incorrect_Signage2.setVisible(true);
+			lbl_Incorrect_Signage3.setVisible(true);
+			lbl_Incorrect_Signage4.setVisible(true);
 			return;
 		}
 		
 		if (username.equals("Enter Username") || email.equals("Enter Email") || password.equals("Enter Password") || confirmPassword.equals("Confirm Password")) {
 			System.out.println("Please fill in all fields.");
+			lbl_Incorrect_Signage1.setVisible(true);
+			lbl_Incorrect_Signage2.setVisible(true);
+			lbl_Incorrect_Signage3.setVisible(true);
+			lbl_Incorrect_Signage4.setVisible(true);
 			return;
 		}
 		
 		if (!password.equals(confirmPassword)) {
 			System.out.println("Passwords do not match.");
+			lbl_Incorrect_Signage4.setVisible(true);
+			lbl_Incorrect_Signage1.setVisible(false);
 			return;
 		}
 		
 		if (database_manager.getUserManager().UsernameEmailMatch(username, email)) {
 			System.out.println("User Email already exisist");
+			lbl_Incorrect_Signage2.setVisible(false);
+			lbl_Incorrect_Signage3.setVisible(false);
 			return;
 		}
 	
