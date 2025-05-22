@@ -234,7 +234,7 @@ public class Utility_Panel extends JPanel {
 	    lbl_Next_Button.setForeground(new Color(220, 220, 220));
 	    panel_Graph_Button_Container.add(lbl_Next_Button);
 
-	    lbl_CurrentYear = new JLabel("<Year>");
+	    lbl_CurrentYear = new JLabel(String.valueOf(current_graph_year));
 	    lbl_CurrentYear.setHorizontalAlignment(SwingConstants.CENTER);
 	    lbl_CurrentYear.setFont(new Font("Tahoma", Font.PLAIN, 20));
 	    lbl_CurrentYear.setBounds(170, 0, 111, 32);
