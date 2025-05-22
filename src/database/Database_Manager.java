@@ -26,6 +26,10 @@ public class Database_Manager {
 			// Create connection
 			connection = DriverManager.getConnection(DataBase_URL);
 			
+			try (Statement stmt = connection.createStatement()) {
+			    stmt.execute("PRAGMA foreign_keys = ON;");
+			}
+			
 			// Initialize managers
 			initializeManagers();
 			
