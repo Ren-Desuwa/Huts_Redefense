@@ -524,7 +524,7 @@ public class Reading_Manager {
     // Update the getMonthly_Utility_Data method to include year parameter
     public Map<Month, Double> getMonthly_Utility_Data(User user, String utility_type, int months, int year, boolean use_price) 
             throws SQLException {
-        LocalDate end_date = LocalDate.of(year, 12, 31);
+        LocalDate end_date = LocalDate.of(year, 12, 31); // Whole Year
         LocalDate start_date = LocalDate.of(year, 1, 1);
         
         List<Reading> readings = getReadings_By_Date_And_Type(user, start_date, end_date, utility_type);
