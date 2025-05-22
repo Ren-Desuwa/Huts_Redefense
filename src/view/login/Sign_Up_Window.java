@@ -386,15 +386,19 @@ public class Sign_Up_Window extends JFrame {
 			return;
 		}
 		
-		if (!password.equals(confirmPassword)) {
-			System.out.println("Passwords do not match.");
-			lbl_Incorrect_Signage4.setVisible(true);
+		if (database_manager.getUserManager().checkUserEmail(username, email)) {
+			lbl_Incorrect_Signage2.setVisible(true);
+			lbl_Incorrect_Signage3.setVisible(true);
+			lbl_Incorrect_Signage4.setVisible(false);
 			lbl_Incorrect_Signage1.setVisible(false);
+			System.out.println("User Email already exisist");
 			return;
 		}
 		
-		if (!database_manager.getUserManager().checkUserEmail(username, email)) {
-			System.out.println("User Email already exisist");
+		if (!password.equals(confirmPassword)) {
+			System.out.println("Passwords do not match.");
+			lbl_Incorrect_Signage4.setVisible(true);
+			lbl_Incorrect_Signage1.setVisible(true);
 			lbl_Incorrect_Signage2.setVisible(false);
 			lbl_Incorrect_Signage3.setVisible(false);
 			return;
