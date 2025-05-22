@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 
 import javax.swing.JPanel;
 
+import java.util.List;
 import database.Database_Manager;
 import model.Reading;
 import model.User;
@@ -58,6 +59,11 @@ public class Utility_Panel extends JPanel {
     private String panel_subtitle;
     private String reading_unit;
     private Color tips_title_color;
+    
+    // Year navigation fields
+    private int current_graph_year;
+    private int earliest_reading_year;
+    private int latest_reading_year;
     
     // Main panel fields
     private JPanel panel_Title;
@@ -129,6 +135,10 @@ public class Utility_Panel extends JPanel {
         this.reading_unit = reading_unit;
         this.tips_title_color = tips_title_color;
         
+        // Initialize year navigation
+        this.current_graph_year = LocalDate.now().getYear();
+        this.latest_reading_year = LocalDate.now().getYear();
+        
         setBackground(new Color(213, 213, 213));
         setPreferredSize(new Dimension(986, 688));
         setLayout(null);
@@ -137,6 +147,8 @@ public class Utility_Panel extends JPanel {
         create_Actions_Listeners();
         
         setupData();
+        initializeYearBounds();
+        updateYearDisplay();
     }
     
     private void initialize_UI(String tips_title) {
@@ -212,7 +224,7 @@ public class Utility_Panel extends JPanel {
 	    lbl_Prev_Button.setHorizontalAlignment(SwingConstants.CENTER);
 	    lbl_Prev_Button.setFont(new Font("Tahoma", Font.PLAIN, 35));
 	    lbl_Prev_Button.setBounds(59, -8, 80, 48);
-	    lbl_Prev_Button.setForeground(new Color(172, 172, 172));
+	    lbl_Prev_Button.setForeground(new Color(220, 220, 220));
 	    panel_Graph_Button_Container.add(lbl_Prev_Button);
 
 	    lbl_Next_Button = new JLabel(">");
@@ -220,7 +232,7 @@ public class Utility_Panel extends JPanel {
 	    lbl_Next_Button.setHorizontalAlignment(SwingConstants.CENTER);
 	    lbl_Next_Button.setFont(new Font("Tahoma", Font.PLAIN, 35));
 	    lbl_Next_Button.setBounds(315, -8, 80, 48);
-	    lbl_Next_Button.setForeground(new Color(172, 172, 172));
+	    lbl_Next_Button.setForeground(new Color(220, 220, 220));
 	    panel_Graph_Button_Container.add(lbl_Next_Button);
 
 	    lbl_CurrentYear = new JLabel("<Year>");
@@ -390,32 +402,36 @@ public class Utility_Panel extends JPanel {
     	lbl_Prev_Button.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-//				graph_Panel.previousYear();
+				navigateToPreviousYear();
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				lbl_Prev_Button.setForeground(new Color(90, 90, 90));
+				if (canNavigateToPreviousYear()) {
+					lbl_Prev_Button.setForeground(new Color(90, 90, 90));
+				}
 			}
 			
 			@Override
 			public void mouseExited(MouseEvent e) {
-				lbl_Prev_Button.setForeground(new Color(172, 172, 172));
+				updateNavigationButtonColors();
 			}
 		});
 		
 		lbl_Next_Button.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-//				graph_Panel.nextYear();
+				navigateToNextYear();
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				lbl_Next_Button.setForeground(new Color(90, 90, 90));
+				if (canNavigateToNextYear()) {
+					lbl_Next_Button.setForeground(new Color(90, 90, 90));
+				}
 			}
 			
 			@Override
 			public void mouseExited(MouseEvent e) {
-				lbl_Next_Button.setForeground(new Color(172, 172, 172));
+				updateNavigationButtonColors();
 			}
 		});
         btn_Add_New_Reading.addMouseListener(new MouseAdapter() {
@@ -444,6 +460,107 @@ public class Utility_Panel extends JPanel {
     }
     
     /**
+     * Initialize the year bounds based on existing readings
+     */
+    private void initializeYearBounds() {
+    	try {
+            // Get all readings for this user and utility type
+            List<Reading> readings = database_manager.getReadingManager().getAll_Readings_By_Type(current_user, utility_type);
+
+            if (readings.isEmpty()) {
+                earliest_reading_year = LocalDate.now().getYear();
+            } else {
+                // Find the minimum year from readings
+                earliest_reading_year = readings.stream()
+                    .map(r -> r.getDate().getYear())
+                    .min(Integer::compareTo)
+                    .orElse(LocalDate.now().getYear());
+            }
+            // Latest year is always current year
+            latest_reading_year = LocalDate.now().getYear();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Fallback to current year if there's an error
+            earliest_reading_year = LocalDate.now().getYear();
+            latest_reading_year = LocalDate.now().getYear();
+        }
+    }
+    
+    /**
+     * Navigate to the previous year
+     */
+    private void navigateToPreviousYear() {
+        if (canNavigateToPreviousYear()) {
+            current_graph_year--;
+            updateGraphYear();
+            updateYearDisplay();
+            updateNavigationButtonColors();
+        }
+    }
+    
+    /**
+     * Navigate to the next year
+     */
+    private void navigateToNextYear() {
+        if (canNavigateToNextYear()) {
+            current_graph_year++;
+            updateGraphYear();
+            updateYearDisplay();
+            updateNavigationButtonColors();
+        }
+    }
+    
+    /**
+     * Check if we can navigate to the previous year
+     */
+    private boolean canNavigateToPreviousYear() {
+        return current_graph_year > earliest_reading_year;
+    }
+    
+    /**
+     * Check if we can navigate to the next year
+     */
+    private boolean canNavigateToNextYear() {
+        return current_graph_year < latest_reading_year;
+    }
+    
+    /**
+     * Update the graph panel with the new year
+     */
+    private void updateGraphYear() {
+        if (graph_Panel != null) {
+            graph_Panel.setYear(current_graph_year);
+        }
+    }
+    
+    /**
+     * Update the year display label
+     */
+    private void updateYearDisplay() {
+        lbl_CurrentYear.setText(String.valueOf(current_graph_year));
+    }
+    
+    /**
+     * Update the navigation button colors based on availability
+     */
+    private void updateNavigationButtonColors() {
+        // Update previous button color
+        if (canNavigateToPreviousYear()) {
+            lbl_Prev_Button.setForeground(new Color(172, 172, 172)); // Active color
+        } else {
+            lbl_Prev_Button.setForeground(new Color(220, 220, 220)); // Disabled color
+        }
+        
+        // Update next button color
+        if (canNavigateToNextYear()) {
+            lbl_Next_Button.setForeground(new Color(172, 172, 172)); // Active color
+        } else {
+            lbl_Next_Button.setForeground(new Color(220, 220, 220)); // Disabled color
+        }
+    }
+    
+    /**
      * Refreshes the graph with the latest data
      */
     public void Refresh_Graph() {
@@ -457,6 +574,9 @@ public class Utility_Panel extends JPanel {
      */
     public void Panel_Refresh() {
         setupData(); // update the current reading display
+        // Reinitialize year bounds in case new readings were added
+        initializeYearBounds();
+        updateNavigationButtonColors();
     }
     
     /**
