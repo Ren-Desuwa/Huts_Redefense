@@ -53,7 +53,6 @@ public class User_Manager {
 			e.printStackTrace();
 			
 		}
-		
 	}
 	
 	public void addUser(User user) throws SQLException {

@@ -57,6 +57,10 @@ public class Sign_Up_Window extends JFrame {
 	
 	// Buttons
 	private JButton btn_Sign_Up;
+	private JLabel lbl_Incorrect_Signage1;
+	private JLabel lbl_Incorrect_Signage2;
+	private JLabel lbl_Incorrect_Signage3;
+	private JLabel lbl_Incorrect_Signage4;
 	
 	/**
 	 * Create the frame.
@@ -185,6 +189,30 @@ public class Sign_Up_Window extends JFrame {
 		lbl_Login.setBounds(181, 547, 70, 25);
 		lbl_Login.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(lbl_Login);
+		
+		lbl_Incorrect_Signage1 = new JLabel("*");
+		lbl_Incorrect_Signage1.setForeground(new Color(255, 0, 0));
+		lbl_Incorrect_Signage1.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_Incorrect_Signage1.setBounds(403, 311, 23, 25); // Hide initially
+		contentPane.add(lbl_Incorrect_Signage1);
+		
+		lbl_Incorrect_Signage2 = new JLabel("*");
+		lbl_Incorrect_Signage2.setForeground(Color.RED);
+		lbl_Incorrect_Signage2.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_Incorrect_Signage2.setBounds(403, 222, 23, 25);
+		contentPane.add(lbl_Incorrect_Signage2);
+		
+		lbl_Incorrect_Signage3 = new JLabel("*");
+		lbl_Incorrect_Signage3.setForeground(Color.RED);
+		lbl_Incorrect_Signage3.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_Incorrect_Signage3.setBounds(403, 134, 23, 25);
+		contentPane.add(lbl_Incorrect_Signage3);
+		
+		lbl_Incorrect_Signage4 = new JLabel("*");
+		lbl_Incorrect_Signage4.setForeground(Color.RED);
+		lbl_Incorrect_Signage4.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_Incorrect_Signage4.setBounds(403, 400, 23, 25);
+		contentPane.add(lbl_Incorrect_Signage4);
 	}
 	
 	/**
@@ -338,27 +366,40 @@ public class Sign_Up_Window extends JFrame {
 		// Validate inputs
 		if (username.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
 			System.out.println("Please fill in all fields.");
+			lbl_Incorrect_Signage1.setVisible(true);
+			lbl_Incorrect_Signage2.setVisible(true);
+			lbl_Incorrect_Signage3.setVisible(true);
+			lbl_Incorrect_Signage4.setVisible(true);
 			return;
 		}
 		
 		if (username.equals("Enter Username") || email.equals("Enter Email") || password.equals("Enter Password") || confirmPassword.equals("Confirm Password")) {
 			System.out.println("Please fill in all fields.");
+			lbl_Incorrect_Signage1.setVisible(true);
+			lbl_Incorrect_Signage2.setVisible(true);
+			lbl_Incorrect_Signage3.setVisible(true);
+			lbl_Incorrect_Signage4.setVisible(true);
 			return;
 		}
 		
 		if (!password.equals(confirmPassword)) {
 			System.out.println("Passwords do not match.");
+			lbl_Incorrect_Signage4.setVisible(true);
+			lbl_Incorrect_Signage1.setVisible(false);
 			return;
 		}
 		
 		if (database_manager.getUserManager().UsernameEmailMatch(username, email)) {
 			System.out.println("User Email already exisist");
+			lbl_Incorrect_Signage2.setVisible(false);
+			lbl_Incorrect_Signage3.setVisible(false);
 			return;
 		}
 	
 		try {
 			// Add user to the database
 			database_manager.getUserManager().addUser(username, password, email);
+			User user = database_manager.getUserManager().getUserByEmail(email);
 			System.out.println("User registered successfully.");
 			
 			// Navigate to main frame
@@ -366,7 +407,7 @@ public class Sign_Up_Window extends JFrame {
 		        public void run() {
 		            try {
 		                Sign_Up_Window.this.dispose();
-		                Main_Frame mainFrame = new Main_Frame(database_manager, new User(username, password, email));
+		                Main_Frame mainFrame = new Main_Frame(database_manager, user);
 		                mainFrame.setVisible(true);
 		            } catch (Exception e) {
 		                e.printStackTrace();
