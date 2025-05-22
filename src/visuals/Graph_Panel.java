@@ -6,6 +6,7 @@ import database.Reading_Manager;
 import javax.swing.*;
 import java.awt.*;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.Month;
 import java.util.Map;
 
@@ -22,6 +23,7 @@ public class Graph_Panel extends JPanel {
     private Scrollable_Bar_Graph_Panel gas_graph;
     private Scrollable_Bar_Graph_Panel overall_graph;
 
+    private int selected_year;
     private String utility_type;
     private boolean is_single_utility;
 
@@ -32,6 +34,7 @@ public class Graph_Panel extends JPanel {
         this.reading_manager = reading_manager;
         this.current_user = current_user;
         this.is_single_utility = false;
+        this.selected_year = LocalDate.now().getYear(); // Default to current year
 
         setLayout(new BorderLayout());
         setBackground(new Color(255, 255, 255));
@@ -51,6 +54,7 @@ public class Graph_Panel extends JPanel {
         this.current_user = current_user;
         this.utility_type = utility_type;
         this.is_single_utility = true;
+        this.selected_year = LocalDate.now().getYear(); // Default to current year
 
         setLayout(new BorderLayout());
         setBackground(new Color(255, 255, 255));
@@ -148,10 +152,10 @@ public class Graph_Panel extends JPanel {
 
     private void updateGraphData() {
         try {
-            Map<Month, Double> electricity_data = reading_manager.getMonthly_Utility_Data(current_user, "electricity", 6, false);
-            Map<Month, Double> water_data = reading_manager.getMonthly_Utility_Data(current_user, "water", 6, false);
-            Map<Month, Double> gas_data = reading_manager.getMonthly_Utility_Data(current_user, "gas", 6, false);
-            Map<Month, Double> overall_data = reading_manager.getMonthly_Total_Expenses(current_user, 6);
+            Map<Month, Double> electricity_data = reading_manager.getMonthly_Utility_Data(current_user, "electricity", 6, selected_year,false);
+            Map<Month, Double> water_data = reading_manager.getMonthly_Utility_Data(current_user, "water", 6, selected_year, false);
+            Map<Month, Double> gas_data = reading_manager.getMonthly_Utility_Data(current_user, "gas", 6, selected_year, false);
+            Map<Month, Double> overall_data = reading_manager.getMonthly_Total_Expenses(current_user, 6, selected_year);
 
             electricity_graph.setMonthlyData("Electricity", electricity_data, 6);
             water_graph.setMonthlyData("Water", water_data, 6);
@@ -164,7 +168,7 @@ public class Graph_Panel extends JPanel {
 
     private void updateSingleGraphData() {
         try {
-            Map<Month, Double> data = reading_manager.getMonthly_Utility_Data(current_user, utility_type, 6, true);
+            Map<Month, Double> data = reading_manager.getMonthly_Utility_Data(current_user, utility_type, 6, selected_year, true);
             switch (utility_type) {
                 case "electricity" -> electricity_graph.setMonthlyData("Electricity", data, 6);
                 case "water" -> water_graph.setMonthlyData("Water", data, 6);
@@ -187,5 +191,21 @@ public class Graph_Panel extends JPanel {
         } else {
             updateGraphData();
         }
+    }
+    /**
+     * Sets the year for data display and refreshes the graphs
+     * @param year The year to display data for
+     */
+    public void setYear(int year) {
+        this.selected_year = year;
+        refreshData();
+    }
+
+    /**
+     * Gets the currently selected year
+     * @return The selected year
+     */
+    public int getSelectedYear() {
+        return selected_year;
     }
 }

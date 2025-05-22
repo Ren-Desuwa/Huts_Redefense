@@ -38,9 +38,7 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
     private static final int HEADER_HEIGHT = 40;     // Height of the header panel
     private static final int DEFAULT_HEIGHT = 300;   // Default height of the panel
 
-    // Margin constants that vary based on header presence
-    private int TOP_MARGIN = hasHeader ? 10 : 200;      // Top margin
-    private int BOTTOM_MARGIN = 90;   // Bottom margin for x-axis labels
+    // Margin constants that vary based on header presence      // Top margin
     
     // Color scheme
     private Color barColor = new Color(79, 129, 189); // Blue color for bars
@@ -289,7 +287,7 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         
-        int height = getHeight() - TOP_MARGIN - BOTTOM_MARGIN;
+        int height = getHeight() - getTopMargin() - getBottomMargin();
         int width = Y_AXIS_WIDTH;
         
         // Set font and color
@@ -305,7 +303,7 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
         g2d.rotate(-Math.PI / 2);
         FontMetrics fm = g2d.getFontMetrics();
         int labelWidth = fm.stringWidth(yAxisLabel);
-        g2d.drawString(yAxisLabel, -(TOP_MARGIN + height/2 + labelWidth/2), 15);
+        g2d.drawString(yAxisLabel, -(getTopMargin() + height/2 + labelWidth/2), 15);
         g2d.setTransform(originalTransform);
         
         // Draw Y-axis value labels
@@ -314,7 +312,7 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
         int numDivisions = 5;
         for (int i = 0; i <= numDivisions; i++) {
             double value = maxValue * (numDivisions - i) / numDivisions;
-            int y = TOP_MARGIN + (height * i) / numDivisions;
+            int y = getTopMargin() + (height * i) / numDivisions;
             
             String valueStr = String.format("%.1f", value);
             fm = g2d.getFontMetrics();
@@ -336,9 +334,9 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         
-        int availableHeight = getHeight() - TOP_MARGIN - BOTTOM_MARGIN;
-        int xAxisY = TOP_MARGIN + availableHeight;  // Y position for x-axis
-        int height = getHeight() - TOP_MARGIN - BOTTOM_MARGIN;
+        int availableHeight = getHeight() - getTopMargin() - getBottomMargin();
+        int xAxisY = getTopMargin() + availableHeight;  // Y position for x-axis
+        int height = getHeight() - getTopMargin() - getBottomMargin();
         
         // Sort the data by months
         List<Month> sortedMonths = new ArrayList<>(data.keySet());
@@ -352,7 +350,7 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
         }
         
         // Draw X-axis
-        g2d.drawLine(BAR_SPACING, TOP_MARGIN + height, calculateChartWidth() - BAR_SPACING, xAxisY);
+        g2d.drawLine(BAR_SPACING, getTopMargin() + height, calculateChartWidth() - BAR_SPACING, xAxisY);
         
         // Draw X-axis label
         g2d.setFont(new Font("SansSerif", Font.BOLD, 12));
@@ -376,7 +374,7 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
             // Draw bar outline
             g2d.setColor(barColor.darker());
             g2d.drawRect(x, xAxisY - barHeight, BAR_WIDTH, barHeight);
-            
+              
             // Draw month label
             g2d.setColor(textColor);
             String monthStr = month.toString().substring(0, 3);
@@ -391,5 +389,13 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
             
             barIndex++;
         }
+    }
+    private int getTopMargin() {
+    	int height = hasHeader ? 10 : 10;
+    	return height;
+    }
+    private int getBottomMargin() {
+    	int height = hasHeader ? 90 : 60;
+    	return height;
     }
 }

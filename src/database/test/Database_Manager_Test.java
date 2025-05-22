@@ -640,7 +640,7 @@ public class Database_Manager_Test {
         }
         
         // Create readings spanning multiple months for testing
-        String[] types = {"electricity", "water", "gas", "internet"};
+        String[] types = {"electricity", "water", "gas", "other"};
         
         // Create readings for the past 6 months
         for (int month = 5; month >= 0; month--) {
@@ -686,75 +686,83 @@ public class Database_Manager_Test {
             System.out.println("❌ FAILURE: Retrieved incorrect number of electricity readings. Expected: 6, got: " + allElectricityReadings.size());
         }
         
-        // Test groupReadings_By_Month
-        totalTests++;
-        try {
-            Map<Month, Double> groupedReadings = readingManager.groupReadings_By_Month(allElectricityReadings, false);
-            if (groupedReadings.size() == 6) {
-                System.out.println("✅ SUCCESS: Grouped readings by month correctly: " + groupedReadings.size() + " months");
-                passedTests++;
-            } else {
-                System.out.println("❌ FAILURE: Incorrect grouping by month. Expected: 6 months, got: " + groupedReadings.size());
-            }
-        } catch (Exception e) {
-            System.out.println("❌ FAILURE: Exception when grouping readings by month: " + e.getMessage());
-        }
-        
-        // Test groupReadings_By_Month with price flag
-        totalTests++;
-        try {
-            Map<Month, Double> groupedPrices = readingManager.groupReadings_By_Month(allElectricityReadings, true);
-            if (groupedPrices.size() == 6) {
-                System.out.println("✅ SUCCESS: Grouped reading prices by month correctly: " + groupedPrices.size() + " months");
-                passedTests++;
-            } else {
-                System.out.println("❌ FAILURE: Incorrect grouping of prices by month. Expected: 6 months, got: " + groupedPrices.size());
-            }
-        } catch (Exception e) {
-            System.out.println("❌ FAILURE: Exception when grouping reading prices by month: " + e.getMessage());
-        }
-        
-        // Test getMonthly_Utility_Data with readings
-        totalTests++;
-        try {
-            Map<Month, Double> monthlyElectricityReadings = readingManager.getMonthly_Utility_Data(currentUser, "electricity", 6, false);
-            if (monthlyElectricityReadings.size() == 6) {
-                System.out.println("✅ SUCCESS: Retrieved monthly electricity readings: " + monthlyElectricityReadings.size() + " months");
-                passedTests++;
-            } else {
-                System.out.println("❌ FAILURE: Incorrect monthly electricity readings. Expected: 6 months, got: " + monthlyElectricityReadings.size());
-            }
-        } catch (Exception e) {
-            System.out.println("❌ FAILURE: Exception when getting monthly electricity readings: " + e.getMessage());
-        }
-        
-        // Test getMonthly_Utility_Data with prices
-        totalTests++;
-        try {
-            Map<Month, Double> monthlyElectricityPrices = readingManager.getMonthly_Utility_Data(currentUser, "electricity", 6, true);
-            if (monthlyElectricityPrices.size() == 6) {
-                System.out.println("✅ SUCCESS: Retrieved monthly electricity prices: " + monthlyElectricityPrices.size() + " months");
-                passedTests++;
-            } else {
-                System.out.println("❌ FAILURE: Incorrect monthly electricity prices. Expected: 6 months, got: " + monthlyElectricityPrices.size());
-            }
-        } catch (Exception e) {
-            System.out.println("❌ FAILURE: Exception when getting monthly electricity prices: " + e.getMessage());
-        }
-        
-        // Test getMonthly_Total_Expenses
-        totalTests++;
-        try {
-            Map<Month, Double> monthlyTotalExpenses = readingManager.getMonthly_Total_Expenses(currentUser, 6);
-            if (monthlyTotalExpenses.size() == 6) {
-                System.out.println("✅ SUCCESS: Retrieved monthly total expenses: " + monthlyTotalExpenses.size() + " months");
-                passedTests++;
-            } else {
-                System.out.println("❌ FAILURE: Incorrect monthly total expenses. Expected: 6 months, got: " + monthlyTotalExpenses.size());
-            }
-        } catch (Exception e) {
-            System.out.println("❌ FAILURE: Exception when getting monthly total expenses: " + e.getMessage());
-        }
+     // In testAdvancedReadingManager method, modify these test blocks:
+
+     // Test groupReadings_By_Month
+     totalTests++;
+     try {
+         int currentYear = LocalDate.now().getYear();
+         Map<Month, Double> groupedReadings = readingManager.groupReadings_By_Month(allElectricityReadings, currentYear, false);
+         if (groupedReadings.size() == 6) {
+             System.out.println("✅ SUCCESS: Grouped readings by month correctly: " + groupedReadings.size() + " months");
+             passedTests++;
+         } else {
+             System.out.println("❌ FAILURE: Incorrect grouping by month. Expected: 6 months, got: " + groupedReadings.size());
+         }
+     } catch (Exception e) {
+         System.out.println("❌ FAILURE: Exception when grouping readings by month: " + e.getMessage());
+     }
+
+     // Test groupReadings_By_Month with price flag
+     totalTests++;
+     try {
+         int currentYear = LocalDate.now().getYear();
+         Map<Month, Double> groupedPrices = readingManager.groupReadings_By_Month(allElectricityReadings, currentYear, true);
+         if (groupedPrices.size() == 6) {
+             System.out.println("✅ SUCCESS: Grouped reading prices by month correctly: " + groupedPrices.size() + " months");
+             passedTests++;
+         } else {
+             System.out.println("❌ FAILURE: Incorrect grouping of prices by month. Expected: 6 months, got: " + groupedPrices.size());
+         }
+     } catch (Exception e) {
+         System.out.println("❌ FAILURE: Exception when grouping reading prices by month: " + e.getMessage());
+     }
+
+     // Test getMonthly_Utility_Data with readings
+     totalTests++;
+     try {
+         int currentYear = LocalDate.now().getYear();
+         Map<Month, Double> monthlyElectricityReadings = readingManager.getMonthly_Utility_Data(currentUser, "electricity", 6, currentYear, false);
+         if (monthlyElectricityReadings.size() == 6) {
+             System.out.println("✅ SUCCESS: Retrieved monthly electricity readings: " + monthlyElectricityReadings.size() + " months");
+             passedTests++;
+         } else {
+             System.out.println("❌ FAILURE: Incorrect monthly electricity readings. Expected: 6 months, got: " + monthlyElectricityReadings.size());
+         }
+     } catch (Exception e) {
+         System.out.println("❌ FAILURE: Exception when getting monthly electricity readings: " + e.getMessage());
+     }
+
+     // Test getMonthly_Utility_Data with prices
+     totalTests++;
+     try {
+         int currentYear = LocalDate.now().getYear();
+         Map<Month, Double> monthlyElectricityPrices = readingManager.getMonthly_Utility_Data(currentUser, "electricity", 6, currentYear, true);
+         if (monthlyElectricityPrices.size() == 6) {
+             System.out.println("✅ SUCCESS: Retrieved monthly electricity prices: " + monthlyElectricityPrices.size() + " months");
+             passedTests++;
+         } else {
+             System.out.println("❌ FAILURE: Incorrect monthly electricity prices. Expected: 6 months, got: " + monthlyElectricityPrices.size());
+         }
+     } catch (Exception e) {
+         System.out.println("❌ FAILURE: Exception when getting monthly electricity prices: " + e.getMessage());
+     }
+
+     // Test getMonthly_Total_Expenses
+     totalTests++;
+     try {
+         int currentYear = LocalDate.now().getYear();
+         Map<Month, Double> monthlyTotalExpenses = readingManager.getMonthly_Total_Expenses(currentUser, 6, currentYear);
+         if (monthlyTotalExpenses.size() == 6) {
+             System.out.println("✅ SUCCESS: Retrieved monthly total expenses: " + monthlyTotalExpenses.size() + " months");
+             passedTests++;
+         } else {
+             System.out.println("❌ FAILURE: Incorrect monthly total expenses. Expected: 6 months, got: " + monthlyTotalExpenses.size());
+         }
+     } catch (Exception e) {
+         System.out.println("❌ FAILURE: Exception when getting monthly total expenses: " + e.getMessage());
+     }
+
         
         // Test getTotal_Expenses_In_Range
         totalTests++;
@@ -821,24 +829,6 @@ public class Database_Manager_Test {
             passedTests++;
         } catch (Exception e) {
             System.out.println("❌ FAILURE: Exception when getting electricity trend color: " + e.getMessage());
-        }
-        
-        // Test getReading_By_Month
-        totalTests++;
-        try {
-            LocalDate previousMonth = LocalDate.now().minusMonths(1);
-            Reading readingForPreviousMonth = readingManager.getReading_By_Month(currentUser, "electricity", previousMonth);
-            
-            if (readingForPreviousMonth != null && 
-                readingForPreviousMonth.getType().equals("electricity") &&
-                readingForPreviousMonth.getDate().getMonth() == previousMonth.getMonth()) {
-                System.out.println("✅ SUCCESS: Retrieved electricity reading for previous month");
-                passedTests++;
-            } else {
-                System.out.println("❌ FAILURE: Failed to retrieve electricity reading for previous month");
-            }
-        } catch (Exception e) {
-            System.out.println("❌ FAILURE: Exception when getting reading by month: " + e.getMessage());
         }
         
         // Test getTotal_Readings

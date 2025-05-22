@@ -500,78 +500,53 @@ public class Reading_Manager {
      * @param use_price If true, uses total_price field; if false, uses reading field
      * @return Map with Month as key and summed value as value
      */
-    public Map<Month, Double> groupReadings_By_Month(List<Reading> readings, boolean use_price) {
+    public Map<Month, Double> groupReadings_By_Month(List<Reading> readings, int year, boolean use_price) {
         Map<Month, Double> monthly_data = new HashMap<>();
         
         if (readings != null) {
             for (Reading reading : readings) {
                 LocalDate reading_date = reading.getDate();
-                Month month = reading_date.getMonth();
                 
-                double value = use_price ? reading.getTotal_Price() : reading.getReading();
-                
-                // Add value to existing month or create new entry
-                monthly_data.put(month, monthly_data.getOrDefault(month, 0.0) + value);
+                // Only process readings from the selected year
+                if (reading_date.getYear() == year) {
+                    Month month = reading_date.getMonth();
+                    double value = use_price ? reading.getTotal_Price() : reading.getReading();
+                    
+                    // Add value to existing month or create new entry
+                    monthly_data.put(month, monthly_data.getOrDefault(month, 0.0) + value);
+                }
             }
         }
         
         return monthly_data;
     }
-    
-    /**
-     * Get utility usage data organized by month for a specific time period
-     * @param user The user to get data for
-     * @param utility_type The type of utility (electricity, water, gas)
-     * @param months Number of months to look back from current date
-     * @param use_price Whether to use price values (true) or reading values (false)
-     * @return Map with Month as key and value as double
-     * @throws SQLException If database operation fails
-     */
-    public Map<Month, Double> getMonthly_Utility_Data(User user, String utility_type, int months, boolean use_price) 
+
+    // Update the getMonthly_Utility_Data method to include year parameter
+    public Map<Month, Double> getMonthly_Utility_Data(User user, String utility_type, int months, int year, boolean use_price) 
             throws SQLException {
-        LocalDate end_date = LocalDate.now();
-        LocalDate start_date = end_date.minusMonths(months);
+        LocalDate end_date = LocalDate.of(year, 12, 31);
+        LocalDate start_date = LocalDate.of(year, 1, 1);
         
         List<Reading> readings = getReadings_By_Date_And_Type(user, start_date, end_date, utility_type);
-        return groupReadings_By_Month(readings, use_price);
+        return groupReadings_By_Month(readings, year, use_price);
     }
-    
-    /**
-     * Gets combined monthly expense data for all utilities
-     * @param user The user to get data for 
-     * @param months Number of months to look back from current date
-     * @return Map with Month as key and total expense as value
-     * @throws SQLException If database operation fails
-     */
-    public Map<Month, Double> getMonthly_Total_Expenses(User user, int months) throws SQLException {
+
+    // Update the getMonthly_Total_Expenses method to include year parameter
+    public Map<Month, Double> getMonthly_Total_Expenses(User user, int months, int year) throws SQLException {
         Map<Month, Double> total_expenses = new HashMap<>();
         
         // Get data for each utility type
-        Map<Month, Double> electricity_expenses = getMonthly_Utility_Data(user, "electricity", months, true);
-        Map<Month, Double> water_expenses = getMonthly_Utility_Data(user, "water", months, true);
-        Map<Month, Double> gas_expenses = getMonthly_Utility_Data(user, "gas", months, true);
+        Map<Month, Double> electricity_expenses = getMonthly_Utility_Data(user, "electricity", months, year, true);
+        Map<Month, Double> water_expenses = getMonthly_Utility_Data(user, "water", months, year, true);
+        Map<Month, Double> gas_expenses = getMonthly_Utility_Data(user, "gas", months, year, true);
         
-        // Get all months from any of the maps
-        for (Month month : electricity_expenses.keySet()) {
+        // Combine expenses from all utility types
+        for (Month month : Month.values()) {
             double total_for_month = electricity_expenses.getOrDefault(month, 0.0) +
                                     water_expenses.getOrDefault(month, 0.0) +
                                     gas_expenses.getOrDefault(month, 0.0);
-            total_expenses.put(month, total_for_month);
-        }
-        
-        // Add months from water expenses that might not be in electricity
-        for (Month month : water_expenses.keySet()) {
-            if (!total_expenses.containsKey(month)) {
-                double total_for_month = water_expenses.get(month) +
-                                        gas_expenses.getOrDefault(month, 0.0);
+            if (total_for_month > 0) {
                 total_expenses.put(month, total_for_month);
-            }
-        }
-        
-        // Add months from gas expenses that might not be in either electricity or water
-        for (Month month : gas_expenses.keySet()) {
-            if (!total_expenses.containsKey(month)) {
-                total_expenses.put(month, gas_expenses.get(month));
             }
         }
         
@@ -776,31 +751,6 @@ public class Reading_Manager {
      * @param previous_month The month to get reading for
      * @return Reading object if found, null otherwise
      */
-    public Reading getReading_By_Month(User current_user, String type, LocalDate previous_month) {
-        String sql_script = "SELECT * FROM readings WHERE user_id = ? AND type = ? AND date = ?";
-        try (PreparedStatement prepared_statement = database_connection.prepareStatement(sql_script)) {
-            prepared_statement.setInt(1, current_user.getUser_Id());
-            prepared_statement.setString(2, type);
-            prepared_statement.setString(3, previous_month.toString());
-            try (ResultSet result_set = prepared_statement.executeQuery()) {
-                if (result_set.next()) {
-                    return new Reading(
-                        result_set.getInt("reading_id"),
-                        result_set.getInt("user_id"),
-                        LocalDate.parse(result_set.getString("date")),
-                        result_set.getString("type"),
-                        result_set.getDouble("reading"),
-                        result_set.getDouble("rate"),
-                        result_set.getDouble("total_price")
-                    );
-                }
-                return null;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
     
     /**
      * Gets the total number of readings for a user
