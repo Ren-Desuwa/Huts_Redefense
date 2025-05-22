@@ -3,8 +3,6 @@ package view.login;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -27,28 +25,56 @@ import java.awt.event.MouseEvent;
 import visuals.Rounded_Button;
 import visuals.Rounded_Panel;
 
+/**
+ * A window for user registration
+ * This window allows new users to sign up for the application
+ */
 public class Sign_Up_Window extends JFrame {
 	
+	// Database and user fields
 	private Database_Manager database_manager;
 
+	// Serial version UID
 	private static final long serialVersionUID = 1L;
+	
+	// Panel configuration
 	private JPanel contentPane;
+	private Rounded_Panel panel_SignUp_Title;
+	private JLabel lbl_Title_SignUp;
+	
+	// Input fields
 	private JTextField tf_Username;
 	private JTextField tf_Email;
 	private JPasswordField pf_Password;
 	private JPasswordField pf_ConfirmPassword;
+	
+	// Labels
 	private JLabel lbl_Username;
 	private JLabel lbl_Email;
 	private JLabel lbl_Password;
 	private JLabel lbl_Confirm_Password;
-	private Rounded_Panel panel_SignUp_Title;
-	private JLabel lbl_Title_SignUp;
-	private JButton btn_Sign_Up;
 	private JLabel lbl_Login;
 	
+	// Buttons
+	private JButton btn_Sign_Up;
+	
+	/**
+	 * Create the frame.
+	 * 
+	 * @param database_manager The database manager
+	 */
 	public Sign_Up_Window(Database_Manager database_manager) {
 		this.database_manager = database_manager;
 		
+		initialize_Window_Properties();
+		initialize_UI_Components();
+		create_Action_Listeners();
+	}
+	
+	/**
+	 * Initialize basic window properties
+	 */
+	private void initialize_Window_Properties() {
 		setTitle("Sign Up");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -60,7 +86,15 @@ public class Sign_Up_Window extends JFrame {
 		contentPane.setBackground(new Color(213, 213, 213));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+	}
+	
+	/**
+	 * Initialize UI components
+	 */
+	private void initialize_UI_Components() {
+		//==============================================================================================
+		// UI CREATION - TITLE SECTION
+		//==============================================================================================
 		panel_SignUp_Title = new Rounded_Panel();
 		panel_SignUp_Title.setLayout(null);
 		panel_SignUp_Title.setBackground(Color.WHITE);
@@ -73,6 +107,9 @@ public class Sign_Up_Window extends JFrame {
 		lbl_Title_SignUp.setBounds(13, 20, 393, 54);
 		panel_SignUp_Title.add(lbl_Title_SignUp);
 		
+		//==============================================================================================
+		// UI CREATION - USERNAME SECTION
+		//==============================================================================================
 		lbl_Username = new JLabel("Username");
 		lbl_Username.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lbl_Username.setBounds(12, 119,114, 22);
@@ -81,6 +118,82 @@ public class Sign_Up_Window extends JFrame {
 		tf_Username = new JTextField();
 		tf_Username.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		tf_Username.setText("Enter Username");
+		tf_Username.setBounds(22, 151, 396, 45);
+		contentPane.add(tf_Username);
+		tf_Username.setColumns(10);
+		
+		//==============================================================================================
+		// UI CREATION - EMAIL SECTION
+		//==============================================================================================
+		lbl_Email = new JLabel("Email");
+		lbl_Email.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_Email.setBounds(12, 207, 114, 22);
+		contentPane.add(lbl_Email);
+		
+		tf_Email = new JTextField();
+		tf_Email.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		tf_Email.setText("Enter Email");
+		tf_Email.setBounds(22, 240, 396, 45);
+		tf_Email.setColumns(10);
+		contentPane.add(tf_Email);
+		
+		//==============================================================================================
+		// UI CREATION - PASSWORD SECTION
+		//==============================================================================================
+		lbl_Password = new JLabel("Password");
+		lbl_Password.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_Password.setBounds(12, 296, 114, 22);
+		contentPane.add(lbl_Password);
+		
+		pf_Password = new JPasswordField();
+		pf_Password.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		pf_Password.setText("Enter Password");
+		pf_Password.setEchoChar((char) 0);
+		pf_Password.setBounds(22, 329, 396, 45);
+		contentPane.add(pf_Password);
+		
+		//==============================================================================================
+		// UI CREATION - CONFIRM PASSWORD SECTION
+		//==============================================================================================
+		lbl_Confirm_Password = new JLabel("Confirm Password");
+		lbl_Confirm_Password.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_Confirm_Password.setBounds(12, 385, 212, 22);
+		contentPane.add(lbl_Confirm_Password);
+		
+		pf_ConfirmPassword = new JPasswordField();
+		pf_ConfirmPassword.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		pf_ConfirmPassword.setText("Confirm Password");
+		pf_ConfirmPassword.setEchoChar((char) 0);
+		pf_ConfirmPassword.setBounds(24, 418, 396, 45);
+		contentPane.add(pf_ConfirmPassword);
+		
+		//==============================================================================================
+		// UI CREATION - SIGN UP BUTTON
+		//==============================================================================================
+		btn_Sign_Up = new Rounded_Button("Sign Up", 25);
+		btn_Sign_Up.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btn_Sign_Up.setBackground(new Color(182, 182, 182));
+		btn_Sign_Up.setForeground(Color.BLACK);
+		btn_Sign_Up.setBounds(160, 492, 109, 44);
+		contentPane.add(btn_Sign_Up);
+		
+		//==============================================================================================
+		// UI CREATION - LOGIN LINK
+		//==============================================================================================
+		lbl_Login = new JLabel("Log in");
+		lbl_Login.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lbl_Login.setBounds(181, 547, 70, 25);
+		lbl_Login.setHorizontalAlignment(SwingConstants.CENTER);
+		contentPane.add(lbl_Login);
+	}
+	
+	/**
+	 * Create action listeners for UI components
+	 */
+	private void create_Action_Listeners() {
+		//==============================================================================================
+		// FOCUS LISTENERS - USERNAME FIELD
+		//==============================================================================================
 		tf_Username.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -95,18 +208,10 @@ public class Sign_Up_Window extends JFrame {
 				}
 			}
 		});
-		tf_Username.setBounds(22, 151, 396, 45);
-		contentPane.add(tf_Username);
-		tf_Username.setColumns(10);
 		
-		lbl_Email = new JLabel("Email");
-		lbl_Email.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lbl_Email.setBounds(12, 207, 114, 22);
-		contentPane.add(lbl_Email);
-		
-		tf_Email = new JTextField();
-		tf_Email.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		tf_Email.setText("Enter Email");
+		//==============================================================================================
+		// FOCUS LISTENERS - EMAIL FIELD
+		//==============================================================================================
 		tf_Email.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -121,19 +226,10 @@ public class Sign_Up_Window extends JFrame {
 				}
 			}
 		});
-		tf_Email.setBounds(22, 240, 396, 45);
-		tf_Email.setColumns(10);
-		contentPane.add(tf_Email);
 		
-		lbl_Password = new JLabel("Password");
-		lbl_Password.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lbl_Password.setBounds(12, 296, 114, 22);
-		contentPane.add(lbl_Password);
-		
-		pf_Password = new JPasswordField();
-		pf_Password.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		pf_Password.setText("Enter Password");
-		pf_Password.setEchoChar((char) 0);
+		//==============================================================================================
+		// FOCUS LISTENERS - PASSWORD FIELD
+		//==============================================================================================
 		pf_Password.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -151,18 +247,10 @@ public class Sign_Up_Window extends JFrame {
 				}
 			}
 		});
-		pf_Password.setBounds(22, 329, 396, 45);
-		contentPane.add(pf_Password);
 		
-		lbl_Confirm_Password = new JLabel("Confirm Password");
-		lbl_Confirm_Password.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lbl_Confirm_Password.setBounds(12, 385, 212, 22);
-		contentPane.add(lbl_Confirm_Password);
-		
-		pf_ConfirmPassword = new JPasswordField();
-		pf_ConfirmPassword.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		pf_ConfirmPassword.setText("Confirm Password");
-		pf_ConfirmPassword.setEchoChar((char) 0);
+		//==============================================================================================
+		// FOCUS LISTENERS - CONFIRM PASSWORD FIELD
+		//==============================================================================================
 		pf_ConfirmPassword.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -180,13 +268,10 @@ public class Sign_Up_Window extends JFrame {
 				}
 			}
 		});
-		pf_ConfirmPassword.setBounds(24, 418, 396, 45);
-		contentPane.add(pf_ConfirmPassword);
 		
-		btn_Sign_Up = new Rounded_Button("Sign Up", 25);
-		btn_Sign_Up.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btn_Sign_Up.setBackground(new Color(182, 182, 182));
-		btn_Sign_Up.setForeground(Color.BLACK);
+		//==============================================================================================
+		// MOUSE LISTENERS - SIGN UP BUTTON
+		//==============================================================================================
 		btn_Sign_Up.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -203,11 +288,10 @@ public class Sign_Up_Window extends JFrame {
 				btn_Sign_Up.setForeground(Color.BLACK);
 			}
 		});
-		btn_Sign_Up.setBounds(160, 492, 109, 44);
-		contentPane.add(btn_Sign_Up);
 		
-		lbl_Login = new JLabel("Log in");
-		lbl_Login.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		//==============================================================================================
+		// MOUSE LISTENERS - LOGIN LINK
+		//==============================================================================================
 		lbl_Login.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -222,13 +306,12 @@ public class Sign_Up_Window extends JFrame {
 				lbl_Login.setText("Log in");
 			}
 		});
-		lbl_Login.setBounds(181, 547, 70, 25);
-		lbl_Login.setHorizontalAlignment(SwingConstants.CENTER);
-		contentPane.add(lbl_Login);
 	}
 	
+	/**
+	 * Opens the login window
+	 */
 	private void openLogIn() {
-		
 		EventQueue.invokeLater(new Runnable() {
 	        public void run() {
 	            try {
@@ -242,12 +325,17 @@ public class Sign_Up_Window extends JFrame {
 	    });
 	}
 	
+	/**
+	 * Handles the sign up process
+	 * Validates input and creates a new user if valid
+	 */
 	private void SignUp() {
 		String username = tf_Username.getText();
 		String email = tf_Email.getText();
 		String password = String.valueOf(pf_Password.getPassword());
 		String confirmPassword = String.valueOf(pf_ConfirmPassword.getPassword());
 		
+		// Validate inputs
 		if (username.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
 			System.out.println("Please fill in all fields.");
 			return;
@@ -268,8 +356,7 @@ public class Sign_Up_Window extends JFrame {
 			database_manager.getUserManager().addUser(username, password, email);
 			System.out.println("User registered successfully.");
 			
-			// Optionally, you can close the window or redirect to another page
-			
+			// Navigate to main frame
 			EventQueue.invokeLater(new Runnable() {
 		        public void run() {
 		            try {
