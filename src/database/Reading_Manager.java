@@ -845,7 +845,7 @@ public class Reading_Manager {
                                         (JFrame) SwingUtilities.getWindowAncestor(utility_panel),
                                         database_manager, user, utility_panel, type, selected_reading
                                     );
-                                    edit_reading_panel.loadReadingData(selected_reading);
+                                    edit_reading_panel.loadReadingData(selected_reading, selected_index);
                                     edit_reading_panel.setVisible(true);
                                 } catch (Exception ex) {
                                     ex.printStackTrace();

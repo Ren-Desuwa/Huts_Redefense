@@ -405,7 +405,6 @@ public class Utility_Panel extends JPanel {
     	            current_graph_year--;
     	            lbl_CurrentYear.setText(String.valueOf(current_graph_year));
     	            graph_Panel.setYear(current_graph_year);
-
     	            setupData();
     	        }
     	    }
@@ -432,7 +431,6 @@ public class Utility_Panel extends JPanel {
     	            current_graph_year++;
     	            lbl_CurrentYear.setText(String.valueOf(current_graph_year));
     	            graph_Panel.setYear(current_graph_year);
-
     	            setupData();
     	        }
     	    }
@@ -528,7 +526,7 @@ public class Utility_Panel extends JPanel {
                 hasPreviousYear = current_graph_year > minYear;
             }
             
-            lbl_Prev_Button.setForeground(new Color(90, 90, 90));
+            lbl_Next_Button.setForeground(new Color(170, 170, 170));
             lbl_Next_Button.setVisible(hasNextYear);
             lbl_Next_Button.setEnabled(hasNextYear);
             lbl_Prev_Button.setForeground(new Color(170, 170, 170));

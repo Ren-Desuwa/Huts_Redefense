@@ -642,7 +642,7 @@ public class Edit_Reading_Panel extends JDialog {
 			}
 		}
 		
-		public void loadReadingData(LocalDate date, double reading, double rate, double totalPrice) {
+		public void loadReadingData(int index,LocalDate date, double reading, double rate, double totalPrice) {
 		    // Set the reading value based on reading type
 		    if (readingType.equals("electricity")) {
 		        tf_Reading.setText(String.valueOf(reading));
@@ -653,14 +653,15 @@ public class Edit_Reading_Panel extends JDialog {
 		    }
 
 		    // Set rate and total price
+		    cB_Edit_Reading_Selection.setSelectedIndex(index);
 		    lbl_DateSelected.setText(date.toString());
 		    tf_Rate.setText(String.valueOf(rate));
 		    tf_TotalPrice.setText(String.valueOf(totalPrice));
 		}
 		
-		public void loadReadingData(Reading reading) {
+		public void loadReadingData(Reading reading, int index) {
 		    if (reading != null) {
-		        loadReadingData(reading.getDate(),reading.getReading(), reading.getRate(), reading.getTotal_Price());
+		        loadReadingData(index, reading.getDate(),reading.getReading(), reading.getRate(), reading.getTotal_Price());
 		    }
 		}
 
