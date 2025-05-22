@@ -372,8 +372,8 @@ public class Log_In_Window extends JFrame {
 	        public void run() {
 	            try {
 	            	Log_In_Window.this.dispose();
-	                Retrive_Window retrive_window = new Retrive_Window(database_manager);
-	                retrive_window.setVisible(true);
+	                Retrieve_Window retrieve_window = new Retrieve_Window(database_manager);
+	                retrieve_window.setVisible(true);
 	            } catch (Exception e) {
 	                e.printStackTrace();
 	            }

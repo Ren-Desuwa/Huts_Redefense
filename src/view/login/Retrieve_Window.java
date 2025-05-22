@@ -25,7 +25,7 @@ import visuals.Rounded_Panel;
  * A window for retrieving user account and resetting password
  * This window is displayed when a user forgets their password
  */
-public class Retrive_Window extends JFrame {
+public class Retrieve_Window extends JFrame {
 
 	private static final long serialVersionUID = 1L;
     
@@ -52,7 +52,7 @@ public class Retrive_Window extends JFrame {
      * 
      * @param database_manager The database manager
      */
-    public Retrive_Window(Database_Manager database_manager) {
+    public Retrieve_Window(Database_Manager database_manager) {
         this.database_manager = database_manager;
         
         initialize_Window_Properties();
@@ -247,7 +247,7 @@ public class Retrive_Window extends JFrame {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    Retrive_Window.this.dispose();
+                    Retrieve_Window.this.dispose();
                     Log_In_Window logInWindow = new Log_In_Window(database_manager);
                     logInWindow.setVisible(true);
                 } catch (Exception e) {
@@ -289,7 +289,7 @@ public class Retrive_Window extends JFrame {
             EventQueue.invokeLater(new Runnable() {
                 public void run() {
                     try {
-                        Retrive_Window.this.dispose();
+                        Retrieve_Window.this.dispose();
                         New_Password_Window newPasswordWindow = new New_Password_Window(database_manager, current_user);
                         newPasswordWindow.setVisible(true);
                     } catch (Exception e) {
