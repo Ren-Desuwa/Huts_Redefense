@@ -65,6 +65,9 @@ public class Add_Reading_Panel extends JDialog {
 	private JLabel lbl_Day;
 	private JLabel lbl_Month;
 	private JLabel lbl_Year;
+	private JLabel lbl_Incorrect_Signage2;
+	private JLabel lbl_Incorrect_Signage3;
+	private JLabel lbl_Incorrect_Signage1;
 	
 	public Add_Reading_Panel(JFrame parent ,Database_Manager database_manager, User current_user,JPanel panel_type, String type) {
 		super(parent, "Add Reading", true);
@@ -213,6 +216,27 @@ public class Add_Reading_Panel extends JDialog {
 		btn_Cancel.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btn_Cancel.setBounds(234, 458, 91, 34);
 		contentPane.add(btn_Cancel);
+		
+		lbl_Incorrect_Signage1 = new JLabel("*");
+		lbl_Incorrect_Signage1.setForeground(Color.RED);
+		lbl_Incorrect_Signage1.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_Incorrect_Signage1.setBounds(413, 223, 23, 25);
+		lbl_Incorrect_Signage1.setVisible(false);
+		contentPane.add(lbl_Incorrect_Signage1);
+		
+		lbl_Incorrect_Signage2 = new JLabel("*");
+		lbl_Incorrect_Signage2.setForeground(Color.RED);
+		lbl_Incorrect_Signage2.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_Incorrect_Signage2.setBounds(413, 304, 23, 25);
+		lbl_Incorrect_Signage2.setVisible(false);
+		contentPane.add(lbl_Incorrect_Signage2);
+		
+		lbl_Incorrect_Signage3 = new JLabel("*");
+		lbl_Incorrect_Signage3.setForeground(Color.RED);
+		lbl_Incorrect_Signage3.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_Incorrect_Signage3.setBounds(413, 384, 23, 25);
+		lbl_Incorrect_Signage3.setVisible(false);
+		contentPane.add(lbl_Incorrect_Signage3);
 	}
 	
 	private void create_Action_Listeners() {
@@ -385,14 +409,30 @@ public class Add_Reading_Panel extends JDialog {
 	    String totalPrice = tf_TotalPrice.getText();
 
 	    // Check for placeholder texts
-	    if (reading.equals("Enter Reading") || 
-	        rate.equals("Enter Rate") || 
+	    if (reading.equals("Enter Reading") && 
+	        rate.equals("Enter Rate") && 
 	        totalPrice.equals("Total Price")) {
 	        JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
 	        
-	        //make red show
-	      //make red show
-	      //make red show
+	        lbl_Incorrect_Signage1.setVisible(true);
+	        lbl_Incorrect_Signage2.setVisible(true);
+	        lbl_Incorrect_Signage3.setVisible(true);
+	        return;
+	    }
+	    
+	    if(reading.equals("Enter Reading")) {
+	    	JOptionPane.showMessageDialog(this, "Please enter a reading value.", "Error", JOptionPane.ERROR_MESSAGE);
+	    	lbl_Incorrect_Signage1.setVisible(true);
+	        return;
+	    }
+	    if(rate.equals("Enter Rate")) {
+	    	JOptionPane.showMessageDialog(this, "Please enter a rate value.", "Error", JOptionPane.ERROR_MESSAGE);
+	    	lbl_Incorrect_Signage2.setVisible(true);
+	        return;
+	    }
+	    if(totalPrice.equals("Total Price")) {
+	    	JOptionPane.showMessageDialog(this, "Please enter a total price value.", "Error", JOptionPane.ERROR_MESSAGE);
+	    	lbl_Incorrect_Signage3.setVisible(true);
 	        return;
 	    }
 
@@ -404,19 +444,19 @@ public class Add_Reading_Panel extends JDialog {
 	        // Check for negative values
 	        if (readingVal < 0) {
 	            JOptionPane.showMessageDialog(this, "Reading value cannot be negative.", "Error", JOptionPane.ERROR_MESSAGE);
-	            //make red show
+	            lbl_Incorrect_Signage1.setVisible(true);
 	            return;
 	        } 
 	        //make red not show
 	        if (rateVal < 0) {
 	        	JOptionPane.showMessageDialog(this, "Rate value cannot be negative.", "Error", JOptionPane.ERROR_MESSAGE);
-	        	//make red show
+	        	lbl_Incorrect_Signage2.setVisible(true);
 	            return;
 	        }
 	      //make red not show
 	        if (totalVal < 0) {
 	        	JOptionPane.showMessageDialog(this, "Total value cannot be negative.", "Error", JOptionPane.ERROR_MESSAGE);
-	        	//make red show
+	        	lbl_Incorrect_Signage3.setVisible(true);
 	            return;
 	        }
 	      //make red not show
