@@ -27,13 +27,8 @@ public class User_Manager {
 	}
 	
 	public void addUser(String username, String password, String email) throws SQLException {
-		if (getUserByUsername(username) != null) {
-			System.out.println("Username already exists");
-			return;
-		}
-		if (getUserByEmail(email) != null) {
-			System.out.println("Email already exists");
-			return;
+		if (checkUserEmail(username, email)) {
+			throw new SQLException("User Already Exist");
 		}
 		String sqlscript = "INSERT INTO users (username, password, email) VALUES (?, ?, ?)";
 		try (PreparedStatement prepared_statement = connection.prepareStatement(sqlscript, Statement.RETURN_GENERATED_KEYS)) {
@@ -151,7 +146,6 @@ public class User_Manager {
 	
 	public boolean checkUserEmail(String username, String email) {
 	    try {
-	        // Check if username exists
 	        if (getUserByUsername(username) != null || getUserByEmail(email) != null) {
 	            return true;
 	        }

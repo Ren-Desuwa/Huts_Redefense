@@ -1,4 +1,4 @@
-package view.panel.misc;
+package visuals;
 
 import java.awt.Color;
 import java.util.ArrayList;

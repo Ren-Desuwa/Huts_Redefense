@@ -9,9 +9,9 @@ import database.Database_Manager;
 import model.Reading;
 import model.User;
 import view.panel.misc.Add_Reading_Panel;
-import view.panel.misc.Utility_Tips_Manager;
 import visuals.Graph_Panel;
 import visuals.Rounded_Panel;
+import visuals.Utility_Tips_Manager;
 import visuals.Rounded_Button;
 
 import javax.swing.border.EmptyBorder;

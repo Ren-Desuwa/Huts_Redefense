@@ -1027,7 +1027,7 @@ public class Database_Manager_Test {
             Reading largeReading = new Reading();
             largeReading.setUser_Id(currentUser.getUser_Id());
             largeReading.setDate(LocalDate.now());
-            largeReading.setType("test_large");
+            largeReading.setType("other");
             largeReading.setReading(999999999.99);
             largeReading.setRate(99.99);
             largeReading.setTotal_Price(largeReading.getReading() * largeReading.getRate());
@@ -1046,31 +1046,29 @@ public class Database_Manager_Test {
             printFailure("Large number handling exception: " + e.getMessage());
         }
         
-        // Test 7: Special characters in utility type
+        // Test 7: Invalid utility type handling
         totalTests++;
         try {
-            String specialType = "test-type_with.special@chars";
-            Reading specialReading = new Reading();
-            specialReading.setUser_Id(currentUser.getUser_Id());
-            specialReading.setDate(LocalDate.now());
-            specialReading.setType(specialType);
-            specialReading.setReading(100.0);
-            specialReading.setRate(1.0);
-            specialReading.setTotal_Price(100.0);
+            Reading invalidTypeReading = new Reading();
+            invalidTypeReading.setUser_Id(currentUser.getUser_Id());
+            invalidTypeReading.setDate(LocalDate.now());
+            invalidTypeReading.setType("invalid_type"); // Not electricity/water/gas
+            invalidTypeReading.setReading(100.0);
+            invalidTypeReading.setRate(1.0);
+            invalidTypeReading.setTotal_Price(100.0);
             
-            readingManager.addReading(currentUser, specialReading);
-            Reading retrievedSpecial = readingManager.getLatest_Reading_By_Type(currentUser, specialType);
-            
-            if (retrievedSpecial != null && retrievedSpecial.getType().equals(specialType)) {
-                printSuccess("Special characters in utility type");
+            try {
+                readingManager.addReading(currentUser, invalidTypeReading);
+                printFailure("Invalid utility type - should not allow non-standard types");
+            } catch (SQLException e) {
+                // Expected behavior - should reject invalid type
+                printSuccess("Invalid utility type properly rejected");
                 passedTests++;
-                readingManager.deleteReading(retrievedSpecial); // Cleanup
-            } else {
-                printFailure("Special characters in utility type");
             }
         } catch (Exception e) {
-            printFailure("Special characters in utility type exception: " + e.getMessage());
+            printFailure("Invalid utility type test exception: " + e.getMessage());
         }
+
         
         // Test 8: Password validation with invalid credentials
         totalTests++;

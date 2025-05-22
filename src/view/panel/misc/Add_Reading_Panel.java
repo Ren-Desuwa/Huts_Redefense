@@ -384,12 +384,15 @@ public class Add_Reading_Panel extends JDialog {
 	    String rate = tf_Rate.getText();
 	    String totalPrice = tf_TotalPrice.getText();
 
-	    // Inline placeholder checks
+	    // Check for placeholder texts
 	    if (reading.equals("Enter Reading") || 
 	        rate.equals("Enter Rate") || 
 	        totalPrice.equals("Total Price")) {
-	        
 	        JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
+	        
+	        //make red show
+	      //make red show
+	      //make red show
 	        return;
 	    }
 
@@ -398,8 +401,37 @@ public class Add_Reading_Panel extends JDialog {
 	        double rateVal = Double.parseDouble(rate);
 	        double totalVal = Double.parseDouble(totalPrice);
 
-	        if (readingVal < 0 || rateVal < 0 || totalVal < 0) {
-	            JOptionPane.showMessageDialog(this, "Please enter positive values.", "Error", JOptionPane.ERROR_MESSAGE);
+	        // Check for negative values
+	        if (readingVal < 0) {
+	            JOptionPane.showMessageDialog(this, "Reading value cannot be negative.", "Error", JOptionPane.ERROR_MESSAGE);
+	            //make red show
+	            return;
+	        } 
+	        //make red not show
+	        if (rateVal < 0) {
+	        	JOptionPane.showMessageDialog(this, "Rate value cannot be negative.", "Error", JOptionPane.ERROR_MESSAGE);
+	        	//make red show
+	            return;
+	        }
+	      //make red not show
+	        if (totalVal < 0) {
+	        	JOptionPane.showMessageDialog(this, "Total value cannot be negative.", "Error", JOptionPane.ERROR_MESSAGE);
+	        	//make red show
+	            return;
+	        }
+	      //make red not show
+
+	        // Auto-calculate missing values
+	        if (rateVal == 0 && totalVal > 0) {
+	            // Calculate rate from total price and reading
+	            rateVal = totalVal / readingVal;
+	            tf_Rate.setText(String.format("%.2f", rateVal));
+	        } else if (totalVal == 0 && rateVal > 0) {
+	            // Calculate total from reading and rate
+	            totalVal = readingVal * rateVal;
+	            tf_TotalPrice.setText(String.format("%.2f", totalVal));
+	        } else if (rateVal == 0 && totalVal == 0) {
+	            JOptionPane.showMessageDialog(this, "Either Rate or Total Price must have a value.", "Error", JOptionPane.ERROR_MESSAGE);
 	            return;
 	        }
 
@@ -411,6 +443,7 @@ public class Add_Reading_Panel extends JDialog {
 
 	        database_manager.getReadingManager().addReading(current_user, date, readingType, readingVal, rateVal, totalVal);
 
+	        // Update appropriate panel
 	        if (parentPanel instanceof Electricity_Panel) {
 	            ((Electricity_Panel) parentPanel).Panel_Refresh();
 	            ((Electricity_Panel) parentPanel).Refresh_Graph();
@@ -434,5 +467,4 @@ public class Add_Reading_Panel extends JDialog {
 	        JOptionPane.showMessageDialog(this, "An unexpected error occurred.", "Error", JOptionPane.ERROR_MESSAGE);
 	    }
 	}
-
 }
