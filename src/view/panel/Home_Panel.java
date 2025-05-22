@@ -513,7 +513,6 @@ public class Home_Panel extends JPanel {
             }
 
             // Refresh graph content
-            graph_Panel.initialize();
             graph_Panel.refreshData();
 
         } catch (Exception e) {

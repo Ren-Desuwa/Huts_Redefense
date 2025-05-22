@@ -5,7 +5,6 @@ import java.awt.EventQueue;
 
 import javax.swing.JPanel;
 
-import java.util.List;
 import database.Database_Manager;
 import model.Reading;
 import model.User;
@@ -112,18 +111,6 @@ public class Utility_Panel extends JPanel {
     private JLabel lbl_Title_Tips;
     private JLabel lbl_Tips_1;
     
-    /**
-     * Create the panel.
-     * 
-     * @param database_manager The database manager
-     * @param current_user The current user
-     * @param utility_type The type of utility ("electricity", "gas", etc.)
-     * @param panel_title The title for the panel
-     * @param panel_subtitle The subtitle for the panel
-     * @param reading_unit The unit of measurement for readings (e.g., "KwH", "Qty")
-     * @param tips_title The title for the tips section
-     * @param tips_title_color The color for the tips title
-     */
     public Utility_Panel(Database_Manager database_manager, User current_user, 
             String utility_type, String panel_title, String panel_subtitle, 
             String reading_unit, String tips_title, Color tips_title_color) {
@@ -532,6 +519,8 @@ public class Utility_Panel extends JPanel {
             lbl_Prev_Button.setForeground(new Color(170, 170, 170));
             lbl_Prev_Button.setVisible(hasPreviousYear);
             lbl_Prev_Button.setEnabled(hasPreviousYear);
+            
+            graph_Panel.refreshData();
             
         } catch (Exception e) {
             e.printStackTrace();

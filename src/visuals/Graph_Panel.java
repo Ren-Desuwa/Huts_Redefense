@@ -152,15 +152,15 @@ public class Graph_Panel extends JPanel {
 
     private void updateGraphData() {
         try {
-            Map<Month, Double> electricity_data = reading_manager.getMonthly_Utility_Data(current_user, "electricity", 6, selected_year,false);
-            Map<Month, Double> water_data = reading_manager.getMonthly_Utility_Data(current_user, "water", 6, selected_year, false);
-            Map<Month, Double> gas_data = reading_manager.getMonthly_Utility_Data(current_user, "gas", 6, selected_year, false);
-            Map<Month, Double> overall_data = reading_manager.getMonthly_Total_Expenses(current_user, 6, selected_year);
+            Map<Month, Double> electricity_data = reading_manager.getMonthly_Utility_Data(current_user, "electricity", selected_year,false);
+            Map<Month, Double> water_data = reading_manager.getMonthly_Utility_Data(current_user, "water", selected_year, false);
+            Map<Month, Double> gas_data = reading_manager.getMonthly_Utility_Data(current_user, "gas", selected_year, false);
+            Map<Month, Double> overall_data = reading_manager.getMonthly_Total_Expenses(current_user, selected_year);
 
-            electricity_graph.setMonthlyData("Electricity", electricity_data, 6);
-            water_graph.setMonthlyData("Water", water_data, 6);
-            gas_graph.setMonthlyData("Gas", gas_data, 6);
-            overall_graph.setMonthlyData("Total Cost", overall_data, 6);
+            electricity_graph.setMonthlyData("Electricity", electricity_data);
+            water_graph.setMonthlyData("Water", water_data);
+            gas_graph.setMonthlyData("Gas", gas_data);
+            overall_graph.setMonthlyData("Total Cost", overall_data);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -168,11 +168,11 @@ public class Graph_Panel extends JPanel {
 
     private void updateSingleGraphData() {
         try {
-            Map<Month, Double> data = reading_manager.getMonthly_Utility_Data(current_user, utility_type, 6, selected_year, true);
+            Map<Month, Double> data = reading_manager.getMonthly_Utility_Data(current_user, utility_type, selected_year, true);
             switch (utility_type) {
-                case "electricity" -> electricity_graph.setMonthlyData("Electricity", data, 6);
-                case "water" -> water_graph.setMonthlyData("Water", data, 6);
-                case "gas" -> gas_graph.setMonthlyData("Gas", data, 6);
+                case "electricity" -> electricity_graph.setMonthlyData("Electricity", data);
+                case "water" -> water_graph.setMonthlyData("Water", data);
+                case "gas" -> gas_graph.setMonthlyData("Gas", data);
             }
         } catch (SQLException e) {
             e.printStackTrace();

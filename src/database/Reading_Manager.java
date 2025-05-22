@@ -536,7 +536,7 @@ public class Reading_Manager {
 
 
     // Update the getMonthly_Utility_Data method to include year parameter
-    public Map<Month, Double> getMonthly_Utility_Data(User user, String utility_type, int months, int year, boolean use_price) 
+    public Map<Month, Double> getMonthly_Utility_Data(User user, String utility_type, int year, boolean use_price) 
             throws SQLException {
         LocalDate end_date = LocalDate.of(year, 12, 31); // Whole Year
         LocalDate start_date = LocalDate.of(year, 1, 1);
@@ -546,13 +546,13 @@ public class Reading_Manager {
     }
 
     // Update the getMonthly_Total_Expenses method to include year parameter
-    public Map<Month, Double> getMonthly_Total_Expenses(User user, int months, int year) throws SQLException {
+    public Map<Month, Double> getMonthly_Total_Expenses(User user, int year) throws SQLException {
         Map<Month, Double> total_expenses = new HashMap<>();
         
         // Get data for each utility type
-        Map<Month, Double> electricity_expenses = getMonthly_Utility_Data(user, "electricity", months, year, true);
-        Map<Month, Double> water_expenses = getMonthly_Utility_Data(user, "water", months, year, true);
-        Map<Month, Double> gas_expenses = getMonthly_Utility_Data(user, "gas", months, year, true);
+        Map<Month, Double> electricity_expenses = getMonthly_Utility_Data(user, "electricity", year, true);
+        Map<Month, Double> water_expenses = getMonthly_Utility_Data(user, "water", year, true);
+        Map<Month, Double> gas_expenses = getMonthly_Utility_Data(user, "gas", year, true);
         
         // Combine expenses from all utility types
         for (Month month : Month.values()) {

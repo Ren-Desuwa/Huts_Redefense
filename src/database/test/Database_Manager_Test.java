@@ -722,7 +722,7 @@ public class Database_Manager_Test {
      totalTests++;
      try {
          int currentYear = LocalDate.now().getYear();
-         Map<Month, Double> monthlyElectricityReadings = readingManager.getMonthly_Utility_Data(currentUser, "electricity", 6, currentYear, false);
+         Map<Month, Double> monthlyElectricityReadings = readingManager.getMonthly_Utility_Data(currentUser, "electricity", currentYear, false);
          if (monthlyElectricityReadings.size() == 6) {
              System.out.println("✅ SUCCESS: Retrieved monthly electricity readings: " + monthlyElectricityReadings.size() + " months");
              passedTests++;
@@ -737,7 +737,7 @@ public class Database_Manager_Test {
      totalTests++;
      try {
          int currentYear = LocalDate.now().getYear();
-         Map<Month, Double> monthlyElectricityPrices = readingManager.getMonthly_Utility_Data(currentUser, "electricity", 6, currentYear, true);
+         Map<Month, Double> monthlyElectricityPrices = readingManager.getMonthly_Utility_Data(currentUser, "electricity", currentYear, true);
          if (monthlyElectricityPrices.size() == 6) {
              System.out.println("✅ SUCCESS: Retrieved monthly electricity prices: " + monthlyElectricityPrices.size() + " months");
              passedTests++;
@@ -752,7 +752,7 @@ public class Database_Manager_Test {
      totalTests++;
      try {
          int currentYear = LocalDate.now().getYear();
-         Map<Month, Double> monthlyTotalExpenses = readingManager.getMonthly_Total_Expenses(currentUser, 6, currentYear);
+         Map<Month, Double> monthlyTotalExpenses = readingManager.getMonthly_Total_Expenses(currentUser, currentYear);
          if (monthlyTotalExpenses.size() == 6) {
              System.out.println("✅ SUCCESS: Retrieved monthly total expenses: " + monthlyTotalExpenses.size() + " months");
              passedTests++;

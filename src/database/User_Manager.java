@@ -150,18 +150,17 @@ public class User_Manager {
 		return null;
 	}
 	
-	public boolean UsernameEmailMatch(String username, String email) throws SQLException {
+	public boolean UsernameEmailMatch(String username, String email){
 		String sqlscript = "SELECT * FROM users WHERE username = ? COLLATE BINARY AND email = ? COLLATE NOCASE";
 		try (PreparedStatement prepared_statement = connection.prepareStatement(sqlscript)) {
 			prepared_statement.setString(1, username);
 			prepared_statement.setString(2, email);
 			ResultSet resultSet = prepared_statement.executeQuery();
-			return resultSet.next();
+			return resultSet.next(); //
 		} catch (SQLException e) {
 			e.printStackTrace();
-			
+			return false;
 		}
-		return false;
 	}
 	
 	public boolean UsernamePasswordMatch(String username, String password) throws SQLException {

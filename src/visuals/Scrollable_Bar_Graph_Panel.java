@@ -27,7 +27,6 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
     private String xAxisLabel;          // X-axis label
     private String yAxisLabel;          // Y-axis label
     private String seriesName;          // Name of the data series
-    private int monthsToShow;           // How many months to display
     private double maxValue;            // Maximum value for Y-axis scaling
     private boolean hasHeader = true;
     
@@ -62,7 +61,6 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
         this.xAxisLabel = xAxisLabel;
         this.yAxisLabel = yAxisLabel;
         this.data = new HashMap<>();
-        this.monthsToShow = 6;
         this.maxValue = 100.0;
         this.seriesName = "";
         this.hasHeader = false;
@@ -85,7 +83,6 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
         this.xAxisLabel = xAxisLabel;
         this.yAxisLabel = yAxisLabel;
         this.data = new HashMap<>();
-        this.monthsToShow = 6;
         this.maxValue = 100.0; // Default max value
         this.seriesName = ""; // Default empty series name
         
@@ -160,10 +157,10 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
      * @param data Map of Month to data values
      * @param monthsToShow Number of months to display
      */
-    public void setMonthlyData(String seriesName, Map<Month, Double> data, int monthsToShow) {
+    public void setMonthlyData(String seriesName, Map<Month, Double> data) {
         this.seriesName = seriesName;
         this.data = data != null ? data : new HashMap<>();
-        this.monthsToShow = monthsToShow;
+
         
         // Calculate the maximum value for y-axis scaling
         this.maxValue = calculateMaxValue();
@@ -240,7 +237,7 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
      */
     private int calculateChartWidth() {
         // Calculate how many bars we will draw
-        int barCount = data.size() > 0 ? data.size() : monthsToShow;
+        int barCount = data.size();
         
         // Calculate width based on bars and spacing
         return barCount * (BAR_WIDTH + BAR_SPACING) + BAR_SPACING;

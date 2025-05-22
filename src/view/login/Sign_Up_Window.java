@@ -351,6 +351,11 @@ public class Sign_Up_Window extends JFrame {
 			return;
 		}
 		
+		if (database_manager.getUserManager().UsernameEmailMatch(username, email)) {
+			System.out.println("User Email already exisist");
+			return;
+		}
+	
 		try {
 			// Add user to the database
 			database_manager.getUserManager().addUser(username, password, email);
