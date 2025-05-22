@@ -903,4 +903,31 @@ public class Reading_Manager {
             return new JList<>(new String[] {"Error fetching readings."});
         }
     }
+    
+    /**
+     * Gets list of years for which readings exist for a specific type
+     * @param user User whose reading years to retrieve
+     * @param type Type of reading (electricity, water, gas)
+     * @return Array of years in descending order
+     * @throws SQLException If database operation fails
+     */
+    public int[] getReading_Years(User user, String type) throws SQLException {
+        String sql_script = "SELECT DISTINCT strftime('%Y', date) as year FROM readings WHERE user_id = ? AND type = ? ORDER BY year DESC";
+        List<Integer> years = new ArrayList<>();
+        
+        try (PreparedStatement prepared_statement = database_connection.prepareStatement(sql_script)) {
+            prepared_statement.setInt(1, user.getUser_Id());
+            prepared_statement.setString(2, type);
+            try (ResultSet result_set = prepared_statement.executeQuery()) {
+                while (result_set.next()) {
+                    years.add(Integer.parseInt(result_set.getString("year")));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+        
+        return years.stream().mapToInt(Integer::intValue).toArray();
+    }
 }
