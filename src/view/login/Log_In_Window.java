@@ -52,7 +52,7 @@ public class Log_In_Window extends JFrame {
 	private JLabel lbl_Password;
 	private JLabel lbl_Forgot_Password;
 	private JLabel lbl_Incorrect_Signage1;
-	private JLabel lbl_Incorrect_Signaage2;
+	private JLabel lbl_Incorrect_Signage2;
 	private JLabel lbl_SignUp;
 	
 	// Buttons
@@ -177,12 +177,12 @@ public class Log_In_Window extends JFrame {
 		lbl_Incorrect_Signage1.setVisible(false); // Hide initially
 		contentPane.add(lbl_Incorrect_Signage1);
 		
-		lbl_Incorrect_Signaage2 = new JLabel("*");
-		lbl_Incorrect_Signaage2.setForeground(new Color(255, 0, 0));
-		lbl_Incorrect_Signaage2.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lbl_Incorrect_Signaage2.setBounds(403, 197, 23, 25);
-		lbl_Incorrect_Signaage2.setVisible(false); // Hide initially
-		contentPane.add(lbl_Incorrect_Signaage2);
+		lbl_Incorrect_Signage2 = new JLabel("*");
+		lbl_Incorrect_Signage2.setForeground(new Color(255, 0, 0));
+		lbl_Incorrect_Signage2.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_Incorrect_Signage2.setBounds(403, 197, 23, 25);
+		lbl_Incorrect_Signage2.setVisible(false); // Hide initially
+		contentPane.add(lbl_Incorrect_Signage2);
 	}
 	
 	/**
@@ -321,14 +321,14 @@ public class Log_In_Window extends JFrame {
 		if (username.isEmpty() || password.isEmpty()) {
 			System.out.println("Please fill in all fields.");
 			lbl_Incorrect_Signage1.setVisible(true); // Show label
-			lbl_Incorrect_Signaage2.setVisible(true); // Show label
+			lbl_Incorrect_Signage2.setVisible(true); // Show label
 			return;
 		}
 		
 		if (username.equals("Enter Username") || password.equals("Enter Password")) {
 			System.out.println("Please fill in all fields.");
 			lbl_Incorrect_Signage1.setVisible(true); // Show label
-			lbl_Incorrect_Signaage2.setVisible(true); // Show label
+			lbl_Incorrect_Signage2.setVisible(true); // Show label
 			return;
 		}
 		
@@ -338,7 +338,7 @@ public class Log_In_Window extends JFrame {
 				System.out.println("Passwords do not match.");
 				lbl_Forgot_Password.setVisible(true); // Show label
 				lbl_Incorrect_Signage1.setVisible(true); // Show label
-				lbl_Incorrect_Signaage2.setVisible(true); // Show label
+				lbl_Incorrect_Signage2.setVisible(true); // Show label
 				return;
 			}
 			
