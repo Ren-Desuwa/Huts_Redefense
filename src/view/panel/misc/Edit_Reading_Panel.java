@@ -641,4 +641,27 @@ public class Edit_Reading_Panel extends JDialog {
 				return new JComboBox<>(new String[] {"Error fetching readings."});
 			}
 		}
+		
+		public void loadReadingData(LocalDate date, double reading, double rate, double totalPrice) {
+		    // Set the reading value based on reading type
+		    if (readingType.equals("electricity")) {
+		        tf_Reading.setText(String.valueOf(reading));
+		    } else if (readingType.equals("water")) {
+		        tf_Reading.setText(String.valueOf(reading));
+		    } else if (readingType.equals("gas")) {
+		        tf_Reading.setText(String.valueOf(reading));
+		    }
+
+		    // Set rate and total price
+		    lbl_DateSelected.setText(date.toString());
+		    tf_Rate.setText(String.valueOf(rate));
+		    tf_TotalPrice.setText(String.valueOf(totalPrice));
+		}
+		
+		public void loadReadingData(Reading reading) {
+		    if (reading != null) {
+		        loadReadingData(reading.getDate(),reading.getReading(), reading.getRate(), reading.getTotal_Price());
+		    }
+		}
+
 	}
