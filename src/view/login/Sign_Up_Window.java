@@ -359,6 +359,7 @@ public class Sign_Up_Window extends JFrame {
 		try {
 			// Add user to the database
 			database_manager.getUserManager().addUser(username, password, email);
+			User user = database_manager.getUserManager().getUserByEmail(email);
 			System.out.println("User registered successfully.");
 			
 			// Navigate to main frame
@@ -366,7 +367,7 @@ public class Sign_Up_Window extends JFrame {
 		        public void run() {
 		            try {
 		                Sign_Up_Window.this.dispose();
-		                Main_Frame mainFrame = new Main_Frame(database_manager, new User(username, password, email));
+		                Main_Frame mainFrame = new Main_Frame(database_manager, user);
 		                mainFrame.setVisible(true);
 		            } catch (Exception e) {
 		                e.printStackTrace();
