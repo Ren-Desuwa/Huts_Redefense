@@ -40,7 +40,7 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
 
     // Margin constants that vary based on header presence
     private int TOP_MARGIN = hasHeader ? 10 : 200;      // Top margin
-    private int BOTTOM_MARGIN = hasHeader ? 90 : 400;   // Bottom margin for x-axis labels
+    private int BOTTOM_MARGIN = 90;   // Bottom margin for x-axis labels
     
     // Color scheme
     private Color barColor = new Color(79, 129, 189); // Blue color for bars
@@ -70,6 +70,8 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
         this.hasHeader = false;
         
         initializeUI();
+     // Set a larger height when there's no header
+        setPreferredSize(new Dimension(getWidth(), 400)); // Increased from 300 to 400
     }
 
     
@@ -90,6 +92,7 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
         this.seriesName = ""; // Default empty series name
         
         initializeUI();
+        
     }
 
     /**
@@ -124,7 +127,7 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
             }
         };
         axisLabelPanel.setPreferredSize(new Dimension(Y_AXIS_WIDTH, 
-            hasHeader ? DEFAULT_HEIGHT - HEADER_HEIGHT : DEFAULT_HEIGHT));
+            hasHeader ? DEFAULT_HEIGHT - HEADER_HEIGHT : DEFAULT_HEIGHT - 100));
         axisLabelPanel.setBackground(backgroundColor);
 
         chartPanel = new JPanel() {
@@ -199,8 +202,8 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
 
         // Adjust height based on whether header exists
         int height = getHeight() > 0 ? 
-                     (hasHeader ? getHeight() - HEADER_HEIGHT : getHeight()) : 
-                     (hasHeader ? DEFAULT_HEIGHT - HEADER_HEIGHT : DEFAULT_HEIGHT);
+                     getHeight() : 
+                     (hasHeader ? DEFAULT_HEIGHT : DEFAULT_HEIGHT + 100); // Add extra height when no header
 
         chartPanel.setPreferredSize(new Dimension(width, height));
         chartPanel.revalidate();

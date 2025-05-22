@@ -856,7 +856,15 @@ public class Reading_Manager {
      * @return JList component with formatted reading data
      */
     public JList<String> getReadings_As_JList(JPanel utility_panel, Database_Manager database_manager, User user, String type) {
-        MouseAdapter list_click_listener = new MouseAdapter() {
+    	List<Reading> all_readings;
+    	try {
+    		all_readings = getAll_Readings_By_Type(user, type);
+    	} catch (SQLException e) {
+    		e.printStackTrace();
+    		return null;
+    	}
+    	
+    	MouseAdapter list_click_listener = new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 JList<?> list = (JList<?>) e.getSource();
@@ -871,7 +879,7 @@ public class Reading_Manager {
                         EventQueue.invokeLater(new Runnable() {
                             public void run() {
                                 try {
-                                    List<Reading> all_readings = getAll_Readings_By_Type(user, "electricity");
+                                    
                                     Reading selected_reading = null;
                                     
                                     if (selected_index < all_readings.size()) {
@@ -901,8 +909,6 @@ public class Reading_Manager {
                 list.setFixedCellHeight(30);
                 return list;
             }
-            
-            List<Reading> all_readings = getAll_Readings_By_Type(user, type);
             
             String[] readings = new String[all_readings.size()];
             for (int i = 0; i < all_readings.size(); i++) {
