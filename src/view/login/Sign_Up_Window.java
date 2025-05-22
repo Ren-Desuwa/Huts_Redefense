@@ -193,25 +193,29 @@ public class Sign_Up_Window extends JFrame {
 		lbl_Incorrect_Signage1 = new JLabel("*");
 		lbl_Incorrect_Signage1.setForeground(new Color(255, 0, 0));
 		lbl_Incorrect_Signage1.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lbl_Incorrect_Signage1.setBounds(403, 311, 23, 25); // Hide initially
+		lbl_Incorrect_Signage1.setBounds(403, 311, 23, 25); 
+		lbl_Incorrect_Signage1.setVisible(false);
 		contentPane.add(lbl_Incorrect_Signage1);
 		
 		lbl_Incorrect_Signage2 = new JLabel("*");
 		lbl_Incorrect_Signage2.setForeground(Color.RED);
 		lbl_Incorrect_Signage2.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lbl_Incorrect_Signage2.setBounds(403, 222, 23, 25);
+		lbl_Incorrect_Signage2.setVisible(false);
 		contentPane.add(lbl_Incorrect_Signage2);
 		
 		lbl_Incorrect_Signage3 = new JLabel("*");
 		lbl_Incorrect_Signage3.setForeground(Color.RED);
 		lbl_Incorrect_Signage3.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lbl_Incorrect_Signage3.setBounds(403, 134, 23, 25);
+		lbl_Incorrect_Signage3.setVisible(false);
 		contentPane.add(lbl_Incorrect_Signage3);
 		
 		lbl_Incorrect_Signage4 = new JLabel("*");
 		lbl_Incorrect_Signage4.setForeground(Color.RED);
 		lbl_Incorrect_Signage4.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lbl_Incorrect_Signage4.setBounds(403, 400, 23, 25);
+		lbl_Incorrect_Signage4.setVisible(false);
 		contentPane.add(lbl_Incorrect_Signage4);
 	}
 	
@@ -389,7 +393,7 @@ public class Sign_Up_Window extends JFrame {
 			return;
 		}
 		
-		if (database_manager.getUserManager().UsernameEmailMatch(username, email)) {
+		if (!database_manager.getUserManager().checkUserEmail(username, email)) {
 			System.out.println("User Email already exisist");
 			lbl_Incorrect_Signage2.setVisible(false);
 			lbl_Incorrect_Signage3.setVisible(false);
