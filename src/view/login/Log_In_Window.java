@@ -58,11 +58,6 @@ public class Log_In_Window extends JFrame {
 	// Buttons
 	private JButton btn;
 
-	/**
-	 * Create the frame.
-	 * 
-	 * @param database_manager The database manager
-	 */
 	public Log_In_Window(Database_Manager database_manager) {
 		this.database_manager = database_manager;
 		
@@ -71,9 +66,6 @@ public class Log_In_Window extends JFrame {
 		create_Action_Listeners();
 	}
 	
-	/**
-	 * Initialize basic window properties
-	 */
 	private void initialize_Window_Properties() {
 		setTitle("Log In");
 		setResizable(false);
@@ -89,9 +81,6 @@ public class Log_In_Window extends JFrame {
 		contentPane.setLayout(null);
 	}
 	
-	/**
-	 * Initialize UI components
-	 */
 	private void initialize_UI_Components() {
 		//==============================================================================================
 		// UI CREATION - TITLE SECTION
@@ -185,9 +174,6 @@ public class Log_In_Window extends JFrame {
 		contentPane.add(lbl_Incorrect_Signaage2);
 	}
 	
-	/**
-	 * Create action listeners for UI components
-	 */
 	private void create_Action_Listeners() {
 		//==============================================================================================
 		// FOCUS LISTENERS - USERNAME FIELD
@@ -292,27 +278,6 @@ public class Log_In_Window extends JFrame {
 		});
 	}
 	
-	/**
-	 * Opens the sign up window
-	 */
-	private void openSignUp() {
-	    EventQueue.invokeLater(new Runnable() {
-	        public void run() {
-	            try {
-	            	Log_In_Window.this.dispose();
-	                Sign_Up_Window SignUpWindow = new Sign_Up_Window(database_manager);
-	                SignUpWindow.setVisible(true);
-	            } catch (Exception e) {
-	                e.printStackTrace();
-	            }
-	        }
-	    });
-	}
-	
-	/**
-	 * Handles the login process
-	 * Validates input and performs login if valid
-	 */
 	private void Login() {
 		String username = tf_Username.getText();
 		String password = String.valueOf(pf_Password.getPassword());
@@ -364,9 +329,20 @@ public class Log_In_Window extends JFrame {
 		}
 	}
 	
-	/**
-	 * Opens the password retrieval window
-	 */
+	private void openSignUp() {
+	    EventQueue.invokeLater(new Runnable() {
+	        public void run() {
+	            try {
+	            	Log_In_Window.this.dispose();
+	                Sign_Up_Window SignUpWindow = new Sign_Up_Window(database_manager);
+	                SignUpWindow.setVisible(true);
+	            } catch (Exception e) {
+	                e.printStackTrace();
+	            }
+	        }
+	    });
+	}
+
 	private void openForgotPassword() {
 	    EventQueue.invokeLater(new Runnable() {
 	        public void run() {

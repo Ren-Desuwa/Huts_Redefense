@@ -150,6 +150,21 @@ public class User_Manager {
 		return null;
 	}
 	
+	public boolean checkUserEmail(String username, String email) {
+	    try {
+	        // Check if username exists
+	        if (getUserByUsername(username) != null || getUserByEmail(email) != null) {
+	            return true;
+	        }
+	        
+	        return false;
+	        
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
+	
 	public boolean UsernameEmailMatch(String username, String email){
 		String sqlscript = "SELECT * FROM users WHERE username = ? COLLATE BINARY AND email = ? COLLATE NOCASE";
 		try (PreparedStatement prepared_statement = connection.prepareStatement(sqlscript)) {

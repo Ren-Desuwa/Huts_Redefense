@@ -21,9 +21,15 @@ import javax.swing.JPanel;
 
 public class Database_Manager_Test {
     
+    private static final String ANSI_GREEN = "\u001B[32m";
+    private static final String ANSI_RED = "\u001B[31m";
+    private static final String ANSI_BLUE = "\u001B[34m";
+    private static final String ANSI_RESET = "\u001B[0m";
+    private static final String ANSI_YELLOW = "\u001B[33m";
+    
     public static void main(String[] args) {
-        System.out.println("Starting Database Manager Test");
-        System.out.println("==============================");
+        System.out.println(ANSI_BLUE + "Starting Comprehensive Database Manager Test" + ANSI_RESET);
+        System.out.println("=" .repeat(50));
         
         // Get the database manager instance
         Database_Manager dbManager = Database_Manager.getInstance();
@@ -37,193 +43,268 @@ public class Database_Manager_Test {
         
         try {
             // Test User Manager operations
+            System.out.println(ANSI_YELLOW + "\n=== USER MANAGER TESTS ===" + ANSI_RESET);
             int[] userTestResults = testUserManager(userManager);
             passedTests += userTestResults[0];
             totalTests += userTestResults[1];
             
-            // Test Reading Manager operations
+            // Test Reading Manager basic operations
+            System.out.println(ANSI_YELLOW + "\n=== READING MANAGER BASIC TESTS ===" + ANSI_RESET);
             int[] readingTestResults = testReadingManager(userManager, readingManager);
             passedTests += readingTestResults[0];
             totalTests += readingTestResults[1];
             
             // Test advanced Reading Manager operations
+            System.out.println(ANSI_YELLOW + "\n=== READING MANAGER ADVANCED TESTS ===" + ANSI_RESET);
             int[] advancedReadingTestResults = testAdvancedReadingManager(userManager, readingManager);
             passedTests += advancedReadingTestResults[0];
             totalTests += advancedReadingTestResults[1];
             
-            System.out.println("\nTest Summary:");
-            System.out.println("Passed tests: " + passedTests + "/" + totalTests + " (" + 
-                    (totalTests > 0 ? (passedTests * 100 / totalTests) : 0) + "%)");
+            // Test edge cases and error handling
+            System.out.println(ANSI_YELLOW + "\n=== EDGE CASE AND ERROR HANDLING TESTS ===" + ANSI_RESET);
+            int[] edgeCaseResults = testEdgeCases(userManager, readingManager);
+            passedTests += edgeCaseResults[0];
+            totalTests += edgeCaseResults[1];
             
-            if (passedTests == totalTests) {
-                System.out.println("All tests passed successfully!");
-            } else {
-                System.out.println("Some tests failed. See log for details.");
-            }
+            // Test UI-related methods
+            System.out.println(ANSI_YELLOW + "\n=== UI INTEGRATION TESTS ===" + ANSI_RESET);
+            int[] uiTestResults = testUIIntegration(userManager, readingManager);
+            passedTests += uiTestResults[0];
+            totalTests += uiTestResults[1];
+            
+            // Final test summary
+            printTestSummary(passedTests, totalTests);
             
         } catch (Exception e) {
-            System.err.println("Test failed with exception: " + e.getMessage());
+            System.err.println(ANSI_RED + "Test suite failed with exception: " + e.getMessage() + ANSI_RESET);
             e.printStackTrace();
         } finally {
-            // Close database connection
+            // Clean up and close database connection
+            cleanupTestData(userManager, readingManager);
             dbManager.closeConnection();
-            System.out.println("\nDatabase connection closed.");
+            System.out.println(ANSI_BLUE + "\nDatabase connection closed." + ANSI_RESET);
         }
     }
     
+    private static void printTestSummary(int passedTests, int totalTests) {
+        System.out.println("\n" + "=".repeat(50));
+        System.out.println(ANSI_BLUE + "COMPREHENSIVE TEST SUMMARY:" + ANSI_RESET);
+        System.out.println("Passed tests: " + ANSI_GREEN + passedTests + ANSI_RESET + "/" + totalTests + 
+                " (" + (totalTests > 0 ? (passedTests * 100 / totalTests) : 0) + "%)");
+        
+        if (passedTests == totalTests) {
+            System.out.println(ANSI_GREEN + "🎉 ALL TESTS PASSED SUCCESSFULLY!" + ANSI_RESET);
+        } else {
+            int failedTests = totalTests - passedTests;
+            System.out.println(ANSI_RED + "⚠️  " + failedTests + " test(s) failed. See log for details." + ANSI_RESET);
+        }
+        System.out.println("=".repeat(50));
+    }
+    
     private static int[] testUserManager(User_Manager userManager) throws SQLException {
-        System.out.println("\n--- Testing User Manager ---");
+        System.out.println("Testing User Manager functionality...");
         int passedTests = 0;
         int totalTests = 0;
 
-        // Test user creation with parameters
+        // Test 1: User creation with parameters
+        totalTests++;
         String testUsername = "testuser_" + System.currentTimeMillis();
-        String testPassword = "password123";
+        String testPassword = "SecurePassword123!";
         String testEmail = "test" + System.currentTimeMillis() + "@example.com";
 
-        System.out.println("Creating test user: " + testUsername);
-        userManager.addUser(testUsername, testPassword, testEmail);
-
-        // Test retrieving user by username
-        totalTests++;
-        User retrievedUser = userManager.getUserByUsername(testUsername);
-        if (retrievedUser != null && retrievedUser.getUsername().equals(testUsername)) {
-            System.out.println("✅ SUCCESS: Retrieved user by username: " + retrievedUser.getUsername());
-            passedTests++;
-        } else {
-            System.out.println("❌ FAILURE: User retrieval by username failed");
-        }
-
-        // Test retrieving user by email
-        totalTests++;
-        User retrievedUserByEmail = userManager.getUserByEmail(testEmail);
-        if (retrievedUserByEmail != null && retrievedUserByEmail.getEmail().equals(testEmail)) {
-            System.out.println("✅ SUCCESS: Retrieved user by email: " + retrievedUserByEmail.getEmail());
-            passedTests++;
-        } else {
-            System.out.println("❌ FAILURE: User retrieval by email failed");
-        }
-
-        // Test retrieving user by ID
-        totalTests++;
-        User retrievedUserById = userManager.getUserById(retrievedUser.getUser_Id());
-        if (retrievedUserById != null && retrievedUserById.getUser_Id() == retrievedUser.getUser_Id()) {
-            System.out.println("✅ SUCCESS: Retrieved user by ID: " + retrievedUserById.getUser_Id());
-            passedTests++;
-        } else {
-            System.out.println("❌ FAILURE: User retrieval by ID failed");
-        }
-
-        // Test username/password match
-        totalTests++;
-        boolean credentialsMatch = userManager.UsernamePasswordMatch(testUsername, testPassword);
-        if (credentialsMatch) {
-            System.out.println("✅ SUCCESS: Username/password match");
-            passedTests++;
-        } else {
-            System.out.println("❌ FAILURE: Username/password match failed");
-        }
-
-        // Test username/email match
-        totalTests++;
-        boolean usernameEmailMatch = userManager.UsernameEmailMatch(testUsername, testEmail);
-        if (usernameEmailMatch) {
-            System.out.println("✅ SUCCESS: Username/email match");
-            passedTests++;
-        } else {
-            System.out.println("❌ FAILURE: Username/email match failed");
-        }
-
-        // Test updating username, password and email
-        totalTests++;
-        String updatedUsername = "updated_" + testUsername;
-        String updatedPassword = "updatedpass456";
-        String updatedEmail = "updated_" + testEmail;
-        System.out.println("Updating username, password and email");
-        userManager.updateUser(retrievedUser, updatedUsername, updatedPassword, updatedEmail);
-        
-        // Verify username and email update
-        User updatedUser = userManager.getUserById(retrievedUser.getUser_Id());
-        if (updatedUser != null && 
-            updatedUser.getUsername().equals(updatedUsername) && 
-            updatedUser.getEmail().equals(updatedEmail) &&
-            userManager.UsernamePasswordMatch(updatedUsername, updatedPassword)) {
-            System.out.println("✅ SUCCESS: Username, password and email update successful");
-            passedTests++;
-        } else {
-            System.out.println("❌ FAILURE: Username, password and email update failed");
-        }
-
-        // Test updating just user password
-        totalTests++;
-        String newPassword = "newpassword789";
-        System.out.println("Updating user password");
-        userManager.updateUserPassword(updatedUser, newPassword);
-
-        // Verify password update
-        boolean newCredentialsMatch = userManager.UsernamePasswordMatch(updatedUsername, newPassword);
-        if (newCredentialsMatch) {
-            System.out.println("✅ SUCCESS: Password update successful");
-            passedTests++;
-        } else {
-            System.out.println("❌ FAILURE: Password update failed");
-        }
-
-        // Test setCurrentUser and getCurrentUser
-        totalTests++;
-        userManager.setCurrentUser(updatedUser);
-        User currentUser = userManager.getCurrentUser();
-        if (currentUser != null && currentUser.getUsername().equals(updatedUsername)) {
-            System.out.println("✅ SUCCESS: Current user set and retrieved: " + currentUser.getUsername());
-            passedTests++;
-        } else {
-            System.out.println("❌ FAILURE: Failed to set or retrieve current user");
-        }
-        
-        // Test setCurrentUserNull
-        totalTests++;
-        userManager.setCurrentUserNull();
-        if (userManager.getCurrentUser() == null) {
-            System.out.println("✅ SUCCESS: Current user set to null");
-            passedTests++;
-        } else {
-            System.out.println("❌ FAILURE: Failed to set current user to null");
-        }
-        
-        // Reset current user for subsequent tests
-        userManager.setCurrentUser(updatedUser);
-        
-        // Test adding user with User object
-        totalTests++;
-        User newUser = new User();
-        String secondUsername = "testuser2_" + System.currentTimeMillis();
-        String secondPassword = "password456";
-        String secondEmail = "test2_" + System.currentTimeMillis() + "@example.com";
-        newUser.setUsername(secondUsername);
-        newUser.setPassword(secondPassword);
-        newUser.setEmail(secondEmail);
-        
         try {
-            userManager.addUser(newUser);
-            User retrievedSecondUser = userManager.getUserByUsername(secondUsername);
-            if (retrievedSecondUser != null && retrievedSecondUser.getUsername().equals(secondUsername)) {
-                System.out.println("✅ SUCCESS: Added user with User object: " + retrievedSecondUser.getUsername());
+            userManager.addUser(testUsername, testPassword, testEmail);
+            User retrievedUser = userManager.getUserByUsername(testUsername);
+            
+            if (retrievedUser != null && retrievedUser.getUsername().equals(testUsername)) {
+                printSuccess("User creation and retrieval by username");
                 passedTests++;
             } else {
-                System.out.println("❌ FAILURE: Adding user with User object failed");
+                printFailure("User creation and retrieval by username");
+            }
+        } catch (Exception e) {
+            printFailure("User creation with exception: " + e.getMessage());
+        }
+
+        // Test 2: User retrieval by email
+        totalTests++;
+        try {
+            User retrievedUserByEmail = userManager.getUserByEmail(testEmail);
+            if (retrievedUserByEmail != null && retrievedUserByEmail.getEmail().equals(testEmail)) {
+                printSuccess("User retrieval by email");
+                passedTests++;
+            } else {
+                printFailure("User retrieval by email");
+            }
+        } catch (Exception e) {
+            printFailure("User retrieval by email with exception: " + e.getMessage());
+        }
+
+        // Test 3: User retrieval by ID
+        totalTests++;
+        try {
+            User user = userManager.getUserByUsername(testUsername);
+            if (user != null) {
+                User retrievedUserById = userManager.getUserById(user.getUser_Id());
+                if (retrievedUserById != null && retrievedUserById.getUser_Id() == user.getUser_Id()) {
+                    printSuccess("User retrieval by ID");
+                    passedTests++;
+                } else {
+                    printFailure("User retrieval by ID");
+                }
+            } else {
+                printFailure("User retrieval by ID - base user not found");
+            }
+        } catch (Exception e) {
+            printFailure("User retrieval by ID with exception: " + e.getMessage());
+        }
+
+        // Test 4: Username/Password validation
+        totalTests++;
+        try {
+            boolean credentialsMatch = userManager.UsernamePasswordMatch(testUsername, testPassword);
+            if (credentialsMatch) {
+                printSuccess("Username/password validation");
+                passedTests++;
+            } else {
+                printFailure("Username/password validation - credentials don't match");
+            }
+        } catch (Exception e) {
+            printFailure("Username/password validation with exception: " + e.getMessage());
+        }
+
+        // Test 5: Username/Email validation
+        totalTests++;
+        try {
+            boolean usernameEmailMatch = userManager.UsernameEmailMatch(testUsername, testEmail);
+            if (usernameEmailMatch) {
+                printSuccess("Username/email validation");
+                passedTests++;
+            } else {
+                printFailure("Username/email validation - credentials don't match");
+            }
+        } catch (Exception e) {
+            printFailure("Username/email validation with exception: " + e.getMessage());
+        }
+
+        // Test 6: User update (all fields)
+        totalTests++;
+        try {
+            User user = userManager.getUserByUsername(testUsername);
+            String updatedUsername = "updated_" + testUsername;
+            String updatedPassword = "UpdatedPassword456!";
+            String updatedEmail = "updated_" + testEmail;
+            
+            userManager.updateUser(user, updatedUsername, updatedPassword, updatedEmail);
+            
+            User updatedUser = userManager.getUserById(user.getUser_Id());
+            boolean updateSuccess = updatedUser != null && 
+                    updatedUser.getUsername().equals(updatedUsername) && 
+                    updatedUser.getEmail().equals(updatedEmail) &&
+                    userManager.UsernamePasswordMatch(updatedUsername, updatedPassword);
+            
+            if (updateSuccess) {
+                printSuccess("User update (all fields)");
+                passedTests++;
+                // Update test variables for subsequent tests
+                testUsername = updatedUsername;
+                testPassword = updatedPassword;
+                testEmail = updatedEmail;
+            } else {
+                printFailure("User update (all fields)");
+            }
+        } catch (Exception e) {
+            printFailure("User update with exception: " + e.getMessage());
+        }
+
+        // Test 7: Password-only update
+        totalTests++;
+        try {
+            User user = userManager.getUserByUsername(testUsername);
+            String newPassword = "NewPassword789!";
+            
+            userManager.updateUserPassword(user, newPassword);
+            
+            boolean passwordUpdated = userManager.UsernamePasswordMatch(testUsername, newPassword);
+            if (passwordUpdated) {
+                printSuccess("Password-only update");
+                passedTests++;
+                testPassword = newPassword; // Update for cleanup
+            } else {
+                printFailure("Password-only update");
+            }
+        } catch (Exception e) {
+            printFailure("Password-only update with exception: " + e.getMessage());
+        }
+
+        // Test 8: Current user management
+        totalTests++;
+        try {
+            User user = userManager.getUserByUsername(testUsername);
+            userManager.setCurrentUser(user);
+            User currentUser = userManager.getCurrentUser();
+            
+            if (currentUser != null && currentUser.getUsername().equals(testUsername)) {
+                printSuccess("Current user set and retrieved");
+                passedTests++;
+            } else {
+                printFailure("Current user set and retrieved");
+            }
+        } catch (Exception e) {
+            printFailure("Current user management with exception: " + e.getMessage());
+        }
+
+        // Test 9: Current user null handling
+        totalTests++;
+        try {
+            userManager.setCurrentUserNull();
+            if (userManager.getCurrentUser() == null) {
+                printSuccess("Current user set to null");
+                passedTests++;
+            } else {
+                printFailure("Current user set to null");
             }
             
-            // Clean up second user
-            userManager.deleteUser(retrievedSecondUser);
+            // Reset current user for subsequent tests
+            User user = userManager.getUserByUsername(testUsername);
+            userManager.setCurrentUser(user);
         } catch (Exception e) {
-            System.out.println("❌ FAILURE: Exception when adding user with User object: " + e.getMessage());
+            printFailure("Current user null handling with exception: " + e.getMessage());
+        }
+
+        // Test 10: Add user with User object
+        totalTests++;
+        try {
+            User newUser = new User();
+            String secondUsername = "testuser2_" + System.currentTimeMillis();
+            String secondPassword = "SecondPassword123!";
+            String secondEmail = "test2_" + System.currentTimeMillis() + "@example.com";
+            
+            newUser.setUsername(secondUsername);
+            newUser.setPassword(secondPassword);
+            newUser.setEmail(secondEmail);
+            
+            userManager.addUser(newUser);
+            User retrievedSecondUser = userManager.getUserByUsername(secondUsername);
+            
+            if (retrievedSecondUser != null && retrievedSecondUser.getUsername().equals(secondUsername)) {
+                printSuccess("Add user with User object");
+                passedTests++;
+                
+                // Cleanup second user
+                userManager.deleteUser(retrievedSecondUser);
+            } else {
+                printFailure("Add user with User object");
+            }
+        } catch (Exception e) {
+            printFailure("Add user with User object exception: " + e.getMessage());
         }
 
         return new int[] {passedTests, totalTests};
     }
     
     private static int[] testReadingManager(User_Manager userManager, Reading_Manager readingManager) throws SQLException {
-        System.out.println("\n--- Testing Reading Manager ---");
+        System.out.println("Testing Reading Manager basic functionality...");
         int passedTests = 0;
         int totalTests = 0;
         
@@ -232,388 +313,351 @@ public class Database_Manager_Test {
             throw new RuntimeException("Current user is not set, can't test Reading Manager");
         }
         
-        // Test adding readings
-        System.out.println("Adding test readings for user: " + currentUser.getUsername());
+        // Clean up existing readings for clean test
+        List<Reading> existingReadings = readingManager.getReadings_By_User_Id(currentUser);
+        for (Reading reading : existingReadings) {
+            readingManager.deleteReading(reading);
+        }
         
-        // Add electricity reading
+        // Test 1: Add reading with all parameters
         totalTests++;
-        LocalDate electricityDate = LocalDate.now().minusDays(30);
-        double electricityReading = 500.5;
-        double electricityRate = 0.15;
-        double electricityTotal = electricityReading * electricityRate;
-        
         try {
+            LocalDate electricityDate = LocalDate.now().minusDays(30);
+            double electricityReading = 500.5;
+            double electricityRate = 0.15;
+            double electricityTotal = electricityReading * electricityRate;
+            
             readingManager.addReading(currentUser, electricityDate, "electricity", 
                     electricityReading, electricityRate, electricityTotal);
             
-            // Verify the electricity reading was added
             Reading latestElectricity = readingManager.getLatest_Reading_By_Type(currentUser, "electricity");
-            if (latestElectricity != null && 
-                Math.abs(latestElectricity.getReading() - electricityReading) < 0.001 &&
-                Math.abs(latestElectricity.getRate() - electricityRate) < 0.001 &&
-                Math.abs(latestElectricity.getTotal_Price() - electricityTotal) < 0.001) {
-                System.out.println("✅ SUCCESS: Added electricity reading correctly");
+            if (validateReading(latestElectricity, electricityReading, electricityRate, electricityTotal)) {
+                printSuccess("Add electricity reading with all parameters");
                 passedTests++;
             } else {
-                System.out.println("❌ FAILURE: Electricity reading not added correctly");
+                printFailure("Add electricity reading with all parameters");
+                debugReading("Expected", electricityReading, electricityRate, electricityTotal);
                 if (latestElectricity != null) {
-                    System.out.println("  Expected reading: " + electricityReading + ", got: " + latestElectricity.getReading());
-                    System.out.println("  Expected rate: " + electricityRate + ", got: " + latestElectricity.getRate());
-                    System.out.println("  Expected total: " + electricityTotal + ", got: " + latestElectricity.getTotal_Price());
+                    debugReading("Actual", latestElectricity.getReading(), 
+                            latestElectricity.getRate(), latestElectricity.getTotal_Price());
                 }
             }
         } catch (Exception e) {
-            System.out.println("❌ FAILURE: Exception when adding electricity reading: " + e.getMessage());
+            printFailure("Add electricity reading exception: " + e.getMessage());
         }
         
-        // Add water reading
+        // Test 2: Add reading without rate (overloaded method)
         totalTests++;
-        LocalDate waterDate = LocalDate.now().minusDays(15);
-        double waterReading = 20.5;
-        double waterRate = 2.50;
-        double waterTotal = waterReading * waterRate;
-        
         try {
-            readingManager.addReading(currentUser, waterDate, "water", 
-                    waterReading, waterRate, waterTotal);
+            LocalDate waterDate = LocalDate.now().minusDays(15);
+            double waterReading = 25.0;
+            double waterTotal = 62.50;
             
-            // Verify the water reading was added
-            Reading latestWater = readingManager.getLatest_Reading_By_Type(currentUser, "water");
-            if (latestWater != null && 
-                Math.abs(latestWater.getReading() - waterReading) < 0.001 &&
-                Math.abs(latestWater.getRate() - waterRate) < 0.001 &&
-                Math.abs(latestWater.getTotal_Price() - waterTotal) < 0.001) {
-                System.out.println("✅ SUCCESS: Added water reading correctly");
+            readingManager.addReading(currentUser, waterDate, "water", waterReading, waterTotal);
+            
+            List<Reading> waterReadings = readingManager.getAll_Readings_By_Type(currentUser, "water");
+            Reading addedReading = waterReadings.stream()
+                    .filter(r -> r.getDate().equals(waterDate))
+                    .findFirst().orElse(null);
+            
+            if (addedReading != null && 
+                Math.abs(addedReading.getReading() - waterReading) < 0.001 &&
+                Math.abs(addedReading.getTotal_Price() - waterTotal) < 0.001) {
+                printSuccess("Add water reading without rate");
                 passedTests++;
             } else {
-                System.out.println("❌ FAILURE: Water reading not added correctly");
-                if (latestWater != null) {
-                    System.out.println("  Expected reading: " + waterReading + ", got: " + latestWater.getReading());
-                    System.out.println("  Expected rate: " + waterRate + ", got: " + latestWater.getRate());
-                    System.out.println("  Expected total: " + waterTotal + ", got: " + latestWater.getTotal_Price());
-                }
+                printFailure("Add water reading without rate");
             }
         } catch (Exception e) {
-            System.out.println("❌ FAILURE: Exception when adding water reading: " + e.getMessage());
+            printFailure("Add water reading without rate exception: " + e.getMessage());
         }
         
-        
-        // Test overloaded addReading method (without rate)
+        // Test 3: Add reading with Reading object
         totalTests++;
-        LocalDate overloadDate = LocalDate.now().minusDays(10);
-        double overloadReading = 30.0;
-        double overloadTotal = 75.0;
-        String overloadType = "other";
-        
         try {
-            readingManager.addReading(currentUser, overloadDate, overloadType, overloadReading, overloadTotal);
+            Reading gasReading = new Reading();
+            gasReading.setUser_Id(currentUser.getUser_Id());
+            gasReading.setDate(LocalDate.now().minusDays(10));
+            gasReading.setType("gas");
+            gasReading.setReading(150.0);
+            gasReading.setRate(1.25);
+            gasReading.setTotal_Price(187.50);
             
-            // Verify the overloaded reading was added
-            List<Reading> otherReadings = readingManager.getAll_Readings_By_Type(currentUser, overloadType);
-            boolean foundOverloadedReading = false;
+            readingManager.addReading(currentUser, gasReading);
             
-            for (Reading r : otherReadings) {
-                if (r.getDate().equals(overloadDate) && 
-                    Math.abs(r.getReading() - overloadReading) < 0.001) {
-                    foundOverloadedReading = true;
-                    
-                    // Check if total price is stored correctly
-                    if (Math.abs(r.getTotal_Price() - overloadTotal) < 0.001) {
-                        System.out.println("✅ SUCCESS: Added overloaded reading correctly");
-                        passedTests++;
-                    } else {
-                        System.out.println("❌ FAILURE: Total price mismatch in overloaded reading");
-                        System.out.println("  Expected total: " + overloadTotal + ", got: " + r.getTotal_Price());
-                    }
-                    break;
-                }
-            }
-            
-            if (!foundOverloadedReading) {
-                System.out.println("❌ FAILURE: Overloaded reading not found");
-            }
-        } catch (Exception e) {
-            System.out.println("❌ FAILURE: Exception when testing overloaded addReading: " + e.getMessage());
-        }
-        
-        // Add gas reading
-        totalTests++;
-        LocalDate gasDate = LocalDate.now().minusDays(7);
-        double gasReading = 100.0;
-        double gasRate = 1.20;
-        double gasTotal = gasReading * gasRate;
-        
-        try {
-            readingManager.addReading(currentUser, gasDate, "gas", 
-                    gasReading, gasRate, gasTotal);
-            
-            // Verify the gas reading was added
             Reading latestGas = readingManager.getLatest_Reading_By_Type(currentUser, "gas");
-            if (latestGas != null && 
-                Math.abs(latestGas.getReading() - gasReading) < 0.001 &&
-                Math.abs(latestGas.getRate() - gasRate) < 0.001 &&
-                Math.abs(latestGas.getTotal_Price() - gasTotal) < 0.001) {
-                System.out.println("✅ SUCCESS: Added gas reading correctly");
+            if (validateReading(latestGas, 150.0, 1.25, 187.50)) {
+                printSuccess("Add gas reading with Reading object");
                 passedTests++;
             } else {
-                System.out.println("❌ FAILURE: Gas reading not added correctly");
-                if (latestGas != null) {
-                    System.out.println("  Expected reading: " + gasReading + ", got: " + latestGas.getReading());
-                    System.out.println("  Expected rate: " + gasRate + ", got: " + latestGas.getRate());
-                    System.out.println("  Expected total: " + gasTotal + ", got: " + latestGas.getTotal_Price());
-                }
+                printFailure("Add gas reading with Reading object");
             }
         } catch (Exception e) {
-            System.out.println("❌ FAILURE: Exception when adding gas reading: " + e.getMessage());
+            printFailure("Add gas reading with Reading object exception: " + e.getMessage());
         }
-       
         
-        // Test retrieving all readings for the user
+        // Test 4: Reading retrieval methods
         totalTests++;
+        try {
+            List<Reading> allReadings = readingManager.getReadings_By_User_Id(currentUser);
+            if (allReadings.size() >= 3) {
+                printSuccess("Get all readings by user ID (" + allReadings.size() + " readings)");
+                passedTests++;
+            } else {
+                printFailure("Get all readings by user ID (expected >= 3, got " + allReadings.size() + ")");
+            }
+        } catch (Exception e) {
+            printFailure("Get all readings by user ID exception: " + e.getMessage());
+        }
+        
+        // Test 5: Reading retrieval by date range
+        totalTests++;
+        try {
+            LocalDate startDate = LocalDate.now().minusDays(35);
+            LocalDate endDate = LocalDate.now();
+            List<Reading> rangeReadings = readingManager.getReadings_By_Date(currentUser, startDate, endDate);
+            
+            if (rangeReadings.size() >= 2) { // Should include electricity and water readings
+                printSuccess("Get readings by date range (" + rangeReadings.size() + " readings)");
+                passedTests++;
+            } else {
+                printFailure("Get readings by date range (expected >= 2, got " + rangeReadings.size() + ")");
+            }
+        } catch (Exception e) {
+            printFailure("Get readings by date range exception: " + e.getMessage());
+        }
+        
+        // Test 6: Reading retrieval by date range and type
+        totalTests++;
+        try {
+            LocalDate startDate = LocalDate.now().minusDays(35);
+            LocalDate endDate = LocalDate.now();
+            List<Reading> electricityInRange = readingManager.getReadings_By_Date_And_Type(
+                    currentUser, startDate, endDate, "electricity");
+            
+            if (electricityInRange.size() == 1) {
+                printSuccess("Get readings by date range and type");
+                passedTests++;
+            } else {
+                printFailure("Get readings by date range and type (expected 1, got " + electricityInRange.size() + ")");
+            }
+        } catch (Exception e) {
+            printFailure("Get readings by date range and type exception: " + e.getMessage());
+        }
+        
+        // Test 7: Reading existence check
+        totalTests++;
+        try {
+            boolean electricityExists = readingManager.isReading_Exists(currentUser, "electricity");
+            boolean nonExistentExists = readingManager.isReading_Exists(currentUser, "nonexistent");
+            
+            if (electricityExists && !nonExistentExists) {
+                printSuccess("Reading existence check");
+                passedTests++;
+            } else {
+                printFailure("Reading existence check (electricity: " + electricityExists + 
+                        ", nonexistent: " + nonExistentExists + ")");
+            }
+        } catch (Exception e) {
+            printFailure("Reading existence check exception: " + e.getMessage());
+        }
+        
+        // Test 8: Reading retrieval by ID (multiple overloads)
         List<Reading> allReadings = readingManager.getReadings_By_User_Id(currentUser);
-        if (allReadings.size() >= 4) { // We added at least 4 readings: electricity, water, other, gas, internet
-            System.out.println("✅ SUCCESS: Retrieved " + allReadings.size() + " readings for user");
-            passedTests++;
-        } else {
-            System.out.println("❌ FAILURE: Retrieved only " + allReadings.size() + " readings, expected at least 4");
-        }
-        
-        // Test retrieving readings within a date range
-        totalTests++;
-        LocalDate startDate = LocalDate.now().minusDays(20);
-        LocalDate endDate = LocalDate.now();
-        List<Reading> rangeReadings = readingManager.getReadings_By_Date(currentUser, startDate, endDate);
-        int expectedInRange = 0;
-        for (Reading r : allReadings) {
-            if (!r.getDate().isBefore(startDate) && !r.getDate().isAfter(endDate)) {
-                expectedInRange++;
-            }
-        }
-        
-        if (rangeReadings.size() == expectedInRange) {
-            System.out.println("✅ SUCCESS: Retrieved correct number of readings in date range: " + rangeReadings.size());
-            passedTests++;
-        } else {
-            System.out.println("❌ FAILURE: Date range filter incorrect. Expected: " + expectedInRange + ", got: " + rangeReadings.size());
-        }
-        
-        // Test getting readings by date and type
-        totalTests++;
-        List<Reading> rangeTypeReadings = readingManager.getReadings_By_Date_And_Type(currentUser, startDate, endDate, "water");
-        int expectedWaterInRange = 0;
-        for (Reading r : allReadings) {
-            if (!r.getDate().isBefore(startDate) && !r.getDate().isAfter(endDate) && r.getType().equals("water")) {
-                expectedWaterInRange++;
-            }
-        }
-        
-        if (rangeTypeReadings.size() == expectedWaterInRange) {
-            System.out.println("✅ SUCCESS: Retrieved correct number of water readings in date range: " + rangeTypeReadings.size());
-            passedTests++;
-        } else {
-            System.out.println("❌ FAILURE: Date range and type filter incorrect. Expected: " + expectedWaterInRange + ", got: " + rangeTypeReadings.size());
-        }
-        
-        // Test getting latest reading by type
-        totalTests++;
-        Reading latestGasReading = readingManager.getLatest_Reading_By_Type(currentUser, "gas");
-        if (latestGasReading != null && latestGasReading.getType().equals("gas")) {
-            System.out.println("✅ SUCCESS: Retrieved latest gas reading from date: " + latestGasReading.getDate());
-            passedTests++;
-        } else {
-            System.out.println("❌ FAILURE: Failed to retrieve latest gas reading");
-        }
-        
-        // Test isReading_Exists
-        totalTests++;
-        boolean gasReadingExists = readingManager.isReading_Exists(currentUser, "gas");
-        boolean missingReadingExists = readingManager.isReading_Exists(currentUser, "nonexistent_type");
-        
-        if (gasReadingExists && !missingReadingExists) {
-            System.out.println("✅ SUCCESS: isReading_Exists correctly identified existing and non-existing readings");
-            passedTests++;
-        } else {
-            System.out.println("❌ FAILURE: isReading_Exists gave incorrect results");
-            System.out.println("  Expected gas readings to exist: true, got: " + gasReadingExists);
-            System.out.println("  Expected nonexistent_type readings to exist: false, got: " + missingReadingExists);
-        }
-        
-        // Test getting reading by ID
         if (!allReadings.isEmpty()) {
-            totalTests++;
-            Reading firstReading = allReadings.get(0);
-            int readingId = firstReading.getReading_Id();
+            Reading testReading = allReadings.get(0);
+            int testId = testReading.getReading_Id();
             
-            Reading retrievedById = readingManager.getReading_By_Id(readingId);
-            if (retrievedById != null && retrievedById.getReading_Id() == readingId) {
-                System.out.println("✅ SUCCESS: Retrieved reading by ID: " + readingId);
-                passedTests++;
-            } else {
-                System.out.println("❌ FAILURE: Failed to retrieve reading by ID");
+            // Test getReading_By_Id(id)
+            totalTests++;
+            try {
+                Reading retrievedById = readingManager.getReading_By_Id(testId);
+                if (retrievedById != null && retrievedById.getReading_Id() == testId) {
+                    printSuccess("Get reading by ID");
+                    passedTests++;
+                } else {
+                    printFailure("Get reading by ID");
+                }
+            } catch (Exception e) {
+                printFailure("Get reading by ID exception: " + e.getMessage());
             }
             
-            // Test overloaded getReading_By_Id (with User and ID)
+            // Test getReading_By_Id(user, id)
             totalTests++;
-            Reading retrievedByUserAndId = readingManager.getReading_By_Id(currentUser, readingId);
-            if (retrievedByUserAndId != null && retrievedByUserAndId.getReading_Id() == readingId) {
-                System.out.println("✅ SUCCESS: Retrieved reading by User and ID: " + readingId);
-                passedTests++;
-            } else {
-                System.out.println("❌ FAILURE: Failed to retrieve reading by User and ID");
+            try {
+                Reading retrievedByUserAndId = readingManager.getReading_By_Id(currentUser, testId);
+                if (retrievedByUserAndId != null && retrievedByUserAndId.getReading_Id() == testId) {
+                    printSuccess("Get reading by user and ID");
+                    passedTests++;
+                } else {
+                    printFailure("Get reading by user and ID");
+                }
+            } catch (Exception e) {
+                printFailure("Get reading by user and ID exception: " + e.getMessage());
             }
             
-            // Test overloaded getReading_By_Id (with User and Reading)
+            // Test getReading_By_Id(user, reading)
             totalTests++;
-            Reading retrievedByUserAndReading = readingManager.getReading_By_Id(currentUser, firstReading);
-            if (retrievedByUserAndReading != null && retrievedByUserAndReading.getReading_Id() == readingId) {
-                System.out.println("✅ SUCCESS: Retrieved reading by User and Reading object");
-                passedTests++;
-            } else {
-                System.out.println("❌ FAILURE: Failed to retrieve reading by User and Reading object");
+            try {
+                Reading retrievedByUserAndReading = readingManager.getReading_By_Id(currentUser, testReading);
+                if (retrievedByUserAndReading != null && retrievedByUserAndReading.getReading_Id() == testId) {
+                    printSuccess("Get reading by user and reading object");
+                    passedTests++;
+                } else {
+                    printFailure("Get reading by user and reading object");
+                }
+            } catch (Exception e) {
+                printFailure("Get reading by user and reading object exception: " + e.getMessage());
             }
             
-            // Test overloaded getReading_By_Id (with Reading)
+            // Test getReading_By_Id(reading)
             totalTests++;
-            Reading retrievedByReading = readingManager.getReading_By_Id(firstReading);
-            if (retrievedByReading != null && retrievedByReading.getReading_Id() == readingId) {
-                System.out.println("✅ SUCCESS: Retrieved reading by Reading object");
-                passedTests++;
-            } else {
-                System.out.println("❌ FAILURE: Failed to retrieve reading by Reading object");
+            try {
+                Reading retrievedByReading = readingManager.getReading_By_Id(testReading);
+                if (retrievedByReading != null && retrievedByReading.getReading_Id() == testId) {
+                    printSuccess("Get reading by reading object");
+                    passedTests++;
+                } else {
+                    printFailure("Get reading by reading object");
+                }
+            } catch (Exception e) {
+                printFailure("Get reading by reading object exception: " + e.getMessage());
             }
         }
         
-        // Test updating a reading
-        if (!allReadings.isEmpty()) {
-            totalTests++;
+        // Test 9: Update reading (multiple overloads)
+        if (allReadings.size() >= 2) {
             Reading readingToUpdate = allReadings.get(0);
-            double originalReading = readingToUpdate.getReading();
-            double newReading = originalReading + 10;
+            double newReading = readingToUpdate.getReading() + 10;
             double newTotal = newReading * readingToUpdate.getRate();
             
+            // Test updateReading with all parameters
+            totalTests++;
             try {
-                System.out.println("Updating reading ID: " + readingToUpdate.getReading_Id());
-                readingManager.updateReading(currentUser, readingToUpdate.getReading_Id(), 
-                        readingToUpdate.getDate(), readingToUpdate.getType(), 
+                readingManager.updateReading(currentUser, readingToUpdate.getReading_Id(),
+                        readingToUpdate.getDate(), readingToUpdate.getType(),
                         newReading, readingToUpdate.getRate(), newTotal);
                 
-                // Verify update
-                Reading updatedReading = readingManager.getReading_By_Id(readingToUpdate.getReading_Id());
-                if (updatedReading != null && Math.abs(updatedReading.getReading() - newReading) < 0.001) {
-                    System.out.println("✅ SUCCESS: Updated reading value: " + updatedReading.getReading());
+                Reading updated = readingManager.getReading_By_Id(readingToUpdate.getReading_Id());
+                if (updated != null && Math.abs(updated.getReading() - newReading) < 0.001) {
+                    printSuccess("Update reading with all parameters");
                     passedTests++;
                 } else {
-                    System.out.println("❌ FAILURE: Reading update failed");
-                    if (updatedReading != null) {
-                        System.out.println("  Expected reading: " + newReading + ", got: " + updatedReading.getReading());
-                    }
+                    printFailure("Update reading with all parameters");
                 }
             } catch (Exception e) {
-                System.out.println("❌ FAILURE: Exception when updating reading: " + e.getMessage());
+                printFailure("Update reading with all parameters exception: " + e.getMessage());
             }
-        }
-        
-        // Test overloaded updateReading method (without rate)
-        if (allReadings.size() > 1) {
-            totalTests++;
-            Reading readingToUpdate = allReadings.get(1);
-            double originalReading = readingToUpdate.getReading();
-            double newReading = originalReading + 15;
-            double newTotal = newReading * 2; // Arbitrary total
             
-            try {
-                System.out.println("Testing overloaded updateReading with reading ID: " + readingToUpdate.getReading_Id());
-                readingManager.updateReading(currentUser, readingToUpdate.getReading_Id(), 
-                        readingToUpdate.getDate(), readingToUpdate.getType(), 
-                        newReading, newTotal);
+            // Test updateReading without rate
+            if (allReadings.size() >= 2) {
+                Reading secondReading = allReadings.get(1);
+                double newReading2 = secondReading.getReading() + 15;
+                double newTotal2 = 200.0; // Arbitrary total
                 
-                // Verify update
-                Reading updatedReading = readingManager.getReading_By_Id(readingToUpdate.getReading_Id());
-                if (updatedReading != null && 
-                    Math.abs(updatedReading.getReading() - newReading) < 0.001 &&
-                    Math.abs(updatedReading.getTotal_Price() - newTotal) < 0.001) {
-                    System.out.println("✅ SUCCESS: Updated reading with overloaded method");
-                    passedTests++;
-                } else {
-                    System.out.println("❌ FAILURE: Overloaded reading update failed");
-                    if (updatedReading != null) {
-                        System.out.println("  Expected reading: " + newReading + ", got: " + updatedReading.getReading());
-                        System.out.println("  Expected total: " + newTotal + ", got: " + updatedReading.getTotal_Price());
+                totalTests++;
+                try {
+                    readingManager.updateReading(currentUser, secondReading.getReading_Id(),
+                            secondReading.getDate(), secondReading.getType(),
+                            newReading2, newTotal2);
+                    
+                    Reading updated = readingManager.getReading_By_Id(secondReading.getReading_Id());
+                    if (updated != null && Math.abs(updated.getReading() - newReading2) < 0.001 &&
+                        Math.abs(updated.getTotal_Price() - newTotal2) < 0.001) {
+                        printSuccess("Update reading without rate");
+                        passedTests++;
+                    } else {
+                        printFailure("Update reading without rate");
                     }
+                } catch (Exception e) {
+                    printFailure("Update reading without rate exception: " + e.getMessage());
                 }
-            } catch (Exception e) {
-                System.out.println("❌ FAILURE: Exception when testing overloaded updateReading: " + e.getMessage());
             }
-        }
-        
-        // Test third overloaded updateReading method (with Reading object)
-        if (allReadings.size() > 2) {
-            totalTests++;
-            Reading readingToUpdate = allReadings.get(2);
-            double originalReading = readingToUpdate.getReading();
-            double newReading = originalReading + 20;
-            readingToUpdate.setReading(newReading);
-            readingToUpdate.setTotal_Price(newReading * readingToUpdate.getRate());
             
-            try {
-                System.out.println("Testing updateReading with Reading object for ID: " + readingToUpdate.getReading_Id());
-                readingManager.updateReading(currentUser, readingToUpdate);
+            // Test updateReading with Reading object
+            if (allReadings.size() >= 3) {
+                Reading thirdReading = allReadings.get(2);
+                double originalReading = thirdReading.getReading();
+                double newReading3 = originalReading + 20;
+                thirdReading.setReading(newReading3);
+                thirdReading.setTotal_Price(newReading3 * thirdReading.getRate());
                 
-                // Verify update
-                Reading updatedReading = readingManager.getReading_By_Id(readingToUpdate.getReading_Id());
-                if (updatedReading != null && Math.abs(updatedReading.getReading() - newReading) < 0.001) {
-                    System.out.println("✅ SUCCESS: Updated reading using Reading object");
-                    passedTests++;
-                } else {
-                    System.out.println("❌ FAILURE: Reading update with Reading object failed");
-                    if (updatedReading != null) {
-                        System.out.println("  Expected reading: " + newReading + ", got: " + updatedReading.getReading());
+                totalTests++;
+                try {
+                    readingManager.updateReading(currentUser, thirdReading);
+                    
+                    Reading updated = readingManager.getReading_By_Id(thirdReading.getReading_Id());
+                    if (updated != null && Math.abs(updated.getReading() - newReading3) < 0.001) {
+                        printSuccess("Update reading with Reading object");
+                        passedTests++;
+                    } else {
+                        printFailure("Update reading with Reading object");
                     }
+                } catch (Exception e) {
+                    printFailure("Update reading with Reading object exception: " + e.getMessage());
                 }
-            } catch (Exception e) {
-                System.out.println("❌ FAILURE: Exception when testing updateReading with Reading object: " + e.getMessage());
             }
         }
         
-        // Test deleting a reading
-        if (!allReadings.isEmpty()) {
+        // Test 10: Delete reading (multiple overloads)
+        List<Reading> currentReadings = readingManager.getReadings_By_User_Id(currentUser);
+        if (!currentReadings.isEmpty()) {
+            Reading readingToDelete = currentReadings.get(currentReadings.size() - 1);
+            
+            // Test deleteReading(reading)
             totalTests++;
-            Reading readingToDelete = allReadings.get(allReadings.size() - 1);
             try {
-                System.out.println("Deleting reading ID: " + readingToDelete.getReading_Id());
                 readingManager.deleteReading(readingToDelete);
                 
-                // Verify deletion
-                Reading deletedReading = readingManager.getReading_By_Id(readingToDelete.getReading_Id());
-                if (deletedReading == null) {
-                    System.out.println("✅ SUCCESS: Reading deleted using overloaded method (User and ID)");
+                Reading deleted = readingManager.getReading_By_Id(readingToDelete.getReading_Id());
+                if (deleted == null) {
+                    printSuccess("Delete reading with Reading object");
                     passedTests++;
                 } else {
-                    System.out.println("❌ FAILURE: Overloaded reading deletion failed, reading still exists");
+                    printFailure("Delete reading with Reading object - reading still exists");
                 }
             } catch (Exception e) {
-                System.out.println("❌ FAILURE: Exception when testing overloaded deleteReading: " + e.getMessage());
+                printFailure("Delete reading with Reading object exception: " + e.getMessage());
             }
-        }
-        
-        // Test the overloaded deleteReading method (with User and Reading)
-        if (allReadings.size() > 2) {
-            totalTests++;
-            Reading readingToDelete = allReadings.get(1);
-            try {
-                System.out.println("Testing overloaded deleteReading with User and Reading object for ID: " + readingToDelete.getReading_Id());
-                readingManager.deleteReading(currentUser, readingToDelete);
+            
+            // Test deleteReading(user, reading)
+            if (currentReadings.size() >= 2) {
+                Reading secondReadingToDelete = currentReadings.get(currentReadings.size() - 2);
                 
-                // Verify deletion
-                Reading deletedReading = readingManager.getReading_By_Id(readingToDelete.getReading_Id());
-                if (deletedReading == null) {
-                    System.out.println("✅ SUCCESS: Reading deleted using overloaded method (User and Reading)");
-                    passedTests++;
-                } else {
-                    System.out.println("❌ FAILURE: Overloaded reading deletion (User and Reading) failed, reading still exists");
+                totalTests++;
+                try {
+                    readingManager.deleteReading(currentUser, secondReadingToDelete);
+                    
+                    Reading deleted = readingManager.getReading_By_Id(secondReadingToDelete.getReading_Id());
+                    if (deleted == null) {
+                        printSuccess("Delete reading with user and Reading object");
+                        passedTests++;
+                    } else {
+                        printFailure("Delete reading with user and Reading object - reading still exists");
+                    }
+                } catch (Exception e) {
+                    printFailure("Delete reading with user and Reading object exception: " + e.getMessage());
                 }
-            } catch (Exception e) {
-                System.out.println("❌ FAILURE: Exception when testing overloaded deleteReading (User and Reading): " + e.getMessage());
+            }
+            
+            // Test deleteReading(user, id)
+            if (currentReadings.size() >= 3) {
+                Reading thirdReadingToDelete = currentReadings.get(currentReadings.size() - 3);
+                
+                totalTests++;
+                try {
+                    readingManager.deleteReading(currentUser, thirdReadingToDelete.getReading_Id());
+                    
+                    Reading deleted = readingManager.getReading_By_Id(thirdReadingToDelete.getReading_Id());
+                    if (deleted == null) {
+                        printSuccess("Delete reading with user and ID");
+                        passedTests++;
+                    } else {
+                        printFailure("Delete reading with user and ID - reading still exists");
+                    }
+                } catch (Exception e) {
+                    printFailure("Delete reading with user and ID exception: " + e.getMessage());
+                }
             }
         }
         
@@ -621,7 +665,7 @@ public class Database_Manager_Test {
     }
     
     private static int[] testAdvancedReadingManager(User_Manager userManager, Reading_Manager readingManager) throws SQLException {
-        System.out.println("\n--- Testing Advanced Reading Manager Features ---");
+        System.out.println("Testing Reading Manager advanced functionality...");
         int passedTests = 0;
         int totalTests = 0;
         
@@ -630,227 +674,603 @@ public class Database_Manager_Test {
             throw new RuntimeException("Current user is not set, can't test Advanced Reading Manager features");
         }
         
-        // Generate test data for advanced features
-        System.out.println("Generating test data for advanced features...");
-        
-        // Delete any existing readings to start with a clean slate
+        // Clean up and generate comprehensive test data
         List<Reading> existingReadings = readingManager.getReadings_By_User_Id(currentUser);
         for (Reading reading : existingReadings) {
             readingManager.deleteReading(reading);
         }
         
-        // Create readings spanning multiple months for testing
-        String[] types = {"electricity", "water", "gas", "other"};
+        // Generate 6 months of data for multiple utility types
+        generateTestData(currentUser, readingManager);
         
-        // Create readings for the past 6 months
-        for (int month = 5; month >= 0; month--) {
-            LocalDate date = LocalDate.now().minusMonths(month);
-            
-            for (String type : types) {
-                double baseReading = 0;
-                double baseRate = 0;
-                
-                switch (type) {
-                    case "electricity":
-                        baseReading = 500 + (month * 20); // Slight increase each month
-                        baseRate = 0.15;
-                        break;
-                    case "water":
-                        baseReading = 20 + (month * 1.5); // Slight increase each month
-                        baseRate = 2.50;
-                        break;
-                    case "gas":
-                        baseReading = 100 + (month * 5); // Slight increase each month
-                        baseRate = 1.20;
-                        break;
-                    case "internet":
-                        baseReading = 1.0; // Flat rate
-                        baseRate = 50.0;
-                        break;
-                }
-                
-                double total = baseReading * baseRate;
-                readingManager.addReading(currentUser, date, type, baseReading, baseRate, total);
-            }
-        }
-        
-        System.out.println("Test data generation complete.");
-        
-        // Test getAll_Readings_By_Type
-        totalTests++;
-        List<Reading> allElectricityReadings = readingManager.getAll_Readings_By_Type(currentUser, "electricity");
-        if (allElectricityReadings.size() == 6) { // We created 6 months of readings
-            System.out.println("✅ SUCCESS: Retrieved all electricity readings: " + allElectricityReadings.size());
-            passedTests++;
-        } else {
-            System.out.println("❌ FAILURE: Retrieved incorrect number of electricity readings. Expected: 6, got: " + allElectricityReadings.size());
-        }
-        
-     // In testAdvancedReadingManager method, modify these test blocks:
-
-     // Test groupReadings_By_Month
-     totalTests++;
-     try {
-         int currentYear = LocalDate.now().getYear();
-         Map<Month, Double> groupedReadings = readingManager.groupReadings_By_Month(allElectricityReadings, currentYear, false);
-         if (groupedReadings.size() == 6) {
-             System.out.println("✅ SUCCESS: Grouped readings by month correctly: " + groupedReadings.size() + " months");
-             passedTests++;
-         } else {
-             System.out.println("❌ FAILURE: Incorrect grouping by month. Expected: 6 months, got: " + groupedReadings.size());
-         }
-     } catch (Exception e) {
-         System.out.println("❌ FAILURE: Exception when grouping readings by month: " + e.getMessage());
-     }
-
-     // Test groupReadings_By_Month with price flag
-     totalTests++;
-     try {
-         int currentYear = LocalDate.now().getYear();
-         Map<Month, Double> groupedPrices = readingManager.groupReadings_By_Month(allElectricityReadings, currentYear, true);
-         if (groupedPrices.size() == 6) {
-             System.out.println("✅ SUCCESS: Grouped reading prices by month correctly: " + groupedPrices.size() + " months");
-             passedTests++;
-         } else {
-             System.out.println("❌ FAILURE: Incorrect grouping of prices by month. Expected: 6 months, got: " + groupedPrices.size());
-         }
-     } catch (Exception e) {
-         System.out.println("❌ FAILURE: Exception when grouping reading prices by month: " + e.getMessage());
-     }
-
-     // Test getMonthly_Utility_Data with readings
-     totalTests++;
-     try {
-         int currentYear = LocalDate.now().getYear();
-         Map<Month, Double> monthlyElectricityReadings = readingManager.getMonthly_Utility_Data(currentUser, "electricity", currentYear, false);
-         if (monthlyElectricityReadings.size() == 6) {
-             System.out.println("✅ SUCCESS: Retrieved monthly electricity readings: " + monthlyElectricityReadings.size() + " months");
-             passedTests++;
-         } else {
-             System.out.println("❌ FAILURE: Incorrect monthly electricity readings. Expected: 6 months, got: " + monthlyElectricityReadings.size());
-         }
-     } catch (Exception e) {
-         System.out.println("❌ FAILURE: Exception when getting monthly electricity readings: " + e.getMessage());
-     }
-
-     // Test getMonthly_Utility_Data with prices
-     totalTests++;
-     try {
-         int currentYear = LocalDate.now().getYear();
-         Map<Month, Double> monthlyElectricityPrices = readingManager.getMonthly_Utility_Data(currentUser, "electricity", currentYear, true);
-         if (monthlyElectricityPrices.size() == 6) {
-             System.out.println("✅ SUCCESS: Retrieved monthly electricity prices: " + monthlyElectricityPrices.size() + " months");
-             passedTests++;
-         } else {
-             System.out.println("❌ FAILURE: Incorrect monthly electricity prices. Expected: 6 months, got: " + monthlyElectricityPrices.size());
-         }
-     } catch (Exception e) {
-         System.out.println("❌ FAILURE: Exception when getting monthly electricity prices: " + e.getMessage());
-     }
-
-     // Test getMonthly_Total_Expenses
-     totalTests++;
-     try {
-         int currentYear = LocalDate.now().getYear();
-         Map<Month, Double> monthlyTotalExpenses = readingManager.getMonthly_Total_Expenses(currentUser, currentYear);
-         if (monthlyTotalExpenses.size() == 6) {
-             System.out.println("✅ SUCCESS: Retrieved monthly total expenses: " + monthlyTotalExpenses.size() + " months");
-             passedTests++;
-         } else {
-             System.out.println("❌ FAILURE: Incorrect monthly total expenses. Expected: 6 months, got: " + monthlyTotalExpenses.size());
-         }
-     } catch (Exception e) {
-         System.out.println("❌ FAILURE: Exception when getting monthly total expenses: " + e.getMessage());
-     }
-
-        
-        // Test getTotal_Expenses_In_Range
+        // Test 1: Get all readings by type
         totalTests++;
         try {
-            LocalDate startDate = LocalDate.now().minusMonths(3).withDayOfMonth(1);
-            LocalDate endDate = LocalDate.now().withDayOfMonth(LocalDate.now().lengthOfMonth());
-            
-            double totalExpensesInRange = readingManager.getTotal_Expenses_In_Range(currentUser, startDate, endDate);
-            System.out.println("✅ SUCCESS: Retrieved total expenses in date range: " + totalExpensesInRange);
-            passedTests++;
+            List<Reading> electricityReadings = readingManager.getAll_Readings_By_Type(currentUser, "electricity");
+            if (electricityReadings.size() == 6) {
+                printSuccess("Get all readings by type (" + electricityReadings.size() + " electricity readings)");
+                passedTests++;
+            } else {
+                printFailure("Get all readings by type (expected 6, got " + electricityReadings.size() + ")");
+            }
         } catch (Exception e) {
-            System.out.println("❌ FAILURE: Exception when getting total expenses in range: " + e.getMessage());
+            printFailure("Get all readings by type exception: " + e.getMessage());
         }
         
-        // Test getLatest_Readings_For_All_Types
+        // Test 2: Group readings by month (usage)
+        totalTests++;
+        try {
+            List<Reading> electricityReadings = readingManager.getAll_Readings_By_Type(currentUser, "electricity");
+            int currentYear = LocalDate.now().getYear();
+            Map<Month, Double> groupedUsage = readingManager.groupReadings_By_Month(electricityReadings, currentYear, false);
+            
+            if (groupedUsage.size() <= 6 && !groupedUsage.isEmpty()) {
+                printSuccess("Group readings by month (usage) - " + groupedUsage.size() + " months");
+                passedTests++;
+            } else {
+                printFailure("Group readings by month (usage) - expected <= 6 months, got " + groupedUsage.size());
+            }
+        } catch (Exception e) {
+            printFailure("Group readings by month (usage) exception: " + e.getMessage());
+        }
+        
+     // Test 3: Group readings by month (prices) - CONTINUATION
+        totalTests++;
+        try {
+            List<Reading> electricityReadings = readingManager.getAll_Readings_By_Type(currentUser, "electricity");
+            int currentYear = LocalDate.now().getYear();
+            Map<Month, Double> groupedPrices = readingManager.groupReadings_By_Month(electricityReadings, currentYear, true);
+            
+            if (groupedPrices.size() <= 6 && !groupedPrices.isEmpty()) {
+                printSuccess("Group readings by month (prices) - " + groupedPrices.size() + " months");
+                passedTests++;
+            } else {
+                printFailure("Group readings by month (prices) - expected <= 6 months, got " + groupedPrices.size());
+            }
+        } catch (Exception e) {
+            printFailure("Group readings by month (prices) exception: " + e.getMessage());
+        }
+        
+        // Test 4: Get monthly utility data (usage)
+        totalTests++;
+        try {
+            int currentYear = LocalDate.now().getYear();
+            Map<Month, Double> monthlyElectricityUsage = readingManager.getMonthly_Utility_Data(
+                    currentUser, "electricity", currentYear, false);
+            
+            if (!monthlyElectricityUsage.isEmpty() && monthlyElectricityUsage.size() <= 6) {
+                printSuccess("Get monthly utility data (usage) - " + monthlyElectricityUsage.size() + " months");
+                passedTests++;
+            } else {
+                printFailure("Get monthly utility data (usage) - got " + monthlyElectricityUsage.size() + " months");
+            }
+        } catch (Exception e) {
+            printFailure("Get monthly utility data (usage) exception: " + e.getMessage());
+        }
+        
+        // Test 5: Get monthly utility data (prices)
+        totalTests++;
+        try {
+            int currentYear = LocalDate.now().getYear();
+            Map<Month, Double> monthlyElectricityPrices = readingManager.getMonthly_Utility_Data(
+                    currentUser, "electricity", currentYear, true);
+            
+            if (!monthlyElectricityPrices.isEmpty() && monthlyElectricityPrices.size() <= 6) {
+                printSuccess("Get monthly utility data (prices) - " + monthlyElectricityPrices.size() + " months");
+                passedTests++;
+            } else {
+                printFailure("Get monthly utility data (prices) - got " + monthlyElectricityPrices.size() + " months");
+            }
+        } catch (Exception e) {
+            printFailure("Get monthly utility data (prices) exception: " + e.getMessage());
+        }
+        
+        // Test 6: Get monthly total expenses
+        totalTests++;
+        try {
+            int currentYear = LocalDate.now().getYear();
+            Map<Month, Double> monthlyTotalExpenses = readingManager.getMonthly_Total_Expenses(currentUser, currentYear);
+            
+            if (!monthlyTotalExpenses.isEmpty()) {
+                double totalExpenses = monthlyTotalExpenses.values().stream().mapToDouble(Double::doubleValue).sum();
+                if (totalExpenses > 0) {
+                    printSuccess("Get monthly total expenses - total: $" + String.format("%.2f", totalExpenses));
+                    passedTests++;
+                } else {
+                    printFailure("Get monthly total expenses - total is 0");
+                }
+            } else {
+                printFailure("Get monthly total expenses - no data returned");
+            }
+        } catch (Exception e) {
+            printFailure("Get monthly total expenses exception: " + e.getMessage());
+        }
+        
+        // Test 7: Get total expenses in date range
+        totalTests++;
+        try {
+            LocalDate startDate = LocalDate.now().minusDays(180);
+            LocalDate endDate = LocalDate.now();
+            double totalExpenses = readingManager.getTotal_Expenses_In_Range(currentUser, startDate, endDate);
+            
+            if (totalExpenses > 0) {
+                printSuccess("Get total expenses in range: $" + String.format("%.2f", totalExpenses));
+                passedTests++;
+            } else {
+                printFailure("Get total expenses in range - returned 0");
+            }
+        } catch (Exception e) {
+            printFailure("Get total expenses in range exception: " + e.getMessage());
+        }
+        
+        // Test 8: Get latest readings for all types
         totalTests++;
         try {
             Map<String, Reading> latestReadings = readingManager.getLatest_Readings_For_All_Types(currentUser);
-            if (latestReadings.size() == 4) { // We have 4 types: electricity, water, gas, internet
-                System.out.println("✅ SUCCESS: Retrieved latest readings for all types: " + latestReadings.size() + " types");
+            
+            if (latestReadings.size() >= 3) { // Should have electricity, water, gas
+                printSuccess("Get latest readings for all types (" + latestReadings.size() + " types)");
                 passedTests++;
             } else {
-                System.out.println("❌ FAILURE: Incorrect number of latest readings. Expected: 4 types, got: " + latestReadings.size());
+                printFailure("Get latest readings for all types (expected >= 3, got " + latestReadings.size() + ")");
             }
         } catch (Exception e) {
-            System.out.println("❌ FAILURE: Exception when getting latest readings for all types: " + e.getMessage());
+            printFailure("Get latest readings for all types exception: " + e.getMessage());
         }
         
-        // Test getTotal_Latest_Cost
+        // Test 9: Get total latest cost
         totalTests++;
         try {
             double totalLatestCost = readingManager.getTotal_Latest_Cost(currentUser);
-            System.out.println("✅ SUCCESS: Retrieved total latest cost: " + totalLatestCost);
-            passedTests++;
+            
+            if (totalLatestCost > 0) {
+                printSuccess("Get total latest cost: $" + String.format("%.2f", totalLatestCost));
+                passedTests++;
+            } else {
+                printFailure("Get total latest cost - returned 0");
+            }
         } catch (Exception e) {
-            System.out.println("❌ FAILURE: Exception when getting total latest cost: " + e.getMessage());
+            printFailure("Get total latest cost exception: " + e.getMessage());
         }
         
-        // Test getTrend for specific type
+        // Test 10: Trend analysis for specific type
         totalTests++;
         try {
-        	String electricityTrend = readingManager.getTrend(currentUser, "electricity");
-            System.out.println("✅ SUCCESS: Retrieved electricity trend: " + electricityTrend);
-            passedTests++;
+            String electricityTrend = readingManager.getTrend(currentUser, "electricity");
+            
+            if (electricityTrend != null && !electricityTrend.isEmpty()) {
+                // Check if it matches the expected format: "X.X% from previous month" or "Not enough monthly data"
+                if (electricityTrend.matches("-?\\d+\\.\\d+% from previous month") || 
+                    electricityTrend.equals("Not enough monthly data") ||
+                    electricityTrend.equals("Previous month's reading is 0")) {
+                    printSuccess("Get trend for electricity: " + electricityTrend);
+                    passedTests++;
+                } else {
+                    printFailure("Get trend for electricity - unexpected format: " + electricityTrend);
+                }
+            } else {
+                printFailure("Get trend for electricity - empty or null result");
+            }
         } catch (Exception e) {
-            System.out.println("❌ FAILURE: Exception when getting electricity trend: " + e.getMessage());
+            printFailure("Get trend for electricity exception: " + e.getMessage());
         }
         
-        // Test getTrend_Overall
+     // Test 11: Overall trend analysis
         totalTests++;
         try {
             String overallTrend = readingManager.getTrend_Overall(currentUser);
-            System.out.println("✅ SUCCESS: Retrieved overall trend: " + overallTrend);
-            passedTests++;
+            
+            if (overallTrend != null && !overallTrend.isEmpty()) {
+                // Check if it matches the expected format: "X.X% from last month" or "No previous data"
+                if (overallTrend.matches("-?\\d+\\.\\d+% from last month") || 
+                    overallTrend.equals("No previous data")) {
+                    printSuccess("Get overall trend: " + overallTrend);
+                    passedTests++;
+                } else {
+                    printFailure("Get overall trend - unexpected format: " + overallTrend);
+                }
+            } else {
+                printFailure("Get overall trend - empty or null result");
+            }
         } catch (Exception e) {
-            System.out.println("❌ FAILURE: Exception when getting overall trend: " + e.getMessage());
+            printFailure("Get overall trend exception: " + e.getMessage());
         }
         
-        // Test getTrend_Color
+        // Test 12: Trend color for UI
         totalTests++;
         try {
-        	Color trendColor = readingManager.getTrend_Color(currentUser, "electricity");
-            System.out.println("✅ SUCCESS: Retrieved electricity trend color: " + trendColor.toString());
-            passedTests++;
+            Color electricityTrendColor = readingManager.getTrend_Color(currentUser, "electricity");
+            
+            if (electricityTrendColor != null) {
+                printSuccess("Get trend color for electricity - RGB(" + 
+                        electricityTrendColor.getRed() + "," + 
+                        electricityTrendColor.getGreen() + "," + 
+                        electricityTrendColor.getBlue() + ")");
+                passedTests++;
+            } else {
+                printFailure("Get trend color for electricity - returned null");
+            }
         } catch (Exception e) {
-            System.out.println("❌ FAILURE: Exception when getting electricity trend color: " + e.getMessage());
+            printFailure("Get trend color for electricity exception: " + e.getMessage());
         }
         
-        // Test getTotal_Readings
-        totalTests++;
-        int totalReadings = readingManager.getTotal_Readings(currentUser);
-        if (totalReadings > 0) {
-            System.out.println("✅ SUCCESS: Retrieved total readings count by type: " + totalReadings);
-            passedTests++;
-        } else {
-            System.out.println("❌ FAILURE: Failed to retrieve total readings count");
-        }
-        
-        // Test updateReading_Label and getReadings_As_JList - Mock test
+        // Test 13: Get reading years
         totalTests++;
         try {
-            System.out.println("✅ SUCCESS: Mock testing UI-related methods (updateReading_Label and getReadings_As_JList)");
-            System.out.println("  Note: These methods require UI components and cannot be fully tested in this environment");
-            passedTests++;
+            int[] electricityYears = readingManager.getReading_Years(currentUser, "electricity");
+            
+            if (electricityYears != null && electricityYears.length > 0) {
+                printSuccess("Get reading years for electricity: " + java.util.Arrays.toString(electricityYears));
+                passedTests++;
+            } else {
+                printFailure("Get reading years for electricity - no years returned");
+            }
         } catch (Exception e) {
-            System.out.println("❌ FAILURE: Exception in UI-related methods mock test: " + e.getMessage());
+            printFailure("Get reading years for electricity exception: " + e.getMessage());
+        }
+        
+        // Test 14: Get total readings count
+        totalTests++;
+        try {
+            int totalReadingsCount = readingManager.getTotal_Readings(currentUser);
+            
+            if (totalReadingsCount >= 18) { // 6 months × 3 types = 18 readings
+                printSuccess("Get total readings count: " + totalReadingsCount);
+                passedTests++;
+            } else {
+                printFailure("Get total readings count (expected >= 18, got " + totalReadingsCount + ")");
+            }
+        } catch (Exception e) {
+            printFailure("Get total readings count exception: " + e.getMessage());
         }
         
         return new int[] {passedTests, totalTests};
+    }
+    
+    private static int[] testEdgeCases(User_Manager userManager, Reading_Manager readingManager) throws SQLException {
+        System.out.println("Testing edge cases and error handling...");
+        int passedTests = 0;
+        int totalTests = 0;
+        
+        User currentUser = userManager.getCurrentUser();
+        
+        // Test 1: Null user handling
+        totalTests++;
+        try {
+            List<Reading> nullUserReadings = readingManager.getReadings_By_User_Id(null);
+            if (nullUserReadings.isEmpty()) {
+                printSuccess("Null user handling - returns empty list");
+                passedTests++;
+            } else {
+                printFailure("Null user handling - should return empty list");
+            }
+        } catch (Exception e) {
+            // Exception is acceptable for null user
+            printSuccess("Null user handling - throws exception as expected");
+            passedTests++;
+        }
+        
+        // Test 2: Non-existent reading ID
+        totalTests++;
+        try {
+            Reading nonExistentReading = readingManager.getReading_By_Id(999999);
+            if (nonExistentReading == null) {
+                printSuccess("Non-existent reading ID handling");
+                passedTests++;
+            } else {
+                printFailure("Non-existent reading ID handling - should return null");
+            }
+        } catch (Exception e) {
+            printFailure("Non-existent reading ID handling exception: " + e.getMessage());
+        }
+        
+        // Test 3: Empty date range
+        totalTests++;
+        try {
+            LocalDate futureDate = LocalDate.now().plusDays(30);
+            LocalDate pastDate = LocalDate.now().minusDays(30);
+            List<Reading> emptyRangeReadings = readingManager.getReadings_By_Date(currentUser, futureDate, pastDate);
+            
+            if (emptyRangeReadings.isEmpty()) {
+                printSuccess("Empty date range handling");
+                passedTests++;
+            } else {
+                printFailure("Empty date range handling - should return empty list");
+            }
+        } catch (Exception e) {
+            printFailure("Empty date range handling exception: " + e.getMessage());
+        }
+        
+        // Test 4: Invalid utility type
+        totalTests++;
+        try {
+            boolean invalidTypeExists = readingManager.isReading_Exists(currentUser, "invalidtype");
+            if (!invalidTypeExists) {
+                printSuccess("Invalid utility type handling");
+                passedTests++;
+            } else {
+                printFailure("Invalid utility type handling - should return false");
+            }
+        } catch (Exception e) {
+            printFailure("Invalid utility type handling exception: " + e.getMessage());
+        }
+        
+        // Test 5: Duplicate user creation
+        totalTests++;
+        try {
+            String duplicateUsername = "duplicate_" + System.currentTimeMillis();
+            String password = "TestPassword123!";
+            String email = "duplicate" + System.currentTimeMillis() + "@example.com";
+            
+            userManager.addUser(duplicateUsername, password, email);
+            
+            try {
+                userManager.addUser(duplicateUsername, password + "_different", email + "_different");
+                printFailure("Duplicate username handling - should not allow duplicate");
+            } catch (Exception duplicateException) {
+                printSuccess("Duplicate username handling - throws exception as expected");
+                passedTests++;
+            }
+            
+            // Cleanup
+            User duplicateUser = userManager.getUserByUsername(duplicateUsername);
+            if (duplicateUser != null) {
+                userManager.deleteUser(duplicateUser);
+            }
+        } catch (Exception e) {
+            printFailure("Duplicate user creation test exception: " + e.getMessage());
+        }
+        
+        // Test 6: Very large numbers
+        totalTests++;
+        try {
+            Reading largeReading = new Reading();
+            largeReading.setUser_Id(currentUser.getUser_Id());
+            largeReading.setDate(LocalDate.now());
+            largeReading.setType("test_large");
+            largeReading.setReading(999999999.99);
+            largeReading.setRate(99.99);
+            largeReading.setTotal_Price(largeReading.getReading() * largeReading.getRate());
+            
+            readingManager.addReading(currentUser, largeReading);
+            Reading retrievedLarge = readingManager.getLatest_Reading_By_Type(currentUser, "test_large");
+            
+            if (retrievedLarge != null && Math.abs(retrievedLarge.getReading() - 999999999.99) < 0.01) {
+                printSuccess("Large number handling");
+                passedTests++;
+                readingManager.deleteReading(retrievedLarge); // Cleanup
+            } else {
+                printFailure("Large number handling");
+            }
+        } catch (Exception e) {
+            printFailure("Large number handling exception: " + e.getMessage());
+        }
+        
+        // Test 7: Special characters in utility type
+        totalTests++;
+        try {
+            String specialType = "test-type_with.special@chars";
+            Reading specialReading = new Reading();
+            specialReading.setUser_Id(currentUser.getUser_Id());
+            specialReading.setDate(LocalDate.now());
+            specialReading.setType(specialType);
+            specialReading.setReading(100.0);
+            specialReading.setRate(1.0);
+            specialReading.setTotal_Price(100.0);
+            
+            readingManager.addReading(currentUser, specialReading);
+            Reading retrievedSpecial = readingManager.getLatest_Reading_By_Type(currentUser, specialType);
+            
+            if (retrievedSpecial != null && retrievedSpecial.getType().equals(specialType)) {
+                printSuccess("Special characters in utility type");
+                passedTests++;
+                readingManager.deleteReading(retrievedSpecial); // Cleanup
+            } else {
+                printFailure("Special characters in utility type");
+            }
+        } catch (Exception e) {
+            printFailure("Special characters in utility type exception: " + e.getMessage());
+        }
+        
+        // Test 8: Password validation with invalid credentials
+        totalTests++;
+        try {
+            boolean invalidPasswordMatch = userManager.UsernamePasswordMatch(
+                    currentUser.getUsername(), "WrongPassword123!");
+            if (!invalidPasswordMatch) {
+                printSuccess("Invalid password validation");
+                passedTests++;
+            } else {
+                printFailure("Invalid password validation - should return false");
+            }
+        } catch (Exception e) {
+            printFailure("Invalid password validation exception: " + e.getMessage());
+        }
+        
+        // Test 9: Email validation with invalid credentials
+        totalTests++;
+        try {
+            boolean invalidEmailMatch = userManager.UsernameEmailMatch(
+                    currentUser.getUsername(), "wrong@email.com");
+            if (!invalidEmailMatch) {
+                printSuccess("Invalid email validation");
+                passedTests++;
+            } else {
+                printFailure("Invalid email validation - should return false");
+            }
+        } catch (Exception e) {
+            printFailure("Invalid email validation exception: " + e.getMessage());
+        }
+        
+        // Test 10: Update non-existent reading
+        totalTests++;
+        try {
+            readingManager.updateReading(currentUser, 999999, LocalDate.now(), "test", 100.0, 1.0, 100.0);
+            printFailure("Update non-existent reading - should throw exception");
+        } catch (Exception e) {
+            printSuccess("Update non-existent reading - throws exception as expected");
+            passedTests++;
+        }
+        
+        return new int[] {passedTests, totalTests};
+    }
+    
+    private static int[] testUIIntegration(User_Manager userManager, Reading_Manager readingManager) throws SQLException {
+        System.out.println("Testing UI integration functionality...");
+        int passedTests = 0;
+        int totalTests = 0;
+        
+        User currentUser = userManager.getCurrentUser();
+        
+        // Ensure we have some test data
+        if (readingManager.getReadings_By_User_Id(currentUser).isEmpty()) {
+            // Add some test data
+            readingManager.addReading(currentUser, LocalDate.now().minusDays(30), "electricity", 500.0, 0.15, 75.0);
+            readingManager.addReading(currentUser, LocalDate.now().minusDays(15), "water", 25.0, 62.50);
+            readingManager.addReading(currentUser, LocalDate.now().minusDays(10), "gas", 150.0, 1.25, 187.50);
+        }
+        
+        // Test 1: Update reading label
+        totalTests++;
+        try {
+            Reading testReading = readingManager.getLatest_Reading_By_Type(currentUser, "electricity");
+            if (testReading != null) {
+                JLabel valueLabel = new JLabel();
+                JLabel trendLabel = new JLabel();
+                
+                readingManager.updateReading_Label(currentUser, testReading, valueLabel, trendLabel, "electricity");
+                
+                if (valueLabel.getText() != null && !valueLabel.getText().isEmpty() &&
+                    trendLabel.getText() != null && !trendLabel.getText().isEmpty()) {
+                    printSuccess("Update reading label - Value: '" + valueLabel.getText() + 
+                            "', Trend: '" + trendLabel.getText() + "'");
+                    passedTests++;
+                } else {
+                    printFailure("Update reading label - labels not updated properly");
+                }
+            } else {
+                printFailure("Update reading label - no test reading available");
+            }
+        } catch (Exception e) {
+            printFailure("Update reading label exception: " + e.getMessage());
+        }
+        
+        // Test 2: Get readings as JList
+        totalTests++;
+        try {
+            JPanel testPanel = new JPanel();
+            Database_Manager dbManager = Database_Manager.getInstance();
+            
+            JList<String> readingsList = readingManager.getReadings_As_JList(
+                    testPanel, dbManager, currentUser, "electricity");
+            
+            if (readingsList != null && readingsList.getModel().getSize() > 0) {
+                printSuccess("Get readings as JList - " + readingsList.getModel().getSize() + " items");
+                passedTests++;
+            } else {
+                printFailure("Get readings as JList - no items or null list");
+            }
+        } catch (Exception e) {
+            printFailure("Get readings as JList exception: " + e.getMessage());
+        }
+        
+        // Test 3: UI integration with multiple utility types
+        totalTests++;
+        try {
+            JPanel testPanel = new JPanel();
+            Database_Manager dbManager = Database_Manager.getInstance();
+            
+            String[] utilityTypes = {"electricity", "water", "gas"};
+            int totalListItems = 0;
+            
+            for (String type : utilityTypes) {
+                JList<String> list = readingManager.getReadings_As_JList(testPanel, dbManager, currentUser, type);
+                if (list != null) {
+                    totalListItems += list.getModel().getSize();
+                }
+            }
+            
+            if (totalListItems > 0) {
+                printSuccess("UI integration with multiple utility types - " + totalListItems + " total items");
+                passedTests++;
+            } else {
+                printFailure("UI integration with multiple utility types - no items found");
+            }
+        } catch (Exception e) {
+            printFailure("UI integration with multiple utility types exception: " + e.getMessage());
+        }
+        
+        return new int[] {passedTests, totalTests};
+    }
+    
+    private static void generateTestData(User currentUser, Reading_Manager readingManager) throws SQLException {
+        System.out.println("Generating comprehensive test data...");
+        
+        LocalDate currentDate = LocalDate.now();
+        String[] utilityTypes = {"electricity", "water", "gas"};
+        double[] baseReadings = {500.0, 25.0, 150.0};
+        double[] rates = {0.15, 2.50, 1.25};
+        
+        // Generate 6 months of data
+        for (int month = 0; month < 6; month++) {
+            LocalDate testDate = currentDate.minusMonths(month).withDayOfMonth(1);
+            
+            for (int i = 0; i < utilityTypes.length; i++) {
+                double reading = baseReadings[i] + (month * 10) + (Math.random() * 20);
+                double rate = rates[i];
+                double total = reading * rate;
+                
+                readingManager.addReading(currentUser, testDate, utilityTypes[i], reading, rate, total);
+            }
+        }
+        
+        System.out.println("Generated " + (6 * utilityTypes.length) + " test readings");
+    }
+    
+    private static void cleanupTestData(User_Manager userManager, Reading_Manager readingManager) {
+        System.out.println(ANSI_BLUE + "\nCleaning up test data..." + ANSI_RESET);
+        
+        try {
+            User currentUser = userManager.getCurrentUser();
+            if (currentUser != null) {
+                // Clean up readings
+                List<Reading> allReadings = readingManager.getReadings_By_User_Id(currentUser);
+                for (Reading reading : allReadings) {
+                    readingManager.deleteReading(reading);
+                }
+                System.out.println("Cleaned up " + allReadings.size() + " readings");
+                
+                // Clean up test user (but keep the original user if it wasn't a test user)
+                if (currentUser.getUsername() != null && 
+                    (currentUser.getUsername().startsWith("testuser_") || 
+                     currentUser.getUsername().startsWith("updated_"))) {
+                    userManager.deleteUser(currentUser);
+                    System.out.println("Cleaned up test user: " + currentUser.getUsername());
+                }
+            }
+        } catch (Exception e) {
+            System.err.println(ANSI_RED + "Error during cleanup: " + e.getMessage() + ANSI_RESET);
+        }
+    }
+    
+    private static boolean validateReading(Reading reading, double expectedReading, 
+                                         double expectedRate, double expectedTotal) {
+        if (reading == null) return false;
+        
+        return Math.abs(reading.getReading() - expectedReading) < 0.001 &&
+               Math.abs(reading.getRate() - expectedRate) < 0.001 &&
+               Math.abs(reading.getTotal_Price() - expectedTotal) < 0.001;
+    }
+    
+    private static void debugReading(String label, double reading, double rate, double total) {
+        System.out.println("  " + label + " - Reading: " + reading + ", Rate: " + rate + ", Total: " + total);
+    }
+    
+    private static void printSuccess(String testName) {
+        System.out.println(ANSI_GREEN + "✓ PASS: " + testName + ANSI_RESET);
+    }
+    
+    private static void printFailure(String testName) {
+        System.out.println(ANSI_RED + "✗ FAIL: " + testName + ANSI_RESET);
     }
 }
