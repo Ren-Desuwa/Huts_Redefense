@@ -77,7 +77,7 @@ public class Add_Reading_Panel extends JDialog {
 	    this.readingType = type;  // Set the reading type electricity, water or gas
 		
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setBounds(400, 50, 450, 535);
+		setBounds(287, 50, 450, 535);
 		setBackground(new Color(213, 213, 213));
 		setTitle("Add Reading");
 		setResizable(false);
@@ -412,30 +412,30 @@ public class Add_Reading_Panel extends JDialog {
 	    if (reading.equals("Enter Reading") && 
 	        rate.equals("Enter Rate") && 
 	        totalPrice.equals("Total Price")) {
-	        JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
+	    	lbl_Incorrect_Signage1.setVisible(true);
+	    	lbl_Incorrect_Signage2.setVisible(true);
+	    	lbl_Incorrect_Signage3.setVisible(true);
+	    	JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
 	        
-	        lbl_Incorrect_Signage1.setVisible(true);
-	        lbl_Incorrect_Signage2.setVisible(true);
-	        lbl_Incorrect_Signage3.setVisible(true);
 	        return;
 	    }
 	    
 	    if(reading.equals("Enter Reading")) {
-	    	JOptionPane.showMessageDialog(this, "Please enter a reading value.", "Error", JOptionPane.ERROR_MESSAGE);
 	    	lbl_Incorrect_Signage1.setVisible(true);
+	    	JOptionPane.showMessageDialog(this, "Please enter a reading value.", "Error", JOptionPane.ERROR_MESSAGE);
 	        return;
 	    }
 	    if(rate.equals("Enter Rate")) {
-	    	JOptionPane.showMessageDialog(this, "Please enter a rate value.", "Error", JOptionPane.ERROR_MESSAGE);
 	    	lbl_Incorrect_Signage2.setVisible(true);
+	    	JOptionPane.showMessageDialog(this, "Please enter a rate value.", "Error", JOptionPane.ERROR_MESSAGE);
 	        return;
 	    }
 	    if(totalPrice.equals("Total Price")) {
-	    	JOptionPane.showMessageDialog(this, "Please enter a total price value.", "Error", JOptionPane.ERROR_MESSAGE);
 	    	lbl_Incorrect_Signage3.setVisible(true);
+	    	JOptionPane.showMessageDialog(this, "Please enter a total price value.", "Error", JOptionPane.ERROR_MESSAGE);
 	        return;
 	    }
-
+	    
 	    try {
 	        double readingVal = Double.parseDouble(reading);
 	        double rateVal = Double.parseDouble(rate);
@@ -443,20 +443,20 @@ public class Add_Reading_Panel extends JDialog {
 
 	        // Check for negative values
 	        if (readingVal < 0) {
-	            JOptionPane.showMessageDialog(this, "Reading value cannot be negative.", "Error", JOptionPane.ERROR_MESSAGE);
 	            lbl_Incorrect_Signage1.setVisible(true);
+	            JOptionPane.showMessageDialog(this, "Reading value cannot be negative.", "Error", JOptionPane.ERROR_MESSAGE);
 	            return;
 	        } 
 	        //make red not show
 	        if (rateVal < 0) {
-	        	JOptionPane.showMessageDialog(this, "Rate value cannot be negative.", "Error", JOptionPane.ERROR_MESSAGE);
 	        	lbl_Incorrect_Signage2.setVisible(true);
+	        	JOptionPane.showMessageDialog(this, "Rate value cannot be negative.", "Error", JOptionPane.ERROR_MESSAGE);
 	            return;
 	        }
 	      //make red not show
 	        if (totalVal < 0) {
-	        	JOptionPane.showMessageDialog(this, "Total value cannot be negative.", "Error", JOptionPane.ERROR_MESSAGE);
 	        	lbl_Incorrect_Signage3.setVisible(true);
+	        	JOptionPane.showMessageDialog(this, "Total value cannot be negative.", "Error", JOptionPane.ERROR_MESSAGE);
 	            return;
 	        }
 	      //make red not show
@@ -467,10 +467,13 @@ public class Add_Reading_Panel extends JDialog {
 	            rateVal = totalVal / readingVal;
 	            tf_Rate.setText(String.format("%.2f", rateVal));
 	        } else if (totalVal == 0 && rateVal > 0) {
+	        	
 	            // Calculate total from reading and rate
 	            totalVal = readingVal * rateVal;
 	            tf_TotalPrice.setText(String.format("%.2f", totalVal));
 	        } else if (rateVal == 0 && totalVal == 0) {
+	            lbl_Incorrect_Signage2.setVisible(true);
+	            lbl_Incorrect_Signage3.setVisible(true);
 	            JOptionPane.showMessageDialog(this, "Either Rate or Total Price must have a value.", "Error", JOptionPane.ERROR_MESSAGE);
 	            return;
 	        }

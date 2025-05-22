@@ -12,6 +12,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.JOptionPane;
 
 import database.Database_Manager;
 import model.User;
@@ -369,20 +370,20 @@ public class Sign_Up_Window extends JFrame {
 		
 		// Validate inputs
 		if (username.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
-			System.out.println("Please fill in all fields.");
 			lbl_Incorrect_Signage1.setVisible(true);
 			lbl_Incorrect_Signage2.setVisible(true);
 			lbl_Incorrect_Signage3.setVisible(true);
 			lbl_Incorrect_Signage4.setVisible(true);
+			JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		
 		if (username.equals("Enter Username") || email.equals("Enter Email") || password.equals("Enter Password") || confirmPassword.equals("Confirm Password")) {
-			System.out.println("Please fill in all fields.");
 			lbl_Incorrect_Signage1.setVisible(true);
 			lbl_Incorrect_Signage2.setVisible(true);
 			lbl_Incorrect_Signage3.setVisible(true);
 			lbl_Incorrect_Signage4.setVisible(true);
+			JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		
@@ -391,16 +392,16 @@ public class Sign_Up_Window extends JFrame {
 			lbl_Incorrect_Signage3.setVisible(true);
 			lbl_Incorrect_Signage4.setVisible(false);
 			lbl_Incorrect_Signage1.setVisible(false);
-			System.out.println("User Email already exisist");
+			JOptionPane.showMessageDialog(this, "User Email already exisist", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		
 		if (!password.equals(confirmPassword)) {
-			System.out.println("Passwords do not match.");
 			lbl_Incorrect_Signage4.setVisible(true);
 			lbl_Incorrect_Signage1.setVisible(true);
 			lbl_Incorrect_Signage2.setVisible(false);
 			lbl_Incorrect_Signage3.setVisible(false);
+			JOptionPane.showMessageDialog(this, "Passwords do not match.", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 	

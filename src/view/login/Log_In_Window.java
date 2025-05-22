@@ -5,6 +5,7 @@ import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -284,26 +285,26 @@ public class Log_In_Window extends JFrame {
 		
 		// Validate inputs
 		if (username.isEmpty() || password.isEmpty()) {
-			System.out.println("Please fill in all fields.");
 			lbl_Incorrect_Signage1.setVisible(true); // Show label
 			lbl_Incorrect_Signage2.setVisible(true); // Show label
+			JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		
 		if (username.equals("Enter Username") || password.equals("Enter Password")) {
-			System.out.println("Please fill in all fields.");
 			lbl_Incorrect_Signage1.setVisible(true); // Show label
 			lbl_Incorrect_Signage2.setVisible(true); // Show label
+			JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		
 		try {
 			// Verify credentials
 			if (!database_manager.getUserManager().UsernamePasswordMatch(username, password)) {
-				System.out.println("Passwords do not match.");
 				lbl_Forgot_Password.setVisible(true); // Show label
 				lbl_Incorrect_Signage1.setVisible(true); // Show label
 				lbl_Incorrect_Signage2.setVisible(true); // Show label
+				JOptionPane.showMessageDialog(this, "Incorrect username or password.", "Error", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 			
