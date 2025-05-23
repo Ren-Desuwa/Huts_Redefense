@@ -108,8 +108,9 @@ public class Edit_Profile_Window extends JDialog {
     private void loadUserData() {
         if (current_user != null) {
         	String username = current_user.getUsername();
+        	String email = current_user.getEmail();
             txtUsername.setText(username);
-            txtEmail.setText(username);
+            txtEmail.setText(email);
             if (username != null && !username.isEmpty()) {
                 lblInitials.setText(username.substring(0, Math.min(2, username.length())).toUpperCase());
             } else {
@@ -121,26 +122,6 @@ public class Edit_Profile_Window extends JDialog {
     private void saveProfile() {
         String username = txtUsername.getText().trim();
         String email = txtEmail.getText().trim();
-
-        if (!validateInputs(username, email)) {
-            return;
-        }
-        
-        if (username.isEmpty()) {
-            JOptionPane.showMessageDialog(this, 
-                "Username cannot be empty", 
-                "Input Error", 
-                JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        if (database_manager.getUserManager().validEmail(email)) {
-            JOptionPane.showMessageDialog(this, 
-                "Please enter a valid email address", 
-                "Input Error", 
-                JOptionPane.ERROR_MESSAGE);
-            return;
-        }
 
         try {
             if (!checkExistingCredentials(username, email)) {
@@ -161,7 +142,8 @@ public class Edit_Profile_Window extends JDialog {
                 "Profile updated successfully", 
                 "Success", 
                 JOptionPane.INFORMATION_MESSAGE);
-            profile_Panel.updateUserInfo(current_user);
+            User updated_user = database_manager.getUserManager().getUserById(current_user.getUser_Id());
+            profile_Panel.updateUserInfo(updated_user);
             
             dispose();
 
@@ -171,12 +153,6 @@ public class Edit_Profile_Window extends JDialog {
                 "Error", 
                 JOptionPane.ERROR_MESSAGE);
         }
-    }
-
-    private boolean validateInputs(String username, String email) {
-        
-
-        return true;
     }
 
     private boolean checkExistingCredentials(String username, String email) throws SQLException {
@@ -198,6 +174,29 @@ public class Edit_Profile_Window extends JDialog {
             return false;
         }
         
+        if (username.equals(current_user.getUsername()) && email.equals(current_user.getEmail())) {
+			JOptionPane.showMessageDialog(this, 
+				"No changes made", 
+				"Input Error", 
+				JOptionPane.INFORMATION_MESSAGE);
+			return false;
+		}
+        
+        if (username.isEmpty()) {
+            JOptionPane.showMessageDialog(this, 
+                "Username cannot be empty", 
+                "Input Error", 
+                JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (!database_manager.getUserManager().validEmail(email)) {
+            JOptionPane.showMessageDialog(this, 
+                "Please enter a valid email address", 
+                "Input Error", 
+                JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
         return true;
     }
 }
