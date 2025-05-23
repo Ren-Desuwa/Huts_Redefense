@@ -7,6 +7,7 @@ import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -344,20 +345,20 @@ public class Sign_Up_Window extends JFrame {
 		
 		// Validate inputs
 		if (username.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
-			System.out.println("Please fill in all fields.");
-			lbl_Incorrect_Signage3.setVisible(true);
-			lbl_Incorrect_Signage2.setVisible(true);
 			lbl_Incorrect_Signage1.setVisible(true);
+			lbl_Incorrect_Signage2.setVisible(true);
+			lbl_Incorrect_Signage3.setVisible(true);
 			lbl_Incorrect_Signage4.setVisible(true);
+			JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		
 		if (username.equals("Enter Username") || email.equals("Enter Email") || password.equals("Enter Password") || confirmPassword.equals("Confirm Password")) {
-			System.out.println("Please fill in all fields.");
 			lbl_Incorrect_Signage1.setVisible(true);
 			lbl_Incorrect_Signage2.setVisible(true);
 			lbl_Incorrect_Signage3.setVisible(true);
 			lbl_Incorrect_Signage4.setVisible(true);
+			JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		
@@ -366,27 +367,28 @@ public class Sign_Up_Window extends JFrame {
 			lbl_Incorrect_Signage2.setVisible(true);
 			lbl_Incorrect_Signage3.setVisible(false);
 			lbl_Incorrect_Signage4.setVisible(false);
+			JOptionPane.showMessageDialog(this, "Invalid email format.", "Error", JOptionPane.ERROR_MESSAGE); 
 			return;
 		}
 		
 		if (database_manager.getUserManager().checkUserEmail(username, email)) {
-			lbl_Incorrect_Signage1.setVisible(true);
 			lbl_Incorrect_Signage2.setVisible(true);
-			lbl_Incorrect_Signage3.setVisible(false);
+			lbl_Incorrect_Signage3.setVisible(true);
 			lbl_Incorrect_Signage4.setVisible(false);
-			System.out.println("User Email already exisist");
+			lbl_Incorrect_Signage1.setVisible(false);
+			JOptionPane.showMessageDialog(this, "User Email already exisist", "Error", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		// Check if password meets criteria
+		if (!password.equals(confirmPassword)) {
+			lbl_Incorrect_Signage4.setVisible(true);
+			lbl_Incorrect_Signage1.setVisible(true);
+			lbl_Incorrect_Signage2.setVisible(false);
+			lbl_Incorrect_Signage3.setVisible(false);
+			JOptionPane.showMessageDialog(this, "Passwords do not match.", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		
-		if (!password.equals(confirmPassword)) {
-			System.out.println("Passwords do not match.");
-			lbl_Incorrect_Signage1.setVisible(false);
-			lbl_Incorrect_Signage2.setVisible(false);
-			lbl_Incorrect_Signage3.setVisible(true);
-			lbl_Incorrect_Signage4.setVisible(true);
-			return;
-		}
-	
 		try {
 			// Add user to the database
 			database_manager.getUserManager().addUser(username, password, email);
