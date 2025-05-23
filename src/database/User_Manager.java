@@ -38,7 +38,7 @@ public class User_Manager {
 			prepared_statement.executeUpdate();
 			
 			// Get the generated ID
-			try (ResultSet resultset = prepared_statement.getGeneratedKeys()) {
+			try (ResultSet resultset = prepared_statement.getGeneratedKeys()) { 
 				if (resultset.next()) {
 					int id = resultset.getInt(1);
 					System.out.println("Inserted user with ID: " + id);
@@ -195,5 +195,18 @@ public class User_Manager {
 			e.printStackTrace();
 			
 		}
+	}
+	
+	public boolean validEmail(String email) {
+		// Regex to validate a standard email address:
+		// ^                 - Start of the string
+		// [A-Za-z0-9+_.-]+  - One or more characters that are letters, digits, plus (+), underscore (_), dot (.), or hyphen (-)
+		// @                 - Exactly one @ symbol
+		// [A-Za-z0-9.-]+    - One or more characters that are letters, digits, dot (.), or hyphen (-) — the domain part
+		// $                 - End of the string
+		String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+		
+		// Returns true if the email string matches the pattern, false otherwise
+	    return email.matches(emailRegex);
 	}
 }

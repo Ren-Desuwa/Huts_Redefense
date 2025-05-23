@@ -24,6 +24,9 @@ public class Edit_Profile_Window extends JDialog {
     private Rounded_Button btnSave;
     private Rounded_Button btnCancel;
 	private Profile_Panel profile_Panel;
+	private JLabel lblUsername;
+	private JLabel lblEmail;
+	private JPanel buttonPanel;
 
     public Edit_Profile_Window(Profile_Panel profile_Panel, Database_Manager database_manager, User current_user) {
         this.database_manager = database_manager;
@@ -59,7 +62,7 @@ public class Edit_Profile_Window extends JDialog {
         initialsPanel.add(lblInitials);
 
         // Username Label
-        JLabel lblUsername = new JLabel("Username:");
+        lblUsername = new JLabel("Username:");
         lblUsername.setFont(new Font("Tahoma", Font.PLAIN, 14));
         lblUsername.setBounds(50, 190, 80, 25);
         contentPane.add(lblUsername);
@@ -71,7 +74,7 @@ public class Edit_Profile_Window extends JDialog {
         contentPane.add(txtUsername);
 
         // Email Label
-        JLabel lblEmail = new JLabel("Email:");
+        lblEmail = new JLabel("Email:");
         lblEmail.setFont(new Font("Tahoma", Font.PLAIN, 14));
         lblEmail.setBounds(50, 230, 80, 25);
         contentPane.add(lblEmail);
@@ -83,7 +86,7 @@ public class Edit_Profile_Window extends JDialog {
         contentPane.add(txtEmail);
 
         // Button Panel
-        JPanel buttonPanel = new JPanel();
+        buttonPanel = new JPanel();
         buttonPanel.setBounds(0, 350, 384, 40);
         buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
         contentPane.add(buttonPanel);
@@ -104,17 +107,14 @@ public class Edit_Profile_Window extends JDialog {
 
     private void loadUserData() {
         if (current_user != null) {
-            txtUsername.setText(current_user.getUsername());
-            txtEmail.setText(current_user.getEmail());
-            updateInitials(current_user.getUsername());
-        }
-    }
-
-    private void updateInitials(String username) {
-        if (username != null && !username.isEmpty()) {
-            lblInitials.setText(username.substring(0, Math.min(2, username.length())).toUpperCase());
-        } else {
-            lblInitials.setText("UN");
+        	String username = current_user.getUsername();
+            txtUsername.setText(username);
+            txtEmail.setText(username);
+            if (username != null && !username.isEmpty()) {
+                lblInitials.setText(username.substring(0, Math.min(2, username.length())).toUpperCase());
+            } else {
+                lblInitials.setText("UN");
+            }
         }
     }
 
@@ -123,6 +123,22 @@ public class Edit_Profile_Window extends JDialog {
         String email = txtEmail.getText().trim();
 
         if (!validateInputs(username, email)) {
+            return;
+        }
+        
+        if (username.isEmpty()) {
+            JOptionPane.showMessageDialog(this, 
+                "Username cannot be empty", 
+                "Input Error", 
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (database_manager.getUserManager().validEmail(email)) {
+            JOptionPane.showMessageDialog(this, 
+                "Please enter a valid email address", 
+                "Input Error", 
+                JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -158,21 +174,7 @@ public class Edit_Profile_Window extends JDialog {
     }
 
     private boolean validateInputs(String username, String email) {
-        if (username.isEmpty()) {
-            JOptionPane.showMessageDialog(this, 
-                "Username cannot be empty", 
-                "Input Error", 
-                JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
-        if (email.isEmpty() || !email.contains("@") || !email.contains(".")) {
-            JOptionPane.showMessageDialog(this, 
-                "Please enter a valid email address", 
-                "Input Error", 
-                JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
+        
 
         return true;
     }
@@ -195,7 +197,7 @@ public class Edit_Profile_Window extends JDialog {
                 JOptionPane.ERROR_MESSAGE);
             return false;
         }
-
+        
         return true;
     }
 }

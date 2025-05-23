@@ -21,10 +21,7 @@ import model.User;
 import visuals.Rounded_Button;
 import visuals.Rounded_Panel;
 
-/**
- * A window for retrieving user account and resetting password
- * This window is displayed when a user forgets their password
- */
+
 public class Retrieve_Window extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -47,11 +44,7 @@ public class Retrieve_Window extends JFrame {
     private JButton btn_Confirm;
     private Rounded_Button btn_Cancel;
 
-    /**
-     * Create the frame.
-     * 
-     * @param database_manager The database manager
-     */
+
     public Retrieve_Window(Database_Manager database_manager) {
         this.database_manager = database_manager;
         
@@ -59,10 +52,7 @@ public class Retrieve_Window extends JFrame {
         initialize_UI_Components();
         create_Action_Listeners();
     }
-    
-    /**
-     * Initialize basic window properties
-     */
+
     private void initialize_Window_Properties() {
         setTitle("Forgot Password");
         setResizable(false);
@@ -77,9 +67,7 @@ public class Retrieve_Window extends JFrame {
         contentPane.setLayout(null);
     }
     
-    /**
-     * Initialize UI components
-     */
+
     private void initialize_UI_Components() {
         //==============================================================================================
         // UI CREATION - TITLE SECTION
@@ -141,9 +129,7 @@ public class Retrieve_Window extends JFrame {
         contentPane.add(btn_Cancel);
     }
     
-    /**
-     * Create action listeners for UI components
-     */
+ 
     private void create_Action_Listeners() {
         //==============================================================================================
         // FOCUS LISTENERS - INPUT FIELDS
@@ -216,10 +202,7 @@ public class Retrieve_Window extends JFrame {
         });
     }
     
-    /**
-     * Handles the cancel action
-     * Confirms with user if inputs have been made before closing
-     */
+
     private void cancelRetrieve() {
         String username = tf_Username.getText();
         String email = tf_Email.getText();
@@ -240,9 +223,6 @@ public class Retrieve_Window extends JFrame {
         }
     }
     
-    /**
-     * Opens the login window
-     */
     private void openLogIn() {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -257,10 +237,7 @@ public class Retrieve_Window extends JFrame {
         });
     }
     
-    /**
-     * Handles the confirmation action
-     * Validates input and opens password reset if valid
-     */
+
     private void confirmation() {
         String username = tf_Username.getText();
         String email = tf_Email.getText();

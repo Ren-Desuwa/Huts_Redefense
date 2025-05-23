@@ -3,8 +3,6 @@ package view.login;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
@@ -23,10 +21,7 @@ import model.User;
 import visuals.Rounded_Button;
 import visuals.Rounded_Panel;
 
-/**
- * A window for setting a new password
- * This window is displayed when a user needs to set or reset their password
- */
+
 public class New_Password_Window extends JFrame {
 
     // Database and user fields
@@ -49,12 +44,7 @@ public class New_Password_Window extends JFrame {
     private JButton btn_Change_Password;
     private JButton btn_Cancel;
     
-    /**
-     * Create the frame.
-     * 
-     * @param database_manager The database manager
-     * @param current_user The current user
-     */
+
     public New_Password_Window(Database_Manager database_manager, User current_user) {
         this.current_user = current_user;
         this.database_manager = database_manager;
@@ -64,9 +54,7 @@ public class New_Password_Window extends JFrame {
         create_Action_Listeners();
     }
     
-    /**
-     * Initialize basic window properties
-     */
+
     private void initialize_Window_Properties() {
         setTitle("New Password");
         setResizable(false);
@@ -81,9 +69,7 @@ public class New_Password_Window extends JFrame {
         contentPane.setLayout(null);
     }
     
-    /**
-     * Initialize UI components
-     */
+
     private void initialize_UI_Components() {
         //==============================================================================================
         // UI CREATION - TITLE SECTION
@@ -145,9 +131,7 @@ public class New_Password_Window extends JFrame {
         contentPane.add(btn_Cancel);
     }
     
-    /**
-     * Create action listeners for UI components
-     */
+
     private void create_Action_Listeners() {
         //==============================================================================================
         // FOCUS LISTENERS - PASSWORD FIELDS
@@ -222,10 +206,7 @@ public class New_Password_Window extends JFrame {
         });
     }
     
-    /**
-     * Handles the cancel action
-     * Confirms with user if inputs have been made before closing
-     */
+
     private void cancelNewPassword() {
         String password = String.valueOf(pf_Password.getPassword());
         String confirmPassword = String.valueOf(pf_ConfirmPassword.getPassword());
@@ -245,10 +226,7 @@ public class New_Password_Window extends JFrame {
             openLogIn();
         }
     }
-    
-    /**
-     * Opens the login window
-     */
+
     private void openLogIn() {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -262,11 +240,7 @@ public class New_Password_Window extends JFrame {
             }
         });
     }
-    
-    /**
-     * Handles the change password action
-     * Validates input and updates password if valid
-     */
+
     private void changePassword() {
         String password = String.valueOf(pf_Password.getPassword());
         String confirmPassword = String.valueOf(pf_ConfirmPassword.getPassword());

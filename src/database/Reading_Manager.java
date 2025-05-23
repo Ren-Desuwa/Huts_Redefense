@@ -23,7 +23,7 @@ import javax.swing.SwingUtilities;
 import model.*;
 import view.panel.Electricity_Panel;
 import view.panel.Water_Panel;
-import view.panel.misc.Edit_Reading_Panel;
+import view.panel.misc.Edit_Reading_Window;
 
 public class Reading_Manager {
     
@@ -841,7 +841,7 @@ public class Reading_Manager {
                                         selected_reading = all_readings.get(selected_index);
                                     }
                                     
-                                    Edit_Reading_Panel edit_reading_panel = new Edit_Reading_Panel(
+                                    Edit_Reading_Window edit_reading_panel = new Edit_Reading_Window(
                                         (JFrame) SwingUtilities.getWindowAncestor(utility_panel),
                                         database_manager, user, utility_panel, type, selected_reading
                                     );

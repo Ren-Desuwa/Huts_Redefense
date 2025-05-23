@@ -25,10 +25,6 @@ import java.awt.event.MouseEvent;
 import visuals.Rounded_Button;
 import visuals.Rounded_Panel;
 
-/**
- * A window for user registration
- * This window allows new users to sign up for the application
- */
 public class Sign_Up_Window extends JFrame {
 	
 	// Database and user fields
@@ -57,16 +53,11 @@ public class Sign_Up_Window extends JFrame {
 	
 	// Buttons
 	private JButton btn_Sign_Up;
-	private JLabel lbl_Incorrect_Signage1;
-	private JLabel lbl_Incorrect_Signage2;
 	private JLabel lbl_Incorrect_Signage3;
+	private JLabel lbl_Incorrect_Signage2;
+	private JLabel lbl_Incorrect_Signage1;
 	private JLabel lbl_Incorrect_Signage4;
 	
-	/**
-	 * Create the frame.
-	 * 
-	 * @param database_manager The database manager
-	 */
 	public Sign_Up_Window(Database_Manager database_manager) {
 		this.database_manager = database_manager;
 		
@@ -75,9 +66,6 @@ public class Sign_Up_Window extends JFrame {
 		create_Action_Listeners();
 	}
 	
-	/**
-	 * Initialize basic window properties
-	 */
 	private void initialize_Window_Properties() {
 		setTitle("Sign Up");
 		setResizable(false);
@@ -92,9 +80,6 @@ public class Sign_Up_Window extends JFrame {
 		contentPane.setLayout(null);
 	}
 	
-	/**
-	 * Initialize UI components
-	 */
 	private void initialize_UI_Components() {
 		//==============================================================================================
 		// UI CREATION - TITLE SECTION
@@ -190,12 +175,12 @@ public class Sign_Up_Window extends JFrame {
 		lbl_Login.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(lbl_Login);
 		
-		lbl_Incorrect_Signage1 = new JLabel("*");
-		lbl_Incorrect_Signage1.setForeground(new Color(255, 0, 0));
-		lbl_Incorrect_Signage1.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lbl_Incorrect_Signage1.setBounds(403, 311, 23, 25); 
-		lbl_Incorrect_Signage1.setVisible(false);
-		contentPane.add(lbl_Incorrect_Signage1);
+		lbl_Incorrect_Signage3 = new JLabel("*");
+		lbl_Incorrect_Signage3.setForeground(new Color(255, 0, 0));
+		lbl_Incorrect_Signage3.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_Incorrect_Signage3.setBounds(403, 311, 23, 25); 
+		lbl_Incorrect_Signage3.setVisible(false);
+		contentPane.add(lbl_Incorrect_Signage3);
 		
 		lbl_Incorrect_Signage2 = new JLabel("*");
 		lbl_Incorrect_Signage2.setForeground(Color.RED);
@@ -204,12 +189,12 @@ public class Sign_Up_Window extends JFrame {
 		lbl_Incorrect_Signage2.setVisible(false);
 		contentPane.add(lbl_Incorrect_Signage2);
 		
-		lbl_Incorrect_Signage3 = new JLabel("*");
-		lbl_Incorrect_Signage3.setForeground(Color.RED);
-		lbl_Incorrect_Signage3.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lbl_Incorrect_Signage3.setBounds(403, 134, 23, 25);
-		lbl_Incorrect_Signage3.setVisible(false);
-		contentPane.add(lbl_Incorrect_Signage3);
+		lbl_Incorrect_Signage1 = new JLabel("*");
+		lbl_Incorrect_Signage1.setForeground(Color.RED);
+		lbl_Incorrect_Signage1.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_Incorrect_Signage1.setBounds(403, 134, 23, 25);
+		lbl_Incorrect_Signage1.setVisible(false);
+		contentPane.add(lbl_Incorrect_Signage1);
 		
 		lbl_Incorrect_Signage4 = new JLabel("*");
 		lbl_Incorrect_Signage4.setForeground(Color.RED);
@@ -219,9 +204,6 @@ public class Sign_Up_Window extends JFrame {
 		contentPane.add(lbl_Incorrect_Signage4);
 	}
 	
-	/**
-	 * Create action listeners for UI components
-	 */
 	private void create_Action_Listeners() {
 		//==============================================================================================
 		// FOCUS LISTENERS - USERNAME FIELD
@@ -340,9 +322,6 @@ public class Sign_Up_Window extends JFrame {
 		});
 	}
 	
-	/**
-	 * Opens the login window
-	 */
 	private void openLogIn() {
 		EventQueue.invokeLater(new Runnable() {
 	        public void run() {
@@ -357,10 +336,6 @@ public class Sign_Up_Window extends JFrame {
 	    });
 	}
 	
-	/**
-	 * Handles the sign up process
-	 * Validates input and creates a new user if valid
-	 */
 	private void SignUp() {
 		String username = tf_Username.getText();
 		String email = tf_Email.getText();
@@ -370,9 +345,9 @@ public class Sign_Up_Window extends JFrame {
 		// Validate inputs
 		if (username.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
 			System.out.println("Please fill in all fields.");
-			lbl_Incorrect_Signage1.setVisible(true);
-			lbl_Incorrect_Signage2.setVisible(true);
 			lbl_Incorrect_Signage3.setVisible(true);
+			lbl_Incorrect_Signage2.setVisible(true);
+			lbl_Incorrect_Signage1.setVisible(true);
 			lbl_Incorrect_Signage4.setVisible(true);
 			return;
 		}
@@ -386,21 +361,29 @@ public class Sign_Up_Window extends JFrame {
 			return;
 		}
 		
-		if (database_manager.getUserManager().checkUserEmail(username, email)) {
-			lbl_Incorrect_Signage2.setVisible(true);
-			lbl_Incorrect_Signage3.setVisible(true);
-			lbl_Incorrect_Signage4.setVisible(false);
+		if(!database_manager.getUserManager().validEmail(email)) {
 			lbl_Incorrect_Signage1.setVisible(false);
+			lbl_Incorrect_Signage2.setVisible(true);
+			lbl_Incorrect_Signage3.setVisible(false);
+			lbl_Incorrect_Signage4.setVisible(false);
+			return;
+		}
+		
+		if (database_manager.getUserManager().checkUserEmail(username, email)) {
+			lbl_Incorrect_Signage1.setVisible(true);
+			lbl_Incorrect_Signage2.setVisible(true);
+			lbl_Incorrect_Signage3.setVisible(false);
+			lbl_Incorrect_Signage4.setVisible(false);
 			System.out.println("User Email already exisist");
 			return;
 		}
 		
 		if (!password.equals(confirmPassword)) {
 			System.out.println("Passwords do not match.");
-			lbl_Incorrect_Signage4.setVisible(true);
-			lbl_Incorrect_Signage1.setVisible(true);
+			lbl_Incorrect_Signage1.setVisible(false);
 			lbl_Incorrect_Signage2.setVisible(false);
-			lbl_Incorrect_Signage3.setVisible(false);
+			lbl_Incorrect_Signage3.setVisible(true);
+			lbl_Incorrect_Signage4.setVisible(true);
 			return;
 		}
 	

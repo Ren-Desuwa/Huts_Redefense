@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 import database.Database_Manager;
 import model.Reading;
 import model.User;
-import view.panel.misc.Add_Reading_Panel;
+import view.panel.misc.Add_Reading_Window;
 import visuals.Graph_Panel;
 import visuals.Rounded_Panel;
 import visuals.Utility_Tips_Manager;
@@ -532,7 +532,7 @@ public class Utility_Panel extends JPanel {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    Add_Reading_Panel add_reading_panel = new Add_Reading_Panel(
+                    Add_Reading_Window add_reading_panel = new Add_Reading_Window(
                         (JFrame) SwingUtilities.getWindowAncestor(Utility_Panel.this),
                         database_manager, current_user, Utility_Panel.this, utility_type
                     );

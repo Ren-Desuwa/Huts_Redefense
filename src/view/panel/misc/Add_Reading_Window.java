@@ -34,7 +34,7 @@ import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 
 
-public class Add_Reading_Panel extends JDialog {
+public class Add_Reading_Window extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -66,7 +66,7 @@ public class Add_Reading_Panel extends JDialog {
 	private JLabel lbl_Month;
 	private JLabel lbl_Year;
 	
-	public Add_Reading_Panel(JFrame parent ,Database_Manager database_manager, User current_user,JPanel panel_type, String type) {
+	public Add_Reading_Window(JFrame parent ,Database_Manager database_manager, User current_user,JPanel panel_type, String type) {
 		super(parent, "Add Reading", true);
 	    this.database_manager = database_manager;
 	    this.current_user = current_user;
@@ -433,7 +433,7 @@ public class Add_Reading_Panel extends JDialog {
 	        } else if (rateVal == 0 && totalVal == 0) {
 	            JOptionPane.showMessageDialog(this, "Either Rate or Total Price must have a value.", "Error", JOptionPane.ERROR_MESSAGE);
 	            return;
-	        }
+	        }	
 
 	        LocalDate date = LocalDate.of(
 	            (int) combo_box_Year.getSelectedItem(),

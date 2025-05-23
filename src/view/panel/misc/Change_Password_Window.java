@@ -6,8 +6,6 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Frame;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -21,8 +19,6 @@ import javax.swing.border.EmptyBorder;
 
 import database.Database_Manager;
 import model.User;
-import view.login.Log_In_Window;
-import view.login.New_Password_Window;
 
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -47,6 +43,7 @@ public class Change_Password_Window extends JDialog {
 	private Rounded_Panel panel_ChangePass_Title;
 	private JButton btn_Change_Password;
 	private JButton btn_Cancel;
+	private JLabel lbl_Title_ChangePass;
 		
 	public Change_Password_Window(JFrame parent, Database_Manager database_manager, User current_user) {
 		super(parent, "New Password", true);
@@ -61,6 +58,7 @@ public class Change_Password_Window extends JDialog {
 		setBackground(new Color(213, 213, 213));
 		
 		initialize_UI();
+		create_Action_Listeners();
 	}
 	
 	private void initialize_UI() {
@@ -76,7 +74,7 @@ public class Change_Password_Window extends JDialog {
 		panel_ChangePass_Title.setBounds(10, 11, 416, 97);
 		contentPane.add(panel_ChangePass_Title);
 		
-		JLabel lbl_Title_ChangePass = new JLabel("Change Password");
+		lbl_Title_ChangePass = new JLabel("Change Password");
 		lbl_Title_ChangePass.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_Title_ChangePass.setFont(new Font("Tahoma", Font.BOLD, 35));
 		lbl_Title_ChangePass.setBounds(13, 20, 393, 54);
@@ -91,6 +89,37 @@ public class Change_Password_Window extends JDialog {
 		pf_Password.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		pf_Password.setText("Enter Password");
 		pf_Password.setEchoChar((char) 0);
+		pf_Password.setBounds(20, 214, 396, 45);
+		contentPane.add(pf_Password);
+		
+		lbl_Confirm_Password = new JLabel("Confirm Password");
+		lbl_Confirm_Password.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_Confirm_Password.setBounds(10, 270, 211, 22);
+		contentPane.add(lbl_Confirm_Password);
+		
+		pf_ConfirmPassword = new JPasswordField();
+		pf_ConfirmPassword.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		pf_ConfirmPassword.setText("Confirm Password");
+		pf_ConfirmPassword.setEchoChar((char) 0);
+		pf_ConfirmPassword.setBounds(20, 303, 396, 45);
+		contentPane.add(pf_ConfirmPassword);
+		
+		btn_Change_Password = new Rounded_Button("Change Password", 25);
+		btn_Change_Password.setBackground(new Color(182, 182, 182));
+		btn_Change_Password.setForeground(Color.BLACK);
+		btn_Change_Password.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btn_Change_Password.setBounds(108, 492, 211, 44);
+		contentPane.add(btn_Change_Password);
+		
+		btn_Cancel = new Rounded_Button("Cancel", 25);
+		btn_Cancel.setForeground(Color.BLACK);
+		btn_Cancel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		btn_Cancel.setBackground(new Color(182, 182, 182));
+		btn_Cancel.setBounds(168, 547, 91, 34);
+		contentPane.add(btn_Cancel);
+	}
+	
+	private void create_Action_Listeners() {
 		pf_Password.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -108,18 +137,37 @@ public class Change_Password_Window extends JDialog {
 				}
 			}
 		});
-		pf_Password.setBounds(20, 214, 396, 45);
-		contentPane.add(pf_Password);
 		
-		lbl_Confirm_Password = new JLabel("Confirm Password");
-		lbl_Confirm_Password.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lbl_Confirm_Password.setBounds(10, 270, 211, 22);
-		contentPane.add(lbl_Confirm_Password);
+		btn_Cancel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				cancelChangePass();
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btn_Cancel.setBackground(new Color(150, 150, 150));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btn_Cancel.setBackground(new Color(182, 182, 182));
+			}
+		});
 		
-		pf_ConfirmPassword = new JPasswordField();
-		pf_ConfirmPassword.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		pf_ConfirmPassword.setText("Confirm Password");
-		pf_ConfirmPassword.setEchoChar((char) 0);
+		btn_Change_Password.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				ChangePassword();
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btn_Change_Password.setBackground(new Color(150, 150, 150));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btn_Change_Password.setBackground(new Color(182, 182, 182));
+			}
+		});
+		
 		pf_ConfirmPassword.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -137,50 +185,6 @@ public class Change_Password_Window extends JDialog {
 				}
 			}
 		});
-		pf_ConfirmPassword.setBounds(20, 303, 396, 45);
-		contentPane.add(pf_ConfirmPassword);
-		
-		btn_Change_Password = new Rounded_Button("Change Password", 25);
-		btn_Change_Password.setBackground(new Color(182, 182, 182));
-		btn_Change_Password.setForeground(Color.BLACK);
-		btn_Change_Password.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btn_Change_Password.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				ChangePassword();
-			}
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btn_Change_Password.setBackground(new Color(150, 150, 150));
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btn_Change_Password.setBackground(new Color(182, 182, 182));
-			}
-		});
-		btn_Change_Password.setBounds(108, 492, 211, 44);
-		contentPane.add(btn_Change_Password);
-		
-		btn_Cancel = new Rounded_Button("Cancel", 25);
-		btn_Cancel.setForeground(Color.BLACK);
-		btn_Cancel.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		btn_Cancel.setBackground(new Color(182, 182, 182));
-		btn_Cancel.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				cancelChangePass();
-			}
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btn_Cancel.setBackground(new Color(150, 150, 150));
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btn_Cancel.setBackground(new Color(182, 182, 182));
-			}
-		});
-		btn_Cancel.setBounds(168, 547, 91, 34);
-		contentPane.add(btn_Cancel);
 	}
 	
 	private void cancelChangePass() {
@@ -191,27 +195,12 @@ public class Change_Password_Window extends JDialog {
 			int response = javax.swing.JOptionPane.showConfirmDialog(this, "Are you sure you want to cancel?", "Confirm Cancel", javax.swing.JOptionPane.YES_NO_OPTION);
 			if (response == javax.swing.JOptionPane.YES_OPTION) {
 				this.dispose();
-				openLogIn();
 			}
 		} else {
 			this.dispose();
-			openLogIn();
 		}
 	}
 	
-	private void openLogIn() {
-		EventQueue.invokeLater(new Runnable() {
-	        public void run() {
-	            try {
-	                Change_Password_Window.this.dispose();
-	                Log_In_Window loginWindow = new Log_In_Window(database_manager);
-	                loginWindow.setVisible(true);
-	            } catch (Exception e) {
-	                e.printStackTrace();
-	            }
-	        }
-	    });
-	}
 	private void ChangePassword() {
 		String password = String.valueOf(pf_Password.getPassword());
 		String confirmPassword = String.valueOf(pf_ConfirmPassword.getPassword());

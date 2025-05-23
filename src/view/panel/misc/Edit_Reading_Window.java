@@ -41,7 +41,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 
-public class Edit_Reading_Panel extends JDialog {
+public class Edit_Reading_Window extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -77,7 +77,7 @@ public class Edit_Reading_Panel extends JDialog {
 	private JLabel lblTime;
 	
 	
-		public Edit_Reading_Panel(JFrame parent, Database_Manager database_manager, User current_user, JPanel panel_type, String type) {
+		public Edit_Reading_Window(JFrame parent, Database_Manager database_manager, User current_user, JPanel panel_type, String type) {
 		    // Same as original constructor
 		    super(parent, "Edit Reading", true);
 		    this.database_manager = database_manager;
@@ -95,7 +95,7 @@ public class Edit_Reading_Panel extends JDialog {
 			setLabels();
 		}
 		
-		public Edit_Reading_Panel(JFrame parent, Database_Manager database_manager, User current_user, JPanel panel_type, String type, Reading selectedReading) {
+		public Edit_Reading_Window(JFrame parent, Database_Manager database_manager, User current_user, JPanel panel_type, String type, Reading selectedReading) {
 			this(parent, database_manager, current_user, panel_type, type); // Call the original constructor
 		
 			// If a specific reading was selected, pre-select it in the combo box
