@@ -6,12 +6,12 @@ import java.awt.EventQueue;
 import javax.swing.JPanel;
 
 import database.Database_Manager;
+import database.Utility_Tips_Manager;
 import model.Reading;
 import model.User;
 import view.panel.misc.Add_Reading_Window;
 import visuals.Graph_Panel;
 import visuals.Rounded_Panel;
-import visuals.Utility_Tips_Manager;
 import visuals.Rounded_Button;
 
 import javax.swing.border.EmptyBorder;
@@ -56,7 +56,6 @@ public class Utility_Panel extends JPanel {
     // Panel configuration
     private String panel_title;
     private String panel_subtitle;
-    private String reading_unit;
     private Color tips_title_color;
     
     // Year navigation fields
@@ -113,14 +112,13 @@ public class Utility_Panel extends JPanel {
     
     public Utility_Panel(Database_Manager database_manager, User current_user, 
             String utility_type, String panel_title, String panel_subtitle, 
-            String reading_unit, String tips_title, Color tips_title_color) {
+            String tips_title, Color tips_title_color) {
         
         this.database_manager = database_manager;
         this.current_user = current_user;
         this.utility_type = utility_type;
         this.panel_title = panel_title;
         this.panel_subtitle = panel_subtitle;
-        this.reading_unit = reading_unit;
         this.tips_title_color = tips_title_color;
         this.current_graph_year = LocalDate.now().getYear();
         
@@ -249,34 +247,35 @@ public class Utility_Panel extends JPanel {
         panel_Current_Reading.setBounds(21, 509, 466, 168);
         add(panel_Current_Reading);
 
-        lbl_Title_Current_Reading = new JLabel("Current Reading");
+        lbl_Title_Current_Reading = new JLabel("Current Expenses");
         lbl_Title_Current_Reading.setHorizontalAlignment(SwingConstants.CENTER);
         lbl_Title_Current_Reading.setFont(new Font("Tahoma", Font.PLAIN, 25));
-        lbl_Title_Current_Reading.setBounds(42, 11, 393, 32);
+        lbl_Title_Current_Reading.setBounds(10, 11, 446, 32);
         panel_Current_Reading.add(lbl_Title_Current_Reading);
 
         lbl_Reading_Value = new JLabel();
         lbl_Reading_Value.setHorizontalAlignment(SwingConstants.CENTER);
         lbl_Reading_Value.setFont(new Font("Tahoma", Font.BOLD, 20));
-        lbl_Reading_Value.setBounds(144, 54, 100, 32);
+        lbl_Reading_Value.setBounds(194, 54, 118, 32);
         panel_Current_Reading.add(lbl_Reading_Value);
 
-        lbl_Reading_Unit = new JLabel(reading_unit);
+        lbl_Reading_Unit = new JLabel("₱");
+        lbl_Reading_Unit.setHorizontalAlignment(SwingConstants.TRAILING);
         lbl_Reading_Unit.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        lbl_Reading_Unit.setBounds(254, 55, 68, 32);
+        lbl_Reading_Unit.setBounds(116, 54, 68, 32);
         panel_Current_Reading.add(lbl_Reading_Unit);
 
         lbl_Trend_Of_Reading = new JLabel("No available data");
         lbl_Trend_Of_Reading.setHorizontalAlignment(SwingConstants.CENTER);
         lbl_Trend_Of_Reading.setFont(new Font("Dialog", Font.PLAIN, 15));
-        lbl_Trend_Of_Reading.setBounds(97, 82, 261, 32);
+        lbl_Trend_Of_Reading.setBounds(10, 82, 446, 32);
         panel_Current_Reading.add(lbl_Trend_Of_Reading);
 
         btn_Add_New_Reading = new Rounded_Button("Add Reading", 25);
         btn_Add_New_Reading.setBackground(new Color(192, 192, 192));
         btn_Add_New_Reading.setForeground(Color.BLACK);
         btn_Add_New_Reading.setFont(new Font("Arial", Font.PLAIN, 16));
-        btn_Add_New_Reading.setBounds(168, 120, 137, 40);
+        btn_Add_New_Reading.setBounds(163, 117, 137, 40);
         panel_Current_Reading.add(btn_Add_New_Reading);
 
         //==============================================================================================
@@ -489,7 +488,7 @@ public class Utility_Panel extends JPanel {
                 lbl_Reading_Value.setText("No Data");
             } else {
                 
-                database_manager.getReadingManager().updateReading_Label(current_user, latest_reading, lbl_Reading_Value, lbl_Trend_Of_Reading, utility_type);
+                database_manager.getReadingManager().updateReading_Label(current_user, latest_reading, lbl_Reading_Value, lbl_Trend_Of_Reading, utility_type, "total");
             }
             
             this.years = database_manager.getReadingManager().getReading_Years(current_user, utility_type);

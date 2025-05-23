@@ -16,7 +16,6 @@ public class Water_Panel extends Utility_Panel {
             "water",                               // utility type
             "Water Consumption",                   // panel title
             "Track and manage your water usage",   // panel subtitle
-            "m³",                                   // reading unit (liters)
             "Water Saving Tips",                   // tips title
             new Color(0, 119, 190)                 // tips title color (blue)
         );

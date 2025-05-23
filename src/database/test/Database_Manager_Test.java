@@ -836,7 +836,7 @@ public class Database_Manager_Test {
         // Test 10: Trend analysis for specific type
         totalTests++;
         try {
-            String electricityTrend = readingManager.getTrend(currentUser, "electricity");
+            String electricityTrend = readingManager.getTrend(currentUser, "electricity", "reading");
             
             if (electricityTrend != null && !electricityTrend.isEmpty()) {
                 // Check if it matches the expected format: "X.X% from previous month" or "Not enough monthly data"
@@ -858,7 +858,7 @@ public class Database_Manager_Test {
      // Test 11: Overall trend analysis
         totalTests++;
         try {
-            String overallTrend = readingManager.getTrend_Overall(currentUser);
+            String overallTrend = readingManager.getTrend_Overall(currentUser, "reading");
             
             if (overallTrend != null && !overallTrend.isEmpty()) {
                 // Check if it matches the expected format: "X.X% from last month" or "No previous data"
@@ -1136,7 +1136,7 @@ public class Database_Manager_Test {
                 JLabel valueLabel = new JLabel();
                 JLabel trendLabel = new JLabel();
                 
-                readingManager.updateReading_Label(currentUser, testReading, valueLabel, trendLabel, "electricity");
+                readingManager.updateReading_Label(currentUser, testReading, valueLabel, trendLabel, "electricity","reading");
                 
                 if (valueLabel.getText() != null && !valueLabel.getText().isEmpty() &&
                     trendLabel.getText() != null && !trendLabel.getText().isEmpty()) {

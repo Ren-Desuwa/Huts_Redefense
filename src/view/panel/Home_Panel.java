@@ -3,11 +3,11 @@ package view.panel;
 import javax.swing.JPanel;
 
 import database.Database_Manager;
+import database.Utility_Tips_Manager;
 import model.Reading;
 import model.User;
 import visuals.Graph_Panel;
 import visuals.Rounded_Panel;
-import visuals.Utility_Tips_Manager;
 
 import javax.swing.JLabel;
 import java.awt.Dimension;
@@ -25,6 +25,7 @@ import java.time.format.DateTimeFormatter;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 import java.awt.BorderLayout;
 
 public class Home_Panel extends JPanel {
@@ -490,27 +491,34 @@ public class Home_Panel extends JPanel {
             Reading gas = database_Manager.getReadingManager().getLatest_Reading_By_Type(current_User, "gas");
 
             // Update each reading's label
-            database_Manager.getReadingManager().updateReading_Label(current_User,electricity, lbl_Electricity_Reading_Value, lbl_Trend_Of_Reading_Electricity, "electricity");
-            database_Manager.getReadingManager().updateReading_Label(current_User,water, lbl_Water_Reading_Value, lbl_Trend_Of_Reading_Water, "water");
-            database_Manager.getReadingManager().updateReading_Label(current_User,gas, lbl_Gas_Reading_Value, lbl_Trend_Of_Reading_Gas, "gas");
+            database_Manager.getReadingManager().updateReading_Label(current_User,electricity, lbl_Electricity_Reading_Value, lbl_Trend_Of_Reading_Electricity, "electricity", "reading");
+            database_Manager.getReadingManager().updateReading_Label(current_User,water, lbl_Water_Reading_Value, lbl_Trend_Of_Reading_Water, "water", "reading");
+            database_Manager.getReadingManager().updateReading_Label(current_User,gas, lbl_Gas_Reading_Value, lbl_Trend_Of_Reading_Gas, "gas", "reading");
 
-            // Calculate and update overall reading
-            double total = 0;
-            if (electricity != null) total += electricity.getTotal_Price();
-            if (water != null) total += water.getTotal_Price();
-            if (gas != null) total += gas.getTotal_Price();
+            double total = 0.0;
+            try {
+                // Calculate total expenses by summing latest month's totals for each utility
+                total = database_Manager.getReadingManager().getLatestMonthReadingSum(current_User, "gas", "total")
+                     + database_Manager.getReadingManager().getLatestMonthReadingSum(current_User, "water", "total")
+                     + database_Manager.getReadingManager().getLatestMonthReadingSum(current_User, "electricity", "total");
 
-            if (electricity == null && water == null && gas == null) {
-                lbl_OverAll_Reading_Value.setText("No Data");
-                lbl_Trend_Of_Reading_Overall.setText("No Data");
-            } else {
-                lbl_OverAll_Reading_Value.setText(String.valueOf(total));
-                String trend = database_Manager.getReadingManager().getTrend_Overall(current_User);
-                lbl_Trend_Of_Reading_Overall.setText(trend);
-                lbl_Trend_Of_Reading_Overall.setForeground(
-                    database_Manager.getReadingManager().getTrend_Color(current_User, null)
-                );
+                if (total == 0) {
+                    lbl_OverAll_Reading_Value.setText("No Data");
+                    lbl_Trend_Of_Reading_Overall.setText("No Data");
+                } else {
+                    lbl_OverAll_Reading_Value.setText(String.format("%.2f", total));
+                    String trend = database_Manager.getReadingManager().getTrend_Overall(current_User, "total");
+                    lbl_Trend_Of_Reading_Overall.setText(trend);
+                    lbl_Trend_Of_Reading_Overall.setForeground(
+                        database_Manager.getReadingManager().getTrend_Color(current_User, null)
+                    );
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                lbl_OverAll_Reading_Value.setText("Error");
+                lbl_Trend_Of_Reading_Overall.setText("Error calculating trend");
             }
+
 
             // Refresh graph content
             graph_Panel.refreshData();

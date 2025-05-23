@@ -1,16 +1,11 @@
 package view.panel.misc;
 
-import java.awt.Dimension;
-import java.awt.EventQueue;
+
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
-import javax.swing.JList;
-
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -34,7 +29,6 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.DefaultComboBoxModel;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
@@ -52,7 +46,7 @@ public class Edit_Reading_Window extends JDialog {
 	private Electricity_Panel electricitypanel;
 	private Water_Panel waterpanel;
 	private Gas_Panel gaspanel;
-	private Reading current_reading;
+
 	
 	private JTextField tf_Reading;
 	private JTextField tf_Rate;
@@ -100,7 +94,6 @@ public class Edit_Reading_Window extends JDialog {
 		
 			// If a specific reading was selected, pre-select it in the combo box
 			if (selectedReading != null) {
-				this.current_reading = selectedReading;
 				preSelectReading(selectedReading);
 			}
 		}

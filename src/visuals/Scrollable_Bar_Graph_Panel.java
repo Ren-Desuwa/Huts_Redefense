@@ -29,6 +29,7 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
     private String seriesName;          // Name of the data series
     private double maxValue;            // Maximum value for Y-axis scaling
     private boolean hasHeader = true;
+    private boolean isGasType = false;  // New field for gas type
     
  // Common drawing constants
     private static final int BAR_WIDTH = 50;         // Width of each bar
@@ -323,70 +324,60 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
         }
     }
     
-    /**
-     * Draw the bars and x-axis labels
-     */
-    private void drawBars(Graphics g) {
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        
-        int availableHeight = getHeight() - getTopMargin() - getBottomMargin();
-        int xAxisY = getTopMargin() + availableHeight;  // Y position for x-axis
-        int height = getHeight() - getTopMargin() - getBottomMargin();
-        
-        // Sort the data by months
-        List<Month> sortedMonths = new ArrayList<>(data.keySet());
-        Collections.sort(sortedMonths);
-        
-        if (data.isEmpty()) {
-            // Draw "No Data" message
-            g2d.setFont(new Font("SansSerif", Font.BOLD, 14));
-            g2d.drawString("No Data Available Yet", 20, xAxisY/4);
-            return;
+        private void drawBars(Graphics g) {
+            Graphics2D g2d = (Graphics2D) g;
+            g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            int availableHeight = getHeight() - getTopMargin() - getBottomMargin();
+            int xAxisY = getTopMargin() + availableHeight;
+            int height = getHeight() - getTopMargin() - getBottomMargin();
+
+            List<Month> sortedMonths = new ArrayList<>(data.keySet());
+            Collections.sort(sortedMonths);
+
+            if (data.isEmpty()) {
+                g2d.setFont(new Font("SansSerif", Font.BOLD, 14));
+                g2d.drawString("No Data Available Yet", 20, xAxisY/4);
+                return;
+            }
+
+            g2d.drawLine(BAR_SPACING, getTopMargin() + height, calculateChartWidth() - BAR_SPACING, xAxisY);
+
+            g2d.setFont(new Font("SansSerif", Font.BOLD, 12));
+            FontMetrics fm = g2d.getFontMetrics();
+            int xLabelWidth = fm.stringWidth(xAxisLabel);
+            g2d.drawString(xAxisLabel, (calculateChartWidth() - xLabelWidth) / 2, xAxisY + 30);
+
+            g2d.setFont(new Font("SansSerif", Font.PLAIN, 10));
+            int barIndex = 0;
+
+            for (Month month : sortedMonths) {
+                double value = data.get(month);
+                int x = BAR_SPACING + barIndex * (BAR_WIDTH + BAR_SPACING);
+                int barHeight = (int)(value * height / maxValue);
+
+                g2d.setColor(barColor);
+                g2d.fillRect(x, xAxisY - barHeight, BAR_WIDTH, barHeight);
+
+                g2d.setColor(barColor.darker());
+                g2d.drawRect(x, xAxisY - barHeight, BAR_WIDTH, barHeight);
+
+                g2d.setColor(textColor);
+                String monthStr = month.toString().substring(0, 3);
+                fm = g2d.getFontMetrics();
+                int monthWidth = fm.stringWidth(monthStr);
+                g2d.drawString(monthStr, x + (BAR_WIDTH - monthWidth) / 2, xAxisY + 15);
+
+                // Format value based on gas type
+                String valueStr = isGasType ? String.format("%d", (int)value) : String.format("%.1f", value);
+                int valueWidth = fm.stringWidth(valueStr);
+                g2d.drawString(valueStr, x + (BAR_WIDTH - valueWidth) / 2, xAxisY - barHeight - 5);
+
+                barIndex++;
+            }
         }
-        
-        // Draw X-axis
-        g2d.drawLine(BAR_SPACING, getTopMargin() + height, calculateChartWidth() - BAR_SPACING, xAxisY);
-        
-        // Draw X-axis label
-        g2d.setFont(new Font("SansSerif", Font.BOLD, 12));
-        FontMetrics fm = g2d.getFontMetrics();
-        int xLabelWidth = fm.stringWidth(xAxisLabel);
-        g2d.drawString(xAxisLabel, (calculateChartWidth() - xLabelWidth) / 2, xAxisY + 30);
-        
-        // Draw the bars and x-axis labels
-        g2d.setFont(new Font("SansSerif", Font.PLAIN, 10));
-        int barIndex = 0;
-        
-        for (Month month : sortedMonths) {
-            double value = data.get(month);
-            int x = BAR_SPACING + barIndex * (BAR_WIDTH + BAR_SPACING);
-            int barHeight = (int)(value * height / maxValue);
-            
-            // Draw bar
-            g2d.setColor(barColor);
-            g2d.fillRect(x, xAxisY - barHeight, BAR_WIDTH, barHeight);
-            
-            // Draw bar outline
-            g2d.setColor(barColor.darker());
-            g2d.drawRect(x, xAxisY - barHeight, BAR_WIDTH, barHeight);
-              
-            // Draw month label
-            g2d.setColor(textColor);
-            String monthStr = month.toString().substring(0, 3);
-            fm = g2d.getFontMetrics();
-            int monthWidth = fm.stringWidth(monthStr);
-            g2d.drawString(monthStr, x + (BAR_WIDTH - monthWidth) / 2, xAxisY + 15);
-            
-            // Draw value above bar
-            String valueStr = String.format("%.1f", value);
-            int valueWidth = fm.stringWidth(valueStr);
-            g2d.drawString(valueStr, x + (BAR_WIDTH - valueWidth) / 2, xAxisY - barHeight - 5);
-            
-            barIndex++;
-        }
-    }
+
     private int getTopMargin() {
     	int height = hasHeader ? 10 : 10;
     	return height;
@@ -394,5 +385,14 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
     private int getBottomMargin() {
     	int height = hasHeader ? 90 : 60;
     	return height;
+    }
+    /**
+     * Sets whether this graph is displaying gas readings
+     * 
+     * @param isGas true if displaying gas readings, false otherwise
+     */
+    public void setGasType(boolean isGas) {
+        this.isGasType = isGas;
+        repaint();
     }
 }

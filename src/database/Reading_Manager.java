@@ -440,7 +440,7 @@ public class Reading_Manager {
         }
     }
     
-    public double getLatestMonthReadingSum(User user, String type) throws SQLException {
+    public double getLatestMonthReadingSum(User user, String type, String field) throws SQLException {
         Reading latestReading = getLatest_Reading_By_Type(user, type);
         if (latestReading == null) {
             return 0.0;
@@ -451,7 +451,21 @@ public class Reading_Manager {
         LocalDate startOfMonth = LocalDate.of(year, month, 1);
         LocalDate endOfMonth = startOfMonth.withDayOfMonth(startOfMonth.lengthOfMonth());
 
-        String sql = "SELECT SUM(reading) as total FROM readings WHERE user_id = ? AND type = ? AND date >= ? AND date <= ?";
+        String columnToSum;
+        switch (field.toLowerCase()) {
+            case "total":
+                columnToSum = "total_price";
+                break;
+            case "rate":
+                columnToSum = "rate";
+                break;
+            case "reading":
+            default:
+                columnToSum = "reading";
+                break;
+        }
+
+        String sql = "SELECT SUM(" + columnToSum + ") as total FROM readings WHERE user_id = ? AND type = ? AND date >= ? AND date <= ?";
         try (PreparedStatement ps = database_connection.prepareStatement(sql)) {
             ps.setInt(1, user.getUser_Id());
             ps.setString(2, type);
@@ -659,15 +673,27 @@ public class Reading_Manager {
      * @return Formatted string showing percentage change
      * @throws SQLException If database operation fails
      */
-    public String getTrend(User user, String type) throws SQLException {
-        String sql = """
-            SELECT strftime('%Y-%m', date) AS month, SUM(reading) as total
-            FROM readings
-            WHERE user_id = ? AND type = ?
-            GROUP BY month
-            ORDER BY month DESC
-            LIMIT 2
-        """;
+    public String getTrend(User user, String type, String field) throws SQLException {
+        String columnToSum;
+        switch (field.toLowerCase()) {
+            case "total":
+                columnToSum = "total_price";
+                break;
+            case "rate":
+                columnToSum = "rate";
+                break;
+            case "reading":
+            default:
+                columnToSum = "reading";
+                break;
+        }
+
+        String sql = "SELECT strftime('%Y-%m', date) AS month, SUM(" + columnToSum + ") as total " +
+                     "FROM readings " +
+                     "WHERE user_id = ? AND type = ? " +
+                     "GROUP BY month " +
+                     "ORDER BY month DESC " +
+                     "LIMIT 2";
 
         try (PreparedStatement statement = database_connection.prepareStatement(sql)) {
             statement.setInt(1, user.getUser_Id());
@@ -689,7 +715,8 @@ public class Reading_Manager {
 
                 if (previous > 0) {
                     last_trend_percentage = ((latest - previous) / previous) * 100;
-                    return String.format("%.1f%% from previous month", last_trend_percentage);
+                    String sign = last_trend_percentage > 0 ? "+" : "";
+                    return String.format("%s%.1f%% from previous month", sign, last_trend_percentage);
                 } else {
                     last_trend_percentage = 0;
                     return "Previous month's reading is 0";
@@ -702,6 +729,7 @@ public class Reading_Manager {
         }
     }
 
+
     
     /**
      * Gets the overall trend comparing current month to previous month across all utility types
@@ -709,14 +737,28 @@ public class Reading_Manager {
      * @return Formatted string showing percentage change
      * @throws SQLException If database operation fails
      */
-    public String getTrend_Overall(User user) throws SQLException {
+    public String getTrend_Overall(User user, String field) throws SQLException {
         LocalDate current_date = LocalDate.now();
         LocalDate first_day_current_month = current_date.withDayOfMonth(1);
         LocalDate first_day_previous_month = first_day_current_month.minusMonths(1);
         LocalDate last_day_previous_month = first_day_current_month.minusDays(1);
 
-        String sql_current_month = "SELECT SUM(reading) as total FROM readings WHERE user_id = ? AND date >= ? AND date <= ?";
-        String sql_previous_month = "SELECT SUM(reading) as total FROM readings WHERE user_id = ? AND date >= ? AND date <= ?";
+        String columnToSum;
+        switch (field.toLowerCase()) {
+            case "total":
+                columnToSum = "total_price";
+                break;
+            case "rate":
+                columnToSum = "rate";
+                break;
+            case "reading":
+            default:
+                columnToSum = "reading";
+                break;
+        }
+
+        String sql_current_month = "SELECT SUM(" + columnToSum + ") as total FROM readings WHERE user_id = ? AND date >= ? AND date <= ?";
+        String sql_previous_month = "SELECT SUM(" + columnToSum + ") as total FROM readings WHERE user_id = ? AND date >= ? AND date <= ?";
 
         try {
             double current_month_total = 0;
@@ -748,7 +790,8 @@ public class Reading_Manager {
 
             if (previous_month_total > 0 && current_month_total > 0) {
                 last_trend_percentage = ((current_month_total - previous_month_total) / previous_month_total) * 100;
-                return String.format("%.1f%% from last month", last_trend_percentage);
+                String sign = last_trend_percentage > 0 ? "+" : "";
+                return String.format("%s%.1f%% from last month", sign, last_trend_percentage);
             }
             last_trend_percentage = 0;
             return "No previous data";
@@ -759,6 +802,8 @@ public class Reading_Manager {
             throw e;
         }
     }
+
+
     
     /**
      * Gets the color for trend display based on the trend percentage
@@ -812,20 +857,20 @@ public class Reading_Manager {
      * @param trend_label Label to display trend information
      * @param type Type of reading
      */
-    public void updateReading_Label(User current_user, Reading reading, JLabel value_label, JLabel trend_label, String utility_type) {
+    public void updateReading_Label(User current_user, Reading reading, JLabel value_label, JLabel trend_label, String utility_type,String data) {
         if (reading == null) {
             value_label.setText("No Data");
             trend_label.setText("No Data");
         } else {
             try {
             	if (utility_type.equals("gas")) {
-					value_label.setText(String.valueOf((int) getLatestMonthReadingSum(current_user, utility_type)));
+					value_label.setText(String.valueOf((int) getLatestMonthReadingSum(current_user, utility_type, data)));
 				} else {
-					value_label.setText(String.valueOf(getLatestMonthReadingSum(current_user, utility_type)));					
+					value_label.setText(String.valueOf(getLatestMonthReadingSum(current_user, utility_type, data)));					
 				}
 				
 				// Update trend label
-                String trend = getTrend(current_user, utility_type);
+                String trend = getTrend(current_user, utility_type, data);
                 trend_label.setText(trend);
                 trend_label.setForeground(getTrend_Color(current_user, utility_type));
             } catch (SQLException e) {

@@ -1,4 +1,4 @@
-package visuals;
+package database;
 
 import java.awt.Color;
 import java.util.ArrayList;

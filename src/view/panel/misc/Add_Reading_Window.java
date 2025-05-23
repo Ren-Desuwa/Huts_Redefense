@@ -434,6 +434,7 @@ public class Add_Reading_Window extends JDialog {
 	    
 	    if(utility_Type.equals("gas")) {
 	    	try {
+	    		@SuppressWarnings("unused")
 	    		int readingValGas = Integer.parseInt(reading);
 	    	} catch (NumberFormatException e) {
 	    		lbl_Incorrect_Signage1.setVisible(true);

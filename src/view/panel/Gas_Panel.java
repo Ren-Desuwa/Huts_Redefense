@@ -16,7 +16,6 @@ public class Gas_Panel extends Utility_Panel {
             "gas",                               // utility type
             "Gas Consumption",                   // panel title
             "Track and manage your gas usage",   // panel subtitle
-            "Qty",                               // reading unit
             "Gas Saving Tips",                   // tips title
             new Color(255, 77, 0)                // tips title color (red-orange)
         );

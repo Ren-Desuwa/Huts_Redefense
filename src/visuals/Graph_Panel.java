@@ -90,6 +90,7 @@ public class Graph_Panel extends JPanel {
         electricity_graph = new Scrollable_Bar_Graph_Panel("Monthly Electricity Usage", "Month", "KwH");
         water_graph = new Scrollable_Bar_Graph_Panel("Monthly Water Usage", "Month", "m³");
         gas_graph = new Scrollable_Bar_Graph_Panel("Monthly Gas Usage", "Month", "Qty");
+        gas_graph.setGasType(true); // Set gas type for integer display
         overall_graph = new Scrollable_Bar_Graph_Panel("Monthly Total Expenses", "Month", "Php");
 
         // Set bar colors
@@ -129,6 +130,9 @@ public class Graph_Panel extends JPanel {
         };
 
         Scrollable_Bar_Graph_Panel utility_graph = new Scrollable_Bar_Graph_Panel("Month", units);
+        if (utility_type.equals("gas")) {
+            utility_graph.setGasType(true);
+        }
         Color barColor = switch (utility_type) {
             case "electricity" -> new Color(255,206,0); // Yellow for Electricity
             case "water" -> new Color(79, 129, 189); // Blue for Water
