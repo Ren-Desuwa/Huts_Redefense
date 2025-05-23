@@ -488,7 +488,7 @@ public class Utility_Panel extends JPanel {
             if (latest_reading == null) {
                 lbl_Reading_Value.setText("No Data");
             } else {
-                lbl_Reading_Value.setText(String.valueOf(latest_reading.getReading()));
+                
                 database_manager.getReadingManager().updateReading_Label(current_user, latest_reading, lbl_Reading_Value, lbl_Trend_Of_Reading, utility_type);
             }
             

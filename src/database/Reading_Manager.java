@@ -440,6 +440,33 @@ public class Reading_Manager {
         }
     }
     
+    public double getLatestMonthReadingSum(User user, String type) throws SQLException {
+        Reading latestReading = getLatest_Reading_By_Type(user, type);
+        if (latestReading == null) {
+            return 0.0;
+        }
+        LocalDate latestDate = latestReading.getDate();
+        int year = latestDate.getYear();
+        int month = latestDate.getMonthValue();
+        LocalDate startOfMonth = LocalDate.of(year, month, 1);
+        LocalDate endOfMonth = startOfMonth.withDayOfMonth(startOfMonth.lengthOfMonth());
+
+        String sql = "SELECT SUM(reading) as total FROM readings WHERE user_id = ? AND type = ? AND date >= ? AND date <= ?";
+        try (PreparedStatement ps = database_connection.prepareStatement(sql)) {
+            ps.setInt(1, user.getUser_Id());
+            ps.setString(2, type);
+            ps.setString(3, startOfMonth.toString());
+            ps.setString(4, endOfMonth.toString());
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getDouble("total");
+                }
+            }
+        }
+        return 0.0;
+    }
+
+    
     /**
      * Check if readings of a specific type exist for a user
      * @param user User to check
@@ -785,16 +812,22 @@ public class Reading_Manager {
      * @param trend_label Label to display trend information
      * @param type Type of reading
      */
-    public void updateReading_Label(User current_user, Reading reading, JLabel value_label, JLabel trend_label, String type) {
+    public void updateReading_Label(User current_user, Reading reading, JLabel value_label, JLabel trend_label, String utility_type) {
         if (reading == null) {
             value_label.setText("No Data");
             trend_label.setText("No Data");
         } else {
-            value_label.setText(String.valueOf(reading.getReading()));
             try {
-                String trend = getTrend(current_user, type);
+            	if (utility_type.equals("gas")) {
+					value_label.setText(String.valueOf((int) getLatestMonthReadingSum(current_user, utility_type)));
+				} else {
+					value_label.setText(String.valueOf(getLatestMonthReadingSum(current_user, utility_type)));					
+				}
+				
+				// Update trend label
+                String trend = getTrend(current_user, utility_type);
                 trend_label.setText(trend);
-                trend_label.setForeground(getTrend_Color(current_user, type));
+                trend_label.setForeground(getTrend_Color(current_user, utility_type));
             } catch (SQLException e) {
                 e.printStackTrace();
                 trend_label.setText("Error calculating trend");
