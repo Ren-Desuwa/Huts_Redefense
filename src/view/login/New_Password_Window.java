@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.SwingConstants;
@@ -43,6 +44,8 @@ public class New_Password_Window extends JFrame {
     // Buttons
     private JButton btn_Change_Password;
     private JButton btn_Cancel;
+    private JLabel lbl_Incorrect_Signage1;
+    private JLabel lbl_Incorrect_Signage2;
     
 
     public New_Password_Window(Database_Manager database_manager, User current_user) {
@@ -129,6 +132,20 @@ public class New_Password_Window extends JFrame {
         btn_Cancel.setBackground(new Color(182, 182, 182));
         btn_Cancel.setBounds(168, 547, 91, 34);
         contentPane.add(btn_Cancel);
+        
+        lbl_Incorrect_Signage1 = new JLabel("*");
+		lbl_Incorrect_Signage1.setForeground(new Color(255, 0, 0));
+		lbl_Incorrect_Signage1.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_Incorrect_Signage1.setBounds(403, 287, 23, 25);
+		lbl_Incorrect_Signage1.setVisible(false); // Hide initially
+		contentPane.add(lbl_Incorrect_Signage1);
+        
+		lbl_Incorrect_Signage2 = new JLabel("*");
+		lbl_Incorrect_Signage2.setForeground(new Color(255, 0, 0));
+		lbl_Incorrect_Signage2.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_Incorrect_Signage2.setBounds(403, 197, 23, 25);
+		lbl_Incorrect_Signage2.setVisible(false); // Hide initially
+		contentPane.add(lbl_Incorrect_Signage2);
     }
     
 
@@ -247,25 +264,30 @@ public class New_Password_Window extends JFrame {
         
         // Validate inputs
         if (password.isEmpty() || confirmPassword.isEmpty()) {
-            System.out.println("Please fill in all fields.");
+            lbl_Incorrect_Signage1.setVisible(true);
+            lbl_Incorrect_Signage2.setVisible(true);
+            JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Input Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         
         if (password.equals("Enter Password") || confirmPassword.equals("Confirm Password")) {
-            System.out.println("Please fill in all fields.");
+            lbl_Incorrect_Signage1.setVisible(true);
+            lbl_Incorrect_Signage2.setVisible(true);
+            JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Input Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         
         if (!password.equals(confirmPassword)) {
-            System.out.println("Passwords do not match.");
+            lbl_Incorrect_Signage1.setVisible(true);
+            lbl_Incorrect_Signage2.setVisible(true);
+            JOptionPane.showMessageDialog(this, "Passwords do not match", "Input Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         
         // Update password
         try {
             database_manager.getUserManager().updateUserPassword(current_user, password);
-            System.out.println("Password changed successfully.");
-            
+            JOptionPane.showMessageDialog(this, "Password changed successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
             // Open the login window
             EventQueue.invokeLater(new Runnable() {
                 public void run() {

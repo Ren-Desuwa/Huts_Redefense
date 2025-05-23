@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -43,6 +44,8 @@ public class Retrieve_Window extends JFrame {
     // Buttons
     private JButton btn_Confirm;
     private Rounded_Button btn_Cancel;
+    private JLabel lbl_Incorrect_Signage1;
+    private JLabel lbl_Incorrect_Signage2;
 
 
     public Retrieve_Window(Database_Manager database_manager) {
@@ -127,6 +130,20 @@ public class Retrieve_Window extends JFrame {
         btn_Cancel.setBackground(new Color(182, 182, 182));
         btn_Cancel.setBounds(168, 547, 91, 34);
         contentPane.add(btn_Cancel);
+        
+        lbl_Incorrect_Signage1 = new JLabel("*");
+		lbl_Incorrect_Signage1.setForeground(new Color(255, 0, 0));
+		lbl_Incorrect_Signage1.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_Incorrect_Signage1.setBounds(403, 287, 23, 25);
+		lbl_Incorrect_Signage1.setVisible(false); // Hide initially
+		contentPane.add(lbl_Incorrect_Signage1);
+        
+        lbl_Incorrect_Signage2 = new JLabel("*");
+		lbl_Incorrect_Signage2.setForeground(new Color(255, 0, 0));
+		lbl_Incorrect_Signage2.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_Incorrect_Signage2.setBounds(403, 197, 23, 25);
+		lbl_Incorrect_Signage2.setVisible(false); // Hide initially
+		contentPane.add(lbl_Incorrect_Signage2);
     }
     
  
@@ -244,25 +261,31 @@ public class Retrieve_Window extends JFrame {
         
         // Validate inputs
         if (username.isEmpty() || email.isEmpty()) {
-            System.out.println("Please fill in all fields.");
+			lbl_Incorrect_Signage2.setVisible(true);
+			lbl_Incorrect_Signage1.setVisible(true);
+            JOptionPane.showMessageDialog(this, "Please fill in all fields", "Input Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         
         if (username.equals("Enter Username") || email.equals("Enter Email")) {
-            System.out.println("Please fill in all fields.");
+            lbl_Incorrect_Signage2.setVisible(true);
+            lbl_Incorrect_Signage1.setVisible(true);
+            JOptionPane.showMessageDialog(this, "Please fill in all fields", "Input Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         
         try {
             // Check if username and email match
             if (!database_manager.getUserManager().UsernameEmailMatch(username, email)) {
-                System.out.println("Username and email do not match.");
+                lbl_Incorrect_Signage2.setVisible(true);
+                lbl_Incorrect_Signage1.setVisible(true);
+                JOptionPane.showMessageDialog(this, "Username and email do not match", "Input Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             
             // Get the user and open the new password window
             User current_user = database_manager.getUserManager().getUserByUsername(username);
-            
+            JOptionPane.showMessageDialog(this, "Username and email match", "Success", JOptionPane.INFORMATION_MESSAGE);
             EventQueue.invokeLater(new Runnable() {
                 public void run() {
                     try {
@@ -277,6 +300,7 @@ public class Retrieve_Window extends JFrame {
             
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("Error retrieving user: " + e.getMessage());
         }
     }
 }

@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.SwingConstants;
@@ -44,6 +45,8 @@ public class Change_Password_Window extends JDialog {
 	private JButton btn_Change_Password;
 	private JButton btn_Cancel;
 	private JLabel lbl_Title_ChangePass;
+	private JLabel lbl_Incorrect_Signage1;
+	private JLabel lbl_Incorrect_Signage2;
 		
 	public Change_Password_Window(JFrame parent, Database_Manager database_manager, User current_user) {
 		super(parent, "New Password", true);
@@ -117,6 +120,20 @@ public class Change_Password_Window extends JDialog {
 		btn_Cancel.setBackground(new Color(182, 182, 182));
 		btn_Cancel.setBounds(168, 547, 91, 34);
 		contentPane.add(btn_Cancel);
+		
+		lbl_Incorrect_Signage1 = new JLabel("*");
+		lbl_Incorrect_Signage1.setForeground(new Color(255, 0, 0));
+		lbl_Incorrect_Signage1.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_Incorrect_Signage1.setBounds(403, 287, 23, 25);
+		lbl_Incorrect_Signage1.setVisible(false); // Hide initially
+		contentPane.add(lbl_Incorrect_Signage1);
+		
+		lbl_Incorrect_Signage2 = new JLabel("*");
+		lbl_Incorrect_Signage2.setForeground(new Color(255, 0, 0));
+		lbl_Incorrect_Signage2.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_Incorrect_Signage2.setBounds(403, 197, 23, 25);
+		lbl_Incorrect_Signage2.setVisible(false); // Hide initially
+		contentPane.add(lbl_Incorrect_Signage2);
 	}
 	
 	private void create_Action_Listeners() {
@@ -206,24 +223,29 @@ public class Change_Password_Window extends JDialog {
 		String confirmPassword = String.valueOf(pf_ConfirmPassword.getPassword());
 		
 		if (password.isEmpty() || confirmPassword.isEmpty()) {
-			System.out.println("Please fill in all fields.");
+			lbl_Incorrect_Signage2.setVisible(true);
+			lbl_Incorrect_Signage1.setVisible(true);
+			JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		
 		if (password.equals("Enter Password") || confirmPassword.equals("Confirm Password")) {
-			System.out.println("Please fill in all fields.");
+			lbl_Incorrect_Signage2.setVisible(true);
+			lbl_Incorrect_Signage1.setVisible(true);
+			JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		
 		if (!password.equals(confirmPassword)) {
-			System.out.println("Passwords do not match.");
+			lbl_Incorrect_Signage2.setVisible(true);
+			lbl_Incorrect_Signage1.setVisible(true);
+			JOptionPane.showMessageDialog(this, "Passwords do not match.", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		
 		try {
 			database_manager.getUserManager().updateUserPassword(current_user, password);
-			System.out.println("Password changed successfully.");
-			
+			JOptionPane.showMessageDialog(Change_Password_Window.this, "Password changed successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
 			
 			EventQueue.invokeLater(new Runnable() {
 		        public void run() {
@@ -231,7 +253,6 @@ public class Change_Password_Window extends JDialog {
 		                
 		                database_manager.getUserManager().setCurrentUser(current_user);
 		                // create confimation window
-		                createConfirmationWindow("Password Changed", "Your password has been changed successfully.");
 		                
 		                Change_Password_Window.this.dispose();
 		            } catch (Exception e) {
@@ -242,31 +263,5 @@ public class Change_Password_Window extends JDialog {
 		} catch (Exception e) {
 			System.out.println("Error changing password: " + e.getMessage());
 		}
-	}
-	
-	private void createConfirmationWindow(String title, String message) {
-	    JDialog dialog = new JDialog((Frame) null, title, true);
-	    dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-	    dialog.getContentPane().setLayout(new BorderLayout(10, 10));
-
-	    // Message label with padding
-	    JLabel messageLabel = new JLabel("<html><div style='text-align: center;'>" + message + "</div></html>");
-	    messageLabel.setHorizontalAlignment(SwingConstants.CENTER);
-	    messageLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-	    dialog.getContentPane().add(messageLabel, BorderLayout.CENTER);
-
-	    // OK button panel
-	    JPanel buttonPanel = new JPanel();
-	    JButton okButton = new JButton("OK");
-	    okButton.setPreferredSize(new Dimension(80, 30));
-	    okButton.addActionListener(e -> dialog.dispose());
-	    buttonPanel.add(okButton);
-	    dialog.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-
-	    // Padding around content
-	    dialog.getRootPane().setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
-	    dialog.pack();
-	    dialog.setLocationRelativeTo(null);
-	    dialog.setVisible(true);
 	}
 }

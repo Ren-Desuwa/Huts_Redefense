@@ -393,7 +393,8 @@ public class Sign_Up_Window extends JFrame {
 			// Add user to the database
 			database_manager.getUserManager().addUser(username, password, email);
 			User user = database_manager.getUserManager().getUserByEmail(email);
-			System.out.println("User registered successfully.");
+			JOptionPane.showMessageDialog(this, "Welcome " + user.getUsername() + "!", "Signup Successful", JOptionPane.INFORMATION_MESSAGE);
+			
 			
 			// Navigate to main frame
 			EventQueue.invokeLater(new Runnable() {

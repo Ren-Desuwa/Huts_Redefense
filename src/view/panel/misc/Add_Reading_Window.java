@@ -40,7 +40,7 @@ public class Add_Reading_Window extends JDialog {
 	private JPanel contentPane;
 	private Database_Manager database_manager;
 	private User current_user;
-	private String readingType;
+	private String utility_Type;
 	private JPanel parentPanel;
 
 	
@@ -69,12 +69,12 @@ public class Add_Reading_Window extends JDialog {
 	private JLabel lbl_Incorrect_Signage3;
 	private JLabel lbl_Incorrect_Signage1;
 	
-	public Add_Reading_Window(JFrame parent ,Database_Manager database_manager, User current_user,JPanel panel_type, String type) {
+	public Add_Reading_Window(JFrame parent ,Database_Manager database_manager, User current_user,JPanel panel_type, String utility_type) {
 		super(parent, "Add Reading", true);
 	    this.database_manager = database_manager;
 	    this.current_user = current_user;
 	    this.parentPanel = panel_type; // Set the parent panel Electricity_Panel, Water_Panel or Gas_Panel
-	    this.readingType = type;  // Set the reading type electricity, water or gas
+	    this.utility_Type = utility_type;  // Set the reading type electricity, water or gas
 		
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setBounds(287, 50, 450, 535);
@@ -283,7 +283,7 @@ public class Add_Reading_Window extends JDialog {
 		updateMonthComboBox();
 		updateDayComboBox();
 		
-		configureReadingUI(readingType);
+		configureReadingUI(utility_Type);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -379,11 +379,11 @@ public class Add_Reading_Window extends JDialog {
 	    String totalPrice = tf_TotalPrice.getText();
 
 	    // Inline normalization of placeholder
-	    if (readingType.equals("electricity") && reading.equals("Enter Reading (kWh)")) {
+	    if (utility_Type.equals("electricity") && reading.equals("Enter Reading (kWh)")) {
 	        reading = "Enter Reading";
-	    } else if (readingType.equals("water") && reading.equals("Enter Reading (m³)")) {
+	    } else if (utility_Type.equals("water") && reading.equals("Enter Reading (m³)")) {
 	        reading = "Enter Reading";
-	    } else if (readingType.equals("gas") && reading.equals("Enter Reading (Qty)")) {
+	    } else if (utility_Type.equals("gas") && reading.equals("Enter Reading (Qty)")) {
 	        reading = "Enter Reading";
 	    }
 
@@ -425,22 +425,39 @@ public class Add_Reading_Window extends JDialog {
 	    	JOptionPane.showMessageDialog(this, "Please enter a reading value.", "Error", JOptionPane.ERROR_MESSAGE);
 	        return;
 	    }
-	    if(rate.equals("Enter Rate")) {
+	    if(rate.equals("Enter Rate") && totalPrice.equals("Total Price")) {
 	    	lbl_Incorrect_Signage2.setVisible(true);
-	    	JOptionPane.showMessageDialog(this, "Please enter a rate value.", "Error", JOptionPane.ERROR_MESSAGE);
-	        return;
-	    }
-	    if(totalPrice.equals("Total Price")) {
 	    	lbl_Incorrect_Signage3.setVisible(true);
-	    	JOptionPane.showMessageDialog(this, "Please enter a total price value.", "Error", JOptionPane.ERROR_MESSAGE);
+	    	JOptionPane.showMessageDialog(this, "Please enter a rate value or a total price.", "Error", JOptionPane.ERROR_MESSAGE);
 	        return;
 	    }
 	    
-	    try {
-	        double readingVal = Double.parseDouble(reading);
-	        double rateVal = Double.parseDouble(rate);
-	        double totalVal = Double.parseDouble(totalPrice);
-
+	    if(utility_Type.equals("gas")) {
+	    	try {
+	    		int readingValGas = Integer.parseInt(reading);
+	    	} catch (NumberFormatException e) {
+	    		lbl_Incorrect_Signage1.setVisible(true);
+	    		JOptionPane.showMessageDialog(this, "Please enter a valid reading value must be a whole number.", "Error", JOptionPane.ERROR_MESSAGE);
+	    		return;
+	    	}
+ 	    }
+	    
+	    try {	
+	    	double readingVal = Double.parseDouble(reading);
+	    	double rateVal;
+	    	double totalVal;
+	    	
+	    	if(rate.equals("Enter Rate")) {
+	    		rateVal = 0;
+	    		totalVal = Double.parseDouble(totalPrice);
+		    } else if (totalPrice.equals("Total Price")) {
+		    	rateVal = Double.parseDouble(rate);
+		    	totalVal = 0;
+		    } else {
+		    	rateVal = Double.parseDouble(rate);
+		    	totalVal = Double.parseDouble(totalPrice);
+		    }
+	    	
 	        // Check for negative values
 	        if (readingVal < 0) {
 	            lbl_Incorrect_Signage1.setVisible(true);
@@ -484,8 +501,11 @@ public class Add_Reading_Window extends JDialog {
 	            (int) combo_box_Day.getSelectedItem()
 	        );
 
-	        database_manager.getReadingManager().addReading(current_user, date, readingType, readingVal, rateVal, totalVal);
-
+	        if (utility_Type.equals("gas")) {
+	        	database_manager.getReadingManager().addReading(current_user, date, utility_Type, (int) readingVal, rateVal, totalVal);
+	        } else {
+	        	database_manager.getReadingManager().addReading(current_user, date, utility_Type, readingVal, rateVal, totalVal);
+	        }
 	        // Update appropriate panel
 	        if (parentPanel instanceof Electricity_Panel) {
 	            ((Electricity_Panel) parentPanel).Panel_Refresh();
