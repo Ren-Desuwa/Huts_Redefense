@@ -66,7 +66,6 @@ public class Profile_Panel extends JPanel {
     private JLabel lbl_Total_Submissions_Prop;
     private JLabel lbl_Total_Submissions_Value;
     private JLabel lbl_Usage_Statistics;
-    private JLabel lbl_Actions;
     
     // Statistics Labels
     private JLabel lbl_Electricity_Count;
@@ -253,7 +252,7 @@ public class Profile_Panel extends JPanel {
         panel_Statistics.setLayout(null);
         panel_Content.add(panel_Statistics);
         
-        lbl_Usage_Statistics = new JLabel("Usage Statistics");
+        lbl_Usage_Statistics = new JLabel("Utility Submissions");
         lbl_Usage_Statistics.setBackground(new Color(250, 250, 250));
         lbl_Usage_Statistics.setForeground(Color.BLACK);
         lbl_Usage_Statistics.setFont(new Font("Tahoma", Font.PLAIN, 20));
@@ -378,12 +377,6 @@ public class Profile_Panel extends JPanel {
         btn_Change_Password.setBorderPainted(false);
         btn_Change_Password.setFont(new Font("Arial", Font.PLAIN, 16));
         panel_Content.add(btn_Change_Password);
-        
-        lbl_Actions = new JLabel("Actions");
-        lbl_Actions.setForeground(Color.BLACK);
-        lbl_Actions.setFont(new Font("Tahoma", Font.PLAIN, 20));
-        lbl_Actions.setBounds(10, 219, 263, 25);
-        panel_Content.add(lbl_Actions);
         
         separator_Actions = new JSeparator(SwingConstants.HORIZONTAL);
         separator_Actions.setForeground(Color.DARK_GRAY);
