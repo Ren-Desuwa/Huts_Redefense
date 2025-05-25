@@ -24,15 +24,17 @@ public class Graph_Panel extends JPanel {
     private Scrollable_Bar_Graph_Panel overall_graph;
 
     private int selected_year;
+    String field;
     private String utility_type;
     private boolean is_single_utility;
 
     /**
      * Constructor for multi-utility graph panel
      */
-    public Graph_Panel(Reading_Manager reading_manager, User current_user) {
+    public Graph_Panel(Reading_Manager reading_manager, User current_user, String field) {
         this.reading_manager = reading_manager;
         this.current_user = current_user;
+        this.field = field;
         this.is_single_utility = false;
         this.selected_year = LocalDate.now().getYear(); // Default to current year
 
@@ -49,9 +51,10 @@ public class Graph_Panel extends JPanel {
     /**
      * Constructor for single utility graph panel
      */
-    public Graph_Panel(Reading_Manager reading_manager, User current_user, String utility_type) {
+    public Graph_Panel(Reading_Manager reading_manager, User current_user, String field, String utility_type) {
         this.reading_manager = reading_manager;
         this.current_user = current_user;
+        this.field = field;
         this.utility_type = utility_type;
         this.is_single_utility = true;
         this.selected_year = LocalDate.now().getYear(); // Default to current year
@@ -154,40 +157,46 @@ public class Graph_Panel extends JPanel {
         updateSingleGraphData();
     }
 
+
+
+    // Update graph data for multi-utility view
     private void updateGraphData() {
         try {
-            Map<Month, Double> electricity_data = reading_manager.getMonthly_Utility_Data(current_user, "electricity", selected_year,false);
-            Map<Month, Double> water_data = reading_manager.getMonthly_Utility_Data(current_user, "water", selected_year, false);
-            Map<Month, Double> gas_data = reading_manager.getMonthly_Utility_Data(current_user, "gas", selected_year, false);
+            Map<Month, Double> electricity_data = reading_manager.getMonthly_Utility_Data(current_user, "electricity", selected_year, field);
+            Map<Month, Double> water_data = reading_manager.getMonthly_Utility_Data(current_user, "water", selected_year, field);
+            Map<Month, Double> gas_data = reading_manager.getMonthly_Utility_Data(current_user, "gas", selected_year, field);
             Map<Month, Double> overall_data = reading_manager.getMonthly_Total_Expenses(current_user, selected_year);
 
-            electricity_graph.setMonthlyData("Electricity", electricity_data);
-            water_graph.setMonthlyData("Water", water_data);
-            gas_graph.setMonthlyData("Gas", gas_data);
-            overall_graph.setMonthlyData("Total Cost", overall_data);
+            electricity_graph.setMonthlyData("Electricity " + field, electricity_data);
+            water_graph.setMonthlyData("Water " + field, water_data);
+            gas_graph.setMonthlyData("Gas " + field, gas_data);
+            overall_graph.setMonthlyData("Overall " + field, overall_data);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    // Update graph data for single-utility view
     private void updateSingleGraphData() {
         try {
-            Map<Month, Double> data = reading_manager.getMonthly_Utility_Data(current_user, utility_type, selected_year, true);
+            Map<Month, Double> data = reading_manager.getMonthly_Utility_Data(current_user, utility_type, selected_year, field);
             switch (utility_type) {
-                case "electricity" -> electricity_graph.setMonthlyData("Electricity", data);
-                case "water" -> water_graph.setMonthlyData("Water", data);
-                case "gas" -> gas_graph.setMonthlyData("Gas", data);
+                case "electricity" -> electricity_graph.setMonthlyData("Electricity " + field, data);
+                case "water" -> water_graph.setMonthlyData("Water " + field, data);
+                case "gas" -> gas_graph.setMonthlyData("Gas " + field, data);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+
     // Methods for switching between graphs in multi-utility view
     public void showElectricityGraph() { if (!is_single_utility) card_layout.show(graph_container, "electricity"); }
     public void showWaterGraph() { if (!is_single_utility) card_layout.show(graph_container, "water"); }
     public void showGasGraph() { if (!is_single_utility) card_layout.show(graph_container, "gas"); }
     public void showOverallGraph() { if (!is_single_utility) card_layout.show(graph_container, "overall"); }
+    
 
     public void refreshData() {
         if (is_single_utility) {
@@ -212,4 +221,13 @@ public class Graph_Panel extends JPanel {
     public int getSelectedYear() {
         return selected_year;
     }
+    
+    public String getField() {
+		return field;
+	}
+
+	public void setField(String field) {
+		this.field = field;
+		refreshData();
+	}
 }

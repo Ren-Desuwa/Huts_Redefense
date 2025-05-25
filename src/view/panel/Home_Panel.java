@@ -9,11 +9,13 @@ import model.User;
 import visuals.Graph_Panel;
 import visuals.Rounded_Panel;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
 import java.awt.Dimension;
 import javax.swing.border.EmptyBorder;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
@@ -27,6 +29,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.awt.BorderLayout;
+import javax.swing.JRadioButton;
 
 public class Home_Panel extends JPanel {
 
@@ -40,12 +43,14 @@ public class Home_Panel extends JPanel {
     private Database_Manager database_Manager;
     private Utility_Tips_Manager utility_Tips_Manager = Utility_Tips_Manager.getInstance();
     private User current_User;
+    private String field = "reading";
     
     /** Main panel containers */
     private JPanel panel_Welcome_Title;
     private JPanel panel_Information;
-    private JPanel panel_Tips;
     private JPanel panel_Graph_Container;
+    private JPanel panel_Tips;
+    private JPanel panel_VIew_Buttons;
     
     /** Utility info panels */
     private JPanel panel_Electricity_Info;
@@ -88,15 +93,27 @@ public class Home_Panel extends JPanel {
     /** Tips panel components */
     private Rounded_Panel panel_Tip_1;
     private Rounded_Panel panel_Tip_2;
-    private Rounded_Panel panel_Tip_3;
     
     /** Tip labels */
     private JLabel lbl_Tip_1;
     private JLabel lbl_Tip_2;
-    private JLabel lbl_Tip_3;
     private JLabel lbl_Tip_Type_1;
     private JLabel lbl_Tip_Type_2;
-    private JLabel lbl_Tip_Type_3;
+    
+    /** View data section components */
+    private JLabel lbl_View_Data;
+    private JLabel lbl_Reading;
+    private JLabel lbl_Rate;
+    private JLabel lbl_Price;
+    
+    /** Radio buttons for data type selection */
+    private ButtonGroup rdgroup_Data_Type;
+    private JRadioButton rdbtn_Reading;
+    private JRadioButton rdbtn_Rate;
+    private JRadioButton rdbtn_Price;
+    private JPanel panel_Reading_Button;
+    private JPanel panel_Rate_Button;
+    private JPanel panel_Price_Button;
 
     public Home_Panel(Database_Manager database_Manager, User current_User) {
         this.database_Manager = database_Manager;
@@ -135,7 +152,7 @@ public class Home_Panel extends JPanel {
         
         lbl_Username = new JLabel("User");
         lbl_Username.setFont(new Font("Tahoma", Font.PLAIN, 35));
-        lbl_Username.setBounds(184, 0, 206, 60);
+        lbl_Username.setBounds(184, 0, 609, 60);
         lbl_Username.setText(current_User.getUsername());
         panel_Welcome_Title.add(lbl_Username);
         
@@ -189,18 +206,18 @@ public class Home_Panel extends JPanel {
         lbl_Electricity_Reading_Value = new JLabel();
         lbl_Electricity_Reading_Value.setHorizontalAlignment(SwingConstants.CENTER);
         lbl_Electricity_Reading_Value.setFont(new Font("Tahoma", Font.BOLD, 20));
-        lbl_Electricity_Reading_Value.setBounds(259, 15, 100, 32);
+        lbl_Electricity_Reading_Value.setBounds(226, 15, 100, 32);
         panel_Electricity_Info.add(lbl_Electricity_Reading_Value);
         
         lbl_Electricity_Reading_Unit = new JLabel("KwH");
         lbl_Electricity_Reading_Unit.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        lbl_Electricity_Reading_Unit.setBounds(369, 15, 68, 32);
+        lbl_Electricity_Reading_Unit.setBounds(336, 15, 101, 32);
         panel_Electricity_Info.add(lbl_Electricity_Reading_Unit);
         
         lbl_Trend_Of_Reading_Electricity = new JLabel("No avilable data");
         lbl_Trend_Of_Reading_Electricity.setHorizontalAlignment(SwingConstants.CENTER);
         lbl_Trend_Of_Reading_Electricity.setFont(new Font("Dialog", Font.PLAIN, 15));
-        lbl_Trend_Of_Reading_Electricity.setBounds(176, 44, 261, 32);
+        lbl_Trend_Of_Reading_Electricity.setBounds(113, 44, 324, 32);
         panel_Electricity_Info.add(lbl_Trend_Of_Reading_Electricity);
 
         //==============================================================================================
@@ -221,18 +238,18 @@ public class Home_Panel extends JPanel {
         lbl_Water_Reading_Value = new JLabel();
         lbl_Water_Reading_Value.setHorizontalAlignment(SwingConstants.CENTER);
         lbl_Water_Reading_Value.setFont(new Font("Tahoma", Font.BOLD, 20));
-        lbl_Water_Reading_Value.setBounds(261, 15, 100, 32);
+        lbl_Water_Reading_Value.setBounds(226, 15, 100, 32);
         panel_Water_Info.add(lbl_Water_Reading_Value);
         
         lbl_Water_Reading_Unit = new JLabel("m³");
         lbl_Water_Reading_Unit.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        lbl_Water_Reading_Unit.setBounds(369, 15, 68, 32);
+        lbl_Water_Reading_Unit.setBounds(336, 15, 101, 32);
         panel_Water_Info.add(lbl_Water_Reading_Unit);
         
         lbl_Trend_Of_Reading_Water = new JLabel("No avilable data");
         lbl_Trend_Of_Reading_Water.setHorizontalAlignment(SwingConstants.CENTER);
         lbl_Trend_Of_Reading_Water.setFont(new Font("Dialog", Font.PLAIN, 15));
-        lbl_Trend_Of_Reading_Water.setBounds(176, 44, 261, 32);
+        lbl_Trend_Of_Reading_Water.setBounds(113, 44, 324, 32);
         panel_Water_Info.add(lbl_Trend_Of_Reading_Water);
 
         //==============================================================================================
@@ -253,18 +270,18 @@ public class Home_Panel extends JPanel {
         lbl_Gas_Reading_Value = new JLabel();
         lbl_Gas_Reading_Value.setHorizontalAlignment(SwingConstants.CENTER);
         lbl_Gas_Reading_Value.setFont(new Font("Tahoma", Font.BOLD, 20));
-        lbl_Gas_Reading_Value.setBounds(259, 15, 100, 32);
+        lbl_Gas_Reading_Value.setBounds(226, 15, 100, 32);
         panel_Gas_Info.add(lbl_Gas_Reading_Value);
         
         lbl_Gas_Reading_Unit = new JLabel("Qty");
         lbl_Gas_Reading_Unit.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        lbl_Gas_Reading_Unit.setBounds(369, 15, 68, 32);
+        lbl_Gas_Reading_Unit.setBounds(337, 15, 100, 32);
         panel_Gas_Info.add(lbl_Gas_Reading_Unit);
         
         lbl_Trend_Of_Reading_Gas = new JLabel("No avilable data");
         lbl_Trend_Of_Reading_Gas.setHorizontalAlignment(SwingConstants.CENTER);
         lbl_Trend_Of_Reading_Gas.setFont(new Font("Dialog", Font.PLAIN, 15));
-        lbl_Trend_Of_Reading_Gas.setBounds(176, 44, 261, 32);
+        lbl_Trend_Of_Reading_Gas.setBounds(113, 44, 324, 32);
         panel_Gas_Info.add(lbl_Trend_Of_Reading_Gas);
         
         //==============================================================================================
@@ -279,24 +296,24 @@ public class Home_Panel extends JPanel {
         
         lbl_Title_OverAll_Info = new JLabel("Overall Expenses");
         lbl_Title_OverAll_Info.setFont(new Font("Dialog", Font.PLAIN, 20));
-        lbl_Title_OverAll_Info.setBounds(10, 15, 260, 32);
+        lbl_Title_OverAll_Info.setBounds(10, 15, 181, 32);
         panel_Overall_Info.add(lbl_Title_OverAll_Info);
         
         lbl_OverAll_Reading_Value = new JLabel();
         lbl_OverAll_Reading_Value.setHorizontalAlignment(SwingConstants.CENTER);
         lbl_OverAll_Reading_Value.setFont(new Font("Tahoma", Font.BOLD, 20));
-        lbl_OverAll_Reading_Value.setBounds(258, 15, 101, 32);
+        lbl_OverAll_Reading_Value.setBounds(226, 15, 101, 32);
         panel_Overall_Info.add(lbl_OverAll_Reading_Value);
         
         lbl_OverAll_Reading_Unit = new JLabel("Php");
         lbl_OverAll_Reading_Unit.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        lbl_OverAll_Reading_Unit.setBounds(369, 15, 68, 32);
+        lbl_OverAll_Reading_Unit.setBounds(337, 15, 100, 32);
         panel_Overall_Info.add(lbl_OverAll_Reading_Unit);
         
         lbl_Trend_Of_Reading_Overall = new JLabel("No avilable data");
         lbl_Trend_Of_Reading_Overall.setHorizontalAlignment(SwingConstants.CENTER);
         lbl_Trend_Of_Reading_Overall.setFont(new Font("Dialog", Font.PLAIN, 15));
-        lbl_Trend_Of_Reading_Overall.setBounds(177, 44, 260, 32);
+        lbl_Trend_Of_Reading_Overall.setBounds(113, 44, 324, 32);
         panel_Overall_Info.add(lbl_Trend_Of_Reading_Overall);
         
         //==============================================================================================
@@ -317,7 +334,7 @@ public class Home_Panel extends JPanel {
             panel_Graph_Container.add(placeholder);
         } else {
             // Create and add actual graph panel at runtime
-            graph_Panel = new Graph_Panel(database_Manager.getReadingManager(), current_User);
+            graph_Panel = new Graph_Panel(database_Manager.getReadingManager(), current_User, "reading");
             graph_Panel.setBackground(new Color(255, 255, 255));
             panel_Graph_Container.add(graph_Panel);
         }
@@ -343,7 +360,7 @@ public class Home_Panel extends JPanel {
         
         panel_Tips = new Rounded_Panel();
         panel_Tips.setBackground(new Color(255, 255, 255));
-        panel_Tips.setBounds(21, 533, 944, 144);
+        panel_Tips.setBounds(21, 533, 629, 144);
         panel_Tips.setLayout(null);
         add(panel_Tips);
 
@@ -395,30 +412,6 @@ public class Home_Panel extends JPanel {
         lbl_Tip_2.setBounds(20, 44, 268, 67);
         panel_Tip_2.add(lbl_Tip_2);
         
-        //===============================================================================================
-        // UI CREATION - TIPS PANELS - TIP 3
-        //===============================================================================================
-        
-        panel_Tip_3 = new Rounded_Panel();
-        panel_Tip_3.setLayout(null);
-        panel_Tip_3.setBounds(627, 11, 307, 122);
-        panel_Tip_3.setBackground(new Color(235, 235, 235));
-        panel_Tips.add(panel_Tip_3);
-
-        lbl_Tip_Type_3 = new JLabel("Tip 3");
-        lbl_Tip_Type_3.setVerticalAlignment(SwingConstants.TOP);
-        lbl_Tip_Type_3.setHorizontalAlignment(SwingConstants.LEFT);
-        lbl_Tip_Type_3.setForeground(new Color(0, 128, 255));
-        lbl_Tip_Type_3.setFont(new Font("Tahoma", Font.PLAIN, 20));
-        lbl_Tip_Type_3.setBounds(10, 11, 243, 36);
-        panel_Tip_3.add(lbl_Tip_Type_3);
-
-        lbl_Tip_3 = new JLabel("<html>Info</html>");
-        lbl_Tip_3.setHorizontalAlignment(SwingConstants.LEFT);
-        lbl_Tip_3.setFont(new Font("Tahoma", Font.PLAIN, 17));
-        lbl_Tip_3.setBounds(20, 44, 277, 67);
-        panel_Tip_3.add(lbl_Tip_3);
-        
         //==============================================================================================
         // UI CREATION - TIPS SECTION - TIMER
         //==============================================================================================
@@ -438,12 +431,85 @@ public class Home_Panel extends JPanel {
         	lbl_Tip_2.setText("<html>" + utility_Tips_Manager.getRandomTip() + "</html>");
         	lbl_Tip_Type_2.setText(utility_Tips_Manager.getType());
         	lbl_Tip_Type_2.setForeground(utility_Tips_Manager.setcolor());
-        	lbl_Tip_3.setText("<html>" + utility_Tips_Manager.getRandomTip() + "</html>");
-        	lbl_Tip_Type_3.setText(utility_Tips_Manager.getType());
-        	lbl_Tip_Type_3.setForeground(utility_Tips_Manager.setcolor());
         });
         tips_timer.setInitialDelay(0); // Start immediately
         tips_timer.start();
+        
+     // Main container panel
+        panel_VIew_Buttons = new Rounded_Panel();
+        panel_VIew_Buttons.setBackground(Color.WHITE);
+        panel_VIew_Buttons.setBounds(660, 533, 316, 144);
+        panel_VIew_Buttons.setLayout(null);
+        add(panel_VIew_Buttons);
+
+        // Title label
+        lbl_View_Data = new JLabel("View Data");
+        lbl_View_Data.setFont(new Font("Tahoma", Font.PLAIN, 20));
+        lbl_View_Data.setForeground(Color.BLACK);
+        lbl_View_Data.setBounds(10, 11, 296, 25);
+        panel_VIew_Buttons.add(lbl_View_Data);
+
+        // Button group
+        rdgroup_Data_Type = new ButtonGroup();
+
+        // ---------- First Option ----------
+        panel_Reading_Button = new Rounded_Panel(15, Color.BLACK, 0);
+        panel_Reading_Button.setLayout(null);
+        panel_Reading_Button.setBackground(new Color(245, 245, 245));
+        panel_Reading_Button.setBounds(10, 45, 296, 25); // Moved up slightly
+        panel_VIew_Buttons.add(panel_Reading_Button);
+
+        rdbtn_Reading = new JRadioButton();
+        rdbtn_Reading.setBounds(5, 0, 21, 23);
+        rdbtn_Reading.setOpaque(false);
+        rdbtn_Reading.setSelected(true);
+        panel_Reading_Button.add(rdbtn_Reading);
+        rdgroup_Data_Type.add(rdbtn_Reading);
+
+        lbl_Reading = new JLabel("Readings");
+        lbl_Reading.setFont(new Font("Dialog", Font.PLAIN, 15));
+        lbl_Reading.setBounds(30, 0, 260, 23);
+        lbl_Reading.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        panel_Reading_Button.add(lbl_Reading);
+
+        // ---------- Second Option ----------
+        panel_Rate_Button = new Rounded_Panel(15, Color.BLACK, 0);
+        panel_Rate_Button.setLayout(null);
+        panel_Rate_Button.setBackground(new Color(245, 245, 245));
+        panel_Rate_Button.setBounds(10, 75, 296, 25); // Even spacing
+        panel_VIew_Buttons.add(panel_Rate_Button);
+
+        rdbtn_Rate = new JRadioButton();
+        rdbtn_Rate.setBounds(5, 0, 21, 23);
+        rdbtn_Rate.setOpaque(false);
+        panel_Rate_Button.add(rdbtn_Rate);
+        rdgroup_Data_Type.add(rdbtn_Rate);
+
+        lbl_Rate = new JLabel("Rate");
+        lbl_Rate.setFont(new Font("Dialog", Font.PLAIN, 15));
+        lbl_Rate.setBounds(30, 0, 260, 23);
+        lbl_Rate.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        panel_Rate_Button.add(lbl_Rate);
+
+        // ---------- Third Option ----------
+        panel_Price_Button = new Rounded_Panel(15, Color.BLACK, 0);
+        panel_Price_Button.setLayout(null);
+        panel_Price_Button.setBackground(new Color(245, 245, 245));
+        panel_Price_Button.setBounds(10, 105, 296, 25); // Bottom-aligned nicely
+        panel_VIew_Buttons.add(panel_Price_Button);
+
+        rdbtn_Price = new JRadioButton();
+        rdbtn_Price.setBounds(5, 0, 21, 23);
+        rdbtn_Price.setOpaque(false);
+        panel_Price_Button.add(rdbtn_Price);
+        rdgroup_Data_Type.add(rdbtn_Price);
+
+        lbl_Price = new JLabel("Price");
+        lbl_Price.setFont(new Font("Dialog", Font.PLAIN, 15));
+        lbl_Price.setBounds(30, 0, 260, 23);
+        lbl_Price.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        panel_Price_Button.add(lbl_Price);
+
     }
     
     //==============================================================================================
@@ -453,31 +519,64 @@ public class Home_Panel extends JPanel {
     public void home_Panel_Refresh() {setup_Data();}
     
     private void create_Action_Listeners() {
-        
-        
-        // Panel click listeners
-        panel_Electricity_Info.addMouseListener(createPanelMouseAdapter(() -> graph_Panel.showElectricityGraph()));
-        panel_Water_Info.addMouseListener(createPanelMouseAdapter(() -> graph_Panel.showWaterGraph()));
-        panel_Gas_Info.addMouseListener(createPanelMouseAdapter(() -> graph_Panel.showGasGraph()));
-        panel_Overall_Info.addMouseListener(createPanelMouseAdapter(() -> graph_Panel.showOverallGraph()));
-    }
-    
-    private MouseAdapter createPanelMouseAdapter(Runnable onClick) {
-        return new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {onClick.run();}
-            @Override
-            public void mouseEntered(MouseEvent e) {((JPanel) e.getSource()).setBackground(new Color(200, 200, 200));}
-            @Override
-            public void mouseExited(MouseEvent e) {((JPanel) e.getSource()).setBackground(new Color(220, 220, 220));}
-        };
-    }
+
+    // Electricity panel
+    panel_Electricity_Info.addMouseListener(new MouseAdapter() {
+        @Override public void mouseClicked(MouseEvent e) { graph_Panel.showElectricityGraph(); }
+        @Override public void mouseEntered(MouseEvent e) { panel_Electricity_Info.setBackground(new Color(200, 200, 200)); }
+        @Override public void mouseExited(MouseEvent e) { panel_Electricity_Info.setBackground(new Color(220, 220, 220)); }
+    });
+
+    // Water panel
+    panel_Water_Info.addMouseListener(new MouseAdapter() {
+        @Override public void mouseClicked(MouseEvent e) { graph_Panel.showWaterGraph(); }
+        @Override public void mouseEntered(MouseEvent e) { panel_Water_Info.setBackground(new Color(200, 200, 200)); }
+        @Override public void mouseExited(MouseEvent e) { panel_Water_Info.setBackground(new Color(220, 220, 220)); }
+    });
+
+    // Gas panel
+    panel_Gas_Info.addMouseListener(new MouseAdapter() {
+        @Override public void mouseClicked(MouseEvent e) { graph_Panel.showGasGraph(); }
+        @Override public void mouseEntered(MouseEvent e) { panel_Gas_Info.setBackground(new Color(200, 200, 200)); }
+        @Override public void mouseExited(MouseEvent e) { panel_Gas_Info.setBackground(new Color(220, 220, 220)); }
+    });
+
+    // Overall panel
+    panel_Overall_Info.addMouseListener(new MouseAdapter() {
+        @Override public void mouseClicked(MouseEvent e) { graph_Panel.showOverallGraph(); }
+        @Override public void mouseEntered(MouseEvent e) { panel_Overall_Info.setBackground(new Color(200, 200, 200)); }
+        @Override public void mouseExited(MouseEvent e) { panel_Overall_Info.setBackground(new Color(220, 220, 220)); }
+    });
+
+    // Reading panel
+    panel_Reading_Button.addMouseListener(new MouseAdapter() {
+        @Override public void mouseClicked(MouseEvent e) { graph_Panel.setField("reading"); rdbtn_Reading.setSelected(true); field = "reading"; setup_Data(); }
+        @Override public void mouseEntered(MouseEvent e) { panel_Reading_Button.setBackground(new Color(200, 200, 200)); }
+        @Override public void mouseExited(MouseEvent e) { panel_Reading_Button.setBackground(new Color(220, 220, 220)); }
+    });
+
+    // Rate panel
+    panel_Rate_Button.addMouseListener(new MouseAdapter() {
+        @Override public void mouseClicked(MouseEvent e) { graph_Panel.setField("rate"); rdbtn_Rate.setSelected(true); field = "rate"; setup_Data(); }
+        @Override public void mouseEntered(MouseEvent e) { panel_Rate_Button.setBackground(new Color(200, 200, 200)); }
+        @Override public void mouseExited(MouseEvent e) { panel_Rate_Button.setBackground(new Color(220, 220, 220)); }
+    });
+
+    // Price panel
+    panel_Price_Button.addMouseListener(new MouseAdapter() {
+        @Override public void mouseClicked(MouseEvent e) { graph_Panel.setField("total"); rdbtn_Price.setSelected(true); field = "total"; setup_Data(); }
+        @Override public void mouseEntered(MouseEvent e) { panel_Price_Button.setBackground(new Color(200, 200, 200)); }
+        @Override public void mouseExited(MouseEvent e) { panel_Price_Button.setBackground(new Color(220, 220, 220)); }
+    });
+}
+
+
 
     private void setup_Data() {
         try {
             // Initialize graph panel if needed
             if (graph_Panel == null && database_Manager != null) {
-                graph_Panel = new Graph_Panel(database_Manager.getReadingManager(), current_User);
+                graph_Panel = new Graph_Panel(database_Manager.getReadingManager(), current_User, field);
                 graph_Panel.setBackground(Color.WHITE);
                 panel_Graph_Container.removeAll();
                 panel_Graph_Container.add(graph_Panel);
@@ -491,9 +590,9 @@ public class Home_Panel extends JPanel {
             Reading gas = database_Manager.getReadingManager().getLatest_Reading_By_Type(current_User, "gas");
 
             // Update each reading's label
-            database_Manager.getReadingManager().updateReading_Label(current_User,electricity, lbl_Electricity_Reading_Value, lbl_Trend_Of_Reading_Electricity, "electricity", "reading");
-            database_Manager.getReadingManager().updateReading_Label(current_User,water, lbl_Water_Reading_Value, lbl_Trend_Of_Reading_Water, "water", "reading");
-            database_Manager.getReadingManager().updateReading_Label(current_User,gas, lbl_Gas_Reading_Value, lbl_Trend_Of_Reading_Gas, "gas", "reading");
+            database_Manager.getReadingManager().updateReading_Label(current_User,electricity, lbl_Electricity_Reading_Value, lbl_Trend_Of_Reading_Electricity,lbl_Electricity_Reading_Unit, "electricity", field);
+            database_Manager.getReadingManager().updateReading_Label(current_User,water, lbl_Water_Reading_Value, lbl_Trend_Of_Reading_Water, lbl_Water_Reading_Unit, "water", field);
+            database_Manager.getReadingManager().updateReading_Label(current_User,gas, lbl_Gas_Reading_Value, lbl_Trend_Of_Reading_Gas, lbl_Gas_Reading_Unit, "gas", field);
 
             double total = 0.0;
             try {

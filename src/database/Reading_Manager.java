@@ -541,7 +541,7 @@ public class Reading_Manager {
      * @param use_price If true, uses total_price field; if false, uses reading field
      * @return Map with Month as key and summed value as value
      */
-    public Map<Month, Double> groupReadings_By_Month(List<Reading> readings, int year, boolean use_price) {
+    public Map<Month, Double> groupReadings_By_Month(List<Reading> readings, int year, String field) {
         Map<Month, Double> monthly_data = new HashMap<>();
 
         if (readings == null || readings.isEmpty()) {
@@ -557,7 +557,19 @@ public class Reading_Manager {
             if (date.getYear() == year) {
                 int monthValue = date.getMonthValue();
                 Month month = date.getMonth();
-                double value = use_price ? reading.getTotal_Price() : reading.getReading();
+                double value;
+                switch (field.toLowerCase()) {
+					case "total":
+						value = reading.getTotal_Price();
+						break;
+					case "rate":
+						value = reading.getRate();
+						break;
+					case "reading":
+					default:
+						value = reading.getReading();
+						break;
+				}
 
                 monthly_data.put(month, monthly_data.getOrDefault(month, 0.0) + value);
 
@@ -577,13 +589,13 @@ public class Reading_Manager {
 
 
     // Update the getMonthly_Utility_Data method to include year parameter
-    public Map<Month, Double> getMonthly_Utility_Data(User user, String utility_type, int year, boolean use_price) 
+    public Map<Month, Double> getMonthly_Utility_Data(User user, String utility_type, int year, String field) 
             throws SQLException {
         LocalDate end_date = LocalDate.of(year, 12, 31); // Whole Year
         LocalDate start_date = LocalDate.of(year, 1, 1);
         
         List<Reading> readings = getReadings_By_Date_And_Type(user, start_date, end_date, utility_type);
-        return groupReadings_By_Month(readings, year, use_price);
+        return groupReadings_By_Month(readings, year, field);
     }
 
     // Update the getMonthly_Total_Expenses method to include year parameter
@@ -591,9 +603,9 @@ public class Reading_Manager {
         Map<Month, Double> total_expenses = new HashMap<>();
         
         // Get data for each utility type
-        Map<Month, Double> electricity_expenses = getMonthly_Utility_Data(user, "electricity", year, true);
-        Map<Month, Double> water_expenses = getMonthly_Utility_Data(user, "water", year, true);
-        Map<Month, Double> gas_expenses = getMonthly_Utility_Data(user, "gas", year, true);
+        Map<Month, Double> electricity_expenses = getMonthly_Utility_Data(user, "electricity", year, "total");
+        Map<Month, Double> water_expenses = getMonthly_Utility_Data(user, "water", year, "total");
+        Map<Month, Double> gas_expenses = getMonthly_Utility_Data(user, "gas", year, "total");
         
         // Combine expenses from all utility types
         for (Month month : Month.values()) {
@@ -857,20 +869,31 @@ public class Reading_Manager {
      * @param trend_label Label to display trend information
      * @param type Type of reading
      */
-    public void updateReading_Label(User current_user, Reading reading, JLabel value_label, JLabel trend_label, String utility_type,String data) {
+    public void updateReading_Label(User current_user, Reading reading, JLabel value_label, JLabel trend_label, JLabel unit_label, String utility_type,String field) {
         if (reading == null) {
             value_label.setText("No Data");
             trend_label.setText("No Data");
         } else {
             try {
             	if (utility_type.equals("gas")) {
-					value_label.setText(String.valueOf((int) getLatestMonthReadingSum(current_user, utility_type, data)));
+					value_label.setText(String.valueOf((int) getLatestMonthReadingSum(current_user, utility_type, field)));
 				} else {
-					value_label.setText(String.valueOf(getLatestMonthReadingSum(current_user, utility_type, data)));					
+					value_label.setText(String.valueOf(getLatestMonthReadingSum(current_user, utility_type, field)));					
 				}
 				
+            	if (field.equals("reading")) {
+					unit_label.setText(utility_type.equals("gas") ? "Qty" : utility_type.equals("water") ? "m³" : "kWh");
+				} else if (field.equals("rate")) {
+					unit_label.setText("Php/kWh");
+				} else {
+					unit_label.setText("Php");
+				}
+				
+				// Update value label
+				value_label.setFont(new Font("monoFont", Font.BOLD, 20));
+            	
 				// Update trend label
-                String trend = getTrend(current_user, utility_type, data);
+                String trend = getTrend(current_user, utility_type, field);
                 trend_label.setText(trend);
                 trend_label.setForeground(getTrend_Color(current_user, utility_type));
             } catch (SQLException e) {
