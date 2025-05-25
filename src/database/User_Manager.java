@@ -103,7 +103,7 @@ public class User_Manager {
 		return null;
 	}
 	
-	public User getUserByUsername(String username) throws SQLException {
+	public User getUserByUsername(String username) {
 		// Using GLOB operator for case-sensitive comparison
 		String sqlscript = "SELECT * FROM users WHERE username = ? COLLATE BINARY";
 		try (PreparedStatement prepared_statement = connection.prepareStatement(sqlscript)) {
@@ -124,7 +124,7 @@ public class User_Manager {
 		return null;
 	}
 	
-	public User getUserByEmail(String email) throws SQLException {
+	public User getUserByEmail(String email) {
 		String sqlscript = "SELECT * FROM users WHERE email = ? COLLATE NOCASE";
 		try (PreparedStatement prepared_statement = connection.prepareStatement(sqlscript)) {
 			prepared_statement.setString(1, email);
@@ -145,17 +145,10 @@ public class User_Manager {
 	}
 	
 	public boolean checkUserEmail(String username, String email) {
-	    try {
-	        if (getUserByUsername(username) != null || getUserByEmail(email) != null) {
-	            return true;
-	        }
-	        
-	        return false;
-	        
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	        return false;
-	    }
+	    if (getUserByUsername(username) != null || getUserByEmail(email) != null) {
+	        return true;
+	    }   
+	    return false;
 	}
 	
 	public boolean UsernameEmailMatch(String username, String email){

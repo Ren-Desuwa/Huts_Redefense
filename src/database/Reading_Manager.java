@@ -22,6 +22,7 @@ import javax.swing.SwingUtilities;
 
 import model.*;
 import view.panel.Electricity_Panel;
+import view.panel.Utility_Panel;
 import view.panel.Water_Panel;
 import view.panel.misc.Edit_Reading_Window;
 
@@ -911,7 +912,7 @@ public class Reading_Manager {
      * @param type Type of readings to display
      * @return JList component with formatted reading data
      */
-    public JList<String> getReadings_As_JList(JPanel utility_panel, Database_Manager database_manager, User user, String type) {
+    public JList<String> getReadings_As_JList(Utility_Panel utility_panel, Database_Manager database_manager, User user, String type) {
     	List<Reading> all_readings;
     	try {
     		all_readings = getAll_Readings_By_Type(user, type);
@@ -946,7 +947,6 @@ public class Reading_Manager {
                                         (JFrame) SwingUtilities.getWindowAncestor(utility_panel),
                                         database_manager, user, utility_panel, type, selected_reading
                                     );
-                                    edit_reading_panel.loadReadingData(selected_reading, selected_index);
                                     edit_reading_panel.setVisible(true);
                                 } catch (Exception ex) {
                                     ex.printStackTrace();

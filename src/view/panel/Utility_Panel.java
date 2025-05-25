@@ -277,7 +277,7 @@ public class Utility_Panel extends JPanel {
         lbl_Reading_Unit = new JLabel("₱");
         lbl_Reading_Unit.setHorizontalAlignment(SwingConstants.LEFT);
         lbl_Reading_Unit.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        lbl_Reading_Unit.setBounds(216, 54, 68, 32);
+        lbl_Reading_Unit.setBounds(216, 54, 129, 32);
         panel_Current_Reading.add(lbl_Reading_Unit);
 
         lbl_Trend_Of_Reading = new JLabel("No available data");
@@ -544,21 +544,21 @@ public class Utility_Panel extends JPanel {
         
      // Reading panel
         panel_Reading_Button.addMouseListener(new MouseAdapter() {
-            @Override public void mouseClicked(MouseEvent e) { graph_Panel.setField("reading");; rdbtn_Reading.setSelected(true); }
+            @Override public void mouseClicked(MouseEvent e) { graph_Panel.setField("reading");; rdbtn_Reading.setSelected(true); field = "reading"; setupData(); }
             @Override public void mouseEntered(MouseEvent e) { panel_Reading_Button.setBackground(new Color(200, 200, 200)); }
             @Override public void mouseExited(MouseEvent e) { panel_Reading_Button.setBackground(new Color(220, 220, 220)); }
         });
 
         // Rate panel
         panel_Rate_Button.addMouseListener(new MouseAdapter() {
-            @Override public void mouseClicked(MouseEvent e) { graph_Panel.setField("rate"); rdbtn_Rate.setSelected(true); }
+            @Override public void mouseClicked(MouseEvent e) { graph_Panel.setField("rate"); rdbtn_Rate.setSelected(true); field = "rate"; setupData(); }
             @Override public void mouseEntered(MouseEvent e) { panel_Rate_Button.setBackground(new Color(200, 200, 200)); }
             @Override public void mouseExited(MouseEvent e) { panel_Rate_Button.setBackground(new Color(220, 220, 220)); }
         });
 
         // Price panel
         panel_Price_Button.addMouseListener(new MouseAdapter() {
-            @Override public void mouseClicked(MouseEvent e) { graph_Panel.setField("total"); rdbtn_Price.setSelected(true); }
+            @Override public void mouseClicked(MouseEvent e) { graph_Panel.setField("total"); rdbtn_Price.setSelected(true); field = "total"; setupData(); }
             @Override public void mouseEntered(MouseEvent e) { panel_Price_Button.setBackground(new Color(200, 200, 200)); }
             @Override public void mouseExited(MouseEvent e) { panel_Price_Button.setBackground(new Color(220, 220, 220)); }
         });
@@ -577,7 +577,6 @@ public class Utility_Panel extends JPanel {
      */
     public void Panel_Refresh() {
         setupData(); // update the current reading display
-        
     }
 
     private void setupData() {

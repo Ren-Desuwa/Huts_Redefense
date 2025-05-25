@@ -1,0 +1,55 @@
+
+File: Edit_Profile_Window.java
+Description:
+This file defines the `Edit_Profile_Window` class, which is a `JDialog` used for editing a user's profile. 
+It provides a graphical interface for updating the username and email of the current user. 
+The class interacts with the `Database_Manager` to validate and save the updated user information.
+
+Variables:
+- `database_manager` (Database_Manager): Manages database operations, including user-related actions.
+- `current_user` (User): Represents the currently logged-in user whose profile is being edited.
+- `contentPane` (JPanel): The main container for the dialog's components.
+- `txtUsername` (JTextField): Input field for the user's username.
+- `txtEmail` (JTextField): Input field for the user's email.
+- `lblInitials` (JLabel): Displays the user's initials in the circular panel.
+- `initialsPanel` (Circle_Panel): A custom circular panel to display the user's initials.
+- `btnSave` (Rounded_Button): Button to save the updated profile information.
+- `btnCancel` (Rounded_Button): Button to cancel the operation and close the dialog.
+- `profile_Panel` (Profile_Panel): Reference to the parent profile panel to update user information after saving.
+- `lblUsername` (JLabel): Label for the username input field.
+- `lblEmail` (JLabel): Label for the email input field.
+- `buttonPanel` (JPanel): Container for the save and cancel buttons.
+
+Functions:
+
+1. `Edit_Profile_Window(Profile_Panel, Database_Manager, User)`:
+   - Constructor that initializes the dialog with the provided profile panel, database manager, and current user.
+   - Calls `initialize()` to set up the UI and `loadUserData()` to populate the fields with the current user's data.
+
+2. `initialize()`:
+   - Sets up the dialog's properties (e.g., size, layout, title).
+   - Creates and positions all UI components, including labels, text fields, and buttons.
+   - Adds action listeners to the save and cancel buttons.
+
+3. `loadUserData()`:
+   - Populates the username and email fields with the current user's data.
+   - Extracts and displays the user's initials in the circular panel.
+   - If the username is empty, displays "UN" as the initials.
+
+4. `saveProfile()`:
+   - Validates the input fields and updates the user's profile in the database.
+   - Key conditions:
+     - Checks if the username is empty and displays an error message if true.
+     - Validates the email format using `validEmail()` and displays an error if invalid.
+     - Checks if the username already exists in the database (excluding the current user) and displays an error if true.
+     - Checks if the email already exists in the database (excluding the current user) and displays an error if true.
+   - If all validations pass:
+     - Updates the user's information in the database using `updateUser()`.
+     - Updates the `current_user` object with the new username and email.
+     - Displays a success message and updates the parent `Profile_Panel` with the new user information.
+     - Closes the dialog.
+   - Catches and handles any `SQLException` that occurs during the database update.
+
+Usage:
+This class is used to provide a user-friendly interface for editing a user's profile. 
+It ensures that the input data is validated before updating the database and provides feedback to the user in case of errors or success.
