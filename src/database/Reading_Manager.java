@@ -310,7 +310,7 @@ public class Reading_Manager {
     }
 
 	// Gets the color for the trend based on the last trend percentage	
-    public Color getTrend_Color(User user, String type) {
+    public Color getTrend_Color() {
         if (last_trend_percentage < 0) {
             return new Color(0, 150, 0); // Green for decrease
         } else if (last_trend_percentage > 0) {
@@ -414,7 +414,7 @@ public class Reading_Manager {
 				// Update trend label
                 String trend = getTrend(current_user, utility_type, field);
                 trend_label.setText(trend);
-                trend_label.setForeground(getTrend_Color(current_user, utility_type));
+                trend_label.setForeground(getTrend_Color());
             } catch (SQLException e) {
                 e.printStackTrace();
                 trend_label.setText("Error calculating trend");
@@ -953,6 +953,11 @@ public class Reading_Manager {
  * ================================================================================
  *                              MAINTENANCE NOTES
  * ================================================================================
+ *
+ *!!!! GRAPH HEAVY CLASS - USE CAUTION WHEN MODIFYING !!!!!
+ * This class is heavily integrated with the UI and database, making it sensitive to changes.
+ * Any modifications can have wide-ranging effects, so thorough testing is required.
+ * 'getMonthly_Utility_Data()' and 'getMonthly_Total_Expenses()' are particularly sensitive to changes in utility types.
  *
  * WHEN MODIFYING THIS CLASS:
  * - Always use try-with-resources for database operations
