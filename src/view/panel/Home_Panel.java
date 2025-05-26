@@ -20,14 +20,12 @@ import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-
-
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.awt.BorderLayout;
 import javax.swing.JRadioButton;
 
@@ -357,17 +355,9 @@ public class Home_Panel extends JPanel {
         panel_Graph_Container.setLayout(new BorderLayout());
         add(panel_Graph_Container);
 
-        // Add placeholder panel for design time
-        if (database_Manager == null) {
-            JPanel placeholder = new JPanel();
-            placeholder.setBackground(new Color(255, 255, 255));
-            panel_Graph_Container.add(placeholder);
-        } else {
-            // Create and add actual graph panel at runtime
-            graph_Panel = new Graph_Panel(database_Manager.getReadingManager(), current_User, "reading");
-            graph_Panel.setBackground(new Color(255, 255, 255));
-            panel_Graph_Container.add(graph_Panel);
-        }
+        graph_Panel = new Graph_Panel(database_Manager.getReadingManager(), current_User, "reading");
+        graph_Panel.setBackground(new Color(255, 255, 255));
+        panel_Graph_Container.add(graph_Panel);
         
         // Behind panels for design time
         panel_Behind1 = new Rounded_Panel(25, Color.BLACK, 0);
@@ -597,32 +587,23 @@ public class Home_Panel extends JPanel {
     });
 
     // Assign panel listeners
-    panel_Reading_Button.addMouseListener(getPanelMouseListener(panel_Reading_Button, "reading", rdbtn_Reading));
-    panel_Rate_Button.addMouseListener(getPanelMouseListener(panel_Rate_Button, "rate", rdbtn_Rate));
-    panel_Price_Button.addMouseListener(getPanelMouseListener(panel_Price_Button, "total", rdbtn_Price));
-
-    rdbtn_Reading.addMouseListener(getClickListener("reading"));
-    rdbtn_Rate.addMouseListener(getClickListener("rate"));
-    rdbtn_Price.addMouseListener(getClickListener("total"));
+    panel_Reading_Button.addMouseListener(mouseListener(panel_Reading_Button, "reading", rdbtn_Reading));
+    panel_Rate_Button.addMouseListener(mouseListener(panel_Rate_Button, "rate", rdbtn_Rate));
+    panel_Price_Button.addMouseListener(mouseListener(panel_Price_Button, "total", rdbtn_Price));
+    
+    // Assign radio button listeners
+    rdbtn_Reading.addMouseListener(mouseListener(panel_Reading_Button, "reading", rdbtn_Reading));
+    rdbtn_Rate.addMouseListener(mouseListener(panel_Rate_Button, "rate", rdbtn_Rate));
+    rdbtn_Price.addMouseListener(mouseListener(panel_Price_Button, "total", rdbtn_Price));
 
     // Assign to labels
-    lbl_Reading.addMouseListener(getClickListener("reading"));
-    lbl_Rate.addMouseListener(getClickListener("rate"));
-    lbl_Price.addMouseListener(getClickListener("total"));
-}
-    
-    MouseAdapter getClickListener(String fieldType) {
-        return new MouseAdapter() {
-            @Override public void mouseClicked(MouseEvent e) {
-                graph_Panel.setField(fieldType);
-                field = fieldType;
-                setup_Data();
-            }
-        };
+    lbl_Reading.addMouseListener(mouseListener(panel_Reading_Button, "reading", rdbtn_Reading));
+    lbl_Rate.addMouseListener(mouseListener(panel_Rate_Button, "rate", rdbtn_Rate));
+    lbl_Price.addMouseListener(mouseListener(panel_Price_Button, "total", rdbtn_Price));
     }
     
     // Returns a MouseAdapter for handling clicks on the specified panel and field type
-    MouseAdapter getPanelMouseListener(JPanel panel, String fieldType, JRadioButton radioButton) {
+    MouseAdapter mouseListener(JPanel panel, String fieldType, JRadioButton radioButton) {
         return new MouseAdapter() {
             @Override public void mouseClicked(MouseEvent e) {
                 graph_Panel.setField(fieldType);

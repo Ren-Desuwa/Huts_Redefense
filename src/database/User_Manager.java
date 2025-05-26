@@ -121,7 +121,7 @@ public class User_Manager {
 	}
 	
 	// Checks if the provided username and password match a user in the database
-	public boolean UsernamePasswordMatch(String username, String password) throws SQLException {
+	public boolean UsernamePasswordMatch(String username, String password) {
 		String sqlscript = "SELECT * FROM users WHERE username = ? COLLATE BINARY AND password = ? COLLATE BINARY";
 		try (PreparedStatement prepared_statement = connection.prepareStatement(sqlscript)) {
 			prepared_statement.setString(1, username);

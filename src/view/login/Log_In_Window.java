@@ -265,13 +265,11 @@ public class Log_In_Window extends JFrame {
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				btn.setBackground(new Color(150, 150, 150));
-				btn.setForeground(Color.BLACK);
 			}
 			
 			@Override
 			public void mouseExited(MouseEvent e) {
 				btn.setBackground(new Color(182, 182, 182));
-				btn.setForeground(Color.BLACK);
 			}
 		});
 		
@@ -308,6 +306,7 @@ public class Log_In_Window extends JFrame {
 			return;
 		}
 		
+		// Check for placeholder text
 		if (username.equals("Enter Username") || password.equals("Enter Password")) {
 			lbl_Incorrect_Signage1.setVisible(true); // Show label
 			lbl_Incorrect_Signage2.setVisible(true); // Show label
@@ -315,36 +314,30 @@ public class Log_In_Window extends JFrame {
 			return;
 		}
 		
-		try {
-			// Verify credentials
-			if (!database_manager.getUserManager().UsernamePasswordMatch(username, password)) {
-				lbl_Forgot_Password.setVisible(true); // Show label
-				lbl_Incorrect_Signage1.setVisible(true); // Show label
-				lbl_Incorrect_Signage2.setVisible(true); // Show label
-				JOptionPane.showMessageDialog(this, "Incorrect username or password.", "Login Error", JOptionPane.ERROR_MESSAGE);
-				return;
-			}
-			
-			
-			// Get user and navigate to main frame
-			User current_user = database_manager.getUserManager().getUserByUsername(username);
-			JOptionPane.showMessageDialog(this, "Welcome " + current_user.getUsername() + "!", "Login Successful", JOptionPane.INFORMATION_MESSAGE);
-			
-		    EventQueue.invokeLater(new Runnable() {
-		        public void run() {
-		            try {
-		                Log_In_Window.this.dispose();
-		                Main_Frame mainFrame = new Main_Frame(database_manager, current_user);
-		                mainFrame.setVisible(true);
-		            } catch (Exception e) {
-		                e.printStackTrace();
-		            }
-		        }
-		    });
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
+		if (!database_manager.getUserManager().UsernamePasswordMatch(username, password)) {
+			lbl_Forgot_Password.setVisible(true); // Show label
+			lbl_Incorrect_Signage1.setVisible(true); // Show label
+			lbl_Incorrect_Signage2.setVisible(true); // Show label
+			JOptionPane.showMessageDialog(this, "Incorrect username or password.", "Login Error", JOptionPane.ERROR_MESSAGE);
+			return;
 		}
+		
+		// Get user and navigate to main frame
+		User current_user = database_manager.getUserManager().getUserByUsername(username);
+		JOptionPane.showMessageDialog(this, "Welcome " + current_user.getUsername() + "!", "Login Successful", JOptionPane.INFORMATION_MESSAGE);
+		
+	    EventQueue.invokeLater(new Runnable() {
+	        public void run() {
+	            try {
+	                Log_In_Window.this.dispose();
+	                Main_Frame mainFrame = new Main_Frame(database_manager, current_user);
+	                mainFrame.setVisible(true);
+	            } catch (Exception e) {
+	                e.printStackTrace();
+	            }
+	        }
+	    });
+		
 	}
 	
 	private void openSignUp() {

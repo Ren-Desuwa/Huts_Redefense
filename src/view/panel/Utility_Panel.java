@@ -582,51 +582,38 @@ public class Utility_Panel extends JPanel {
         });
         
         // Assign panel listeners
-        panel_Reading_Button.addMouseListener(getPanelMouseListener(panel_Reading_Button, "reading", rdbtn_Reading));
-        panel_Rate_Button.addMouseListener(getPanelMouseListener(panel_Rate_Button, "rate", rdbtn_Rate));
-        panel_Price_Button.addMouseListener(getPanelMouseListener(panel_Price_Button, "total", rdbtn_Price));
-
-        // Assign to radio buttons
-        rdbtn_Reading.addMouseListener(getClickListener("reading"));
-        rdbtn_Rate.addMouseListener(getClickListener("rate"));
-        rdbtn_Price.addMouseListener(getClickListener("total"));
+        panel_Reading_Button.addMouseListener(mouseListener(panel_Reading_Button, "reading", rdbtn_Reading));
+        panel_Rate_Button.addMouseListener(mouseListener(panel_Rate_Button, "rate", rdbtn_Rate));
+        panel_Price_Button.addMouseListener(mouseListener(panel_Price_Button, "total", rdbtn_Price));
+        
+        // Assign radio button listeners
+        rdbtn_Reading.addMouseListener(mouseListener(panel_Reading_Button, "reading", rdbtn_Reading));
+        rdbtn_Rate.addMouseListener(mouseListener(panel_Rate_Button, "rate", rdbtn_Rate));
+        rdbtn_Price.addMouseListener(mouseListener(panel_Price_Button, "total", rdbtn_Price));
 
         // Assign to labels
-        lbl_Reading.addMouseListener(getClickListener("reading"));
-        lbl_Rate.addMouseListener(getClickListener("rate"));
-        lbl_Price.addMouseListener(getClickListener("total"));
-
-     
+        lbl_Reading.addMouseListener(mouseListener(panel_Reading_Button, "reading", rdbtn_Reading));
+        lbl_Rate.addMouseListener(mouseListener(panel_Rate_Button, "rate", rdbtn_Rate));
+        lbl_Price.addMouseListener(mouseListener(panel_Price_Button, "total", rdbtn_Price));
     }
-    
-    // Returns a MouseAdapter for handling clicks on the specified field type
-    MouseAdapter getClickListener(String fieldType) {
-        return new MouseAdapter() {
-            @Override public void mouseClicked(MouseEvent e) {
-                graph_Panel.setField(fieldType);
-                field = fieldType;
-                setupData();
-            }
-        };
-    }
-    
-    // Returns a MouseAdapter for handling clicks on the specified panel and field type
-    MouseAdapter getPanelMouseListener(JPanel panel, String fieldType, JRadioButton radioButton) {
-        return new MouseAdapter() {
-            @Override public void mouseClicked(MouseEvent e) {
-                graph_Panel.setField(fieldType);
-                field = fieldType;
-                radioButton.setSelected(true);
-                setupData();
-            }
-            @Override public void mouseEntered(MouseEvent e) {
-                panel.setBackground(new Color(200, 200, 200));
-            }
-            @Override public void mouseExited(MouseEvent e) {
-                panel.setBackground(new Color(220, 220, 220));
-            }
-        };
-    }
+        
+        // Returns a MouseAdapter for handling clicks on the specified panel and field type
+        MouseAdapter mouseListener(JPanel panel, String fieldType, JRadioButton radioButton) {
+            return new MouseAdapter() {
+                @Override public void mouseClicked(MouseEvent e) {
+                    graph_Panel.setField(fieldType);
+                    field = fieldType;
+                    radioButton.setSelected(true);
+                    setupData();
+                }
+                @Override public void mouseEntered(MouseEvent e) {
+                    panel.setBackground(new Color(200, 200, 200));
+                }
+                @Override public void mouseExited(MouseEvent e) {
+                    panel.setBackground(new Color(220, 220, 220));
+                }
+            };
+        }
 
     public void Refresh_Graph() {
         if (graph_Panel.getSelectedYear() != current_graph_year) {
