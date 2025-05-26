@@ -92,8 +92,7 @@ public class Graph_Panel extends JPanel {
         // Initialize scrollable bar graphs
         electricity_graph = new Scrollable_Bar_Graph_Panel("Monthly Electricity Usage", "Month", "KwH");
         water_graph = new Scrollable_Bar_Graph_Panel("Monthly Water Usage", "Month", "m³");
-        gas_graph = new Scrollable_Bar_Graph_Panel("Monthly Gas Usage", "Month", "Qty");
-        gas_graph.setGasType(true); // Set gas type for integer display
+        gas_graph = new Scrollable_Bar_Graph_Panel("Monthly Gas Usage", "Month", "kg");
         overall_graph = new Scrollable_Bar_Graph_Panel("Monthly Total Expenses", "Month", "Php");
 
         // Set bar colors
@@ -125,14 +124,27 @@ public class Graph_Panel extends JPanel {
         container.setLayout(new BorderLayout());
         container.setBackground(new Color(255, 255, 255));
 
-        String units = switch (utility_type) {
-            case "electricity" -> "Total Price (Php)";
-            case "water" -> "Total Price (Php)";
-            case "gas" -> "Total Price (Php)";
-            default -> "";
+        String units = switch (field) {
+        	case "reading" -> 
+        		switch (utility_type) {
+	        		case "electricity" -> "KwH";
+	        		case "water" -> "m³";
+	        		case "gas" -> "kg";
+	        		default -> "";
+        };
+	        case "rate" -> 
+	        	switch (utility_type) {
+		            case "electricity" -> "Rate (Php/KwH)";
+		            case "water" -> "Rate (Php/m³)";
+		            case "gas" -> "Rate (Php/kg)";
+		            default -> "";
+	        };
+	        case "total" -> "Total Price (Php)";
+	        default -> "";
         };
 
         Scrollable_Bar_Graph_Panel utility_graph = new Scrollable_Bar_Graph_Panel("Month", units);
+        utility_graph.changeYAxisLabel(units); // Set Y-axis label based on field
         if (utility_type.equals("gas")) {
             utility_graph.setGasType(true);
         }
@@ -226,8 +238,59 @@ public class Graph_Panel extends JPanel {
 		return field;
 	}
 
-	public void setField(String field) {
-		this.field = field;
-		refreshData();
-	}
+    public void setField(String field) {
+        this.field = field;
+
+        if (is_single_utility) {
+            String units = switch (field) {
+                case "reading" -> switch (utility_type) {
+                    case "electricity" -> "KwH";
+                    case "water" -> "m³";
+                    case "gas" -> "kg";
+                    default -> "";
+                };
+                case "rate" -> switch (utility_type) {
+                    case "electricity" -> "Rate (Php/KwH)";
+                    case "water" -> "Rate (Php/m³)";
+                    case "gas" -> "Rate (Php/kg)";
+                    default -> "";
+                };
+                case "total" -> "Total Price (Php)";
+                default -> "";
+            };
+
+            switch (utility_type) {
+                case "electricity" -> electricity_graph.changeYAxisLabel(units);
+                case "water" -> water_graph.changeYAxisLabel(units);
+                case "gas" -> gas_graph.changeYAxisLabel(units);
+            }
+        } else {
+            // Multi-utility mode: update all graphs
+            electricity_graph.changeYAxisLabel(switch (field) {
+                case "reading" -> "KwH";
+                case "rate" -> "Rate (Php/KwH)";
+                case "total" -> "Total Price (Php)";
+                default -> "";
+            });
+
+            water_graph.changeYAxisLabel(switch (field) {
+                case "reading" -> "m³";
+                case "rate" -> "Rate (Php/m³)";
+                case "total" -> "Total Price (Php)";
+                default -> "";
+            });
+
+            gas_graph.changeYAxisLabel(switch (field) {
+                case "reading" -> "kg";
+                case "rate" -> "Rate (Php/kg)";
+                case "total" -> "Total Price (Php)";
+                default -> "";
+            });
+
+            overall_graph.changeYAxisLabel("Php"); // Always Php for overall
+        }
+
+        refreshData();
+    }
+
 }

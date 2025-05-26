@@ -301,7 +301,7 @@ public class New_Password_Window extends JFrame {
         
         // Update password
         try {
-            database_manager.getUserManager().updateUserPassword(current_user, password);
+            database_manager.getUserManager().updateUser(current_user, current_user.getUsername(), password, current_user.getEmail());
             JOptionPane.showMessageDialog(this, "Password changed successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
             // Open the login window
             EventQueue.invokeLater(new Runnable() {

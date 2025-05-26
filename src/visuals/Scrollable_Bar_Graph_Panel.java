@@ -395,4 +395,9 @@ public class Scrollable_Bar_Graph_Panel extends JPanel {
         this.isGasType = isGas;
         repaint();
     }
+    
+    public void changeYAxisLabel(String yAxisLabel) {
+		this.yAxisLabel = yAxisLabel;
+		axisLabelPanel.repaint();
+	}
 }

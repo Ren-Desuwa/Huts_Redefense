@@ -271,7 +271,7 @@ public class Change_Password_Window extends JDialog {
 		}
 		
 		try {
-			database_manager.getUserManager().updateUserPassword(current_user, password);
+			database_manager.getUserManager().updateUser(current_user, current_user.getUsername(), password, current_user.getEmail());
 			JOptionPane.showMessageDialog(Change_Password_Window.this, "Password changed successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
 			
 			EventQueue.invokeLater(new Runnable() {

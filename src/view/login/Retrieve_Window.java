@@ -294,7 +294,7 @@ public class Retrieve_Window extends JFrame {
         
         try {
             // Check if username and email match
-            if (!database_manager.getUserManager().UsernameEmailMatch(username, email)) {
+            if (!database_manager.getUserManager().checkUserEmail(username, email)) {
                 lbl_Incorrect_Signage2.setVisible(true);
                 lbl_Incorrect_Signage1.setVisible(true);
                 JOptionPane.showMessageDialog(this, "Username and email do not match", "Input Error", JOptionPane.ERROR_MESSAGE);
