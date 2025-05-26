@@ -653,7 +653,7 @@ public class Home_Panel extends JPanel {
                     lbl_Trend_Of_Reading_Overall.setText("No Data");
                 } else {
                     lbl_OverAll_Reading_Value.setText(String.format("%.2f", total));
-                    String trend = database_Manager.getReadingManager().getTrend_Overall(current_User, "total");
+                    String trend = database_Manager.getReadingManager().getTrend(current_User, null, "total");
                     lbl_Trend_Of_Reading_Overall.setText(trend);
                     lbl_Trend_Of_Reading_Overall.setForeground(
                         database_Manager.getReadingManager().getTrend_Color(current_User, null)

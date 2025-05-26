@@ -477,7 +477,7 @@ public class Edit_Reading_Window extends JDialog {
 			List<Reading> allReadings = database_manager.getReadingManager().getAll_Readings_By_Type(current_user, readingType);
 			Reading selectedReading = allReadings.get(selectedIndex);
 			
-			database_manager.getReadingManager().deleteReading(current_user, selectedReading);
+			database_manager.getReadingManager().deleteReading(selectedReading);
 			
 			getAllReadings();
 			parentPanel.Panel_Refresh();

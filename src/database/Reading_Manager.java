@@ -17,13 +17,11 @@ import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JPanel;
+
 import javax.swing.SwingUtilities;
 
 import model.*;
-import view.panel.Electricity_Panel;
 import view.panel.Utility_Panel;
-import view.panel.Water_Panel;
 import view.panel.misc.Edit_Reading_Window;
 
 public class Reading_Manager {
@@ -73,37 +71,6 @@ public class Reading_Manager {
         }
     }
     
-    /**
-     * Add a reading without rate information
-     * @param user User who owns the reading
-     * @param date Date of the reading
-     * @param type Type of reading (electricity, water, gas)
-     * @param reading Reading value
-     * @param total_price Total price calculated
-     * @throws SQLException If database operation fails
-     */
-    public void addReading(User user, LocalDate date, String type, double reading, double total_price) throws SQLException {
-        String sql_script = "INSERT INTO readings (user_id, date, type, reading, total_price) VALUES (?, ?, ?, ?, ?)";
-        try (PreparedStatement prepared_statement = database_connection.prepareStatement(sql_script, Statement.RETURN_GENERATED_KEYS)) {
-            prepared_statement.setInt(1, user.getUser_Id());
-            prepared_statement.setString(2, date.toString());
-            prepared_statement.setString(3, type);
-            prepared_statement.setDouble(4, reading);
-            prepared_statement.setDouble(5, total_price);
-            prepared_statement.executeUpdate();
-            
-            // Get the generated ID
-            try (ResultSet result_set = prepared_statement.getGeneratedKeys()) {
-                if (result_set.next()) {
-                    int reading_id = result_set.getInt(1);
-                    System.out.println("Inserted reading with ID: " + reading_id);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw e;
-        }
-    }
     
     /**
      * Add a reading using a Reading object
@@ -113,24 +80,6 @@ public class Reading_Manager {
      */
     public void addReading(User user, Reading reading) throws SQLException {
         addReading(user, reading.getDate(), reading.getType(), reading.getReading(), reading.getRate(), reading.getTotal_Price());
-    }
-    
-    /**
-     * Delete a reading by ID
-     * @param user User who owns the reading
-     * @param reading_id ID of the reading to delete
-     * @throws SQLException If database operation fails
-     */
-    public void deleteReading(User user, int reading_id) throws SQLException {
-        String sql_script = "DELETE FROM readings WHERE reading_id = ? AND user_id = ?";
-        try (PreparedStatement prepared_statement = database_connection.prepareStatement(sql_script)) {
-            prepared_statement.setInt(1, reading_id);
-            prepared_statement.setInt(2, user.getUser_Id());
-            prepared_statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw e;
-        }
     }
     
     /**
@@ -147,16 +96,6 @@ public class Reading_Manager {
             e.printStackTrace();
             throw e;
         }
-    }
-    
-    /**
-     * Delete a reading using User and Reading objects
-     * @param user User who owns the reading
-     * @param reading Reading object to delete
-     * @throws SQLException If database operation fails
-     */
-    public void deleteReading(User user, Reading reading) throws SQLException {
-        deleteReading(user, reading.getReading_Id());
     }
     
     /**
@@ -188,32 +127,6 @@ public class Reading_Manager {
     }
     
     /**
-     * Update a reading without rate information
-     * @param user User who owns the reading
-     * @param reading_id ID of the reading to update
-     * @param date Updated date
-     * @param type Updated type
-     * @param reading Updated reading value
-     * @param total_price Updated total price
-     * @throws SQLException If database operation fails
-     */
-    public void updateReading(User user, int reading_id, LocalDate date, String type, double reading, double total_price) throws SQLException {
-        String sql_script = "UPDATE readings SET date = ?, type = ?, reading = ?, total_price = ? WHERE reading_id = ? AND user_id = ?";
-        try (PreparedStatement prepared_statement = database_connection.prepareStatement(sql_script)) {
-            prepared_statement.setString(1, date.toString());
-            prepared_statement.setString(2, type);
-            prepared_statement.setDouble(3, reading);
-            prepared_statement.setDouble(4, total_price);
-            prepared_statement.setInt(5, reading_id);
-            prepared_statement.setInt(6, user.getUser_Id());
-            prepared_statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw e;
-        }
-    }
-    
-    /**
      * Update a reading using a Reading object
      * @param user User who owns the reading
      * @param reading Reading object with updated information
@@ -221,89 +134,6 @@ public class Reading_Manager {
      */
     public void updateReading(User user, Reading reading) throws SQLException {
         updateReading(user, reading.getReading_Id(), reading.getDate(), reading.getType(), reading.getReading(), reading.getRate(), reading.getTotal_Price());
-    }
-    
-    /**
-     * Get a reading by ID for a specific user
-     * @param user User who owns the reading
-     * @param reading_id ID of the reading to retrieve
-     * @return Reading object if found, null otherwise
-     * @throws SQLException If database operation fails
-     */
-    public Reading getReading_By_Id(User user, int reading_id) throws SQLException {
-        String sql_script = "SELECT * FROM readings WHERE reading_id = ? AND user_id = ?";
-        try (PreparedStatement prepared_statement = database_connection.prepareStatement(sql_script)) {
-            prepared_statement.setInt(1, reading_id);
-            prepared_statement.setInt(2, user.getUser_Id());
-            try (ResultSet result_set = prepared_statement.executeQuery()) {
-                if (result_set.next()) {
-                    return new Reading(
-                        result_set.getInt("reading_id"),
-                        result_set.getInt("user_id"),
-                        LocalDate.parse(result_set.getString("date")),
-                        result_set.getString("type"),
-                        result_set.getDouble("reading"),
-                        result_set.getDouble("rate"),
-                        result_set.getDouble("total_price")
-                    );
-                }
-                return null;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw e;
-        }
-    }
-    
-    /**
-     * Get a reading by ID regardless of user
-     * @param reading_id ID of the reading to retrieve
-     * @return Reading object if found, null otherwise
-     * @throws SQLException If database operation fails
-     */
-    public Reading getReading_By_Id(int reading_id) throws SQLException {
-        String sql_script = "SELECT * FROM readings WHERE reading_id = ?";
-        try (PreparedStatement prepared_statement = database_connection.prepareStatement(sql_script)) {
-            prepared_statement.setInt(1, reading_id);
-            try (ResultSet result_set = prepared_statement.executeQuery()) {
-                if (result_set.next()) {
-                    return new Reading(
-                        result_set.getInt("reading_id"),
-                        result_set.getInt("user_id"),
-                        LocalDate.parse(result_set.getString("date")),
-                        result_set.getString("type"),
-                        result_set.getDouble("reading"),
-                        result_set.getDouble("rate"),
-                        result_set.getDouble("total_price")
-                    );
-                }
-                return null;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw e;
-        }
-    }
-    
-    /**
-     * Get a reading by Reading object for a specific user
-     * @param user User who owns the reading
-     * @param reading Reading object containing the ID to search for
-     * @return Reading object if found, null otherwise
-     * @throws SQLException If database operation fails
-     */
-    public Reading getReading_By_Id(User user, Reading reading) throws SQLException {
-        return getReading_By_Id(user, reading.getReading_Id());
-    }
-    
-    /**
-     * Get a reading by Reading object regardless of user
-     * @param reading Reading object containing the ID to search for
-     * @return Reading object if found, null otherwise
-     * @throws SQLException If database operation fails
-     */
-    public Reading getReading_By_Id(Reading reading) throws SQLException {
-        return getReading_By_Id(reading.getReading_Id());
     }
     
     /**
@@ -337,40 +167,7 @@ public class Reading_Manager {
         return reading_list;
     }
     
-    /**
-     * Get readings within a date range for a specific user
-     * @param user User whose readings to retrieve
-     * @param start_date Start date of the range
-     * @param end_date End date of the range
-     * @return List of Reading objects
-     * @throws SQLException If database operation fails
-     */
-    public List<Reading> getReadings_By_Date(User user, LocalDate start_date, LocalDate end_date) throws SQLException {
-        String sql_script = "SELECT * FROM readings WHERE user_id = ? AND date >= ? AND date <= ? ORDER BY date ASC";
-        List<Reading> reading_list = new ArrayList<>();
-        try (PreparedStatement prepared_statement = database_connection.prepareStatement(sql_script)) {
-            prepared_statement.setInt(1, user.getUser_Id());
-            prepared_statement.setString(2, start_date.toString());
-            prepared_statement.setString(3, end_date.toString());
-            try (ResultSet result_set = prepared_statement.executeQuery()) {
-                while (result_set.next()) {
-                    reading_list.add(new Reading(
-                        result_set.getInt("reading_id"),
-                        result_set.getInt("user_id"),
-                        LocalDate.parse(result_set.getString("date")),
-                        result_set.getString("type"),
-                        result_set.getDouble("reading"),
-                        result_set.getDouble("rate"),
-                        result_set.getDouble("total_price")
-                    ));
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw e;
-        }
-        return reading_list;
-    }
+
     
     /**
      * Get readings within a date range for a specific user and type
@@ -629,55 +426,42 @@ public class Reading_Manager {
      * @return Total expenses for all utilities in the date range
      * @throws SQLException If database operation fails
      */
-    public double getTotal_Expenses_In_Range(User user, LocalDate start_date, LocalDate end_date) throws SQLException {
-        double total_expenses = 0.0;
-        
-        List<Reading> all_readings = getReadings_By_Date(user, start_date, end_date);
-        for (Reading reading : all_readings) {
-            total_expenses += reading.getTotal_Price();
-        }
-        
-        return total_expenses;
-    }
-    
-    /**
-     * Gets latest readings for all utility types
-     * @param user The user to get readings for
-     * @return Map with utility type as key and Reading object as value
-     * @throws SQLException If database operation fails
-     */
-    public Map<String, Reading> getLatest_Readings_For_All_Types(User user) throws SQLException {
-        Map<String, Reading> latest_readings = new HashMap<>();
-        
-        // Common utility types
-        String[] utility_types = {"electricity", "water", "gas"};
-        
-        for (String type : utility_types) {
-            Reading reading = getLatest_Reading_By_Type(user, type);
-            if (reading != null) {
-                latest_readings.put(type, reading);
+    public double getTotal_Expenses_In_Range(User user, LocalDate start_date, LocalDate end_date) {
+        String sql_script = "SELECT SUM(total_price) AS total FROM readings WHERE user_id = ? AND date >= ? AND date <= ?";
+        try (PreparedStatement stmt = database_connection.prepareStatement(sql_script)) {
+            stmt.setInt(1, user.getUser_Id());
+            stmt.setString(2, start_date.toString());
+            stmt.setString(3, end_date.toString());
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getDouble("total"); // returns 0.0 if null
+                }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        
-        return latest_readings;
-    }
+        return 0.0;
+    }    
     
     /**
-     * Calculates the total combined cost of the latest readings for all utilities
-     * @param user The user to calculate for
-     * @return The total cost of all latest utility readings
-     * @throws SQLException If database operation fails
+     * Calculates the total combined cost of the latest readings for all utilities.
+     * @param user The user to calculate for.
+     * @return The total cost of the latest utility readings.
+     * @throws SQLException If database operation fails.
      */
     public double getTotal_Latest_Cost(User user) throws SQLException {
-        Map<String, Reading> latest_readings = getLatest_Readings_For_All_Types(user);
-        double total_cost = 0.0;
-        
-        for (Reading reading : latest_readings.values()) {
-            total_cost += reading.getTotal_Price();
+        double totalCost = 0.0;
+        String[] utilityTypes = {"electricity", "water", "gas"};
+
+        for (String type : utilityTypes) {
+            Reading latestReading = getLatest_Reading_By_Type(user, type);
+            if (latestReading != null) {
+                totalCost += latestReading.getTotal_Price();
+            }
         }
-        
-        return total_cost;
+        return totalCost;
     }
+
     
     /**
      * Gets the trend for a specific utility type comparing current month to previous month
@@ -686,53 +470,47 @@ public class Reading_Manager {
      * @return Formatted string showing percentage change
      * @throws SQLException If database operation fails
      */
+    /**
+     * Gets the trend for a specific utility type or overall if type is null.
+     * @param user The user to get trend for
+     * @param type Type of utility or null for overall
+     * @param field Field to base trend on: "reading", "rate", or "total"
+     * @return Formatted trend string
+     * @throws SQLException If database operation fails
+     */
     public String getTrend(User user, String type, String field) throws SQLException {
-        String columnToSum;
-        switch (field.toLowerCase()) {
-            case "total":
-                columnToSum = "total_price";
-                break;
-            case "rate":
-                columnToSum = "rate";
-                break;
-            case "reading":
-            default:
-                columnToSum = "reading";
-                break;
-        }
+        String columnToSum = switch (field.toLowerCase()) {
+            case "total" -> "total_price";
+            case "rate" -> "rate";
+            default -> "reading";
+        };
 
-        String sql = "SELECT strftime('%Y-%m', date) AS month, SUM(" + columnToSum + ") as total " +
-                     "FROM readings " +
-                     "WHERE user_id = ? AND type = ? " +
-                     "GROUP BY month " +
-                     "ORDER BY month DESC " +
-                     "LIMIT 2";
+        String dateCol = "strftime('%Y-%m', date)";
+        String sql = (type != null)
+            ? "SELECT " + dateCol + " AS month, SUM(" + columnToSum + ") as total FROM readings WHERE user_id = ? AND type = ? GROUP BY month ORDER BY month DESC LIMIT 2"
+            : "SELECT " + dateCol + " AS month, SUM(" + columnToSum + ") as total FROM readings WHERE user_id = ? GROUP BY month ORDER BY month DESC LIMIT 2";
 
-        try (PreparedStatement statement = database_connection.prepareStatement(sql)) {
-            statement.setInt(1, user.getUser_Id());
-            statement.setString(2, type);
+        try (PreparedStatement stmt = database_connection.prepareStatement(sql)) {
+            stmt.setInt(1, user.getUser_Id());
+            if (type != null) stmt.setString(2, type);
 
-            try (ResultSet rs = statement.executeQuery()) {
+            try (ResultSet rs = stmt.executeQuery()) {
                 List<Double> totals = new ArrayList<>();
-                while (rs.next()) {
-                    totals.add(rs.getDouble("total"));
-                }
+                while (rs.next()) totals.add(rs.getDouble("total"));
 
                 if (totals.size() < 2) {
                     last_trend_percentage = 0;
-                    return "Not enough monthly data";
+                    return "Not enough data";
                 }
 
-                double latest = totals.get(0);
-                double previous = totals.get(1);
-
+                double current = totals.get(0), previous = totals.get(1);
                 if (previous > 0) {
-                    last_trend_percentage = ((latest - previous) / previous) * 100;
+                    last_trend_percentage = ((current - previous) / previous) * 100;
                     String sign = last_trend_percentage > 0 ? "+" : "";
                     return String.format("%s%.1f%% from previous month", sign, last_trend_percentage);
                 } else {
                     last_trend_percentage = 0;
-                    return "Previous month's reading is 0";
+                    return "Previous month's value is 0";
                 }
             }
         } catch (SQLException e) {
@@ -742,79 +520,6 @@ public class Reading_Manager {
         }
     }
 
-
-    
-    /**
-     * Gets the overall trend comparing current month to previous month across all utility types
-     * @param user User to get trend for
-     * @return Formatted string showing percentage change
-     * @throws SQLException If database operation fails
-     */
-    public String getTrend_Overall(User user, String field) throws SQLException {
-        LocalDate current_date = LocalDate.now();
-        LocalDate first_day_current_month = current_date.withDayOfMonth(1);
-        LocalDate first_day_previous_month = first_day_current_month.minusMonths(1);
-        LocalDate last_day_previous_month = first_day_current_month.minusDays(1);
-
-        String columnToSum;
-        switch (field.toLowerCase()) {
-            case "total":
-                columnToSum = "total_price";
-                break;
-            case "rate":
-                columnToSum = "rate";
-                break;
-            case "reading":
-            default:
-                columnToSum = "reading";
-                break;
-        }
-
-        String sql_current_month = "SELECT SUM(" + columnToSum + ") as total FROM readings WHERE user_id = ? AND date >= ? AND date <= ?";
-        String sql_previous_month = "SELECT SUM(" + columnToSum + ") as total FROM readings WHERE user_id = ? AND date >= ? AND date <= ?";
-
-        try {
-            double current_month_total = 0;
-            double previous_month_total = 0;
-
-            // Get current month total
-            try (PreparedStatement statement = database_connection.prepareStatement(sql_current_month)) {
-                statement.setInt(1, user.getUser_Id());
-                statement.setString(2, first_day_current_month.toString());
-                statement.setString(3, current_date.toString());
-                try (ResultSet result_set = statement.executeQuery()) {
-                    if (result_set.next() && result_set.getObject("total") != null) {
-                        current_month_total = result_set.getDouble("total");
-                    }
-                }
-            }
-
-            // Get previous month total
-            try (PreparedStatement statement = database_connection.prepareStatement(sql_previous_month)) {
-                statement.setInt(1, user.getUser_Id());
-                statement.setString(2, first_day_previous_month.toString());
-                statement.setString(3, last_day_previous_month.toString());
-                try (ResultSet result_set = statement.executeQuery()) {
-                    if (result_set.next() && result_set.getObject("total") != null) {
-                        previous_month_total = result_set.getDouble("total");
-                    }
-                }
-            }
-
-            if (previous_month_total > 0 && current_month_total > 0) {
-                last_trend_percentage = ((current_month_total - previous_month_total) / previous_month_total) * 100;
-                String sign = last_trend_percentage > 0 ? "+" : "";
-                return String.format("%s%.1f%% from last month", sign, last_trend_percentage);
-            }
-            last_trend_percentage = 0;
-            return "No previous data";
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            last_trend_percentage = 0;
-            throw e;
-        }
-    }
 
 
     
