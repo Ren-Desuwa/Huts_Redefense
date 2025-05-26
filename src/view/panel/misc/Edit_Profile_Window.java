@@ -129,6 +129,7 @@ public class Edit_Profile_Window extends JDialog {
     }
     
     private void create_Action_Listeners() {
+    	
 		btn_Save.addMouseListener(new MouseAdapter() {
 			@Override 
 			public void mouseClicked(MouseEvent e) { saveProfile(); }
@@ -181,6 +182,7 @@ public class Edit_Profile_Window extends JDialog {
         String username = tf_Username.getText().trim();
         String email = tf_Email.getText().trim();
 
+        // if empty, show error message
         if (username.isEmpty() || email.isEmpty()) {
             JOptionPane.showMessageDialog(this, 
                 "Username And Email cannot be empty", 
@@ -189,6 +191,7 @@ public class Edit_Profile_Window extends JDialog {
             return;
         }
 
+        // Validate email format
         if (!database_manager.getUserManager().validEmail(email)) {
             JOptionPane.showMessageDialog(this, 
                 "Please enter a valid email address", 
@@ -197,6 +200,7 @@ public class Edit_Profile_Window extends JDialog {
             return;
         }
 
+        // Check if username or email already exists in the database
         User existingUser = database_manager.getUserManager().getUserByUsername(username);
         if (existingUser != null && existingUser.getUser_Id() != current_user.getUser_Id()) {
             JOptionPane.showMessageDialog(this, 
@@ -207,6 +211,7 @@ public class Edit_Profile_Window extends JDialog {
         }
 
         existingUser = database_manager.getUserManager().getUserByEmail(email);
+        // Check if email already exists in the database
         if (existingUser != null && existingUser.getUser_Id() != current_user.getUser_Id()) {
             JOptionPane.showMessageDialog(this, 
                 "Email already exists", 
@@ -215,6 +220,7 @@ public class Edit_Profile_Window extends JDialog {
             return;
         }
         
+        // Check if the username and email are the same as the current user
         if (username.equals(current_user.getUsername()) && email.equals(current_user.getEmail())) {
 			JOptionPane.showMessageDialog(this, 
 				"No changes made", 
@@ -225,7 +231,6 @@ public class Edit_Profile_Window extends JDialog {
 		}
 
         try {
-           
             database_manager.getUserManager().updateUser(current_user, username, current_user.getPassword(), email);
             current_user.setUsername(username);
             current_user.setEmail(email);

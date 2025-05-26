@@ -61,37 +61,41 @@ public class Log_In_Window extends JFrame {
 
 	public Log_In_Window(Database_Manager database_manager) {
 		this.database_manager = database_manager;
-		
-		initialize_Window_Properties();
+		setTitle("Log In");
+		setResizable(false);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(400, 50, 450, 620);
+		setBackground(new Color(213, 213, 213));
+
 		initialize_UI_Components();
 		create_Action_Listeners();
 	}
 	
-	private void initialize_Window_Properties() {
-		setTitle("Log In");
-		setResizable(false);
+	private void initialize_UI_Components() {
 		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(400, 50, 450, 620);
-		setBackground(new Color(213, 213, 213));
+		//==============================================================================================
+		// UI CREATION - MAIN CONTENT PANE
+		//==============================================================================================
 		
+		// Create the main content pane with a light gray background
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setBackground(new Color(213, 213, 213));
-		setContentPane(contentPane);
 		contentPane.setLayout(null);
-	}
-	
-	private void initialize_UI_Components() {
+		setContentPane(contentPane);
+		
 		//==============================================================================================
 		// UI CREATION - TITLE SECTION
 		//==============================================================================================
+		
+		// Create a rounded panel for the title section
 		panel_LogIn_Title = new Rounded_Panel();
 		panel_LogIn_Title.setLayout(null);
 		panel_LogIn_Title.setBackground(Color.WHITE);
 		panel_LogIn_Title.setBounds(10, 11, 416, 97);
 		contentPane.add(panel_LogIn_Title);
 		
+		// Create and configure the title label
 		lbl_Title_LogIn = new JLabel("Log In");
 		lbl_Title_LogIn.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_Title_LogIn.setFont(new Font("Tahoma", Font.BOLD, 35));
@@ -101,11 +105,14 @@ public class Log_In_Window extends JFrame {
 		//==============================================================================================
 		// UI CREATION - USERNAME SECTION
 		//==============================================================================================
+		
+		// Create and configure the username label and text field
 		lbl_Username = new JLabel("Username");
 		lbl_Username.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lbl_Username.setBounds(10, 181, 114, 22);
 		contentPane.add(lbl_Username);
 							
+		// Create and configure the username text field
 		tf_Username = new JTextField();
 		tf_Username.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		tf_Username.setText("Enter Username");
@@ -116,11 +123,14 @@ public class Log_In_Window extends JFrame {
 		//==============================================================================================
 		// UI CREATION - PASSWORD SECTION
 		//==============================================================================================
+		
+		// Create and configure the password label and field
 		lbl_Password = new JLabel("Password");
 		lbl_Password.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lbl_Password.setBounds(10, 270, 114, 22);
 		contentPane.add(lbl_Password);
 		
+		// Create and configure the password field
 		pf_Password = new JPasswordField();
 		pf_Password.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		pf_Password.setText("Enter Password");
@@ -131,6 +141,8 @@ public class Log_In_Window extends JFrame {
 		//==============================================================================================
 		// UI CREATION - FORGOT PASSWORD
 		//==============================================================================================
+		
+		// Create and configure the forgot password label
 		lbl_Forgot_Password = new JLabel("Forgot Password?");
 		lbl_Forgot_Password.setHorizontalAlignment(SwingConstants.RIGHT);
 		lbl_Forgot_Password.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -141,6 +153,8 @@ public class Log_In_Window extends JFrame {
 		//==============================================================================================
 		// UI CREATION - LOGIN BUTTON
 		//==============================================================================================
+		
+		// Create and configure the login button
 		btn = new Rounded_Button("Log In", 25);
 		btn.setBackground(new Color(182, 182, 182));
 		btn.setForeground(Color.BLACK);
@@ -151,6 +165,8 @@ public class Log_In_Window extends JFrame {
 		//==============================================================================================
 		// UI CREATION - SIGN UP LINK
 		//==============================================================================================
+		
+		// Create and configure the sign-up label
 		lbl_SignUp = new JLabel("Sign Up");
 		lbl_SignUp.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lbl_SignUp.setBounds(181, 547, 70, 25);
@@ -160,6 +176,7 @@ public class Log_In_Window extends JFrame {
 		//==============================================================================================
 		// UI CREATION - ERROR INDICATORS
 		//==============================================================================================
+		
 		lbl_Incorrect_Signage1 = new JLabel("*");
 		lbl_Incorrect_Signage1.setForeground(new Color(255, 0, 0));
 		lbl_Incorrect_Signage1.setFont(new Font("Tahoma", Font.PLAIN, 20));
@@ -358,3 +375,64 @@ public class Log_In_Window extends JFrame {
 	    });
 	}
 }
+/*
+ * File: Log_In_Window.java
+ *
+ * Description:
+ * This file defines the `Log_In_Window` class, which is a `JFrame` used for user authentication.
+ * It provides a graphical interface for users to log in to the application by entering their username and password.
+ * The class interacts with the `Database_Manager` to validate user credentials and navigate to the main application window upon successful login.
+ *
+ * Variables:
+ *
+ * - **Database and User Fields**:
+ *   - `database_manager` (Database_Manager): Manages database operations, including user-related actions.
+ *
+ * - **UI Components**:
+ *   - `contentPane` (JPanel): The main container for the window's components.
+ *   - `panel_LogIn_Title` (Rounded_Panel): A rounded panel for displaying the title of the login window.
+ *   - `lbl_Title_LogIn` (JLabel): Displays the title "Log In" at the top of the window.
+ *   - `lbl_Username`, `lbl_Password` (JLabel): Labels for the username and password input fields.
+ *   - `tf_Username` (JTextField): Input field for the user's username.
+ *   - `pf_Password` (JPasswordField): Input field for the user's password.
+ *   - `lbl_Forgot_Password` (JLabel): A clickable label for navigating to the password retrieval window.
+ *   - `lbl_SignUp` (JLabel): A clickable label for navigating to the sign-up window.
+ *   - `lbl_Incorrect_Signage1`, `lbl_Incorrect_Signage2` (JLabel): Labels to indicate validation errors for specific fields.
+ *   - `btn` (Rounded_Button): Button to submit the login form.
+ *
+ * Functions:
+ *
+ * 1. **Constructor**:
+ *    - `Log_In_Window(Database_Manager)`:
+ *      - Initializes the login window with the provided database manager.
+ *      - Calls `initialize_UI_Components()` to set up the UI and `create_Action_Listeners()` to add event listeners.
+ *
+ * 2. **initialize_UI_Components()**:
+ *    - Configures the layout and properties of the login window.
+ *    - Creates and positions all UI components, including labels, text fields, and buttons.
+ *    - Organizes the components into sections for title, username, password, and navigation links.
+ *
+ * 3. **create_Action_Listeners()**:
+ *    - Adds event listeners to handle user interactions with the input fields, buttons, and labels.
+ *    - Handles focus events for input fields to manage placeholder text.
+ *    - Handles mouse events for the "Log In" button, "Forgot Password?" label, and "Sign Up" label.
+ *
+ * 4. **Login()**:
+ *    - Validates the input fields and authenticates the user credentials.
+ *    - Key conditions:
+ *      - Checks if any input field is empty or contains placeholder text and displays an error message if true.
+ *      - If the username and password do not match, displays an error message and shows the "Forgot Password?" label.
+ *    - If authentication is successful:
+ *      - Retrieves the user from the database.
+ *      - Displays a success message and navigates to the `Main_Frame` for the authenticated user.
+ *
+ * 5. **openSignUp()**:
+ *    - Navigates to the `Sign_Up_Window` when the "Sign Up" label is clicked.
+ *
+ * 6. **openForgotPassword()**:
+ *    - Navigates to the `Retrieve_Window` when the "Forgot Password?" label is clicked.
+ *
+ * Usage:
+ * This class is used to provide a user-friendly interface for logging in to the application.
+ * It ensures that the input data is validated before authenticating the user and provides feedback in case of errors or success.
+ */

@@ -119,6 +119,7 @@ public class Profile_Panel extends JPanel {
     	// UI COMPONENTS - MAIN PANEL
     	//=============================================================================
     	
+    	// Create the main panel with rounded corners and a light background
         panel_Main = new Rounded_Panel(100, Color.BLACK, 0);
         panel_Main.setBackground(new Color(250, 250, 250));
         panel_Main.setLayout(new BorderLayout());
@@ -128,18 +129,21 @@ public class Profile_Panel extends JPanel {
         // UI COMPONENTS - HEADER
         //=============================================================================
        
+        // Create the header panel with a specific background color and preferred size
         panel_Header = new JPanel();
         panel_Header.setBackground(new Color(68, 162, 255));
         panel_Header.setPreferredSize(new Dimension(0, 300));
         panel_Header.setLayout(null);
         panel_Main.add(panel_Header, BorderLayout.NORTH);
         
+        // circle panel for profile image
         panel_Profile_Image = new Circle_Panel(245);
         panel_Profile_Image.setBackground(new Color(68, 162, 255));
         panel_Profile_Image.setBounds(10, 23, 250, 250);
         panel_Profile_Image.setLayout(null);
         panel_Header.add(panel_Profile_Image);
         
+        // label for profile initials
         lbl_Profile_Initials = new JLabel("UN");
         lbl_Profile_Initials.setHorizontalAlignment(SwingConstants.CENTER);
         lbl_Profile_Initials.setBounds(10, 11, 230, 239);
@@ -151,29 +155,32 @@ public class Profile_Panel extends JPanel {
         // UI COMPONENTS - HEADER USER INFO
         //=============================================================================
         
+        // Labels for user information
         lbl_Email = new JLabel("Email@gmail.com");
         lbl_Email.setForeground(Color.WHITE);
         lbl_Email.setFont(new Font("Tahoma", Font.PLAIN, 20));
         lbl_Email.setBounds(270, 177, 263, 55);
         panel_Header.add(lbl_Email);
         
+        // Label for username
         lbl_Username = new JLabel("User Name");
         lbl_Username.setForeground(Color.WHITE);
         lbl_Username.setFont(new Font("Tahoma", Font.PLAIN, 44));
         lbl_Username.setBounds(270, 107, 293, 82);
         panel_Header.add(lbl_Username);
         
+        // Label for edit profile link
         lbl_Edit_Profile = new JLabel("Edit Profile");
         lbl_Edit_Profile.setForeground(Color.WHITE);
         lbl_Edit_Profile.setFont(new Font("Tahoma", Font.PLAIN, 20));
         lbl_Edit_Profile.setBounds(826, 23, 110, 25);
-        
         panel_Header.add(lbl_Edit_Profile);
     
         //=============================================================================
         // UI COMPONENTS - CONTENT
         //=============================================================================
         
+        // Create the content panel with a specific background color and layout
         panel_Content = new JPanel();
         panel_Content.setBackground(new Color(250, 250, 250));
         panel_Content.setLayout(null);
@@ -183,12 +190,14 @@ public class Profile_Panel extends JPanel {
         // UI COMPONENTS - CONTENT - ACCOUNT INFO
         //=============================================================================
         
+        // Label for account information section
         lbl_Account_Information = new JLabel("Account Inforamtion");
         lbl_Account_Information.setForeground(Color.BLACK);
         lbl_Account_Information.setFont(new Font("Tahoma", Font.PLAIN, 20));
         lbl_Account_Information.setBounds(10, 11, 263, 25);
         panel_Content.add(lbl_Account_Information);
         
+        // Separator for account information section
         separator_Account_Info = new JSeparator(SwingConstants.HORIZONTAL);
         separator_Account_Info.setForeground(new Color(64, 64, 64));
         separator_Account_Info.setBounds(10, 42, 455, 25);
@@ -198,12 +207,14 @@ public class Profile_Panel extends JPanel {
         // UI COMPONENTS - CONTENT - ACCOUNT INFO - USERNAME
         //=============================================================================
         
+        // Label for username property
         lbl_Username_Prop = new JLabel("Username");
         lbl_Username_Prop.setForeground(Color.BLACK);
         lbl_Username_Prop.setFont(new Font("Tahoma", Font.PLAIN, 20));
         lbl_Username_Prop.setBounds(20, 58, 134, 25);
         panel_Content.add(lbl_Username_Prop);
         
+        // Label for username value
         lbl_Username_Value = new JLabel("Username");
         lbl_Username_Value.setForeground(Color.BLACK);
         lbl_Username_Value.setFont(new Font("Tahoma", Font.PLAIN, 20));
@@ -214,12 +225,14 @@ public class Profile_Panel extends JPanel {
         // UI COMPONENTS - CONTENT - ACCOUNT INFO - EMAIL
         //=============================================================================
         
+        // Label for email property
         lbl_Email_Prop = new JLabel("Email");
         lbl_Email_Prop.setForeground(Color.BLACK);
         lbl_Email_Prop.setFont(new Font("Tahoma", Font.PLAIN, 20));
         lbl_Email_Prop.setBounds(20, 94, 134, 25);
         panel_Content.add(lbl_Email_Prop);
         
+        // Label for email value
         lbl_Email_Value = new JLabel("Email@gmail.com");
         lbl_Email_Value.setForeground(Color.BLACK);
         lbl_Email_Value.setFont(new Font("Tahoma", Font.PLAIN, 20));
@@ -230,12 +243,14 @@ public class Profile_Panel extends JPanel {
         // UI COMPONENTS - CONTENT - ACCOUNT INFO - TOTAL SUBMISSIONS
         //=============================================================================
         
+        // Label for total submissions property
         lbl_Total_Submissions_Prop = new JLabel("Total Submissions");
         lbl_Total_Submissions_Prop.setForeground(Color.BLACK);
         lbl_Total_Submissions_Prop.setFont(new Font("Tahoma", Font.PLAIN, 20));
         lbl_Total_Submissions_Prop.setBounds(20, 130, 165, 25);
         panel_Content.add(lbl_Total_Submissions_Prop);
         
+        // Label for total submissions value
         lbl_Total_Submissions_Value = new JLabel();
         lbl_Total_Submissions_Value.setForeground(Color.BLACK);
         lbl_Total_Submissions_Value.setFont(new Font("Tahoma", Font.PLAIN, 20));
@@ -246,12 +261,14 @@ public class Profile_Panel extends JPanel {
         // UI COMPONENTS - CONTENT - ACCOUNT INFO - STATISTICS
         //=============================================================================
         
+        // Create the statistics panel with a specific background color and layout
         panel_Statistics = new JPanel();
         panel_Statistics.setBackground(new Color(250, 250, 250));
         panel_Statistics.setBounds(475, 11, 471, 220);
         panel_Statistics.setLayout(null);
         panel_Content.add(panel_Statistics);
         
+        // Label for usage statistics section
         lbl_Usage_Statistics = new JLabel("Utility Submissions");
         lbl_Usage_Statistics.setBackground(new Color(250, 250, 250));
         lbl_Usage_Statistics.setForeground(Color.BLACK);
@@ -259,6 +276,7 @@ public class Profile_Panel extends JPanel {
         lbl_Usage_Statistics.setBounds(10, 0, 263, 25);
         panel_Statistics.add(lbl_Usage_Statistics);
         
+        // Separator for usage statistics section
         separator_Statistics = new JSeparator(SwingConstants.HORIZONTAL);
         separator_Statistics.setForeground(Color.DARK_GRAY);
         separator_Statistics.setBounds(10, 29, 451, 25);
@@ -268,12 +286,14 @@ public class Profile_Panel extends JPanel {
         // UI COMPONENTS - CONTENT - ACCOUNT INFO - STATISTICS - ELECTRICITY
         //=============================================================================
         
+        // Create the electricity statistics panel with a specific background color and layout
         panel_Electricity_Stats = new Rounded_Panel(15);
         panel_Electricity_Stats.setBackground(new Color(218, 218, 218));
         panel_Electricity_Stats.setBounds(10, 36, 140, 174);
         panel_Electricity_Stats.setLayout(null);
         panel_Statistics.add(panel_Electricity_Stats);
         
+        // Labels for electricity statistics
         lbl_Electricity_Count = new JLabel("12");
         lbl_Electricity_Count.setHorizontalAlignment(SwingConstants.CENTER);
         lbl_Electricity_Count.setForeground(Color.BLACK);
@@ -281,6 +301,7 @@ public class Profile_Panel extends JPanel {
         lbl_Electricity_Count.setBounds(0, 11, 140, 72);
         panel_Electricity_Stats.add(lbl_Electricity_Count);
         
+        // Label for electricity label
         lbl_Electricity_Label = new JLabel("Electricity");
         lbl_Electricity_Label.setHorizontalAlignment(SwingConstants.CENTER);
         lbl_Electricity_Label.setForeground(Color.BLACK);
@@ -288,6 +309,7 @@ public class Profile_Panel extends JPanel {
         lbl_Electricity_Label.setBounds(0, 90, 140, 25);
         panel_Electricity_Stats.add(lbl_Electricity_Label);
         
+        // Label for electricity readings
         lbl_Electricity_Readings = new JLabel("Readings");
         lbl_Electricity_Readings.setHorizontalAlignment(SwingConstants.CENTER);
         lbl_Electricity_Readings.setForeground(Color.BLACK);
@@ -295,18 +317,21 @@ public class Profile_Panel extends JPanel {
         lbl_Electricity_Readings.setBounds(0, 115, 140, 25);
         panel_Electricity_Stats.add(lbl_Electricity_Readings);
         
+        // Tooltip for electricity statistics panel
         tooltip_Electricity = new Following_Tool_Tip(panel_Electricity_Stats, "Open Electricity Reading?", 500);
     
         //=============================================================================
         // UI COMPONENTS - CONTENT - ACCOUNT INFO - STATISTICS - WATER
         //=============================================================================
         
+        // Create the water statistics panel with a specific background color and layout
         panel_Water_Stats = new Rounded_Panel(15);
         panel_Water_Stats.setBackground(new Color(218, 218, 218));
         panel_Water_Stats.setBounds(166, 36, 140, 174);
         panel_Water_Stats.setLayout(null);
         panel_Statistics.add(panel_Water_Stats);
         
+        // Labels for water statistics
         lbl_Water_Readings = new JLabel("Readings");
         lbl_Water_Readings.setHorizontalAlignment(SwingConstants.CENTER);
         lbl_Water_Readings.setForeground(Color.BLACK);
@@ -314,6 +339,7 @@ public class Profile_Panel extends JPanel {
         lbl_Water_Readings.setBounds(0, 115, 140, 25);
         panel_Water_Stats.add(lbl_Water_Readings);
         
+        // Label for water label
         lbl_Water_Label = new JLabel("Water");
         lbl_Water_Label.setHorizontalAlignment(SwingConstants.CENTER);
         lbl_Water_Label.setForeground(Color.BLACK);
@@ -321,6 +347,7 @@ public class Profile_Panel extends JPanel {
         lbl_Water_Label.setBounds(0, 90, 140, 25);
         panel_Water_Stats.add(lbl_Water_Label);
         
+        // Label for water count
         lbl_Water_Count = new JLabel("6");
         lbl_Water_Count.setHorizontalAlignment(SwingConstants.CENTER);
         lbl_Water_Count.setForeground(Color.BLACK);
@@ -328,18 +355,21 @@ public class Profile_Panel extends JPanel {
         lbl_Water_Count.setBounds(0, 11, 140, 72);
         panel_Water_Stats.add(lbl_Water_Count);
         
+        // Tooltip for water statistics panel
         tooltip_Water = new Following_Tool_Tip(panel_Water_Stats, "Open Water Reading?", 500);
     
         //=============================================================================
         // UI COMPONENTS - CONTENT - ACCOUNT INFO - STATISTICS - GAS
         //=============================================================================
         
+        // Create the gas statistics panel with a specific background color and layout
         panel_Gas_Stats = new Rounded_Panel(15);
         panel_Gas_Stats.setBackground(new Color(218, 218, 218));
         panel_Gas_Stats.setBounds(321, 36, 140, 174);
         panel_Gas_Stats.setLayout(null);
         panel_Statistics.add(panel_Gas_Stats);
         
+        // Labels for gas statistics
         lbl_Gas_Readings = new JLabel("Readings");
         lbl_Gas_Readings.setHorizontalAlignment(SwingConstants.CENTER);
         lbl_Gas_Readings.setForeground(Color.BLACK);
@@ -347,6 +377,7 @@ public class Profile_Panel extends JPanel {
         lbl_Gas_Readings.setBounds(0, 115, 140, 25);
         panel_Gas_Stats.add(lbl_Gas_Readings);
         
+        // Label for gas label
         lbl_Gas_Label = new JLabel("Gas");
         lbl_Gas_Label.setHorizontalAlignment(SwingConstants.CENTER);
         lbl_Gas_Label.setForeground(Color.BLACK);
@@ -354,6 +385,7 @@ public class Profile_Panel extends JPanel {
         lbl_Gas_Label.setBounds(0, 90, 140, 25);
         panel_Gas_Stats.add(lbl_Gas_Label);
         
+        // Label for gas count
         lbl_Gas_Count = new JLabel("4");
         lbl_Gas_Count.setHorizontalAlignment(SwingConstants.CENTER);
         lbl_Gas_Count.setForeground(Color.BLACK);
@@ -361,12 +393,20 @@ public class Profile_Panel extends JPanel {
         lbl_Gas_Count.setBounds(0, 11, 140, 72);
         panel_Gas_Stats.add(lbl_Gas_Count);
         
+        // Tooltip for gas statistics panel
         tooltip_Gas = new Following_Tool_Tip(panel_Gas_Stats, "Open Gas Reading?", 500);
     
         //=============================================================================
         // UI COMPONENTS - CONTENT - ACCOUNT INFO - STATISTICS - BUTTONS
         //=============================================================================
+
+        // Label for actions section
+        separator_Actions = new JSeparator(SwingConstants.HORIZONTAL);
+        separator_Actions.setForeground(Color.DARK_GRAY);
+        separator_Actions.setBounds(10, 250, 926, 25);
+        panel_Content.add(separator_Actions);
         
+        // Button to change password
         btn_Change_Password = new Rounded_Button("Change Password", 25);
         btn_Change_Password.setBounds(760, 286, 165, 40);
         btn_Change_Password.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -378,10 +418,6 @@ public class Profile_Panel extends JPanel {
         btn_Change_Password.setFont(new Font("Arial", Font.PLAIN, 16));
         panel_Content.add(btn_Change_Password);
         
-        separator_Actions = new JSeparator(SwingConstants.HORIZONTAL);
-        separator_Actions.setForeground(Color.DARK_GRAY);
-        separator_Actions.setBounds(10, 250, 926, 25);
-        panel_Content.add(separator_Actions);
     }
     
     private void createActionListeners() {
@@ -476,3 +512,77 @@ public class Profile_Panel extends JPanel {
 		});
 	}
 }
+
+/*
+ * File: Profile_Panel.java
+ *
+ * Description:
+ * This file defines the `Profile_Panel` class, which is a `JPanel` used for displaying and managing the user's profile information.
+ * It provides a graphical interface for viewing account details, utility submission statistics, and performing actions such as editing the profile or changing the password.
+ * The class interacts with the `Database_Manager` to fetch and update user-related data.
+ *
+ * Variables:
+ *
+ * - **Data Fields**:
+ *   - `database_manager` (Database_Manager): Manages database operations, including user and reading-related actions.
+ *   - `current_user` (User): Represents the currently logged-in user.
+ *   - `main_frame` (Main_Frame): Reference to the main application frame for navigation.
+ *   - `profile_Panel` (Profile_Panel): Reference to the current instance of the profile panel.
+ *
+ * - **UI Components**:
+ *   - `panel_Main` (Rounded_Panel): The main container for the profile panel.
+ *   - `panel_Header` (JPanel): The header section containing the user's profile image and basic information.
+ *   - `panel_Content` (JPanel): The content section containing account details and statistics.
+ *   - `panel_Profile_Image` (Circle_Panel): A circular panel displaying the user's initials as a profile image.
+ *   - `panel_Statistics` (JPanel): A container for utility submission statistics.
+ *   - `panel_Electricity_Stats`, `panel_Water_Stats`, `panel_Gas_Stats` (Rounded_Panel): Panels displaying statistics for electricity, water, and gas submissions.
+ *
+ * - **Labels**:
+ *   - `lbl_Profile_Initials` (JLabel): Displays the user's initials in the profile image panel.
+ *   - `lbl_Edit_Profile` (JLabel): A clickable label for opening the edit profile window.
+ *   - `lbl_Email`, `lbl_Username` (JLabel): Display the user's email and username in the header.
+ *   - `lbl_Account_Information`, `lbl_Username_Prop`, `lbl_Username_Value`, `lbl_Email_Prop`, `lbl_Email_Value`, `lbl_Total_Submissions_Prop`, `lbl_Total_Submissions_Value` (JLabel): Display account details in the content section.
+ *   - `lbl_Usage_Statistics`, `lbl_Electricity_Count`, `lbl_Electricity_Label`, `lbl_Electricity_Readings`, `lbl_Water_Count`, `lbl_Water_Label`, `lbl_Water_Readings`, `lbl_Gas_Count`, `lbl_Gas_Label`, `lbl_Gas_Readings` (JLabel): Display utility submission statistics.
+ *
+ * - **Buttons**:
+ *   - `btn_Change_Password` (Rounded_Button): Button to open the change password window.
+ *
+ * - **Separators**:
+ *   - `separator_Account_Info`, `separator_Statistics`, `separator_Actions` (JSeparator): Separators for organizing sections in the content panel.
+ *
+ * - **Tooltips**:
+ *   - `tooltip_Electricity`, `tooltip_Water`, `tooltip_Gas` (Following_Tool_Tip): Tooltips for the utility statistics panels.
+ *
+ * Functions:
+ *
+ * 1. **Constructor**:
+ *    - `Profile_Panel(Main_Frame, Database_Manager, User)`:
+ *      - Initializes the profile panel with the provided main frame, database manager, and current user.
+ *      - Calls `initialize_UI()` to set up the UI, `createActionListeners()` to add event listeners, and `updateUserInfo()` to populate the panel with user data.
+ *
+ * 2. **initialize_UI()**:
+ *    - Sets up the layout and properties of the profile panel.
+ *    - Creates and positions all UI components, including the header, content, and statistics sections.
+ *
+ * 3. **createActionListeners()**:
+ *    - Adds event listeners to buttons and labels for handling user interactions.
+ *    - Handles actions such as opening the edit profile window, changing the password, and navigating to utility panels.
+ *
+ * 4. **updateUserInfo(User)**:
+ *    - Updates the profile panel with the current user's information.
+ *    - Fetches and displays the user's username, email, total submissions, and utility statistics.
+ *    - Updates the profile initials based on the username.
+ *
+ * 5. **createChangePasswordWindow()**:
+ *    - Opens the `Change_Password_Window` dialog for changing the user's password.
+ *
+ * 6. **openEditProfileWindow()**:
+ *    - Opens the `Edit_Profile_Window` dialog for editing the user's profile.
+ *
+ * 7. **addPanelClickListener(JPanel, Runnable)**:
+ *    - Adds a mouse click listener to a panel to trigger a specified action.
+ *
+ * Usage:
+ * This class is used to provide a user-friendly interface for managing the user's profile.
+ * It allows the user to view account details, utility submission statistics, and perform actions such as editing the profile or changing the password.
+ */

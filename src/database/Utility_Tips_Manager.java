@@ -97,3 +97,54 @@ public class Utility_Tips_Manager {
 		return tips.get(random.nextInt(tips.size()));
 	}
 }
+
+/*
+ * File: Utility_Tips_Manager.java
+ *
+ * Description:
+ * This file defines the `Utility_Tips_Manager` class, which is responsible for managing and providing utility-saving tips for electricity, water, and gas. 
+ * It stores a collection of tips for each utility type and provides methods to retrieve random tips. 
+ * The class also includes functionality to assign colors and labels based on the type of utility tip.
+ *
+ * Variables:
+ * - `instance` (Utility_Tips_Manager): A singleton instance of the `Utility_Tips_Manager` class to ensure only one instance exists.
+ * - `tipsByUtility` (Map<String, ArrayList<String>>): A map that associates each utility type (electricity, water, gas) with a list of tips.
+ * - `random` (Random): A random number generator used to select random tips and utility types.
+ * - `utilityTypes` (String[]): An array of utility types ("electricity", "water", "gas").
+ * - `randomIndex` (int): Stores the index of the randomly selected utility type.
+ *
+ * Constructors:
+ * 1. `Utility_Tips_Manager()`:
+ *    - Private constructor to initialize the singleton instance.
+ *    - Populates the `tipsByUtility` map with predefined tips for electricity, water, and gas.
+ *
+ * Methods:
+ * 1. `getInstance()`:
+ *    - Returns the singleton instance of the `Utility_Tips_Manager` class.
+ *    - Creates the instance if it does not already exist.
+ *
+ * 2. `getType()`:
+ *    - Returns the label for the currently selected utility type based on the `randomIndex`.
+ *    - Possible return values: "Electricity Tip", "Water Tip", "Gas Tip", or "Unknown Tip".
+ *
+ * 3. `setcolor()`:
+ *    - Returns a `Color` object corresponding to the currently selected utility type based on the `randomIndex`.
+ *    - Possible colors:
+ *      - Yellow for electricity (`new Color(255, 167, 0)`).
+ *      - Blue for water (`new Color(79, 129, 189)`).
+ *      - Red for gas (`new Color(255, 77, 0)`).
+ *      - Black for unknown types (`new Color(0, 0, 0)`).
+ *
+ * 4. `getRandomTip()`:
+ *    - Selects a random utility type and retrieves a random tip from the corresponding list in `tipsByUtility`.
+ *    - Updates the `randomIndex` to reflect the selected utility type.
+ *
+ * 5. `getRandomTip(String utilityType)`:
+ *    - Retrieves a random tip for the specified utility type from the `tipsByUtility` map.
+ *    - Assumes the provided utility type is valid and exists in the map.
+ *
+ * Usage:
+ * The `Utility_Tips_Manager` class is used to provide utility-saving tips to users in the application. 
+ * It ensures that tips are categorized by utility type and can be retrieved randomly or based on a specific type. 
+ * The class also provides visual cues (colors and labels) to enhance the user interface when displaying tips.
+ */

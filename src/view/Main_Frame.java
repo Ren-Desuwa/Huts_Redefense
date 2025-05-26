@@ -55,53 +55,67 @@ public class Main_Frame extends JFrame {
 		this.database_manager = database_manager;
 		this.current_user = user;
 		
-		initializeFrame();
-		createPanels();
-        initializeComponents();
-        addComponentsToFrame();
-        setupActionListeners();
+		setTitle("House Utility Tracking System");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(50, 50, 1200, 725);
+        setBackground(new Color(213, 213, 213));
+        setResizable(false);
+
+        initialize_UI();
+        side_panel_Setup();
+        create_Action_Listeners();
 		
 		content_pane.add(side_panel, BorderLayout.WEST);
 		content_pane.add(card_panel, BorderLayout.CENTER);
 		
 	}
 	
-	private void initializeFrame() {
-		setTitle("Main Frame");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(50, 50, 1200, 725);
-        setBackground(new Color(213, 213, 213));
-        setResizable(false);
+	
+	private void initialize_UI() {
+		
+		//===========================================================================================================
+		// MAIN FRAME SETUP
+		//===========================================================================================================
+		
+		// Set the main content pane with a BorderLayout
         content_pane = new JPanel();
         content_pane.setLayout(new BorderLayout(0, 0));
         setContentPane(content_pane);
-    }
-	
-	private void createPanels() {
-		side_panel = new JPanel();
-		side_panel.setBackground(new Color(213, 213, 213));
-		side_panel.setPreferredSize(new Dimension(200, getHeight()));
-        side_panel.setLayout(new BoxLayout(side_panel, BoxLayout.Y_AXIS));
+		
+        //===========================================================================================================
+        // CARD PANEL SETUP
+        //===========================================================================================================
         
+        // Create the card panel with a CardLayout
         card_layout = new CardLayout();
         card_panel = new JPanel();
         card_panel.setLayout(card_layout);
         
+        // Create and add the individual panels to the card panel
         home_panel = new Home_Panel(database_manager, current_user);
         electricity_panel = new Electricity_Panel(database_manager, current_user);
         water_panel = new Water_Panel(database_manager, current_user);
         gas_panel = new Gas_Panel(database_manager, current_user);
         profile_panel = new Profile_Panel(this,database_manager, current_user);
         
+        // Add the panels to the card panel with their respective names
         card_panel.add(home_panel, HOME_PANEL);
         card_panel.add(electricity_panel, ELECTRICITY_PANEL);
         card_panel.add(water_panel, WATER_PANEL);
         card_panel.add(gas_panel, GAS_PANEL);
         card_panel.add(profile_panel, PROFILE_PANEL);
-	}
-	
-	private void initializeComponents() {
-		side_home_button = new Rounded_Button("Home");
+        
+        //===========================================================================================================
+        // SIDE PANEL SETUP
+        //===========================================================================================================
+        
+        // Create the side panel with a vertical BoxLayout
+        side_panel = new JPanel();
+        side_panel.setBackground(new Color(213, 213, 213));
+        side_panel.setPreferredSize(new Dimension(200, getHeight()));
+        side_panel.setLayout(new BoxLayout(side_panel, BoxLayout.Y_AXIS));
+        
+        side_home_button = new Rounded_Button("Home");
 		side_electricity_button = new Rounded_Button("Electricity");
 		side_water_button = new Rounded_Button("Water");
 		side_gas_button = new Rounded_Button("Gas");
@@ -155,13 +169,14 @@ public class Main_Frame extends JFrame {
 		side_logout_button.setFocusPainted(false);
 		side_logout_button.setBorderPainted(false);
 		side_logout_button.setFont(new Font("Arial", Font.PLAIN, 16));
-		
 	}
 	
-	private void addComponentsToFrame() {
+	private void side_panel_Setup() {
+		// Set the background color of the side panel
 		content_pane.add(side_panel, BorderLayout.WEST);
 		content_pane.add(card_panel, BorderLayout.CENTER);
 		
+		// Add components to the side panel with spacing
 		side_panel.add(Box.createRigidArea(new Dimension(0, 20)));  // Top margin
 		side_panel.add(side_home_button);
 		side_panel.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -179,7 +194,7 @@ public class Main_Frame extends JFrame {
 		
 	}
 	
-	private void setupActionListeners() {
+	private void create_Action_Listeners() {
 	    // Add hover effects to all sidebar buttons
 	    addHoverEffectToButton(side_home_button);
 	    addHoverEffectToButton(side_electricity_button);
@@ -239,5 +254,74 @@ public class Main_Frame extends JFrame {
 	public void showHomePanel() {card_layout.show(card_panel, HOME_PANEL);}
 	public void showProfilePanel() {card_layout.show(card_panel, PROFILE_PANEL);}
 
-	
 }
+
+/*
+ * File: Main_Frame.java
+ *
+ * Description:
+ * This file defines the `Main_Frame` class, which is the main application window for the House Utility Tracking System.
+ * It provides a graphical interface for navigating between different panels, including Home, Electricity, Water, Gas, and Profile panels.
+ * The class uses a `CardLayout` to switch between panels and a side panel for navigation.
+ *
+ * Variables:
+ *
+ * - **Database and User Fields**:
+ *   - `database_manager` (Database_Manager): Manages database operations, including user and utility-related actions.
+ *   - `current_user` (User): Represents the currently logged-in user.
+ *
+ * - **Main Components**:
+ *   - `content_pane` (JPanel): The main container for the frame's components.
+ *   - `side_panel` (JPanel): The vertical navigation panel on the left side of the frame.
+ *   - `card_panel` (JPanel): The main panel that uses a `CardLayout` to switch between different panels.
+ *   - `card_layout` (CardLayout): The layout manager for the `card_panel`.
+ *
+ * - **Panels**:
+ *   - `home_panel` (Home_Panel): Displays the home screen with an overview of the application.
+ *   - `electricity_panel` (Electricity_Panel): Displays and manages electricity-related data.
+ *   - `water_panel` (Water_Panel): Displays and manages water-related data.
+ *   - `gas_panel` (Gas_Panel): Displays and manages gas-related data.
+ *   - `profile_panel` (Profile_Panel): Displays and manages the user's profile information.
+ *
+ * - **Side Panel Buttons**:
+ *   - `side_home_button` (JButton): Button to navigate to the Home panel.
+ *   - `side_electricity_button` (JButton): Button to navigate to the Electricity panel.
+ *   - `side_water_button` (JButton): Button to navigate to the Water panel.
+ *   - `side_gas_button` (JButton): Button to navigate to the Gas panel.
+ *   - `side_profile_button` (JButton): Button to navigate to the Profile panel.
+ *   - `side_logout_button` (JButton): Button to log out of the application.
+ *
+ * Functions:
+ *
+ * 1. **Constructor**:
+ *    - `Main_Frame(Database_Manager, User)`:
+ *      - Initializes the main frame with the provided database manager and current user.
+ *      - Calls `initialize_UI()` to set up the UI, `side_panel_Setup()` to configure the side panel, and `create_Action_Listeners()` to add event listeners.
+ *
+ * 2. **initialize_UI()**:
+ *    - Configures the layout and properties of the main frame.
+ *    - Creates and positions the `content_pane`, `card_panel`, and individual panels (Home, Electricity, Water, Gas, Profile).
+ *
+ * 3. **side_panel_Setup()**:
+ *    - Configures the side panel with navigation buttons.
+ *    - Adds spacing and alignment for a clean layout.
+ *
+ * 4. **create_Action_Listeners()**:
+ *    - Adds event listeners to the side panel buttons to handle navigation and user interactions.
+ *    - Handles hover effects for buttons and click actions to switch between panels or log out.
+ *
+ * 5. **addHoverEffectToButton(JButton)**:
+ *    - Adds hover effects to a button by changing its background color when the mouse enters or exits.
+ *
+ * 6. **Panel Navigation Methods**:
+ *    - `showElectricityPanel()`: Switches to the Electricity panel.
+ *    - `showWaterPanel()`: Switches to the Water panel.
+ *    - `showGasPanel()`: Switches to the Gas panel.
+ *    - `showHomePanel()`: Switches to the Home panel.
+ *    - `showProfilePanel()`: Switches to the Profile panel.
+ *
+ * Usage:
+ * This class serves as the main entry point for the application after a successful login.
+ * It provides a user-friendly interface for navigating between different panels and managing utility data and user profiles.
+ */
+

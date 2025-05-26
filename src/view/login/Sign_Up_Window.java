@@ -85,12 +85,15 @@ public class Sign_Up_Window extends JFrame {
 		//==============================================================================================
 		// UI CREATION - TITLE SECTION
 		//==============================================================================================
+		
+		// Create a rounded panel for the title
 		panel_SignUp_Title = new Rounded_Panel();
 		panel_SignUp_Title.setLayout(null);
 		panel_SignUp_Title.setBackground(Color.WHITE);
 		panel_SignUp_Title.setBounds(10, 11, 416, 97);
 		contentPane.add(panel_SignUp_Title);
 		
+		// Create and configure the title label
 		lbl_Title_SignUp = new JLabel("Sign Up");
 		lbl_Title_SignUp.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_Title_SignUp.setFont(new Font("Tahoma", Font.BOLD, 35));
@@ -100,11 +103,14 @@ public class Sign_Up_Window extends JFrame {
 		//==============================================================================================
 		// UI CREATION - USERNAME SECTION
 		//==============================================================================================
+		
+		// Create and configure the username label and text field
 		lbl_Username = new JLabel("Username");
 		lbl_Username.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lbl_Username.setBounds(12, 119,114, 22);
 		contentPane.add(lbl_Username);
 		
+		// Create and configure the username text field
 		tf_Username = new JTextField();
 		tf_Username.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		tf_Username.setText("Enter Username");
@@ -115,11 +121,14 @@ public class Sign_Up_Window extends JFrame {
 		//==============================================================================================
 		// UI CREATION - EMAIL SECTION
 		//==============================================================================================
+		
+		// Create and configure the email label and text field
 		lbl_Email = new JLabel("Email");
 		lbl_Email.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lbl_Email.setBounds(12, 207, 114, 22);
 		contentPane.add(lbl_Email);
 		
+		// Create and configure the email text field
 		tf_Email = new JTextField();
 		tf_Email.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		tf_Email.setText("Enter Email");
@@ -130,11 +139,14 @@ public class Sign_Up_Window extends JFrame {
 		//==============================================================================================
 		// UI CREATION - PASSWORD SECTION
 		//==============================================================================================
+		
+		// Create and configure the password label and password field
 		lbl_Password = new JLabel("Password");
 		lbl_Password.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lbl_Password.setBounds(12, 296, 114, 22);
 		contentPane.add(lbl_Password);
 		
+		// Create and configure the password field
 		pf_Password = new JPasswordField();
 		pf_Password.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		pf_Password.setText("Enter Password");
@@ -145,11 +157,14 @@ public class Sign_Up_Window extends JFrame {
 		//==============================================================================================
 		// UI CREATION - CONFIRM PASSWORD SECTION
 		//==============================================================================================
+		
+		// Create and configure the confirm password label and password field
 		lbl_Confirm_Password = new JLabel("Confirm Password");
 		lbl_Confirm_Password.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lbl_Confirm_Password.setBounds(12, 385, 212, 22);
 		contentPane.add(lbl_Confirm_Password);
 		
+		// Create and configure the confirm password field
 		pf_ConfirmPassword = new JPasswordField();
 		pf_ConfirmPassword.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		pf_ConfirmPassword.setText("Confirm Password");
@@ -160,6 +175,8 @@ public class Sign_Up_Window extends JFrame {
 		//==============================================================================================
 		// UI CREATION - SIGN UP BUTTON
 		//==============================================================================================
+		
+		// Create and configure the sign-up button
 		btn_Sign_Up = new Rounded_Button("Sign Up", 25);
 		btn_Sign_Up.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btn_Sign_Up.setBackground(new Color(182, 182, 182));
@@ -170,18 +187,24 @@ public class Sign_Up_Window extends JFrame {
 		//==============================================================================================
 		// UI CREATION - LOGIN LINK
 		//==============================================================================================
+		
+		// Create and configure the login label
 		lbl_Login = new JLabel("Log in");
 		lbl_Login.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lbl_Login.setBounds(181, 547, 70, 25);
 		lbl_Login.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(lbl_Login);
 		
-		lbl_Incorrect_Signage3 = new JLabel("*");
-		lbl_Incorrect_Signage3.setForeground(new Color(255, 0, 0));
-		lbl_Incorrect_Signage3.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lbl_Incorrect_Signage3.setBounds(403, 311, 23, 25); 
-		lbl_Incorrect_Signage3.setVisible(false);
-		contentPane.add(lbl_Incorrect_Signage3);
+		//==============================================================================================
+		// UI CREATION - INCORRECT SIGNAGE
+		//==============================================================================================
+		
+		lbl_Incorrect_Signage1 = new JLabel("*");
+		lbl_Incorrect_Signage1.setForeground(Color.RED);
+		lbl_Incorrect_Signage1.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_Incorrect_Signage1.setBounds(403, 134, 23, 25);
+		lbl_Incorrect_Signage1.setVisible(false);
+		contentPane.add(lbl_Incorrect_Signage1);
 		
 		lbl_Incorrect_Signage2 = new JLabel("*");
 		lbl_Incorrect_Signage2.setForeground(Color.RED);
@@ -190,12 +213,12 @@ public class Sign_Up_Window extends JFrame {
 		lbl_Incorrect_Signage2.setVisible(false);
 		contentPane.add(lbl_Incorrect_Signage2);
 		
-		lbl_Incorrect_Signage1 = new JLabel("*");
-		lbl_Incorrect_Signage1.setForeground(Color.RED);
-		lbl_Incorrect_Signage1.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lbl_Incorrect_Signage1.setBounds(403, 134, 23, 25);
-		lbl_Incorrect_Signage1.setVisible(false);
-		contentPane.add(lbl_Incorrect_Signage1);
+		lbl_Incorrect_Signage3 = new JLabel("*");
+		lbl_Incorrect_Signage3.setForeground(new Color(255, 0, 0));
+		lbl_Incorrect_Signage3.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_Incorrect_Signage3.setBounds(403, 311, 23, 25); 
+		lbl_Incorrect_Signage3.setVisible(false);
+		contentPane.add(lbl_Incorrect_Signage3);
 		
 		lbl_Incorrect_Signage4 = new JLabel("*");
 		lbl_Incorrect_Signage4.setForeground(Color.RED);
@@ -415,3 +438,67 @@ public class Sign_Up_Window extends JFrame {
 		}
 	}
 }
+/*
+ * File: Sign_Up_Window.java
+ *
+ * Description:
+ * This file defines the `Sign_Up_Window` class, which is a `JFrame` used for user registration. 
+ * It provides a graphical interface for creating a new user account by entering a username, email, and password. 
+ * The class interacts with the `Database_Manager` to validate and save the new user information.
+ *
+ * Variables:
+ *
+ * - **Database and User Fields**:
+ *   - `database_manager` (Database_Manager): Manages database operations, including user-related actions.
+ *
+ * - **UI Components**:
+ *   - `contentPane` (JPanel): The main container for the window's components.
+ *   - `panel_SignUp_Title` (Rounded_Panel): A rounded panel for displaying the title of the sign-up window.
+ *   - `lbl_Title_SignUp` (JLabel): Displays the title "Sign Up" at the top of the window.
+ *   - `lbl_Username`, `lbl_Email`, `lbl_Password`, `lbl_Confirm_Password` (JLabel): Labels for the input fields.
+ *   - `tf_Username` (JTextField): Input field for the user's username.
+ *   - `tf_Email` (JTextField): Input field for the user's email.
+ *   - `pf_Password` (JPasswordField): Input field for the user's password.
+ *   - `pf_ConfirmPassword` (JPasswordField): Input field for confirming the user's password.
+ *   - `btn_Sign_Up` (Rounded_Button): Button to submit the sign-up form.
+ *   - `lbl_Login` (JLabel): A clickable label to navigate to the login window.
+ *   - `lbl_Incorrect_Signage1`, `lbl_Incorrect_Signage2`, `lbl_Incorrect_Signage3`, `lbl_Incorrect_Signage4` (JLabel): Labels to indicate validation errors for specific fields.
+ *
+ * Functions:
+ *
+ * 1. **Constructor**:
+ *    - `Sign_Up_Window(Database_Manager)`:
+ *      - Initializes the sign-up window with the provided database manager.
+ *      - Calls `initialize_Window_Properties()` to set up the window properties, `initialize_UI_Components()` to create the UI, and `create_Action_Listeners()` to add event listeners.
+ *
+ * 2. **initialize_Window_Properties()**:
+ *    - Configures the window's properties, such as size, layout, and background color.
+ *
+ * 3. **initialize_UI_Components()**:
+ *    - Creates and positions all UI components, including labels, text fields, password fields, and buttons.
+ *    - Organizes the components into sections for title, username, email, password, and confirm password.
+ *
+ * 4. **create_Action_Listeners()**:
+ *    - Adds event listeners to handle user interactions with the input fields, buttons, and labels.
+ *    - Handles focus events for input fields to manage placeholder text.
+ *    - Handles mouse events for the "Sign Up" button and "Log in" label.
+ *
+ * 5. **openLogIn()**:
+ *    - Navigates to the `Log_In_Window` when the "Log in" label is clicked.
+ *
+ * 6. **SignUp()**:
+ *    - Validates the input fields and creates a new user account in the database.
+ *    - Key conditions:
+ *      - Checks if any input field is empty or contains placeholder text and displays an error message if true.
+ *      - Validates the email format using `validEmail()` and displays an error if invalid.
+ *      - Checks if the username or email already exists in the database and displays an error if true.
+ *      - Ensures that the password and confirm password fields match and displays an error if they do not.
+ *    - If all validations pass:
+ *      - Adds the new user to the database using `addUser()`.
+ *      - Retrieves the newly created user and displays a success message.
+ *      - Navigates to the `Main_Frame` for the newly registered user.
+ *
+ * Usage:
+ * This class is used to provide a user-friendly interface for creating a new user account. 
+ * It ensures that the input data is validated before saving the user information to the database and provides feedback to the user in case of errors or success.
+ */
