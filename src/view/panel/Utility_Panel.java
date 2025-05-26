@@ -581,26 +581,51 @@ public class Utility_Panel extends JPanel {
             }
         });
         
-     // Reading panel
-        panel_Reading_Button.addMouseListener(new MouseAdapter() {
-            @Override public void mouseClicked(MouseEvent e) { graph_Panel.setField("reading");; rdbtn_Reading.setSelected(true); field = "reading"; setupData(); }
-            @Override public void mouseEntered(MouseEvent e) { panel_Reading_Button.setBackground(new Color(200, 200, 200)); }
-            @Override public void mouseExited(MouseEvent e) { panel_Reading_Button.setBackground(new Color(220, 220, 220)); }
-        });
+        // Assign panel listeners
+        panel_Reading_Button.addMouseListener(getPanelMouseListener(panel_Reading_Button, "reading", rdbtn_Reading));
+        panel_Rate_Button.addMouseListener(getPanelMouseListener(panel_Rate_Button, "rate", rdbtn_Rate));
+        panel_Price_Button.addMouseListener(getPanelMouseListener(panel_Price_Button, "total", rdbtn_Price));
 
-        // Rate panel
-        panel_Rate_Button.addMouseListener(new MouseAdapter() {
-            @Override public void mouseClicked(MouseEvent e) { graph_Panel.setField("rate"); rdbtn_Rate.setSelected(true); field = "rate"; setupData(); }
-            @Override public void mouseEntered(MouseEvent e) { panel_Rate_Button.setBackground(new Color(200, 200, 200)); }
-            @Override public void mouseExited(MouseEvent e) { panel_Rate_Button.setBackground(new Color(220, 220, 220)); }
-        });
+        // Assign to radio buttons
+        rdbtn_Reading.addMouseListener(getClickListener("reading"));
+        rdbtn_Rate.addMouseListener(getClickListener("rate"));
+        rdbtn_Price.addMouseListener(getClickListener("total"));
 
-        // Price panel
-        panel_Price_Button.addMouseListener(new MouseAdapter() {
-            @Override public void mouseClicked(MouseEvent e) { graph_Panel.setField("total"); rdbtn_Price.setSelected(true); field = "total"; setupData(); }
-            @Override public void mouseEntered(MouseEvent e) { panel_Price_Button.setBackground(new Color(200, 200, 200)); }
-            @Override public void mouseExited(MouseEvent e) { panel_Price_Button.setBackground(new Color(220, 220, 220)); }
-        });
+        // Assign to labels
+        lbl_Reading.addMouseListener(getClickListener("reading"));
+        lbl_Rate.addMouseListener(getClickListener("rate"));
+        lbl_Price.addMouseListener(getClickListener("total"));
+
+     
+    }
+    
+    // Returns a MouseAdapter for handling clicks on the specified field type
+    MouseAdapter getClickListener(String fieldType) {
+        return new MouseAdapter() {
+            @Override public void mouseClicked(MouseEvent e) {
+                graph_Panel.setField(fieldType);
+                field = fieldType;
+                setupData();
+            }
+        };
+    }
+    
+    // Returns a MouseAdapter for handling clicks on the specified panel and field type
+    MouseAdapter getPanelMouseListener(JPanel panel, String fieldType, JRadioButton radioButton) {
+        return new MouseAdapter() {
+            @Override public void mouseClicked(MouseEvent e) {
+                graph_Panel.setField(fieldType);
+                field = fieldType;
+                radioButton.setSelected(true);
+                setupData();
+            }
+            @Override public void mouseEntered(MouseEvent e) {
+                panel.setBackground(new Color(200, 200, 200));
+            }
+            @Override public void mouseExited(MouseEvent e) {
+                panel.setBackground(new Color(220, 220, 220));
+            }
+        };
     }
 
     public void Refresh_Graph() {
