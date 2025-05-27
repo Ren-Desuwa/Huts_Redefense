@@ -6,7 +6,7 @@ import database.Database_Manager;
 import database.Utility_Tips_Manager;
 import model.Reading;
 import model.User;
-import visuals.Graph_Panel;
+import view.panel.misc.Graph_Panel;
 import visuals.Rounded_Panel;
 
 import javax.swing.ButtonGroup;
@@ -294,7 +294,7 @@ public class Home_Panel extends JPanel {
         panel_Gas_Info.add(lbl_Gas_Reading_Value);
         
         // Unit label for gas reading
-        lbl_Gas_Reading_Unit = new JLabel("Qty");
+        lbl_Gas_Reading_Unit = new JLabel("Kg");
         lbl_Gas_Reading_Unit.setFont(new Font("Tahoma", Font.PLAIN, 18));
         lbl_Gas_Reading_Unit.setBounds(337, 15, 100, 32);
         panel_Gas_Info.add(lbl_Gas_Reading_Unit);
@@ -735,7 +735,7 @@ public class Home_Panel extends JPanel {
  * - **Unit Labels**:
  *   - `lbl_Electricity_Reading_Unit` (JLabel): Displays the unit for electricity readings (e.g., "kWh").
  *   - `lbl_Water_Reading_Unit` (JLabel): Displays the unit for water readings (e.g., "m³").
- *   - `lbl_Gas_Reading_Unit` (JLabel): Displays the unit for gas readings (e.g., "Qty").
+ *   - `lbl_Gas_Reading_Unit` (JLabel): Displays the unit for gas readings (e.g., "kg").
  *   - `lbl_OverAll_Reading_Unit` (JLabel): Displays the unit for overall expenses (e.g., "Php").
  * 
  * - **Graph Components**:

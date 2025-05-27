@@ -10,7 +10,7 @@ import database.Utility_Tips_Manager;
 import model.Reading;
 import model.User;
 import view.panel.misc.Add_Reading_Window;
-import visuals.Graph_Panel;
+import view.panel.misc.Graph_Panel;
 import visuals.Rounded_Panel;
 import visuals.Rounded_Button;
 

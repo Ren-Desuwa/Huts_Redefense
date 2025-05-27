@@ -319,6 +319,7 @@ public class Reading_Manager {
             return Color.GRAY; // Gray for no change or no data
         }
     }
+    
 
     // Gets the total number of readings for a user
     public int getTotal_Readings(User current_user) {
@@ -398,7 +399,7 @@ public class Reading_Manager {
                 	switch (field) {
                     	case "reading" -> 
                     		switch (utility_type) {
-		                        case "gas" -> "Qty";
+		                        case "gas" -> "Kg";
 		                        case "water" -> "m³";
 		                        default -> "kWh";
                     		};
@@ -444,7 +445,7 @@ public class Reading_Manager {
         String unit = switch (type) {
             case "electricity" -> "kWh";
             case "water" -> "m³";
-            case "gas" -> "Qty";
+            case "gas" -> "kg";
             default -> "";
         };
 
@@ -868,7 +869,7 @@ public class Reading_Manager {
  * - Returns placeholder JList if no readings exist
  * - Formats readings with fixed-width spacing for alignment
  * - Adds mouse click listener for editing functionality
- * - Units are hardcoded: electricity=kWh, water=m³, gas=Qty
+ * - Units are hardcoded: electricity=kWh, water=m³, gas=kg
  * - DEBUGGING TIP: Array index out of bounds if all_readings size changes during display
  * - DEBUGGING TIP: Edit window creation may fail if UI components are not properly initialized
  *
