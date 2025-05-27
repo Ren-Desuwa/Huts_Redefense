@@ -658,7 +658,7 @@ public class Home_Panel extends JPanel {
                     String trend = database_Manager.getReadingManager().getTrend(current_User, null, "total");
                     lbl_Trend_Of_Reading_Overall.setText(trend);
                     lbl_Trend_Of_Reading_Overall.setForeground(
-                        database_Manager.getReadingManager().getTrend_Color(current_User, null)
+                        database_Manager.getReadingManager().getTrend_Color()
                     );
                 }
             } catch (SQLException e) {

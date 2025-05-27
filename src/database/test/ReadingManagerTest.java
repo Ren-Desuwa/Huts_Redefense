@@ -7,6 +7,8 @@ import java.time.Month;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JLabel;
+
+import database.Reading_Manager;
 import model.Reading;
 import model.User;
 

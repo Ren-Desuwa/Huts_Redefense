@@ -69,6 +69,18 @@ public class User_Manager {
 		}
 	}
 	
+	// Deletes a user from the database
+	public void deleteUser(User user) throws SQLException {
+		String sqlscript = "DELETE FROM users WHERE user_id = ?";
+		try (PreparedStatement prepared_statement = connection.prepareStatement(sqlscript)) {
+			prepared_statement.setInt(1, user.getUser_Id());
+			prepared_statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+		}
+	}
+	
 	// Retrieves a user by their username, using COLLATE BINARY for case-sensitive comparison
 	public User getUserByUsername(String username) {
 		// Using GLOB operator for case-sensitive comparison
