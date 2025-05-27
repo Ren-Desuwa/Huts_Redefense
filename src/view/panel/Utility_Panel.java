@@ -33,8 +33,9 @@ import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
-
+import java.util.Map;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -55,6 +56,8 @@ public class Utility_Panel extends JPanel {
     private User current_user;
     private String utility_type; // "electricity", "gas", "water".
     private String field = "reading"; // Default field to display in graph (can be "reading", "rate", or "total")
+    private Map<Month, Double> data; // Monthly data for the graph
+    
     
     // Panel configuration
     private String panel_title;
@@ -259,7 +262,7 @@ public class Utility_Panel extends JPanel {
 	    	placeholder.setBackground(Color.WHITE);
 	    	panel_Graph_View.add(placeholder);
 	    } else {
-	    	graph_Panel = new Graph_Panel(database_manager.getReadingManager(), current_user, "reading", utility_type);
+	    	graph_Panel = new Graph_Panel("reading", utility_type);
 	    	graph_Panel.setBackground(Color.WHITE);
 	    	panel_Graph_View.add(graph_Panel);
 	    }
@@ -522,7 +525,6 @@ public class Utility_Panel extends JPanel {
     	        if (hasPreviousYear) {
     	            current_graph_year--;
     	            lbl_CurrentYear.setText(String.valueOf(current_graph_year));
-    	            graph_Panel.setYear(current_graph_year);
     	            setupData();
     	        }
     	    }
@@ -539,7 +541,6 @@ public class Utility_Panel extends JPanel {
     	        if (hasNextYear) {
     	            current_graph_year++;
     	            lbl_CurrentYear.setText(String.valueOf(current_graph_year));
-    	            graph_Panel.setYear(current_graph_year);
     	            setupData();
     	        }
     	    }
@@ -601,7 +602,6 @@ public class Utility_Panel extends JPanel {
         MouseAdapter mouseListener(JPanel panel, String fieldType, JRadioButton radioButton) {
             return new MouseAdapter() {
                 @Override public void mouseClicked(MouseEvent e) {
-                    graph_Panel.setField(fieldType);
                     field = fieldType;
                     radioButton.setSelected(true);
                     setupData();
@@ -616,11 +616,7 @@ public class Utility_Panel extends JPanel {
         }
 
     public void Refresh_Graph() {
-        if (graph_Panel.getSelectedYear() != current_graph_year) {
-        	graph_Panel.setYear(current_graph_year);
-        } else if (graph_Panel != null) {
-        	graph_Panel.refreshData();
-        }
+        setupData(); // update the graph data
     }
 
     /**
@@ -672,7 +668,9 @@ public class Utility_Panel extends JPanel {
             lbl_Prev_Button.setVisible(hasPreviousYear);
             lbl_Prev_Button.setEnabled(hasPreviousYear);
             
-            graph_Panel.refreshData();
+            data = database_manager.getReadingManager().getMonthly_Utility_Data(current_user, utility_type, current_graph_year , field);
+            graph_Panel.setField(field, data);
+            
             
         } catch (Exception e) {
             e.printStackTrace();

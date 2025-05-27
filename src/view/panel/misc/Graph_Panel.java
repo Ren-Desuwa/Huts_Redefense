@@ -1,12 +1,12 @@
 package view.panel.misc;
 
-import model.User;
+
 import visuals.Scrollable_Bar_Graph_Panel;
-import database.Reading_Manager;
+
 
 import javax.swing.*;
 import java.awt.*;
-import java.sql.SQLException;
+
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Map;
@@ -14,10 +14,8 @@ import java.util.Map;
 public class Graph_Panel extends JPanel {
     private static final long serialVersionUID = 1L;
 
-    private final CardLayout card_layout;
+    private final CardLayout card_layout; 
     private final JPanel graph_container;
-    private final Reading_Manager reading_manager;
-    private final User current_user;
 
     private Scrollable_Bar_Graph_Panel electricity_graph;
     private Scrollable_Bar_Graph_Panel water_graph;
@@ -32,9 +30,7 @@ public class Graph_Panel extends JPanel {
     /**
      * Constructor for multi-utility graph panel
      */
-    public Graph_Panel(Reading_Manager reading_manager, User current_user, String field) {
-        this.reading_manager = reading_manager;
-        this.current_user = current_user;
+    public Graph_Panel(String field) {
         this.field = field;
         this.is_single_utility = false;
         this.selected_year = LocalDate.now().getYear(); // Default to current year
@@ -52,9 +48,7 @@ public class Graph_Panel extends JPanel {
     /**
      * Constructor for single utility graph panel
      */
-    public Graph_Panel(Reading_Manager reading_manager, User current_user, String field, String utility_type) {
-        this.reading_manager = reading_manager;
-        this.current_user = current_user;
+    public Graph_Panel(String field, String utility_type) {
         this.field = field;
         this.utility_type = utility_type;
         this.is_single_utility = true;
@@ -114,7 +108,30 @@ public class Graph_Panel extends JPanel {
         graph_container.add(gas_container, "gas");
         graph_container.add(overall_container, "overall");
 
-        updateGraphData();
+
+        Map<Month, Double> mockOverallData = Map.of(
+            Month.JANUARY, 100.0,
+            Month.FEBRUARY, 150.0,
+            Month.MARCH, 200.0
+        );
+        Map<Month, Double> mockElectricityData = Map.of(
+            Month.JANUARY, 50.0,
+            Month.FEBRUARY, 75.0,
+            Month.MARCH, 100.0
+        );
+        Map<Month, Double> mockWaterData = Map.of(
+            Month.JANUARY, 30.0,
+            Month.FEBRUARY, 45.0,
+            Month.MARCH, 60.0
+        );
+        Map<Month, Double> mockGasData = Map.of(
+            Month.JANUARY, 20.0,
+            Month.FEBRUARY, 30.0,
+            Month.MARCH, 40.0
+        );
+
+        // Update graphs with mock data
+        updateGraphData(mockOverallData, mockElectricityData, mockWaterData, mockGasData);
     }
 
     /**
@@ -167,39 +184,30 @@ public class Graph_Panel extends JPanel {
             case "gas" -> gas_graph = utility_graph;
         }
 
-        updateSingleGraphData();
+        Map<Month, Double> Data = Map.of(
+                Month.JANUARY, 20.0,
+                Month.FEBRUARY, 30.0,
+                Month.MARCH, 40.0
+            );
+        updateSingleGraphData(Data);
     }
 
 
 
     // Update graph data for multi-utility view
-    private void updateGraphData() {
-        try {
-            Map<Month, Double> electricity_data = reading_manager.getMonthly_Utility_Data(current_user, "electricity", selected_year, field);
-            Map<Month, Double> water_data = reading_manager.getMonthly_Utility_Data(current_user, "water", selected_year, field);
-            Map<Month, Double> gas_data = reading_manager.getMonthly_Utility_Data(current_user, "gas", selected_year, field);
-            Map<Month, Double> overall_data = reading_manager.getMonthly_Total_Expenses(current_user, selected_year);
-
-            electricity_graph.setMonthlyData("Electricity " + field, electricity_data);
-            water_graph.setMonthlyData("Water " + field, water_data);
-            gas_graph.setMonthlyData("Gas " + field, gas_data);
-            overall_graph.setMonthlyData("Overall " + field, overall_data);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    private void updateGraphData(Map<Month, Double> overall_data, Map<Month, Double> electricity_data, Map<Month, Double> water_data, Map<Month, Double> gas_data) {
+        electricity_graph.setMonthlyData("Electricity " + field, electricity_data);
+        water_graph.setMonthlyData("Water " + field, water_data);
+        gas_graph.setMonthlyData("Gas " + field, gas_data);
+        overall_graph.setMonthlyData("Overall " + field, overall_data);
     }
 
     // Update graph data for single-utility view
-    private void updateSingleGraphData() {
-        try {
-            Map<Month, Double> data = reading_manager.getMonthly_Utility_Data(current_user, utility_type, selected_year, field);
-            switch (utility_type) {
-                case "electricity" -> electricity_graph.setMonthlyData("Electricity " + field, data);
-                case "water" -> water_graph.setMonthlyData("Water " + field, data);
-                case "gas" -> gas_graph.setMonthlyData("Gas " + field, data);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+    private void updateSingleGraphData(Map<Month, Double> data) {
+        switch (utility_type) {
+            case "electricity" -> electricity_graph.setMonthlyData("Electricity " + field, data);
+            case "water" -> water_graph.setMonthlyData("Water " + field, data);
+            case "gas" -> gas_graph.setMonthlyData("Gas " + field, data);
         }
     }
 
@@ -211,20 +219,26 @@ public class Graph_Panel extends JPanel {
     public void showOverallGraph() { if (!is_single_utility) card_layout.show(graph_container, "overall"); }
     
 
-    public void refreshData() {
-        if (is_single_utility) {
-            updateSingleGraphData();
-        } else {
-            updateGraphData();
-        }
+    public void refreshDataHome(Map<Month, Double> overall_data, Map<Month, Double> electricity_data, Map<Month, Double> water_data, Map<Month, Double> gas_data) {
+    	updateGraphData(overall_data, electricity_data, water_data, gas_data);
     }
+    
+    public void refreshDataSingle(Map<Month, Double> data) {
+		updateSingleGraphData(data);
+    }
+    
+
     /**
      * Sets the year for data display and refreshes the graphs
      * @param year The year to display data for
      */
-    public void setYear(int year) {
+    public void setYear(int year, Map<Month, Double> overall_data, Map<Month, Double> electricity_data, Map<Month, Double> water_data, Map<Month, Double> gas_data) {
         this.selected_year = year;
-        refreshData();
+        if (is_single_utility) {
+            updateSingleGraphData(electricity_data); // Pass the relevant data
+        } else {
+            updateGraphData(overall_data, electricity_data, water_data, gas_data);
+        }
     }
 
     /**
@@ -239,7 +253,7 @@ public class Graph_Panel extends JPanel {
 		return field;
 	}
 
-    public void setField(String field) {
+    public void setField(String field, Map<Month, Double> data) {
         this.field = field;
 
         if (is_single_utility) {
@@ -265,7 +279,15 @@ public class Graph_Panel extends JPanel {
                 case "water" -> water_graph.changeYAxisLabel(units);
                 case "gas" -> gas_graph.changeYAxisLabel(units);
             }
-        } else {
+
+            refreshDataSingle(data); // Update single utility graph
+        }
+    }
+
+    public void setField(String field, Map<Month, Double> overall_data, Map<Month, Double> electricity_data, Map<Month, Double> water_data, Map<Month, Double> gas_data) {
+        this.field = field;
+
+        if (!is_single_utility) {
             // Multi-utility mode: update all graphs
             electricity_graph.changeYAxisLabel(switch (field) {
                 case "reading" -> "KwH";
@@ -289,9 +311,9 @@ public class Graph_Panel extends JPanel {
             });
 
             overall_graph.changeYAxisLabel("Php"); // Always Php for overall
-        }
 
-        refreshData();
+            refreshDataHome(overall_data, electricity_data, water_data, gas_data); // Update all graphs
+        }
     }
 
 }

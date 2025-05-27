@@ -25,7 +25,9 @@ import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 import java.awt.BorderLayout;
 import javax.swing.JRadioButton;
 
@@ -41,7 +43,13 @@ public class Home_Panel extends JPanel {
     private Database_Manager database_Manager;
     private Utility_Tips_Manager utility_Tips_Manager = Utility_Tips_Manager.getInstance();
     private User current_User;
+    private int year = LocalDate.now().getYear();
     private String field = "reading";
+    
+    private Map<Month, Double> gasData;
+    private Map<Month, Double> waterData;
+    private Map<Month, Double> electricityData;
+    private Map<Month, Double> overallData; 
     
     /** Main panel containers */
     private JPanel panel_Welcome_Title;
@@ -355,7 +363,7 @@ public class Home_Panel extends JPanel {
         panel_Graph_Container.setLayout(new BorderLayout());
         add(panel_Graph_Container);
 
-        graph_Panel = new Graph_Panel(database_Manager.getReadingManager(), current_User, "reading");
+        graph_Panel = new Graph_Panel("reading");
         graph_Panel.setBackground(new Color(255, 255, 255));
         panel_Graph_Container.add(graph_Panel);
         
@@ -606,7 +614,6 @@ public class Home_Panel extends JPanel {
     MouseAdapter mouseListener(JPanel panel, String fieldType, JRadioButton radioButton) {
         return new MouseAdapter() {
             @Override public void mouseClicked(MouseEvent e) {
-                graph_Panel.setField(fieldType);
                 field = fieldType;
                 radioButton.setSelected(true);
                 setup_Data();
@@ -625,7 +632,7 @@ public class Home_Panel extends JPanel {
         try {
             // Initialize graph panel if needed
             if (graph_Panel == null && database_Manager != null) {
-                graph_Panel = new Graph_Panel(database_Manager.getReadingManager(), current_User, field);
+                graph_Panel = new Graph_Panel(field);
                 graph_Panel.setBackground(Color.WHITE);
                 panel_Graph_Container.removeAll();
                 panel_Graph_Container.add(graph_Panel);
@@ -638,6 +645,16 @@ public class Home_Panel extends JPanel {
             Reading water = database_Manager.getReadingManager().getLatest_Reading_By_Type(current_User, "water");
             Reading gas = database_Manager.getReadingManager().getLatest_Reading_By_Type(current_User, "gas");
 
+         // Prepare data for graphs
+            electricityData = database_Manager.getReadingManager().getMonthly_Utility_Data(current_User, "electricity", year, field);
+            waterData = database_Manager.getReadingManager().getMonthly_Utility_Data(current_User, "water", year, field);
+            gasData = database_Manager.getReadingManager().getMonthly_Utility_Data(current_User, "gas", year,field);
+            overallData = database_Manager.getReadingManager().getMonthly_Utility_Data(current_User, "overall", year, field);
+
+            // Refresh graph content
+            graph_Panel.setField(field, electricityData, waterData, gasData, overallData);
+
+            
             // Update each reading's label
             database_Manager.getReadingManager().updateReading_Label(current_User,electricity, lbl_Electricity_Reading_Value, lbl_Trend_Of_Reading_Electricity,lbl_Electricity_Reading_Unit, "electricity", field);
             database_Manager.getReadingManager().updateReading_Label(current_User,water, lbl_Water_Reading_Value, lbl_Trend_Of_Reading_Water, lbl_Water_Reading_Unit, "water", field);
@@ -669,7 +686,6 @@ public class Home_Panel extends JPanel {
 
 
             // Refresh graph content
-            graph_Panel.refreshData();
 
         } catch (Exception e) {
             e.printStackTrace();
