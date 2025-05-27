@@ -269,7 +269,7 @@ public class UserManagerTest {
             String testEmail = "checkuseremail" + System.currentTimeMillis() + "@example.com";
             
             // Check non-existent user (should return true)
-            boolean availableResult = userManager.checkUserEmail(testUsername, testEmail);
+            boolean availableResult = !userManager.checkUserEmail(testUsername, testEmail);
             if (availableResult) {
                 System.out.println("✓ checkUserEmail correctly returns true for available username/email");
             } else {
@@ -280,7 +280,7 @@ public class UserManagerTest {
             userManager.addUser(testUsername, "testpassword", testEmail);
             
             // Check existing user with same username and email (should return false)
-            boolean existingResult = userManager.checkUserEmail(testUsername, testEmail);
+            boolean existingResult = !userManager.checkUserEmail(testUsername, testEmail);
             if (!existingResult) {
                 System.out.println("✓ checkUserEmail correctly returns false for existing username/email");
             } else {
@@ -289,7 +289,7 @@ public class UserManagerTest {
             
             // Check with existing username but different email (should return false)
             String differentEmail = "different" + System.currentTimeMillis() + "@example.com";
-            boolean existingUsernameResult = userManager.checkUserEmail(testUsername, differentEmail);
+            boolean existingUsernameResult = !userManager.checkUserEmail(testUsername, differentEmail);
             if (!existingUsernameResult) {
                 System.out.println("✓ checkUserEmail correctly returns false for existing username with different email");
             } else {
@@ -298,7 +298,7 @@ public class UserManagerTest {
             
             // Check with different username but existing email (should return false)
             String differentUsername = "different" + testUsername;
-            boolean existingEmailResult = userManager.checkUserEmail(differentUsername, testEmail);
+            boolean existingEmailResult = !userManager.checkUserEmail(differentUsername, testEmail);
             if (!existingEmailResult) {
                 System.out.println("✓ checkUserEmail correctly returns false for existing email with different username");
                 testsPassed++;

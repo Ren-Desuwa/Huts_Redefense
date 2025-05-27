@@ -127,9 +127,9 @@ public class User_Manager {
 	// Checks if the provided username or email already exists in the database
 	public boolean checkUserEmail(String username, String email) {
 	    if (getUserByUsername(username) != null || getUserByEmail(email) != null) {
-	        return true;
+	        return true; // User already exists
 	    }   
-	    return false;
+	    return false; // User does not exist
 	}
 	
 	// Checks if the provided username and password match a user in the database
