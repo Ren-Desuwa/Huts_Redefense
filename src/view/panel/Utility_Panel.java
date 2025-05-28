@@ -257,15 +257,10 @@ public class Utility_Panel extends JPanel {
 	    panel_Graph_Button_Container.add(lbl_CurrentYear);
 
 	    // Add graph panel or placeholder based on database manager availability
-	    if (database_manager == null) {
-	    	JPanel placeholder = new JPanel();
-	    	placeholder.setBackground(Color.WHITE);
-	    	panel_Graph_View.add(placeholder);
-	    } else {
-	    	graph_Panel = new Graph_Panel("reading", utility_type);
-	    	graph_Panel.setBackground(Color.WHITE);
-	    	panel_Graph_View.add(graph_Panel);
-	    }
+	    graph_Panel = new Graph_Panel("reading", utility_type);
+	    graph_Panel.setBackground(Color.WHITE);
+	    panel_Graph_View.add(graph_Panel);
+
 
         //==============================================================================================
         // UI CREATION - CONTENT PANELS - CURRENT READING 
