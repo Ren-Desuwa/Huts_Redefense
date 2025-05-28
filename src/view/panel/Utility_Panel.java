@@ -258,7 +258,7 @@ public class Utility_Panel extends JPanel {
 
 	    // Add graph panel or placeholder based on database manager availability
 	    graph_Panel = new Graph_Panel("reading", utility_type);
-	    graph_Panel.setBackground(Color.WHITE);
+	    graph_Panel.setBackground(new Color(255, 255, 255));
 	    panel_Graph_View.add(graph_Panel);
 
 
