@@ -16,8 +16,8 @@ import database.Database_Manager;
 import model.Reading;
 import model.User;
 import view.panel.Utility_Panel;
-import visuals.Rounded_Button;
-import visuals.Rounded_Panel;
+import visuals.RoundedButton;
+import visuals.RoundedPanel;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -72,13 +72,10 @@ public class Edit_Reading_Window extends JDialog {
 	private JButton btn_Cancel;
 	private JButton btn_Delete;
 
-	// Panels for Specific Reading Types
-
 	// Main Content Pane
 	private JPanel contentPane;
 
-	
-	
+	// Constructor to initialize the Edit Reading Window
 	public Edit_Reading_Window(JFrame parent, Database_Manager database_manager, User current_user, Utility_Panel panel_type, String type, Reading selectedReading) {
 		super(parent, "Edit Reading", true);
 		this.database_manager = database_manager;
@@ -99,6 +96,7 @@ public class Edit_Reading_Window extends JDialog {
 		setupData();
 	}
 
+	// Method to initialize the UI components of the dialog
 	private void initialize_UI() {
 		
 		//=====================================================================================================
@@ -117,7 +115,7 @@ public class Edit_Reading_Window extends JDialog {
 		//=====================================================================================================
 		
 		// Create a rounded panel for the header
-		panel_Header = new Rounded_Panel();
+		panel_Header = new RoundedPanel();
 		panel_Header.setBackground(new Color(255, 255, 255));
 		panel_Header.setLayout(null);
 		panel_Header.setBounds(10, 11, 416, 97);
@@ -260,7 +258,7 @@ public class Edit_Reading_Window extends JDialog {
 		//=====================================================================================================
 		
 		// Add buttons for editing, canceling, and deleting readings
-		btn_Edit =  new Rounded_Button("Update", 25);
+		btn_Edit =  new RoundedButton("Update", 25);
 		btn_Edit.setBackground(new Color(182, 182, 182));
 		btn_Edit.setForeground(Color.BLACK);
 		btn_Edit.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -268,7 +266,7 @@ public class Edit_Reading_Window extends JDialog {
 		contentPane.add(btn_Edit);
 		
 		// Add a cancel button to close the dialog without saving changes
-		btn_Cancel = new Rounded_Button("Cancel", 25);
+		btn_Cancel = new RoundedButton("Cancel", 25);
 		btn_Cancel.setBackground(new Color(182, 182, 182));
 		btn_Cancel.setForeground(Color.BLACK);
 		btn_Cancel.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -276,7 +274,7 @@ public class Edit_Reading_Window extends JDialog {
 		contentPane.add(btn_Cancel);
 		
 		// Add a delete button to remove the selected reading
-		btn_Delete = new Rounded_Button("Delete", 25);
+		btn_Delete = new RoundedButton("Delete", 25);
 		btn_Delete.setBackground(new Color(182, 182, 182));
 		btn_Delete.setForeground(Color.BLACK);
 		btn_Delete.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -284,6 +282,7 @@ public class Edit_Reading_Window extends JDialog {
 		contentPane.add(btn_Delete);
 	}
 	
+	// Method to create action listeners for the components
 	private void create_Action_Listeners() {
 		combo_box_Edit_Reading_Selection.addActionListener(e ->  selectedReading());
 		tf_Rate.addFocusListener(new FocusAdapter() {
@@ -359,6 +358,7 @@ public class Edit_Reading_Window extends JDialog {
 		});
 	}
 	
+	// Method to set up the data and initial state of the dialog based on the reading type
 	private void setupData() {
 		String placeholder;
 		switch (readingType.toLowerCase()) {
@@ -427,6 +427,7 @@ public class Edit_Reading_Window extends JDialog {
 		}
 	}
 	
+	// Method to populate the input fields with the selected reading's details
 	private void selectedReading() {
 		String selected = (String) combo_box_Edit_Reading_Selection.getSelectedItem();
 		String[] parts = selected.trim().split("\\s+");
@@ -463,6 +464,7 @@ public class Edit_Reading_Window extends JDialog {
 	    }
 	}
 	
+	// Method to delete the selected reading from the database and refresh the parent panel
 	private void deleteselectedReading() {
 		if (!hasValidInput()) {
 			return; 
@@ -491,6 +493,7 @@ public class Edit_Reading_Window extends JDialog {
 		}
 	}
 	
+	// Method to update the reading in the database and refresh the parent panel
 	private void updateReading() {
 		if (!hasValidInput()) {
 			return; 
@@ -530,6 +533,7 @@ public class Edit_Reading_Window extends JDialog {
 		}
 	}
 	
+	// Method to cancel the add reading operation and close the dialog
 	private void cancelAddReading() {
 		if (hasValidInput()) {
 			int response = JOptionPane.showConfirmDialog(this, "Are you sure you want to cancel?", "Confirm Cancel", JOptionPane.YES_NO_OPTION);
@@ -541,6 +545,7 @@ public class Edit_Reading_Window extends JDialog {
 		}
 	}
 	
+	// Method to fetch all readings of the specified type and populate the combo box
 	private JComboBox<String> getAllReadings() {
 		try {
 			if (!database_manager.getReadingManager().isReading_Exists(current_user, readingType)) {
@@ -575,6 +580,7 @@ public class Edit_Reading_Window extends JDialog {
 		}
 	}
 	
+	// Method to check if the input fields are valid
 	private boolean hasValidInput() {
 		String reading = tf_Reading.getText();
 		String rate = tf_Rate.getText();

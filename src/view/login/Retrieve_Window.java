@@ -19,8 +19,8 @@ import javax.swing.border.EmptyBorder;
 
 import database.Database_Manager;
 import model.User;
-import visuals.Rounded_Button;
-import visuals.Rounded_Panel;
+import visuals.RoundedButton;
+import visuals.RoundedPanel;
 
 
 public class Retrieve_Window extends JFrame {
@@ -32,7 +32,7 @@ public class Retrieve_Window extends JFrame {
     
     // Panel configuration
     private JPanel contentPane;
-    private Rounded_Panel panel_ConfirmUser_Title;
+    private RoundedPanel panel_ConfirmUser_Title;
     private JLabel lbl_Title_ConfirmUser;
     
     // Input fields
@@ -43,7 +43,7 @@ public class Retrieve_Window extends JFrame {
     
     // Buttons
     private JButton btn_Confirm;
-    private Rounded_Button btn_Cancel;
+    private RoundedButton btn_Cancel;
     private JLabel lbl_Incorrect_Signage1;
     private JLabel lbl_Incorrect_Signage2;
 
@@ -80,7 +80,7 @@ public class Retrieve_Window extends JFrame {
         //==============================================================================================
         
         // Create a rounded panel for the title section
-        panel_ConfirmUser_Title = new Rounded_Panel();
+        panel_ConfirmUser_Title = new RoundedPanel();
         panel_ConfirmUser_Title.setLayout(null);
         panel_ConfirmUser_Title.setBackground(Color.WHITE);
         panel_ConfirmUser_Title.setBounds(10, 11, 416, 97);
@@ -130,7 +130,7 @@ public class Retrieve_Window extends JFrame {
         //==============================================================================================
         
         // Create and configure the confirm and cancel buttons
-        btn_Confirm = new Rounded_Button("Confirm", 25);
+        btn_Confirm = new RoundedButton("Confirm", 25);
         btn_Confirm.setFont(new Font("Tahoma", Font.PLAIN, 20));
         btn_Confirm.setBackground(new Color(182, 182, 182));
         btn_Confirm.setForeground(Color.BLACK);
@@ -138,7 +138,7 @@ public class Retrieve_Window extends JFrame {
         contentPane.add(btn_Confirm);
         
         // Create and configure the cancel button
-        btn_Cancel = new Rounded_Button("Cancel", 25);
+        btn_Cancel = new RoundedButton("Cancel", 25);
         btn_Cancel.setForeground(Color.BLACK);
         btn_Cancel.setFont(new Font("Tahoma", Font.PLAIN, 15));
         btn_Cancel.setBackground(new Color(182, 182, 182));

@@ -23,8 +23,8 @@ import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import visuals.Rounded_Button;
-import visuals.Rounded_Panel;
+import visuals.RoundedButton;
+import visuals.RoundedPanel;
 
 public class Sign_Up_Window extends JFrame {
 	
@@ -36,7 +36,7 @@ public class Sign_Up_Window extends JFrame {
 	
 	// Panel configuration
 	private JPanel contentPane;
-	private Rounded_Panel panel_SignUp_Title;
+	private RoundedPanel panel_SignUp_Title;
 	private JLabel lbl_Title_SignUp;
 	
 	// Input fields
@@ -87,7 +87,7 @@ public class Sign_Up_Window extends JFrame {
 		//==============================================================================================
 		
 		// Create a rounded panel for the title
-		panel_SignUp_Title = new Rounded_Panel();
+		panel_SignUp_Title = new RoundedPanel();
 		panel_SignUp_Title.setLayout(null);
 		panel_SignUp_Title.setBackground(Color.WHITE);
 		panel_SignUp_Title.setBounds(10, 11, 416, 97);
@@ -177,7 +177,7 @@ public class Sign_Up_Window extends JFrame {
 		//==============================================================================================
 		
 		// Create and configure the sign-up button
-		btn_Sign_Up = new Rounded_Button("Sign Up", 25);
+		btn_Sign_Up = new RoundedButton("Sign Up", 25);
 		btn_Sign_Up.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btn_Sign_Up.setBackground(new Color(182, 182, 182));
 		btn_Sign_Up.setForeground(Color.BLACK);

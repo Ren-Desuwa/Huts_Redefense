@@ -12,7 +12,7 @@ import database.Reading_Manager;
 import model.Reading;
 import model.User;
 
-public class ReadingManagerTest {
+public class Reading_Manager_Test {
     
     private static Reading_Manager reading_manager;
     private static Connection database_connection;

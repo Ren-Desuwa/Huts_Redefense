@@ -37,6 +37,10 @@ public class Reading_Manager {
         this.database_connection = database_connection;
     }
 
+    //========================================================================================================================================
+    // CRUD Operations
+    //========================================================================================================================================
+    
     // Adds a new reading to the database
     public void addReading(User user, LocalDate date, String type, double reading, double rate, double total_price) throws SQLException {
         String sql_script = "INSERT INTO readings (user_id, date, type, reading, rate, total_price) VALUES (?, ?, ?, ?, ?, ?)";
@@ -92,6 +96,11 @@ public class Reading_Manager {
         }
     }
     
+    //================================================================================================================================================
+    // Basic Reading Retrieval 
+    //================================================================================================================================================
+    
+    // Gets the latest reading of a specific type for a user
     public Reading getLatest_Reading_By_Type(User user, String type) throws SQLException {
         String sql_script = "SELECT * FROM readings WHERE user_id = ? AND type = ? ORDER BY date DESC LIMIT 1";
         try (PreparedStatement prepared_statement = database_connection.prepareStatement(sql_script)) {
@@ -144,7 +153,56 @@ public class Reading_Manager {
         return reading_list;
     }
     
-	// Groups readings by month and calculates the total for each month	
+    // Gets readings for a user within a date range and of a specific type, ordered by date ascending
+    public List<Reading> getReadings_By_Date_And_Type(User user, LocalDate start_date, LocalDate end_date, String type) throws SQLException {
+        String sql_script = "SELECT * FROM readings WHERE user_id = ? AND date >= ? AND date <= ? AND type = ? ORDER BY date ASC";
+        List<Reading> reading_list = new ArrayList<>();
+        try (PreparedStatement prepared_statement = database_connection.prepareStatement(sql_script)) {
+            prepared_statement.setInt(1, user.getUser_Id());
+            prepared_statement.setString(2, start_date.toString());
+            prepared_statement.setString(3, end_date.toString());
+            prepared_statement.setString(4, type);
+            try (ResultSet result_set = prepared_statement.executeQuery()) {
+                while (result_set.next()) {
+                    reading_list.add(new Reading(
+                        result_set.getInt("reading_id"),
+                        result_set.getInt("user_id"),
+                        LocalDate.parse(result_set.getString("date")),
+                        result_set.getString("type"),
+                        result_set.getDouble("reading"),
+                        result_set.getDouble("rate"),
+                        result_set.getDouble("total_price")
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return reading_list;
+    }
+    
+    // Gets the total number of readings for a user
+    public int getTotal_Readings(User current_user) {
+        String sql_script = "SELECT COUNT(*) as total FROM readings WHERE user_id = ?";
+        try (PreparedStatement prepared_statement = database_connection.prepareStatement(sql_script)) {
+            prepared_statement.setInt(1, current_user.getUser_Id());
+            try (ResultSet result_set = prepared_statement.executeQuery()) {
+                if (result_set.next()) {
+                    return result_set.getInt("total");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    
+    //=================================================================================================================================================
+    // Data Grouping and Analysis Methods
+    //=================================================================================================================================================
+    
+    // Groups readings by month and calculates the total for each month	
     public Map<Month, Double> groupReadings_By_Month(List<Reading> readings, int year, String field) {
         Map<Month, Double> monthly_data = new HashMap<>();
 
@@ -190,35 +248,6 @@ public class Reading_Manager {
 
         return monthly_data;
     }
-
-    // Gets readings for a user within a date range and of a specific type, ordered by date ascending
-    public List<Reading> getReadings_By_Date_And_Type(User user, LocalDate start_date, LocalDate end_date, String type) throws SQLException {
-        String sql_script = "SELECT * FROM readings WHERE user_id = ? AND date >= ? AND date <= ? AND type = ? ORDER BY date ASC";
-        List<Reading> reading_list = new ArrayList<>();
-        try (PreparedStatement prepared_statement = database_connection.prepareStatement(sql_script)) {
-            prepared_statement.setInt(1, user.getUser_Id());
-            prepared_statement.setString(2, start_date.toString());
-            prepared_statement.setString(3, end_date.toString());
-            prepared_statement.setString(4, type);
-            try (ResultSet result_set = prepared_statement.executeQuery()) {
-                while (result_set.next()) {
-                    reading_list.add(new Reading(
-                        result_set.getInt("reading_id"),
-                        result_set.getInt("user_id"),
-                        LocalDate.parse(result_set.getString("date")),
-                        result_set.getString("type"),
-                        result_set.getDouble("reading"),
-                        result_set.getDouble("rate"),
-                        result_set.getDouble("total_price")
-                    ));
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw e;
-        }
-        return reading_list;
-    }
     
     // Update the getMonthly_Utility_Data method to include year parameter
     public Map<Month, Double> getMonthly_Utility_Data(User user, String utility_type, int year, String field) 
@@ -252,19 +281,9 @@ public class Reading_Manager {
         return total_expenses;
     }
     
-    // Gets the total cost of the latest readings for each utility type
-    public double getTotal_Latest_Cost(User user) throws SQLException {
-        double totalCost = 0.0;
-        String[] utilityTypes = {"electricity", "water", "gas"};
-
-        for (String type : utilityTypes) {
-            Reading latestReading = getLatest_Reading_By_Type(user, type);
-            if (latestReading != null) {
-                totalCost += latestReading.getTotal_Price();
-            }
-        }
-        return totalCost;
-    }
+    //=================================================================================================================================================
+    // Trend Calculation and Reporting Methods
+    //=================================================================================================================================================
 
     // Gets the trend of readings for a user, optionally filtered by type and field
     public String getTrend(User user, String type, String field) throws SQLException {
@@ -320,23 +339,24 @@ public class Reading_Manager {
         }
     }
     
-
-    // Gets the total number of readings for a user
-    public int getTotal_Readings(User current_user) {
-        String sql_script = "SELECT COUNT(*) as total FROM readings WHERE user_id = ?";
-        try (PreparedStatement prepared_statement = database_connection.prepareStatement(sql_script)) {
-            prepared_statement.setInt(1, current_user.getUser_Id());
-            try (ResultSet result_set = prepared_statement.executeQuery()) {
-                if (result_set.next()) {
-                    return result_set.getInt("total");
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
+    //=================================================================================================================================================
+    // Utility Methods
+    //=================================================================================================================================================
     
+    
+    // Gets the total cost of the latest readings for each utility type
+    public double getTotal_Latest_Cost(User user) throws SQLException {
+        double totalCost = 0.0;
+        String[] utilityTypes = {"electricity", "water", "gas"};
+
+        for (String type : utilityTypes) {
+            Reading latestReading = getLatest_Reading_By_Type(user, type);
+            if (latestReading != null) {
+                totalCost += latestReading.getTotal_Price();
+            }
+        }
+        return totalCost;
+    }
 
     // Gets the sum of readings for the latest month for a specific type and field
     public double getLatestMonthReadingSum(User user, String type, String field) throws SQLException {
@@ -378,6 +398,10 @@ public class Reading_Manager {
         }
         return 0.0;
     }
+    
+    //=================================================================================================================================================
+    // UI Update Methods
+    //=================================================================================================================================================
     
     // Updates the reading labels with the latest month's data and trend
     public void updateReading_Label(User current_user, Reading reading, JLabel value_label, JLabel trend_label, JLabel unit_label, String utility_type,String field) {
@@ -492,6 +516,10 @@ public class Reading_Manager {
         return list;
     }
 
+    //=================================================================================================================================================
+    // Additional Helper Methods
+    //=================================================================================================================================================
+    
     // Gets the distinct years of readings for a user and type
     public int[] getReading_Years(User user, String type) throws SQLException {
         String sql_script = "SELECT DISTINCT strftime('%Y', date) as year FROM readings WHERE user_id = ? AND type = ? ORDER BY year DESC";

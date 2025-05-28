@@ -142,7 +142,6 @@ public class User_Manager {
 			return resultSet.next(); // If a row is returned, the username and password match // true else false
 		} catch (SQLException e) {
 			e.printStackTrace();
-			
 		}
 		return false;
 	}

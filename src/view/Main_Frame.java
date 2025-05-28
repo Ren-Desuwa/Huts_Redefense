@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 import database.Database_Manager;
 import model.*;
 import view.panel.*;
-import visuals.Rounded_Button;
+import visuals.RoundedButton;
 import view.login.Log_In_Window;
 
 
@@ -115,12 +115,12 @@ public class Main_Frame extends JFrame {
         side_panel.setPreferredSize(new Dimension(200, getHeight()));
         side_panel.setLayout(new BoxLayout(side_panel, BoxLayout.Y_AXIS));
         
-        side_home_button = new Rounded_Button("Home");
-		side_electricity_button = new Rounded_Button("Electricity");
-		side_water_button = new Rounded_Button("Water");
-		side_gas_button = new Rounded_Button("Gas");
-		side_profile_button = new Rounded_Button("Profile");
-		side_logout_button = new Rounded_Button("Logout");
+        side_home_button = new RoundedButton("Home");
+		side_electricity_button = new RoundedButton("Electricity");
+		side_water_button = new RoundedButton("Water");
+		side_gas_button = new RoundedButton("Gas");
+		side_profile_button = new RoundedButton("Profile");
+		side_logout_button = new RoundedButton("Logout");
 		
 		side_home_button.setAlignmentX(Component.CENTER_ALIGNMENT);
 		side_home_button.setMaximumSize(new Dimension(180, 40));

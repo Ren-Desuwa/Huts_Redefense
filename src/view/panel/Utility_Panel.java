@@ -11,8 +11,8 @@ import model.Reading;
 import model.User;
 import view.panel.misc.Add_Reading_Window;
 import view.panel.misc.Graph_Panel;
-import visuals.Rounded_Panel;
-import visuals.Rounded_Button;
+import visuals.RoundedPanel;
+import visuals.RoundedButton;
 
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -115,18 +115,18 @@ public class Utility_Panel extends JPanel {
     // Tips panel labels
     private JLabel lbl_Title_Tips;
     private JLabel lbl_Tips_1;
-    private Rounded_Panel panel_View_Buttons;
+    private RoundedPanel panel_View_Buttons;
     private JLabel lbl_View_Data;
-    private Rounded_Panel panel_Reading_Button;
+    private RoundedPanel panel_Reading_Button;
     private JRadioButton rdbtn_Reading;
     private JLabel lbl_Reading;
-    private Rounded_Panel panel_Rate_Button;
+    private RoundedPanel panel_Rate_Button;
     private JRadioButton rdbtn_Rate;
     private JLabel lbl_Rate;
     private JRadioButton rdbtn_Price;
     private JLabel lbl_Price;
     private ButtonGroup rdgroup_View_Buttons;
-    private Rounded_Panel panel_Price_Button;
+    private RoundedPanel panel_Price_Button;
     
     public Utility_Panel(Database_Manager database_manager, User current_user, 
             String utility_type, String panel_title, String panel_subtitle, 
@@ -157,7 +157,7 @@ public class Utility_Panel extends JPanel {
         //==============================================================================================
 
     	// Create the main title panel
-        panel_Title = new Rounded_Panel();
+        panel_Title = new RoundedPanel();
         panel_Title.setBackground(new Color(255, 255, 255));
         panel_Title.setBounds(21, 11, 944, 85);
         panel_Title.setLayout(null);
@@ -200,7 +200,7 @@ public class Utility_Panel extends JPanel {
         //==============================================================================================
         
         // Create the graph container panel
-        panel_Graph_Container = new Rounded_Panel();
+        panel_Graph_Container = new RoundedPanel();
         panel_Graph_Container.setBackground(new Color(255, 255, 255));
         panel_Graph_Container.setBounds(21, 114, 466, 377);
         panel_Graph_Container.setLayout(null);
@@ -272,7 +272,7 @@ public class Utility_Panel extends JPanel {
         //==============================================================================================
         
 	    // Create the current reading panel
-        panel_Current_Reading = new Rounded_Panel();
+        panel_Current_Reading = new RoundedPanel();
         panel_Current_Reading.setBackground(new Color(255, 255, 255));
         panel_Current_Reading.setLayout(null);
         panel_Current_Reading.setBounds(610, 509, 355, 168);
@@ -307,7 +307,7 @@ public class Utility_Panel extends JPanel {
         panel_Current_Reading.add(lbl_Trend_Of_Reading);
 
         // Create the add new reading button
-        btn_Add_New_Reading = new Rounded_Button("Add Reading", 25);
+        btn_Add_New_Reading = new RoundedButton("Add Reading", 25);
         btn_Add_New_Reading.setBackground(new Color(192, 192, 192));
         btn_Add_New_Reading.setForeground(Color.BLACK);
         btn_Add_New_Reading.setFont(new Font("Arial", Font.PLAIN, 16));
@@ -319,7 +319,7 @@ public class Utility_Panel extends JPanel {
         //==============================================================================================
         
         // Create the tips panel
-        panel_tips = new Rounded_Panel();
+        panel_tips = new RoundedPanel();
         panel_tips.setBackground(new Color(255, 255, 255));
         panel_tips.setLayout(null);
         panel_tips.setBounds(224, 509, 376, 168);
@@ -346,7 +346,7 @@ public class Utility_Panel extends JPanel {
         //==============================================================================================
         
         // Create the recent readings container panel
-        panel_Recent_Readings_Container = new Rounded_Panel();
+        panel_Recent_Readings_Container = new RoundedPanel();
         panel_Recent_Readings_Container.setBackground(new Color(255, 255, 255));
         panel_Recent_Readings_Container.setBounds(497, 114, 466, 377);
         panel_Recent_Readings_Container.setLayout(null);
@@ -437,7 +437,7 @@ public class Utility_Panel extends JPanel {
         //==============================================================================================
         
         // Create the view buttons panel
-        panel_View_Buttons = new Rounded_Panel();
+        panel_View_Buttons = new RoundedPanel();
         panel_View_Buttons.setLayout(null);
         panel_View_Buttons.setBackground(Color.WHITE);
         panel_View_Buttons.setBounds(21, 509, 193, 168); // Keep as-is
@@ -451,7 +451,7 @@ public class Utility_Panel extends JPanel {
         panel_View_Buttons.add(lbl_View_Data);
 
         // Reading Panel
-        panel_Reading_Button = new Rounded_Panel(15, Color.BLACK, 0);
+        panel_Reading_Button = new RoundedPanel(15, Color.BLACK, 0);
         panel_Reading_Button.setLayout(null);
         panel_Reading_Button.setBackground(new Color(220, 220, 220));
         panel_Reading_Button.setBounds(10, 46, 173, 32); // taller height
@@ -474,7 +474,7 @@ public class Utility_Panel extends JPanel {
         panel_Reading_Button.add(lbl_Reading);
 
         // Rate Panel
-        panel_Rate_Button = new Rounded_Panel(15, Color.BLACK, 0);
+        panel_Rate_Button = new RoundedPanel(15, Color.BLACK, 0);
         panel_Rate_Button.setLayout(null);
         panel_Rate_Button.setBackground(new Color(220, 220, 220));
         panel_Rate_Button.setBounds(10, 83, 173, 32);
@@ -493,7 +493,7 @@ public class Utility_Panel extends JPanel {
         panel_Rate_Button.add(lbl_Rate);
 
         // Price Panel
-        panel_Price_Button = new Rounded_Panel(15, Color.BLACK, 0);
+        panel_Price_Button = new RoundedPanel(15, Color.BLACK, 0);
         panel_Price_Button.setLayout(null);
         panel_Price_Button.setBackground(new Color(220, 220, 220));
         panel_Price_Button.setBounds(10, 120, 173, 32);

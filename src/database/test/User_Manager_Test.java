@@ -5,7 +5,7 @@ import java.sql.*;
 import database.User_Manager;
 import model.User;
 
-public class UserManagerTest {
+public class User_Manager_Test {
     
     public static void testUserManager(Connection connection) {
         System.out.println("=== Starting User_Manager Function Tests ===\n");

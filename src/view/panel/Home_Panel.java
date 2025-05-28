@@ -7,7 +7,7 @@ import database.Utility_Tips_Manager;
 import model.Reading;
 import model.User;
 import view.panel.misc.Graph_Panel;
-import visuals.Rounded_Panel;
+import visuals.RoundedPanel;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
@@ -43,7 +43,7 @@ public class Home_Panel extends JPanel {
     private Database_Manager database_Manager;
     private Utility_Tips_Manager utility_Tips_Manager = Utility_Tips_Manager.getInstance();
     private User current_User;
-    private int year = LocalDate.now().getYear();
+    private int year = 2025;
     private String field = "reading";
     
     private Map<Month, Double> gasData;
@@ -98,8 +98,8 @@ public class Home_Panel extends JPanel {
     private JLabel lbl_Trend_Of_Reading_Overall;
     
     /** Tips panel components */
-    private Rounded_Panel panel_Tip_1;
-    private Rounded_Panel panel_Tip_2;
+    private RoundedPanel panel_Tip_1;
+    private RoundedPanel panel_Tip_2;
     
     /** Tip labels */
     private JLabel lbl_Tip_1;
@@ -147,7 +147,7 @@ public class Home_Panel extends JPanel {
     	
     	// Welcome panel
 		setLayout(null);
-    	panel_Welcome_Title = new Rounded_Panel();
+    	panel_Welcome_Title = new RoundedPanel();
         panel_Welcome_Title.setBackground(new Color(255, 255, 255));
         panel_Welcome_Title.setBounds(21, 11, 944, 85);
         panel_Welcome_Title.setLayout(null);
@@ -197,7 +197,7 @@ public class Home_Panel extends JPanel {
         //==============================================================================================
         
         // Main information panel
-        panel_Information = new Rounded_Panel();
+        panel_Information = new RoundedPanel();
         panel_Information.setBackground(new Color(255, 255, 255));
         panel_Information.setBounds(21, 114, 467, 408);
         panel_Information.setLayout(null);
@@ -208,7 +208,7 @@ public class Home_Panel extends JPanel {
         //==============================================================================================
         
         // Electricity info panel
-        panel_Electricity_Info = new Rounded_Panel();
+        panel_Electricity_Info = new RoundedPanel();
         panel_Electricity_Info.setBackground(new Color(220, 220, 220));
         panel_Electricity_Info.setBounds(10, 11, 447, 87);
         panel_Electricity_Info.setLayout(null);
@@ -245,7 +245,7 @@ public class Home_Panel extends JPanel {
         //==============================================================================================
         
         // Water info panel
-        panel_Water_Info = new Rounded_Panel();
+        panel_Water_Info = new RoundedPanel();
         panel_Water_Info.setBackground(new Color(220, 220, 220));
         panel_Water_Info.setBounds(10, 109, 447, 87);
         panel_Water_Info.setLayout(null);
@@ -282,7 +282,7 @@ public class Home_Panel extends JPanel {
         //==============================================================================================
         
         // Gas info panel
-        panel_Gas_Info = new Rounded_Panel();
+        panel_Gas_Info = new RoundedPanel();
         panel_Gas_Info.setBackground(new Color(220, 220, 220));
         panel_Gas_Info.setBounds(10, 207, 447, 87);
         panel_Gas_Info.setLayout(null);
@@ -319,7 +319,7 @@ public class Home_Panel extends JPanel {
         //==============================================================================================
         
         // Overall info panel
-        panel_Overall_Info = new Rounded_Panel();
+        panel_Overall_Info = new RoundedPanel();
         panel_Overall_Info.setBackground(new Color(220, 220, 220));
         panel_Overall_Info.setBounds(10, 305, 447, 87);
         panel_Overall_Info.setLayout(null);
@@ -356,7 +356,7 @@ public class Home_Panel extends JPanel {
         //==============================================================================================
         
         // Main graph container panel
-        panel_Graph_Container = new Rounded_Panel(25, Color.BLACK, 0);
+        panel_Graph_Container = new RoundedPanel(25, Color.BLACK, 0);
         panel_Graph_Container.setBorder(new EmptyBorder(5, 5, 5, 5));
         panel_Graph_Container.setBounds(504, 157, 413, 365);
         panel_Graph_Container.setBackground(new Color(255, 255, 255));
@@ -368,19 +368,19 @@ public class Home_Panel extends JPanel {
         panel_Graph_Container.add(graph_Panel);
         
         // Behind panels for design time
-        panel_Behind1 = new Rounded_Panel(25, Color.BLACK, 0);
+        panel_Behind1 = new RoundedPanel(25, Color.BLACK, 0);
         panel_Behind1.setBackground(new Color(220, 220, 220));
         panel_Behind1.setBounds(520, 142, 413, 365);
         add(panel_Behind1);
         
         // Additional behind panels for design time
-        panel_Behind2 = new Rounded_Panel(25, Color.BLACK, 0);
+        panel_Behind2 = new RoundedPanel(25, Color.BLACK, 0);
         panel_Behind2.setBackground(new Color(200, 200, 200));
         panel_Behind2.setBounds(536, 129, 413, 356);
         add(panel_Behind2);
         
         // Final behind panel for design time
-        panel_Behind3 = new Rounded_Panel(25, Color.BLACK, 0);
+        panel_Behind3 = new RoundedPanel(25, Color.BLACK, 0);
         panel_Behind3.setBackground(new Color(180, 180, 180));
         panel_Behind3.setBounds(552, 114, 413, 347);
         add(panel_Behind3);
@@ -390,7 +390,7 @@ public class Home_Panel extends JPanel {
         //==============================================================================================
         
         // Main tips panel
-        panel_Tips = new Rounded_Panel();
+        panel_Tips = new RoundedPanel();
         panel_Tips.setBackground(new Color(255, 255, 255));
         panel_Tips.setBounds(21, 533, 629, 144);
         panel_Tips.setLayout(null);
@@ -401,7 +401,7 @@ public class Home_Panel extends JPanel {
         //===============================================================================================
         
         // Tips panel title
-        panel_Tip_1 = new Rounded_Panel();
+        panel_Tip_1 = new RoundedPanel();
         panel_Tip_1.setLayout(null);
         panel_Tip_1.setBounds(10, 11, 306, 122);
         panel_Tip_1.setBackground(new Color(235, 235, 235));
@@ -428,7 +428,7 @@ public class Home_Panel extends JPanel {
         //===============================================================================================
         
         // Second tips panel
-        panel_Tip_2 = new Rounded_Panel();
+        panel_Tip_2 = new RoundedPanel();
         panel_Tip_2.setLayout(null);
         panel_Tip_2.setBounds(326, 11, 291, 122);
         panel_Tip_2.setBackground(new Color(235, 235, 235));
@@ -480,7 +480,7 @@ public class Home_Panel extends JPanel {
         //==============================================================================================
         
         // Main container panel
-        panel_View_Buttons = new Rounded_Panel();
+        panel_View_Buttons = new RoundedPanel();
         panel_View_Buttons.setBackground(Color.WHITE);
         panel_View_Buttons.setBounds(660, 533, 316, 144);
         panel_View_Buttons.setLayout(null);
@@ -497,7 +497,7 @@ public class Home_Panel extends JPanel {
         rdgroup_Data_Type = new ButtonGroup();
 
         // ---------- First Option ----------
-        panel_Reading_Button = new Rounded_Panel(15, Color.BLACK, 0);
+        panel_Reading_Button = new RoundedPanel(15, Color.BLACK, 0);
         panel_Reading_Button.setLayout(null);
         panel_Reading_Button.setBackground(new Color(220, 220, 220));
         panel_Reading_Button.setBounds(10, 45, 296, 25); // Moved up slightly
@@ -517,7 +517,7 @@ public class Home_Panel extends JPanel {
         panel_Reading_Button.add(lbl_Reading);
 
         // ---------- Second Option ----------
-        panel_Rate_Button = new Rounded_Panel(15, Color.BLACK, 0);
+        panel_Rate_Button = new RoundedPanel(15, Color.BLACK, 0);
         panel_Rate_Button.setLayout(null);
         panel_Rate_Button.setBackground(new Color(220, 220, 220));
         panel_Rate_Button.setBounds(10, 75, 296, 25); // Even spacing
@@ -536,7 +536,7 @@ public class Home_Panel extends JPanel {
         panel_Rate_Button.add(lbl_Rate);
 
         // ---------- Third Option ----------
-        panel_Price_Button = new Rounded_Panel(15, Color.BLACK, 0);
+        panel_Price_Button = new RoundedPanel(15, Color.BLACK, 0);
         panel_Price_Button.setLayout(null);
         panel_Price_Button.setBackground(new Color(220, 220, 220));
         panel_Price_Button.setBounds(10, 105, 296, 25); // Bottom-aligned nicely
@@ -646,13 +646,15 @@ public class Home_Panel extends JPanel {
             Reading gas = database_Manager.getReadingManager().getLatest_Reading_By_Type(current_User, "gas");
 
          // Prepare data for graphs
+            overallData = database_Manager.getReadingManager().getMonthly_Utility_Data(current_User, "overall", year, field);
             electricityData = database_Manager.getReadingManager().getMonthly_Utility_Data(current_User, "electricity", year, field);
             waterData = database_Manager.getReadingManager().getMonthly_Utility_Data(current_User, "water", year, field);
             gasData = database_Manager.getReadingManager().getMonthly_Utility_Data(current_User, "gas", year,field);
-            overallData = database_Manager.getReadingManager().getMonthly_Utility_Data(current_User, "overall", year, field);
 
+
+            
             // Refresh graph content
-            graph_Panel.setField(field, electricityData, waterData, gasData, overallData);
+            graph_Panel.setField(field, overallData, electricityData, waterData, gasData);
 
             
             // Update each reading's label

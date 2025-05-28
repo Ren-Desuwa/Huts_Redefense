@@ -20,10 +20,10 @@ import model.User;
 import view.Main_Frame;
 import view.panel.misc.Change_Password_Window;
 import view.panel.misc.Edit_Profile_Window;
-import visuals.Circle_Panel;
-import visuals.Following_Tool_Tip;
-import visuals.Rounded_Button;
-import visuals.Rounded_Panel;
+import visuals.CirclePanel;
+import visuals.ToolTip;
+import visuals.RoundedButton;
+import visuals.RoundedPanel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
@@ -88,11 +88,11 @@ public class Profile_Panel extends JPanel {
     
     
     @SuppressWarnings("unused")
-	private Following_Tool_Tip tooltip_Electricity;
+	private ToolTip tooltip_Electricity;
     @SuppressWarnings("unused")
-	private Following_Tool_Tip tooltip_Water;
+	private ToolTip tooltip_Water;
     @SuppressWarnings("unused")
-	private Following_Tool_Tip tooltip_Gas;
+	private ToolTip tooltip_Gas;
     
     //==============================================================================
     // CONSTRUCTOR
@@ -120,7 +120,7 @@ public class Profile_Panel extends JPanel {
     	//=============================================================================
     	
     	// Create the main panel with rounded corners and a light background
-        panel_Main = new Rounded_Panel(100, Color.BLACK, 0);
+        panel_Main = new RoundedPanel(100, Color.BLACK, 0);
         panel_Main.setBackground(new Color(250, 250, 250));
         panel_Main.setLayout(new BorderLayout());
         add(panel_Main, BorderLayout.CENTER);
@@ -137,7 +137,7 @@ public class Profile_Panel extends JPanel {
         panel_Main.add(panel_Header, BorderLayout.NORTH);
         
         // circle panel for profile image
-        panel_Profile_Image = new Circle_Panel(245);
+        panel_Profile_Image = new CirclePanel(245);
         panel_Profile_Image.setBackground(new Color(68, 162, 255));
         panel_Profile_Image.setBounds(10, 23, 250, 250);
         panel_Profile_Image.setLayout(null);
@@ -287,7 +287,7 @@ public class Profile_Panel extends JPanel {
         //=============================================================================
         
         // Create the electricity statistics panel with a specific background color and layout
-        panel_Electricity_Stats = new Rounded_Panel(15);
+        panel_Electricity_Stats = new RoundedPanel(15);
         panel_Electricity_Stats.setBackground(new Color(218, 218, 218));
         panel_Electricity_Stats.setBounds(10, 36, 140, 174);
         panel_Electricity_Stats.setLayout(null);
@@ -318,14 +318,14 @@ public class Profile_Panel extends JPanel {
         panel_Electricity_Stats.add(lbl_Electricity_Readings);
         
         // Tooltip for electricity statistics panel
-        tooltip_Electricity = new Following_Tool_Tip(panel_Electricity_Stats, "Open Electricity Reading?", 500);
+        tooltip_Electricity = new ToolTip(panel_Electricity_Stats, "Open Electricity Reading?", 500);
     
         //=============================================================================
         // UI COMPONENTS - CONTENT - ACCOUNT INFO - STATISTICS - WATER
         //=============================================================================
         
         // Create the water statistics panel with a specific background color and layout
-        panel_Water_Stats = new Rounded_Panel(15);
+        panel_Water_Stats = new RoundedPanel(15);
         panel_Water_Stats.setBackground(new Color(218, 218, 218));
         panel_Water_Stats.setBounds(166, 36, 140, 174);
         panel_Water_Stats.setLayout(null);
@@ -356,14 +356,14 @@ public class Profile_Panel extends JPanel {
         panel_Water_Stats.add(lbl_Water_Count);
         
         // Tooltip for water statistics panel
-        tooltip_Water = new Following_Tool_Tip(panel_Water_Stats, "Open Water Reading?", 500);
+        tooltip_Water = new ToolTip(panel_Water_Stats, "Open Water Reading?", 500);
     
         //=============================================================================
         // UI COMPONENTS - CONTENT - ACCOUNT INFO - STATISTICS - GAS
         //=============================================================================
         
         // Create the gas statistics panel with a specific background color and layout
-        panel_Gas_Stats = new Rounded_Panel(15);
+        panel_Gas_Stats = new RoundedPanel(15);
         panel_Gas_Stats.setBackground(new Color(218, 218, 218));
         panel_Gas_Stats.setBounds(321, 36, 140, 174);
         panel_Gas_Stats.setLayout(null);
@@ -394,7 +394,7 @@ public class Profile_Panel extends JPanel {
         panel_Gas_Stats.add(lbl_Gas_Count);
         
         // Tooltip for gas statistics panel
-        tooltip_Gas = new Following_Tool_Tip(panel_Gas_Stats, "Open Gas Reading?", 500);
+        tooltip_Gas = new ToolTip(panel_Gas_Stats, "Open Gas Reading?", 500);
     
         //=============================================================================
         // UI COMPONENTS - CONTENT - ACCOUNT INFO - STATISTICS - BUTTONS
@@ -407,7 +407,7 @@ public class Profile_Panel extends JPanel {
         panel_Content.add(separator_Actions);
         
         // Button to change password
-        btn_Change_Password = new Rounded_Button("Change Password", 25);
+        btn_Change_Password = new RoundedButton("Change Password", 25);
         btn_Change_Password.setBounds(760, 286, 165, 40);
         btn_Change_Password.setAlignmentX(Component.CENTER_ALIGNMENT);
         btn_Change_Password.setMaximumSize(new Dimension(180, 40));

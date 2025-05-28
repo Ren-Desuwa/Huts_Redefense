@@ -20,12 +20,11 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.sql.SQLException;
 import java.awt.Color;
 import java.awt.EventQueue;
 
-import visuals.Rounded_Button;
-import visuals.Rounded_Panel;
+import visuals.RoundedButton;
+import visuals.RoundedPanel;
 
 /**
  * A window for user login
@@ -41,7 +40,7 @@ public class Log_In_Window extends JFrame {
 	
 	// Panel configuration
 	private JPanel contentPane;
-	private Rounded_Panel panel_LogIn_Title;
+	private RoundedPanel panel_LogIn_Title;
 	private JLabel lbl_Title_LogIn;
 	
 	// Input fields
@@ -89,7 +88,7 @@ public class Log_In_Window extends JFrame {
 		//==============================================================================================
 		
 		// Create a rounded panel for the title section
-		panel_LogIn_Title = new Rounded_Panel();
+		panel_LogIn_Title = new RoundedPanel();
 		panel_LogIn_Title.setLayout(null);
 		panel_LogIn_Title.setBackground(Color.WHITE);
 		panel_LogIn_Title.setBounds(10, 11, 416, 97);
@@ -155,7 +154,7 @@ public class Log_In_Window extends JFrame {
 		//==============================================================================================
 		
 		// Create and configure the login button
-		btn = new Rounded_Button("Log In", 25);
+		btn = new RoundedButton("Log In", 25);
 		btn.setBackground(new Color(182, 182, 182));
 		btn.setForeground(Color.BLACK);
 		btn.setBounds(160, 492, 109, 44);

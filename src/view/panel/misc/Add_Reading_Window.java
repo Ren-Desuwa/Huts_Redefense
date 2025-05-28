@@ -13,8 +13,8 @@ import java.time.format.DateTimeFormatter;
 import database.Database_Manager;
 import model.User;
 import view.panel.Utility_Panel;
-import visuals.Rounded_Button;
-import visuals.Rounded_Panel;
+import visuals.RoundedButton;
+import visuals.RoundedPanel;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -118,7 +118,7 @@ public class Add_Reading_Window extends JDialog {
 		//=======================================================================================================
 		
 		// Create a rounded panel for the title section
-		panel_Title = new Rounded_Panel();
+		panel_Title = new RoundedPanel();
 		panel_Title.setBackground(new Color(255, 255, 255));
 		panel_Title.setLayout(null);
 		panel_Title.setBounds(10, 11, 416, 97);
@@ -239,14 +239,14 @@ public class Add_Reading_Window extends JDialog {
 		// Add and Cancel Buttons
 		//=======================================================================================================
 		
-		btn_Add =  new Rounded_Button("Add", 25);
+		btn_Add =  new RoundedButton("Add", 25);
 		btn_Add.setBackground(new Color(182, 182, 182));
 		btn_Add.setForeground(Color.BLACK);
 		btn_Add.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btn_Add.setBounds(335, 458, 91, 34);
 		contentPane.add(btn_Add);
 		
-		btn_Cancel = new Rounded_Button("Cancel", 25);
+		btn_Cancel = new RoundedButton("Cancel", 25);
 		btn_Cancel.setBackground(new Color(182, 182, 182));
 		btn_Cancel.setForeground(Color.BLACK);
 		btn_Cancel.setFont(new Font("Tahoma", Font.PLAIN, 15));

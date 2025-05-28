@@ -24,8 +24,8 @@ import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import visuals.Rounded_Button;
-import visuals.Rounded_Panel;
+import visuals.RoundedButton;
+import visuals.RoundedPanel;
 
 
 public class Change_Password_Window extends JDialog {
@@ -39,7 +39,7 @@ public class Change_Password_Window extends JDialog {
 	private JPasswordField pf_ConfirmPassword;
 	private JLabel lbl_New_Password;
 	private JLabel lbl_Confirm_Password;
-	private Rounded_Panel panel_ChangePass_Title;
+	private RoundedPanel panel_ChangePass_Title;
 	private JButton btn_Change_Password;
 	private JButton btn_Cancel;
 	private JLabel lbl_Title_ChangePass;
@@ -79,7 +79,7 @@ public class Change_Password_Window extends JDialog {
 		//=========================================================================================================
 		
 		// Create a rounded panel for the title
-		panel_ChangePass_Title = new Rounded_Panel();
+		panel_ChangePass_Title = new RoundedPanel();
 		panel_ChangePass_Title.setLayout(null);
 		panel_ChangePass_Title.setBackground(Color.WHITE);
 		panel_ChangePass_Title.setBounds(10, 11, 416, 97);
@@ -129,7 +129,7 @@ public class Change_Password_Window extends JDialog {
 		//=========================================================================================================
 		
 		// Button to change password
-		btn_Change_Password = new Rounded_Button("Change Password", 25);
+		btn_Change_Password = new RoundedButton("Change Password", 25);
 		btn_Change_Password.setBackground(new Color(182, 182, 182));
 		btn_Change_Password.setForeground(Color.BLACK);
 		btn_Change_Password.setFont(new Font("Tahoma", Font.PLAIN, 20));
@@ -137,7 +137,7 @@ public class Change_Password_Window extends JDialog {
 		contentPane.add(btn_Change_Password);
 		
 		// Button to cancel the change password action
-		btn_Cancel = new Rounded_Button("Cancel", 25);
+		btn_Cancel = new RoundedButton("Cancel", 25);
 		btn_Cancel.setForeground(Color.BLACK);
 		btn_Cancel.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btn_Cancel.setBackground(new Color(182, 182, 182));

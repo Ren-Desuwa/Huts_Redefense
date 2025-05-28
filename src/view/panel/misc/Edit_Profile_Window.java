@@ -10,8 +10,8 @@ import javax.swing.border.EmptyBorder;
 import database.Database_Manager;
 import model.User;
 import view.panel.Profile_Panel;
-import visuals.Circle_Panel;
-import visuals.Rounded_Button;
+import visuals.CirclePanel;
+import visuals.RoundedButton;
 
 public class Edit_Profile_Window extends JDialog {
     private static final long serialVersionUID = 1L;
@@ -20,15 +20,15 @@ public class Edit_Profile_Window extends JDialog {
     private Profile_Panel profile_Panel;
     
     private JPanel contentPane;
-    private Circle_Panel panel_initials;
+    private CirclePanel panel_initials;
     private JLabel lbl_Initials;
     private JLabel lbl_Username;
     private JTextField tf_Username;
     private JLabel lbl_Email;
     private JTextField tf_Email;
 	private JPanel panel_Buttons;
-	private Rounded_Button btn_Save;
-	private Rounded_Button btn_Cancel;
+	private RoundedButton btn_Save;
+	private RoundedButton btn_Cancel;
 
     public Edit_Profile_Window(Profile_Panel profile_Panel, Database_Manager database_manager, User current_user) {
         this.database_manager = database_manager;
@@ -61,7 +61,7 @@ public class Edit_Profile_Window extends JDialog {
         //======================================================================================================
         // Initials Panel
         //======================================================================================================
-        panel_initials = new Circle_Panel(150);
+        panel_initials = new CirclePanel(150);
         panel_initials.setBounds(125, 20, 150, 150);
         panel_initials.setLayout(new BorderLayout(0, 0));
         contentPane.add(panel_initials);
@@ -115,14 +115,14 @@ public class Edit_Profile_Window extends JDialog {
         contentPane.add(panel_Buttons);
 
         // Save Button
-        btn_Save = new Rounded_Button("Save", 15);
+        btn_Save = new RoundedButton("Save", 15);
         btn_Save.setPreferredSize(new Dimension(100, 30));
         btn_Save.setBackground(new Color(68, 162, 255));
         btn_Save.setForeground(Color.WHITE);
         panel_Buttons.add(btn_Save);
 
         // Cancel Button
-        btn_Cancel = new Rounded_Button("Cancel", 15);
+        btn_Cancel = new RoundedButton("Cancel", 15);
         btn_Cancel.setPreferredSize(new Dimension(100, 30));
         btn_Cancel.setBackground(new Color(200, 200, 200));
         panel_Buttons.add(btn_Cancel);
