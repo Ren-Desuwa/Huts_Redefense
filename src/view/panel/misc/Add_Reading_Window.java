@@ -541,11 +541,9 @@ public class Add_Reading_Window extends JDialog {
 	            (int) combo_box_Day.getSelectedItem()
 	        );
 
-	        if (utility_Type.equals("gas")) {
-	        	database_manager.getReadingManager().addReading(current_user, date, utility_Type, (int) readingVal, rateVal, totalVal);
-	        } else {
-	        	database_manager.getReadingManager().addReading(current_user, date, utility_Type, readingVal, rateVal, totalVal);
-	        }
+	        
+	        database_manager.getReadingManager().addReading(current_user, date, utility_Type, readingVal, rateVal, totalVal);
+	        
 	        
 	        // Update appropriate panel
 	        parent_Panel.Panel_Refresh();
