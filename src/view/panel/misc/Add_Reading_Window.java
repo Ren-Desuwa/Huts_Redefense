@@ -521,14 +521,12 @@ public class Add_Reading_Window extends JDialog {
 	        if (rateVal == 0 && totalVal > 0) {
 	            // Calculate rate from total price and reading
 	            rateVal = totalVal / readingVal;
-	            double rateDeci = rateVal;
-	            rateVal = Math.round(rateDeci * 100.0) / 100.0;
+	            rateVal = Math.round(rateVal * 100.0) / 100.0;
 	            tf_Rate.setText(String.format("%.2f", rateVal));
 	        } else if (totalVal == 0 && rateVal > 0) {
 	            // Calculate total from reading and rate
 	            totalVal = readingVal * rateVal;
-	            double totalDeci = totalVal;
-	            totalVal = Math.round(totalDeci * 100.0) / 100.0;
+	            totalVal = Math.round(totalVal * 100.0) / 100.0;
 	            tf_TotalPrice.setText(String.format("%.2f", totalVal));
 	        } else if (rateVal == 0 && totalVal == 0) {
 	            lbl_Incorrect_Signage2.setVisible(true);
