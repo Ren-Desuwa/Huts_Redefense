@@ -261,7 +261,6 @@ public class Utility_Panel extends JPanel {
 	    graph_Panel.setBackground(new Color(255, 255, 255));
 	    panel_Graph_View.add(graph_Panel);
 
-
         //==============================================================================================
         // UI CREATION - CONTENT PANELS - CURRENT READING 
         //==============================================================================================

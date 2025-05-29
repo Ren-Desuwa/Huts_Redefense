@@ -646,7 +646,7 @@ public class Home_Panel extends JPanel {
             Reading gas = database_Manager.getReadingManager().getLatest_Reading_By_Type(current_User, "gas");
 
          // Prepare data for graphs
-            overallData = database_Manager.getReadingManager().getMonthly_Utility_Data(current_User, "overall", year, field);
+            overallData = database_Manager.getReadingManager().getMonthly_Total_Expenses(current_User, year);
             electricityData = database_Manager.getReadingManager().getMonthly_Utility_Data(current_User, "electricity", year, field);
             waterData = database_Manager.getReadingManager().getMonthly_Utility_Data(current_User, "water", year, field);
             gasData = database_Manager.getReadingManager().getMonthly_Utility_Data(current_User, "gas", year,field);
