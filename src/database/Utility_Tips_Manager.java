@@ -8,7 +8,6 @@ import java.util.Random;
 
 public class Utility_Tips_Manager {
     
-	private static Utility_Tips_Manager instance;
     private Map<String, ArrayList<String>> tipsByUtility;
     private Random random;
     private String[] utilityTypes = {"electricity", "water", "gas"};
