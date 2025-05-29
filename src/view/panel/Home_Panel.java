@@ -234,7 +234,7 @@ public class Home_Panel extends JPanel {
         panel_Electricity_Info.add(lbl_Electricity_Reading_Unit);
         
         // Trend label for electricity reading
-        lbl_Trend_Of_Reading_Electricity = new JLabel("No avilable data");
+        lbl_Trend_Of_Reading_Electricity = new JLabel("No available data");
         lbl_Trend_Of_Reading_Electricity.setHorizontalAlignment(SwingConstants.CENTER);
         lbl_Trend_Of_Reading_Electricity.setFont(new Font("Dialog", Font.PLAIN, 15));
         lbl_Trend_Of_Reading_Electricity.setBounds(113, 44, 324, 32);
@@ -271,7 +271,7 @@ public class Home_Panel extends JPanel {
         panel_Water_Info.add(lbl_Water_Reading_Unit);
         
         // Trend label for water reading
-        lbl_Trend_Of_Reading_Water = new JLabel("No avilable data");
+        lbl_Trend_Of_Reading_Water = new JLabel("No available data");
         lbl_Trend_Of_Reading_Water.setHorizontalAlignment(SwingConstants.CENTER);
         lbl_Trend_Of_Reading_Water.setFont(new Font("Dialog", Font.PLAIN, 15));
         lbl_Trend_Of_Reading_Water.setBounds(113, 44, 324, 32);
@@ -308,7 +308,7 @@ public class Home_Panel extends JPanel {
         panel_Gas_Info.add(lbl_Gas_Reading_Unit);
         
         // Trend label for gas reading
-        lbl_Trend_Of_Reading_Gas = new JLabel("No avilable data");
+        lbl_Trend_Of_Reading_Gas = new JLabel("No available data");
         lbl_Trend_Of_Reading_Gas.setHorizontalAlignment(SwingConstants.CENTER);
         lbl_Trend_Of_Reading_Gas.setFont(new Font("Dialog", Font.PLAIN, 15));
         lbl_Trend_Of_Reading_Gas.setBounds(113, 44, 324, 32);
@@ -345,7 +345,7 @@ public class Home_Panel extends JPanel {
         panel_Overall_Info.add(lbl_OverAll_Reading_Unit);
         
         // Trend label for overall expenses reading
-        lbl_Trend_Of_Reading_Overall = new JLabel("No avilable data");
+        lbl_Trend_Of_Reading_Overall = new JLabel("No available data");
         lbl_Trend_Of_Reading_Overall.setHorizontalAlignment(SwingConstants.CENTER);
         lbl_Trend_Of_Reading_Overall.setFont(new Font("Dialog", Font.PLAIN, 15));
         lbl_Trend_Of_Reading_Overall.setBounds(113, 44, 324, 32);
