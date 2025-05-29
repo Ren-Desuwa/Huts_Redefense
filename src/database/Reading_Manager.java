@@ -470,7 +470,7 @@ public class Reading_Manager {
         };
 
         String[] readingsArray = all_readings.stream().map(reading ->
-            String.format("    %-23s %-23s %-19s %-10s",
+            String.format("    %-25s %-27s %-21s %-10s",
                 reading.getDate(),
                 reading.getReading() + unit,
                 reading.getRate() + "Php",
