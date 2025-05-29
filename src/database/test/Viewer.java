@@ -54,6 +54,22 @@ public class Viewer {
     //====================================================================
     // Reading Manager Functions
     //====================================================================
+    
+    public static void print(Reading reading) {
+		if (reading == null) {
+			System.out.println("Reading is null.");
+			return;
+		}
+
+		System.out.println("Reading Details:");
+		System.out.println("  - ID: " + reading.getReading_Id());
+		System.out.println("  - Date: " + reading.getDate());
+		System.out.println("  - Type: " + reading.getType());
+		System.out.println("  - Reading: " + reading.getReading());
+		System.out.println("  - Rate: " + reading.getRate());
+		System.out.println("  - Total Price: " + reading.getTotal_Price());
+    	
+    }
 
     public static void print(Map<?, ?> map) {
         if (!map.isEmpty()) {

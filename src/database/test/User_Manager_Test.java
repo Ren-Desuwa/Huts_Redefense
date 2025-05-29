@@ -102,6 +102,8 @@ public class User_Manager_Test {
 
     private static void testValidEmail() {
         System.out.println("\n=== Testing validEmail() ===");
+        database.test.Viewer.print("Valid email: test@example.com");
+        database.test.Viewer.print("Invalid email: invalid-email");
         assertTrue(userManager.validEmail("test@example.com"), "Valid email should return true");
         assertTrue(!userManager.validEmail("invalid-email"), "Invalid email should return false");
     }
@@ -109,12 +111,15 @@ public class User_Manager_Test {
     private static void testSetAndGetCurrentUser() {
         System.out.println("\n=== Testing setCurrentUser() and getCurrentUser() ===");
         userManager.setCurrentUser(test_user);
+        database.test.Viewer.print(test_user);
+        database.test.Viewer.print(userManager.getCurrentUser());
         assertEqual(test_user, userManager.getCurrentUser(), "Current user should match the set user");
     }
 
     private static void testSetCurrentUserNull() {
         System.out.println("\n=== Testing setCurrentUserNull() ===");
         userManager.setCurrentUserNull();
+        database.test.Viewer.print(userManager.getCurrentUser());
         assertTrue(userManager.getCurrentUser() == null, "Current user should be null after setCurrentUserNull()");
     }
 
@@ -125,6 +130,7 @@ public class User_Manager_Test {
             String email = "new_user@example.com";
             userManager.addUser(username, "password", email);
             User addedUser = userManager.getUserByUsername(username);
+            database.test.Viewer.print(addedUser);
             assertNotNull(addedUser, "User should be added successfully");
             userManager.deleteUser(addedUser); // Cleanup
         } catch (SQLException e) {
@@ -138,6 +144,7 @@ public class User_Manager_Test {
             userManager.addUser(test_user.getUsername(), "password", test_user.getEmail());
             System.out.println("✗ FAIL: addUser() should throw exception for duplicate user");
         } catch (SQLException e) {
+            database.test.Viewer.print(e.getMessage());
             assertTrue(e.getMessage().contains("User Already Exist"), "Duplicate user should not be allowed");
         }
     }
@@ -148,6 +155,7 @@ public class User_Manager_Test {
             userManager.addUser("invalid_email_user", "password", "invalid-email");
             System.out.println("✗ FAIL: addUser() should throw exception for invalid email");
         } catch (SQLException e) {
+            database.test.Viewer.print(e.getMessage());
             assertTrue(e.getMessage().contains("Invalid Email Format"), "Invalid email should not be allowed");
         }
     }
@@ -168,7 +176,6 @@ public class User_Manager_Test {
         }
     }
 
-
     private static void testGetUserByEmail() {
         System.out.println("\n=== Testing getUserByEmail() ===");
         User retrievedUser = userManager.getUserByEmail(test_user.getEmail());
@@ -187,12 +194,16 @@ public class User_Manager_Test {
 
     private static void testCheckUserEmail() {
         System.out.println("\n=== Testing checkUserEmail() ===");
+        database.test.Viewer.print("Username: " + test_user.getUsername());
+        database.test.Viewer.print("Email: " + test_user.getEmail());
         assertTrue(userManager.checkUserEmail(test_user.getUsername(), test_user.getEmail()), "Existing user should return true");
         assertTrue(!userManager.checkUserEmail("nonexistent", "nonexistent@example.com"), "Nonexistent user should return false");
     }
 
     private static void testUsernamePasswordMatch() {
         System.out.println("\n=== Testing UsernamePasswordMatch() ===");
+        database.test.Viewer.print("Username: " + test_user.getUsername());
+        database.test.Viewer.print("Password: testpassword");
         assertTrue(userManager.UsernamePasswordMatch(test_user.getUsername(), "testpassword"), "Correct credentials should return true");
         assertTrue(!userManager.UsernamePasswordMatch(test_user.getUsername(), "wrongpassword"), "Incorrect credentials should return false");
     }
@@ -220,6 +231,7 @@ public class User_Manager_Test {
             String newEmail = "updated_user@example.com";
             userManager.updateUser(test_user, newUsername, "newpassword", newEmail);
             User updatedUser = userManager.getUserById(test_user.getUser_Id());
+            database.test.Viewer.print(updatedUser);
             assertEqual(newUsername, updatedUser.getUsername(), "Username should be updated");
             assertEqual(newEmail, updatedUser.getEmail(), "Email should be updated");
             userManager.updateUser(updatedUser, test_user.getUsername(), "testpassword", test_user.getEmail()); // Revert changes
@@ -235,12 +247,14 @@ public class User_Manager_Test {
             String email = "delete_user@example.com";
             userManager.addUser(username, "password", email);
             User userToDelete = userManager.getUserByUsername(username);
+            database.test.Viewer.print(userToDelete);
             userManager.deleteUser(userToDelete);
             assertTrue(userManager.getUserByUsername(username) == null, "User should be deleted successfully");
         } catch (SQLException e) {
             System.out.println("✗ FAIL: deleteUser() - SQL Exception: " + e.getMessage());
         }
     }
+
 
     private static void printTestResults() {
         System.out.println("\n==========================================");
