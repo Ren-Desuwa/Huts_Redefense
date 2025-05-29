@@ -12,16 +12,13 @@ public class Utility_Tips_Manager {
     private Map<String, ArrayList<String>> tipsByUtility;
     private Random random;
     private String[] utilityTypes = {"electricity", "water", "gas"};
-    private int randomIndex;
+    private int randomTipType;
     
-    public static Utility_Tips_Manager getInstance() {
-		if (instance == null) {
-			instance = new Utility_Tips_Manager();
-		}
-		return instance;
+    protected Utility_Tips_Manager() {
+    	Setup();
 	}
     
-    private Utility_Tips_Manager() {
+    private void Setup() {
         random = new Random();
         tipsByUtility = new HashMap<>();
 
@@ -61,7 +58,7 @@ public class Utility_Tips_Manager {
     }
     
     public String getType() {
-    	switch (randomIndex) {
+    	switch (randomTipType) {
     		case 0:
 			return "Electricity Tip";
 			case 1:
@@ -74,7 +71,7 @@ public class Utility_Tips_Manager {
     }
     
     public Color setcolor() {
-		switch (randomIndex) {
+		switch (randomTipType) {
 			case 0:
 			return new Color(255,167,0); // Yellow for Electricity
 			case 1:
@@ -87,14 +84,33 @@ public class Utility_Tips_Manager {
     }
     
     public String getRandomTip() {
-        randomIndex = random.nextInt(utilityTypes.length);
-        String utilityType = utilityTypes[randomIndex];
+    	// number of utility types
+    	int numberOfUtilities = utilityTypes.length;
+    	
+    	// Select a random utility type electricity, water, or gas
+        randomTipType = random.nextInt(numberOfUtilities);
+        
+        // Get the corresponding utility type
+        String utilityType = utilityTypes[randomTipType];
+        
+        // Retrieve a random tip from the selected utility type
         ArrayList<String> tips = tipsByUtility.get(utilityType);
-        return tips.get(random.nextInt(tips.size()));
+        
+        // gets the number of tips available for the selected utility type
+        int numberOfTips = tips.size();
+        
+        // return a random tip from the list
+        return tips.get(random.nextInt(numberOfTips));
     }
     public String getRandomTip(String utilityType) {
+    	// get the utility type from the parameter
 		ArrayList<String> tips = tipsByUtility.get(utilityType);
-		return tips.get(random.nextInt(tips.size()));
+		
+		// gets the number of tips available for the selected utility type
+		int numberOfTips = tips.size();
+		
+		// return a random tip from the list
+		return tips.get(random.nextInt(numberOfTips));
 	}
 }
 

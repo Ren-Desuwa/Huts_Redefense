@@ -3,7 +3,6 @@ package view.panel;
 import javax.swing.JPanel;
 
 import database.Database_Manager;
-import database.Utility_Tips_Manager;
 import model.Reading;
 import model.User;
 import view.panel.misc.Graph_Panel;
@@ -41,7 +40,6 @@ public class Home_Panel extends JPanel {
     
     /** Database and user fields */
     private Database_Manager database_Manager;
-    private Utility_Tips_Manager utility_Tips_Manager = Utility_Tips_Manager.getInstance();
     private User current_User;
     private int year = 2025;
     private String field = "reading";
@@ -465,12 +463,12 @@ public class Home_Panel extends JPanel {
         
         // Timer for updating date label daily 30 seconds interval
         Timer tips_timer = new Timer(30_000, e -> {
-        	lbl_Tip_1.setText("<html>" + utility_Tips_Manager.getRandomTip() + "</html>");
-        	lbl_Tip_Type_1.setText(utility_Tips_Manager.getType());
-        	lbl_Tip_Type_1.setForeground(utility_Tips_Manager.setcolor());
-        	lbl_Tip_2.setText("<html>" + utility_Tips_Manager.getRandomTip() + "</html>");
-        	lbl_Tip_Type_2.setText(utility_Tips_Manager.getType());
-        	lbl_Tip_Type_2.setForeground(utility_Tips_Manager.setcolor());
+        	lbl_Tip_1.setText("<html>" + database_Manager.getUtilityTipsManager().getRandomTip() + "</html>");
+        	lbl_Tip_Type_1.setText(database_Manager.getUtilityTipsManager().getType());
+        	lbl_Tip_Type_1.setForeground(database_Manager.getUtilityTipsManager().setcolor());
+        	lbl_Tip_2.setText("<html>" + database_Manager.getUtilityTipsManager().getRandomTip() + "</html>");
+        	lbl_Tip_Type_2.setText(database_Manager.getUtilityTipsManager().getType());
+        	lbl_Tip_Type_2.setForeground(database_Manager.getUtilityTipsManager().setcolor());
         });
         tips_timer.setInitialDelay(0); // Start immediately
         tips_timer.start();

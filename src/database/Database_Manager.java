@@ -10,6 +10,7 @@ public class Database_Manager {
 	// Specialized managers
 	private User_Manager userManager;
 	private Reading_Manager readingManager;
+	private Utility_Tips_Manager utilityTipsManager;
 
 	public static Database_Manager getInstance() {
 		if (instance == null) {
@@ -42,6 +43,7 @@ public class Database_Manager {
 	private void initializeManagers() {
 		this.userManager = new User_Manager(connection);
 		this.readingManager = new Reading_Manager(connection);
+		this.utilityTipsManager = new Utility_Tips_Manager();
 	}
 	
 	public User_Manager getUserManager() {
@@ -49,6 +51,10 @@ public class Database_Manager {
 	}
 	public Reading_Manager getReadingManager() {
 		return readingManager;
+	}
+	
+	public Utility_Tips_Manager getUtilityTipsManager() {
+		return utilityTipsManager;
 	}
 	
 	public Connection getConnection() {

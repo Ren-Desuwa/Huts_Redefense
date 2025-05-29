@@ -52,7 +52,6 @@ public class Utility_Panel extends JPanel {
     
     // Database and user fields
     private Database_Manager database_manager;
-    private Utility_Tips_Manager utility_Tips_Manager = Utility_Tips_Manager.getInstance();
     private User current_user;
     private String utility_type; // "electricity", "gas", "water".
     private String field = "reading"; // Default field to display in graph (can be "reading", "rate", or "total")
@@ -328,7 +327,7 @@ public class Utility_Panel extends JPanel {
         panel_tips.add(lbl_Title_Tips);
 
         // Create the tips label with a random tip
-        lbl_Tips_1 = new JLabel("<html><ul><li>" + utility_Tips_Manager.getRandomTip(utility_type) + "</li></ul></html>");
+        lbl_Tips_1 = new JLabel("<html><ul><li>" + database_manager.getUtilityTipsManager().getRandomTip(utility_type) + "</li></ul></html>");
         lbl_Tips_1.setVerticalAlignment(SwingConstants.TOP);
         lbl_Tips_1.setHorizontalAlignment(SwingConstants.LEFT);
         lbl_Tips_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -420,8 +419,8 @@ public class Utility_Panel extends JPanel {
 
         // Timer to update the date label every day at midnight
         Timer tips_timer = new Timer(30_000, e -> {
-            lbl_Tips_1.setText("<html><ul><li>" + utility_Tips_Manager.getRandomTip(utility_type) + "</li><br>"
-                             + "<li>" + utility_Tips_Manager.getRandomTip(utility_type) + "</li></ul></html>");
+            lbl_Tips_1.setText("<html><ul><li>" + database_manager.getUtilityTipsManager().getRandomTip(utility_type) + "</li><br>"
+                             + "<li>" + database_manager.getUtilityTipsManager().getRandomTip(utility_type) + "</li></ul></html>");
         });
         tips_timer.setInitialDelay(0);
         tips_timer.start();
@@ -571,8 +570,8 @@ public class Utility_Panel extends JPanel {
         lbl_Title_Tips.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                lbl_Tips_1.setText("<html><ul><li>" + utility_Tips_Manager.getRandomTip(utility_type) + "</li><br>"
-                                       + "<li>" + utility_Tips_Manager.getRandomTip(utility_type) + "</li></ul></html>");
+                lbl_Tips_1.setText("<html><ul><li>" + database_manager.getUtilityTipsManager().getRandomTip(utility_type) + "</li><br>"
+                                       + "<li>" + database_manager.getUtilityTipsManager().getRandomTip(utility_type) + "</li></ul></html>");
             }
         });
         

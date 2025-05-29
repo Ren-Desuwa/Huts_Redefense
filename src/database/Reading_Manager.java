@@ -29,11 +29,7 @@ public class Reading_Manager {
     private Connection database_connection;
     private double last_trend_percentage;
     
-    /**
-     * Constructor for Reading_Manager
-     * @param database_connection Database connection object
-     */
-    public Reading_Manager(Connection database_connection) {
+    protected Reading_Manager(Connection database_connection) {
         this.database_connection = database_connection;
     }
 

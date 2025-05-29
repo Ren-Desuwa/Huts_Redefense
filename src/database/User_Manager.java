@@ -7,10 +7,9 @@ import model.User;
 public class User_Manager {
 	
 	private Connection connection;
-	
 	private User currentUser;
 	
-	public User_Manager(Connection connection) {
+	protected User_Manager(Connection connection) {
 		this.connection = connection;
 	}
 	
