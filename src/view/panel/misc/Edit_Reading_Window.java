@@ -483,7 +483,6 @@ public class Edit_Reading_Window extends JDialog {
 			
 			getAllReadings();
 			parentPanel.Panel_Refresh();
-			parentPanel.Refresh_Graph();
 			
 			JOptionPane.showMessageDialog(this, "Reading Deleted successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
 			
@@ -521,7 +520,6 @@ public class Edit_Reading_Window extends JDialog {
 			
 			getAllReadings();
 			parentPanel.Panel_Refresh();
-			parentPanel.Refresh_Graph();
 			
 			JOptionPane.showMessageDialog(this, "Reading updated successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
 			

@@ -6,7 +6,6 @@ import java.awt.EventQueue;
 import javax.swing.JPanel;
 
 import database.Database_Manager;
-import database.Utility_Tips_Manager;
 import model.Reading;
 import model.User;
 import view.panel.misc.Add_Reading_Window;
@@ -607,14 +606,7 @@ public class Utility_Panel extends JPanel {
                 }
             };
         }
-
-    public void Refresh_Graph() {
-        setupData(); // update the graph data
-    }
-
-    /**
-     * Refreshes the panel data
-     */
+        
     public void Panel_Refresh() {
         setupData(); // update the current reading display
     }

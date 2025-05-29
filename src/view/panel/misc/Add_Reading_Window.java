@@ -548,7 +548,6 @@ public class Add_Reading_Window extends JDialog {
 	        
 	        // Update appropriate panel
 	        parent_Panel.Panel_Refresh();
-	        parent_Panel.Refresh_Graph();
 
 
 	        JOptionPane.showMessageDialog(this, "Reading added successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
