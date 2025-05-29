@@ -445,10 +445,10 @@ public class Reading_Manager {
     
     // Gets the readings as a JList for display in the utility panel
     // This method creates a JList of readings formatted for display, allowing users to edit readings by clicking on them.
-    public JList<String> getReadings_As_JList(Utility_Panel utility_panel, Database_Manager database_manager, User user, String type) {
+    public JList<String> getReadings_As_JList(Utility_Panel utility_panel, Database_Manager database_manager, User user, String utility_type) {
         List<Reading> all_readings;
         try {
-            all_readings = getAll_Readings_By_Type(user, type);
+            all_readings = getAll_Readings_By_Type(user, utility_type);
         } catch (SQLException e) {
             e.printStackTrace();
             return new JList<>(new String[]{"Error fetching readings."});
@@ -462,7 +462,7 @@ public class Reading_Manager {
             return list;
         }
 
-        String unit = switch (type) {
+        String unit = switch (utility_type) {
             case "electricity" -> "kWh";
             case "water" -> "m³";
             case "gas" -> "kg";
@@ -498,7 +498,7 @@ public class Reading_Manager {
                         try {
                             Edit_Reading_Window editWindow = new Edit_Reading_Window(
                                 (JFrame) SwingUtilities.getWindowAncestor(utility_panel),
-                                database_manager, user, utility_panel, type, selected_reading
+                                database_manager, user, utility_panel, utility_type, selected_reading
                             );
                             editWindow.setVisible(true);
                         } catch (Exception ex) {
