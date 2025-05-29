@@ -7,13 +7,13 @@ import java.time.Month;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JLabel;
-
 import database.Reading_Manager;
 import model.Reading;
 import model.User;
 
 public class Reading_Manager_Test {
     
+
     private static Reading_Manager reading_manager;
     private static Connection database_connection;
     private static User test_user;
@@ -21,9 +21,9 @@ public class Reading_Manager_Test {
     private static int passed_count = 0;
     
     // Main test method to be called from Database_Manager_Test
-    public static void testReadingManager(Connection connection) {
+    public static void testReadingManager(Connection connection, Reading_Manager manager) {
         database_connection = connection;
-        reading_manager = new Reading_Manager(database_connection);
+        reading_manager = manager;
         
         System.out.println("==========================================");
         System.out.println("       READING MANAGER UNIT TESTS        ");

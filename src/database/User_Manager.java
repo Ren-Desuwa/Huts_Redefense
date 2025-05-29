@@ -146,7 +146,7 @@ public class User_Manager {
 	}
 	
 	// Retrieves a user by their ID
-	public User getUserById(int userId) throws SQLException {
+	public User getUserById(int userId){
 		String sqlscript = "SELECT * FROM users WHERE user_id = ?";
 		try (PreparedStatement prepared_statement = connection.prepareStatement(sqlscript)) {
 			prepared_statement.setInt(1, userId);
@@ -161,7 +161,6 @@ public class User_Manager {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			
 		}
 		return null;
 	}

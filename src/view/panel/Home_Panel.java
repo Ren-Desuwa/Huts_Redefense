@@ -692,11 +692,12 @@ public class Home_Panel extends JPanel {
         }
     }
 }
+
 /*
  * File: Home_Panel.java
  * 
  * Description:
- * This file defines the `Home_Panel` class, which serves as the main dashboard panel for the application. 
+ * The `Home_Panel` class serves as the main dashboard panel for the application. 
  * It provides a summary of the user's utility expenses, including electricity, water, and gas readings, 
  * as well as overall expenses. The panel also includes interactive graphs, utility tips, and options 
  * to view data by reading, rate, or price. The class interacts with the `Database_Manager` to fetch 
@@ -706,16 +707,14 @@ public class Home_Panel extends JPanel {
  * - Displays a welcome message with the user's name, current date, and time.
  * - Shows the latest readings for electricity, water, gas, and overall expenses.
  * - Provides trends for each utility type and overall expenses.
- * - Includes a graph panel to visualize data trends.
- * - Displays utility tips that update periodically.
+ * - Includes a graph panel to visualize data trends dynamically.
+ * - Displays utility tips that update periodically using the `Utility_Tips_Manager`.
  * - Allows users to switch between viewing data by reading, rate, or price.
  * - Provides interactive panels for each utility type, which update the graph when clicked.
  * 
  * Variables:
- * 
  * - **Database and User Management**:
  *   - `database_Manager` (Database_Manager): Manages database operations, including reading-related actions.
- *   - `utility_Tips_Manager` (Utility_Tips_Manager): Provides random utility tips for display.
  *   - `current_User` (User): Represents the currently logged-in user.
  *   - `field` (String): Specifies the type of data to display in the graph (e.g., "reading", "rate", or "total").
  * 
@@ -738,53 +737,14 @@ public class Home_Panel extends JPanel {
  *   - `lbl_Gas_Reading_Value` (JLabel): Displays the gas reading value.
  *   - `lbl_OverAll_Reading_Value` (JLabel): Displays the overall expenses value.
  * 
- * - **Panel Title Labels**:
- *   - `lbl_Title_Welcome` (JLabel): Displays the "Welcome" title.
- *   - `lbl_Username` (JLabel): Displays the username of the logged-in user.
- *   - `lbl_Date` (JLabel): Displays the current date.
- *   - `lbl_Time` (JLabel): Displays the current time.
- *   - `lbl_Title_Electricity_Info` (JLabel): Displays the title for the electricity info panel.
- *   - `lbl_Title_Water_Info` (JLabel): Displays the title for the water info panel.
- *   - `lbl_Title_Gas_Info` (JLabel): Displays the title for the gas info panel.
- *   - `lbl_Title_OverAll_Info` (JLabel): Displays the title for the overall expenses panel.
- * 
- * - **Unit Labels**:
- *   - `lbl_Electricity_Reading_Unit` (JLabel): Displays the unit for electricity readings (e.g., "kWh").
- *   - `lbl_Water_Reading_Unit` (JLabel): Displays the unit for water readings (e.g., "m³").
- *   - `lbl_Gas_Reading_Unit` (JLabel): Displays the unit for gas readings (e.g., "kg").
- *   - `lbl_OverAll_Reading_Unit` (JLabel): Displays the unit for overall expenses (e.g., "Php").
- * 
  * - **Graph Components**:
  *   - `graph_Panel` (Graph_Panel): Displays a graph of the selected data type (reading, rate, or price).
- *   - `panel_Behind1`, `panel_Behind2`, `panel_Behind3` (JPanel): Decorative panels behind the graph for design purposes.
  *   - `lbl_Trend_Of_Reading_Electricity` (JLabel): Displays the trend for electricity readings.
  *   - `lbl_Trend_Of_Reading_Water` (JLabel): Displays the trend for water readings.
  *   - `lbl_Trend_Of_Reading_Gas` (JLabel): Displays the trend for gas readings.
  *   - `lbl_Trend_Of_Reading_Overall` (JLabel): Displays the trend for overall expenses.
  * 
- * - **Tips Panel Components**:
- *   - `panel_Tip_1` (Rounded_Panel): Displays the first utility tip.
- *   - `panel_Tip_2` (Rounded_Panel): Displays the second utility tip.
- *   - `lbl_Tip_1` (JLabel): Displays the content of the first utility tip.
- *   - `lbl_Tip_2` (JLabel): Displays the content of the second utility tip.
- *   - `lbl_Tip_Type_1` (JLabel): Displays the type of the first utility tip.
- *   - `lbl_Tip_Type_2` (JLabel): Displays the type of the second utility tip.
- * 
- * - **View Data Section Components**:
- *   - `lbl_View_Data` (JLabel): Displays the title for the view data section.
- *   - `lbl_Reading` (JLabel): Displays the "Readings" option.
- *   - `lbl_Rate` (JLabel): Displays the "Rate" option.
- *   - `lbl_Price` (JLabel): Displays the "Price" option.
- *   - `rdgroup_Data_Type` (ButtonGroup): Groups the radio buttons for selecting the data type.
- *   - `rdbtn_Reading` (JRadioButton): Radio button for selecting "Readings".
- *   - `rdbtn_Rate` (JRadioButton): Radio button for selecting "Rate".
- *   - `rdbtn_Price` (JRadioButton): Radio button for selecting "Price".
- *   - `panel_Reading_Button` (JPanel): Panel for the "Readings" option.
- *   - `panel_Rate_Button` (JPanel): Panel for the "Rate" option.
- *   - `panel_Price_Button` (JPanel): Panel for the "Price" option.
- * 
  * Functions:
- * 
  * 1. `Home_Panel(Database_Manager, User)`:
  *    - Constructor that initializes the panel with the provided database manager and current user.
  *    - Calls `initialize_UI()` to set up the UI, `create_Action_Listeners()` to add event listeners, and `setup_Data()` to load initial data.
@@ -798,9 +758,11 @@ public class Home_Panel extends JPanel {
  *    - Updates the graph and data display based on user actions.
  * 
  * 4. `setup_Data()`:
+ *    - Dynamically initializes the `Graph_Panel` if not already created.
  *    - Fetches the latest readings for electricity, water, gas, and overall expenses from the database.
  *    - Updates the labels and trends for each utility type and overall expenses.
  *    - Refreshes the graph panel with the selected data type.
+ *    - Handles errors gracefully by displaying error messages in the UI.
  * 
  * 5. `home_Panel_Refresh()`:
  *    - Refreshes the panel data by calling `setup_Data()`.
@@ -809,3 +771,4 @@ public class Home_Panel extends JPanel {
  * This class is used as the main dashboard panel for the application. 
  * It provides a comprehensive summary of the user's utility expenses and trends, along with interactive features for data visualization and tips.
  */
+
